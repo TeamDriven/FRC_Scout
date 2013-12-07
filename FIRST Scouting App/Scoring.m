@@ -50,6 +50,7 @@ NSArray *regionalNames;
     
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    //bogus test
     
     paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     scoutingDirectory = [paths objectAtIndex:0];
