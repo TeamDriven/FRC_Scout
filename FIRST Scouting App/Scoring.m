@@ -86,102 +86,105 @@ NSArray *regionalNames;
 }
 
 -(void)setUpScreen{
-    CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
-    greyOut = [[UIControl alloc] initWithFrame:greyOutRect];
-    [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
-    greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
-    [self.view addSubview:greyOut];
-    
-    CGRect setUpViewRect = CGRectMake(70, 100, 628, 700);
-    setUpView = [[UIControl alloc] initWithFrame:setUpViewRect];
-    [setUpView addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
-    setUpView.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
-    setUpView.layer.cornerRadius = 10;
-    
-    
-    CGRect setUpTitleRect = CGRectMake(214, 50, 200, 50);
-    UILabel *setUpTitle = [[UILabel alloc] initWithFrame:setUpTitleRect];
-    [setUpTitle setFont:[UIFont systemFontOfSize:25]];
-    [setUpTitle setTextAlignment:NSTextAlignmentCenter];
-    [setUpTitle setText:@"Sign in to Scout"];
-    [setUpView addSubview:setUpTitle];
-    
-    CGRect red1SelectorRect = CGRectMake(124, 150, 380, 30);
-    red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3",  nil]];
-    [red1Selector setFrame:red1SelectorRect];
-    [setUpView addSubview:red1Selector];
-    
-    CGRect matchNumFieldRect = CGRectMake(384, 220, 130, 40);
-    matchNumField = [[UITextField alloc] initWithFrame:matchNumFieldRect];
-    [matchNumField setBorderStyle:UITextBorderStyleRoundedRect];
-    [matchNumField setFont:[UIFont systemFontOfSize:15]];
-    [matchNumField setPlaceholder:@"Current Match #"];
-    [matchNumField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [matchNumField setKeyboardType:UIKeyboardTypeNumberPad];
-    [matchNumField setReturnKeyType:UIReturnKeyDone];
-    [matchNumField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
-    [matchNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
-    [matchNumField setTextAlignment:NSTextAlignmentCenter];
-    [setUpView addSubview:matchNumField];
-    
-    CGRect teamNumFieldRect = CGRectMake(264, 220, 100, 40);
-    teamNumField = [[UITextField alloc] initWithFrame:teamNumFieldRect];
-    [teamNumField setBorderStyle:UITextBorderStyleRoundedRect];
-    [teamNumField setFont:[UIFont systemFontOfSize:15]];
-    [teamNumField setPlaceholder:@"Your Team #"];
-    [teamNumField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [teamNumField setKeyboardType:UIKeyboardTypeNumberPad];
-    [teamNumField setReturnKeyType:UIReturnKeyDone];
-    [teamNumField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
-    [teamNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
-    [teamNumField setTextAlignment:NSTextAlignmentCenter];
-    [setUpView addSubview:teamNumField];
-    
-    CGRect initialsFieldRect = CGRectMake(114, 220, 130, 40);
-    initialsField = [[UITextField alloc] initWithFrame:initialsFieldRect];
-    [initialsField setBorderStyle:UITextBorderStyleRoundedRect];
-    [initialsField setFont:[UIFont systemFontOfSize:15]];
-    [initialsField setPlaceholder:@"Your 3 Initials"];
-    [initialsField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [initialsField setKeyboardType:UIKeyboardTypeDefault];
-    [initialsField setReturnKeyType:UIReturnKeyDone];
-    [initialsField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
-    [initialsField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
-    [initialsField setTextAlignment:NSTextAlignmentCenter];
-    [setUpView addSubview:initialsField];
-    
-    CGRect regionalPickerLblRect = CGRectMake(194, 305, 240, 30);
-    UILabel *regionalPickerLbl = [[UILabel alloc] initWithFrame:regionalPickerLblRect];
-    [regionalPickerLbl setFont:[UIFont systemFontOfSize:18]];
-    regionalPickerLbl.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
-    [regionalPickerLbl setTextAlignment:NSTextAlignmentCenter];
-    [regionalPickerLbl setText:@"Select the regional you are at"];
-    [setUpView addSubview:regionalPickerLbl];
-    
-    CGRect regionalPickerRect = CGRectMake(104, 340, 420, 300);
-    regionalPicker = [[UIPickerView alloc] initWithFrame:regionalPickerRect];
-    regionalPicker.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.5];
-    regionalPicker.layer.cornerRadius = 5;
-    regionalPicker.delegate = self;
-    regionalPicker.showsSelectionIndicator = YES;
-    [setUpView addSubview:regionalPicker];
-    
-    UIButton *saveSetupButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [saveSetupButton addTarget:self action:@selector(eraseSetUpScreen) forControlEvents:UIControlEventTouchUpInside];
-    [saveSetupButton setTitle:@"Save Settings" forState:UIControlStateNormal];
-    saveSetupButton.frame = CGRectMake(254, 640, 120, 30);
-    saveSetupButton.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
-    [setUpView addSubview:saveSetupButton];
-    
-    setUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
-    [self.view addSubview:setUpView];
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         setUpView.transform = CGAffineTransformIdentity;
-                     }
-                     completion:^(BOOL finished){
-                     }];
-}
+    if (initials == nil) {
+        CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
+        greyOut = [[UIControl alloc] initWithFrame:greyOutRect];
+        [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+        greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
+        [self.view addSubview:greyOut];
+        
+        CGRect setUpViewRect = CGRectMake(70, 100, 628, 700);
+        setUpView = [[UIControl alloc] initWithFrame:setUpViewRect];
+        [setUpView addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+        setUpView.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
+        setUpView.layer.cornerRadius = 10;
+        
+        
+        CGRect setUpTitleRect = CGRectMake(214, 50, 200, 50);
+        UILabel *setUpTitle = [[UILabel alloc] initWithFrame:setUpTitleRect];
+        [setUpTitle setFont:[UIFont systemFontOfSize:25]];
+        [setUpTitle setTextAlignment:NSTextAlignmentCenter];
+        [setUpTitle setText:@"Sign in to Scout"];
+        [setUpView addSubview:setUpTitle];
+        
+        CGRect red1SelectorRect = CGRectMake(124, 150, 380, 30);
+        red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3",  nil]];
+        [red1Selector setFrame:red1SelectorRect];
+        [setUpView addSubview:red1Selector];
+        
+        CGRect matchNumFieldRect = CGRectMake(384, 220, 130, 40);
+        matchNumField = [[UITextField alloc] initWithFrame:matchNumFieldRect];
+        [matchNumField setBorderStyle:UITextBorderStyleRoundedRect];
+        [matchNumField setFont:[UIFont systemFontOfSize:15]];
+        [matchNumField setPlaceholder:@"Current Match #"];
+        [matchNumField setAutocorrectionType:UITextAutocorrectionTypeNo];
+        [matchNumField setKeyboardType:UIKeyboardTypeNumberPad];
+        [matchNumField setReturnKeyType:UIReturnKeyDone];
+        [matchNumField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+        [matchNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+        [matchNumField setTextAlignment:NSTextAlignmentCenter];
+        [setUpView addSubview:matchNumField];
+        
+        CGRect teamNumFieldRect = CGRectMake(264, 220, 100, 40);
+        teamNumField = [[UITextField alloc] initWithFrame:teamNumFieldRect];
+        [teamNumField setBorderStyle:UITextBorderStyleRoundedRect];
+        [teamNumField setFont:[UIFont systemFontOfSize:15]];
+        [teamNumField setPlaceholder:@"Your Team #"];
+        [teamNumField setAutocorrectionType:UITextAutocorrectionTypeNo];
+        [teamNumField setKeyboardType:UIKeyboardTypeNumberPad];
+        [teamNumField setReturnKeyType:UIReturnKeyDone];
+        [teamNumField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+        [teamNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+        [teamNumField setTextAlignment:NSTextAlignmentCenter];
+        [setUpView addSubview:teamNumField];
+        
+        CGRect initialsFieldRect = CGRectMake(114, 220, 130, 40);
+        initialsField = [[UITextField alloc] initWithFrame:initialsFieldRect];
+        [initialsField setBorderStyle:UITextBorderStyleRoundedRect];
+        [initialsField setFont:[UIFont systemFontOfSize:15]];
+        [initialsField setPlaceholder:@"Your 3 Initials"];
+        [initialsField setAutocorrectionType:UITextAutocorrectionTypeNo];
+        [initialsField setKeyboardType:UIKeyboardTypeDefault];
+        [initialsField setReturnKeyType:UIReturnKeyDone];
+        [initialsField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+        [initialsField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+        [initialsField setTextAlignment:NSTextAlignmentCenter];
+        [setUpView addSubview:initialsField];
+        
+        CGRect regionalPickerLblRect = CGRectMake(194, 305, 240, 30);
+        UILabel *regionalPickerLbl = [[UILabel alloc] initWithFrame:regionalPickerLblRect];
+        [regionalPickerLbl setFont:[UIFont systemFontOfSize:18]];
+        regionalPickerLbl.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
+        [regionalPickerLbl setTextAlignment:NSTextAlignmentCenter];
+        [regionalPickerLbl setText:@"Select the regional you are at"];
+        [setUpView addSubview:regionalPickerLbl];
+        
+        CGRect regionalPickerRect = CGRectMake(104, 340, 420, 300);
+        regionalPicker = [[UIPickerView alloc] initWithFrame:regionalPickerRect];
+        regionalPicker.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.5];
+        regionalPicker.layer.cornerRadius = 5;
+        regionalPicker.delegate = self;
+        regionalPicker.showsSelectionIndicator = YES;
+        [setUpView addSubview:regionalPicker];
+        
+        UIButton *saveSetupButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [saveSetupButton addTarget:self action:@selector(eraseSetUpScreen) forControlEvents:UIControlEventTouchUpInside];
+        [saveSetupButton setTitle:@"Save Settings" forState:UIControlStateNormal];
+        saveSetupButton.frame = CGRectMake(254, 640, 120, 30);
+        saveSetupButton.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
+        [setUpView addSubview:saveSetupButton];
+        
+        setUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        [self.view addSubview:setUpView];
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             setUpView.transform = CGAffineTransformIdentity;
+                         }
+                         completion:^(BOOL finished){
+                         }];
+
+    }
+    }
 
 -(void)eraseSetUpScreen{
     pos = nil;
