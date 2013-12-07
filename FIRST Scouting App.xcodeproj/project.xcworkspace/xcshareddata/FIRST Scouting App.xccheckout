@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>D251699E-5092-42B4-BE12-B66D7E08C8F6</string>
+	<key>IDESourceControlProjectName</key>
+	<string>FIRST Scouting App</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>A4E883D5-6D71-4DA7-8807-F156DD693154</key>
+		<string>https://github.com/TeamDriven/ScoutingApp.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>FIRST Scouting App.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>A4E883D5-6D71-4DA7-8807-F156DD693154</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/TeamDriven/ScoutingApp.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>A4E883D5-6D71-4DA7-8807-F156DD693154</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>A4E883D5-6D71-4DA7-8807-F156DD693154</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ScoutingApp</string>
+		</dict>
+	</array>
+</dict>
+</plist>
