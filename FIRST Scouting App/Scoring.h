@@ -11,14 +11,25 @@
 
 @interface LocationsFirstViewController : UIViewController <UIGestureRecognizerDelegate, UIPickerViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *highScoreLbl;
-@property (weak, nonatomic) IBOutlet UILabel *midScoreLbl;
-@property (weak, nonatomic) IBOutlet UILabel *lowScoreLbl;
-
 @property (weak, nonatomic) IBOutlet UITextField *matchNumField;
 @property (weak, nonatomic) IBOutlet UITextField *teamNumField;
+@property (weak, nonatomic) IBOutlet UIButton *matchNumEdit;
+@property (weak, nonatomic) IBOutlet UIButton *teamNumEdit;
 
-@property (weak, nonatomic) IBOutlet UIToolbar *header;
+@property (weak, nonatomic) IBOutlet UILabel *regionalNameLbl;
+@property (weak, nonatomic) IBOutlet UILabel *initialsLbl;
+
+@property (weak, nonatomic) IBOutlet UILabel *autoTitleLbl;
+@property (weak, nonatomic) IBOutlet UILabel *teleopTitleLbl;
+
+@property (weak, nonatomic) IBOutlet UILabel *teleopHighScoreLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoHighScoreLbl;
+@property (weak, nonatomic) IBOutlet UILabel *teleopMidScoreLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoMidScoreLbl;
+@property (weak, nonatomic) IBOutlet UILabel *teleopLowScoreLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoLowScoreLbl;
+
+
 
 
 

@@ -16,9 +16,12 @@
 
 Boolean autoYN;
 
-NSInteger highScore;
-NSInteger midScore;
-NSInteger lowScore;
+NSInteger teleopHighScore;
+NSInteger autoHighScore;
+NSInteger teleopMidScore;
+NSInteger autoMidScore;
+NSInteger teleopLowScore;
+NSInteger autoLowScore;
 
 NSString *initials;
 NSString *scoutTeamNum;
@@ -65,15 +68,15 @@ NSArray *regionalNames;
     twoFingerUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(autoOn)];
     [twoFingerUp setNumberOfTouchesRequired:2];
     [twoFingerUp setDirection:UISwipeGestureRecognizerDirectionUp];
-    [twoFingerUp setDelaysTouchesBegan:YES];
-    [twoFingerUp setDelaysTouchesEnded:YES];
     [self.view addGestureRecognizer:twoFingerUp];
+    
     
     twoFingerDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(autoOff)];
     [twoFingerDown setNumberOfTouchesRequired:2];
     [twoFingerDown setDirection:UISwipeGestureRecognizerDirectionDown];
-    [twoFingerDown setDelaysTouchesBegan:YES];
     [self.view addGestureRecognizer:twoFingerDown];
+    
+    autoYN = true;
     
     regionalNames = @[@"Greater KC Regional", @"Cincinnati Regional", @"Cooler Than the Coolest Regional", @"Greater Division District", @"Divide by Zero Regional", @"Razorback Regional", @"Bayou Regional", @"World Champs"];
 }
@@ -87,6 +90,9 @@ NSArray *regionalNames;
 
 -(void)setUpScreen{
     if (initials == nil) {
+        twoFingerUp.enabled = false;
+        twoFingerDown.enabled = false;
+        
         CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
         greyOut = [[UIControl alloc] initWithFrame:greyOutRect];
         [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
@@ -166,11 +172,14 @@ NSArray *regionalNames;
         regionalPicker.delegate = self;
         regionalPicker.showsSelectionIndicator = YES;
         [setUpView addSubview:regionalPicker];
+        if (currentRegional) {
+            [regionalPicker selectRow:[regionalNames indexOfObject:currentRegional] inComponent:0 animated:YES];
+        }
         
         UIButton *saveSetupButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [saveSetupButton addTarget:self action:@selector(eraseSetUpScreen) forControlEvents:UIControlEventTouchUpInside];
         [saveSetupButton setTitle:@"Save Settings" forState:UIControlStateNormal];
-        saveSetupButton.frame = CGRectMake(254, 640, 120, 30);
+        saveSetupButton.frame = CGRectMake(254, 620, 120, 30);
         saveSetupButton.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
         [setUpView addSubview:saveSetupButton];
         
@@ -198,6 +207,7 @@ NSArray *regionalNames;
     }
     initials = initialsField.text;
     scoutTeamNum = teamNumField.text;
+    teamNum = @"1730";
     currentMatchNum = matchNumField.text;
     currentRegional = [regionalNames objectAtIndex:[regionalPicker selectedRowInComponent:0]];
     
@@ -241,9 +251,44 @@ NSArray *regionalNames;
                          completion:^(BOOL finished){
                              [greyOut removeFromSuperview];
                              [setUpView removeFromSuperview];
+                             //teamNum = teamNumField.text;
+                             
+                             
+                             NSAttributedString *matchNumString = [[NSAttributedString alloc] initWithString:currentMatchNum];
+                             [_matchNumEdit setAttributedTitle:matchNumString forState:UIControlStateNormal];
+                             _matchNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
+                             
+                             
+                             NSAttributedString *teamNumString = [[NSAttributedString alloc] initWithString:teamNum];
+                             [_teamNumEdit setAttributedTitle:teamNumString forState:UIControlStateNormal];
+                             _teamNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
+                             
+                             _initialsLbl.text = [[NSString alloc] initWithFormat:@"Your Initials: %@", initials];
+                             
+                             _regionalNameLbl.text = currentRegional;
+                             _regionalNameLbl.numberOfLines = 0;
+                             [_regionalNameLbl sizeToFit];
+                             
+                             twoFingerDown.enabled = true;
                          }];
         NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
     }
+    
+    
+}
+
+- (IBAction)reSignIn:(id)sender {
+    initials = nil;
+    _matchNumField.enabled = false;
+    _matchNumField.hidden = true;
+    _matchNumEdit.enabled = true;
+    _matchNumEdit.hidden = false;
+    
+    _teamNumField.enabled = false;
+    _teamNumField.hidden = true;
+    _teamNumEdit.enabled = true;
+    _teamNumEdit.hidden = false;
+    [self setUpScreen];
 }
 
 /*****************************************
@@ -288,22 +333,57 @@ NSArray *regionalNames;
 
 -(void)autoOn{
     autoYN = true;
-    [self.view setBackgroundColor:[UIColor whiteColor]];
-    [_header setBarTintColor:[UIColor whiteColor]];
+    twoFingerUp.enabled = false;
+    twoFingerDown.enabled = true;
+    
+    _autoTitleLbl.alpha = 0;
+    _autoHighScoreLbl.alpha = 0;
+    _autoMidScoreLbl.alpha = 0;
+    _autoLowScoreLbl.alpha = 0;
+    
+    _teleopTitleLbl.alpha = 1;
+    _teleopHighScoreLbl.alpha = 1;
+    _teleopMidScoreLbl.alpha = 1;
+    _teleopLowScoreLbl.alpha = 1;
+    
     [UIView animateWithDuration:0.3 animations:^{
-        [self.view setBackgroundColor:[UIColor colorWithRed:(255/255.0) green:(160/255.0) blue:(55/255.0) alpha:1]];
-        [_header setBarTintColor:[UIColor colorWithRed:(255/255.0) green:(160/255.0) blue:(55/255.0) alpha:1]];
+        _autoTitleLbl.alpha = 1;
+        _autoHighScoreLbl.alpha = 1;
+        _autoMidScoreLbl.alpha = 1;
+        _autoLowScoreLbl.alpha = 1;
+        
+        _teleopTitleLbl.alpha = 0;
+        _teleopHighScoreLbl.alpha = 0;
+        _teleopMidScoreLbl.alpha = 0;
+        _teleopLowScoreLbl.alpha = 0;
     }];
     
     NSLog(@"AUTO ON");
 }
 -(void)autoOff{
     autoYN = false;
-    [self.view setBackgroundColor:[UIColor colorWithRed:(255/255.0) green:(160/255.0) blue:(55/255.0) alpha:1]];
-    [_header setBarTintColor:[UIColor colorWithRed:(255/255.0) green:(160/255.0) blue:(55/255.0) alpha:1]];
+    twoFingerUp.enabled = true;
+    twoFingerDown.enabled = false;
+    
+    _autoTitleLbl.alpha = 1;
+    _autoHighScoreLbl.alpha = 1;
+    _autoMidScoreLbl.alpha = 1;
+    _autoLowScoreLbl.alpha = 1;
+    
+    _teleopTitleLbl.alpha = 0;
+    _teleopHighScoreLbl.alpha = 0;
+    _teleopMidScoreLbl.alpha = 0;
+    _teleopLowScoreLbl.alpha = 0;
     [UIView animateWithDuration:0.3 animations:^{
-        [self.view setBackgroundColor:[UIColor whiteColor]];
-        [_header setBarTintColor:[UIColor whiteColor]];
+        _autoTitleLbl.alpha = 0;
+        _autoHighScoreLbl.alpha = 0;
+        _autoMidScoreLbl.alpha = 0;
+        _autoLowScoreLbl.alpha = 0;
+        
+        _teleopTitleLbl.alpha = 1;
+        _teleopHighScoreLbl.alpha = 1;
+        _teleopMidScoreLbl.alpha = 1;
+        _teleopLowScoreLbl.alpha = 1;
     }];
     
     NSLog(@"AUTO OFF");
@@ -317,49 +397,125 @@ NSArray *regionalNames;
 }
 
 - (IBAction)highPlus:(id)sender {
-    highScore++;
-    _highScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)highScore];
+    if (autoYN) {
+        autoHighScore++;
+        _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
+    }
+    else{
+        teleopHighScore++;
+        _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
+    }
 }
 
 - (IBAction)highMinus:(id)sender {
-    if (highScore > 0) {
-        highScore--;
-        _highScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)highScore];
+    if (autoYN) {
+        if (autoHighScore > 0) {
+            autoHighScore--;
+            _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
+        }
     }
+    else{
+        if (teleopHighScore > 0) {
+            teleopHighScore--;
+            _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
+    }
+    }
+    
 }
 
 - (IBAction)midPlus:(id)sender {
-    midScore++;
-    _midScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)midScore];
+    if (autoYN) {
+        autoMidScore++;
+        _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
+    }
+    else{
+        teleopMidScore++;
+        _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
+    }
+    
 }
 
 - (IBAction)midMinus:(id)sender {
-    if (midScore > 0) {
-        midScore--;
-        _midScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)midScore];
+    if (autoYN) {
+        if (autoMidScore > 0) {
+            autoMidScore--;
+            _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
+        }
     }
+    else{
+        if (teleopMidScore > 0) {
+            teleopMidScore--;
+            _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
+        }
+    }
+    
 }
 
 - (IBAction)lowPlus:(id)sender {
-    lowScore++;
-    _lowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)lowScore];
+    if (autoYN) {
+        autoLowScore++;
+        _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+    }
+    else{
+        teleopLowScore++;
+        _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
+    }
 }
 
 - (IBAction)lowMinus:(id)sender {
-    if (lowScore > 0) {
-        lowScore--;
-        _lowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)lowScore];
+    if (autoYN) {
+        if (autoLowScore > 0) {
+            autoLowScore--;
+            _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+        }
     }
+    else{
+        if (teleopLowScore > 0) {
+            teleopLowScore--;
+            _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
+        }
+    }
+    
+}
+
+- (IBAction)matchNumberEdit:(id)sender {
+    _matchNumEdit.hidden = true;
+    _matchNumEdit.enabled = false;
+    _matchNumField.hidden = false;
+    _matchNumField.enabled = true;
+    _matchNumField.text = _matchNumEdit.titleLabel.text;
+    [_matchNumField becomeFirstResponder];
+}
+
+- (IBAction)teamNumberEdit:(id)sender {
+    _teamNumEdit.hidden = true;
+    _teamNumEdit.enabled = false;
+    _teamNumField.hidden = false;
+    _teamNumField.enabled = true;
+    _teamNumField.text = _teamNumEdit.titleLabel.text;
+    _teamNumField.selected = true;
+    [_teamNumField becomeFirstResponder];
 }
 
 - (IBAction)saveMatch:(id)sender {
     
-    currentMatchNum = _matchNumField.text;
-    teamNum = _teamNumField.text;
+    if (_matchNumEdit.isHidden) {
+        currentMatchNum = _matchNumField.text;
+    }
+    else{
+        currentMatchNum = _matchNumEdit.titleLabel.text;
+    }
+    
+    if (_teamNumEdit.isHidden) {
+        teamNum = teamNumField.text;
+    }
+    else{
+        teamNum = _teamNumEdit.titleLabel.text;
+    }
     
     if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO MATCH NUMBER"
-                                                       message: @"Please enter a match number for this bogus match."
+                                                       message: @"Please enter a match number for this match."
                                                       delegate: nil
                                              cancelButtonTitle:@"OK"
                                              otherButtonTitles:nil];
@@ -368,7 +524,7 @@ NSArray *regionalNames;
     
     else if (teamNum == nil || [teamNum isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO TEAM NUMBER"
-                                                       message: @"Please enter a team number for this bogus match."
+                                                       message: @"Please enter a team number for this match."
                                                       delegate: nil
                                              cancelButtonTitle:@"OK"
                                              otherButtonTitles:nil];
@@ -383,10 +539,15 @@ NSArray *regionalNames;
             }
             if ([[dataDict objectForKey:@"Red1"] objectForKey:currentMatchNum] == nil) {
                 [[dataDict objectForKey:@"Red1"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                               [NSNumber numberWithInteger:highScore], @"highScore",
-                                                               [NSNumber numberWithInteger:midScore], @"midScore",
-                                                               [NSNumber numberWithInteger:lowScore], @"lowScore",
+                                                               [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                               [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                               [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                               [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                               [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                               [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
                                                                [NSString stringWithString:teamNum], @"teamNum",
+                                                               [NSString stringWithString:initials], @"initials",
+                                                               [NSString stringWithString:currentRegional], @"regional",
                                                                nil] forKey:currentMatchNum];
                 [self saveSuccess];
             }
@@ -400,10 +561,15 @@ NSArray *regionalNames;
             }
             if ([[dataDict objectForKey:@"Red2"] objectForKey:currentMatchNum] == nil) {
                 [[dataDict objectForKey:@"Red2"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [NSNumber numberWithInteger:highScore], @"highScore",
-                                                            [NSNumber numberWithInteger:midScore], @"midScore",
-                                                            [NSNumber numberWithInteger:lowScore], @"lowScore",
+                                                            [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                            [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                            [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                            [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                            [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                            [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
                                                             [NSString stringWithString:teamNum], @"teamNum",
+                                                            [NSString stringWithString:initials], @"initials",
+                                                            [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
                 [self saveSuccess];
             }
@@ -417,10 +583,15 @@ NSArray *regionalNames;
             }
             if ([[dataDict objectForKey:@"Red3"] objectForKey:currentMatchNum] == nil) {
                 [[dataDict objectForKey:@"Red3"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [NSNumber numberWithInteger:highScore], @"highScore",
-                                                            [NSNumber numberWithInteger:midScore], @"midScore",
-                                                            [NSNumber numberWithInteger:lowScore], @"lowScore",
+                                                            [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                            [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                            [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                            [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                            [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                            [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
                                                             [NSString stringWithString:teamNum], @"teamNum",
+                                                            [NSString stringWithString:initials], @"initials",
+                                                            [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
                 [self saveSuccess];
             }
@@ -434,10 +605,15 @@ NSArray *regionalNames;
             }
             if ([[dataDict objectForKey:@"Blue1"] objectForKey:currentMatchNum] == nil) {
                 [[dataDict objectForKey:@"Blue1"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [NSNumber numberWithInteger:highScore], @"highScore",
-                                                            [NSNumber numberWithInteger:midScore], @"midScore",
-                                                            [NSNumber numberWithInteger:lowScore], @"lowScore",
-                                                            [NSString stringWithString:teamNum], @"teamNum",
+                                                             [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                             [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                             [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                             [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                             [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                             [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                             [NSString stringWithString:teamNum], @"teamNum",
+                                                             [NSString stringWithString:initials], @"initials",
+                                                             [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
                 [self saveSuccess];
             }
@@ -451,10 +627,15 @@ NSArray *regionalNames;
             }
             if ([[dataDict objectForKey:@"Blue2"] objectForKey:currentMatchNum] == nil) {
                 [[dataDict objectForKey:@"Blue2"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [NSNumber numberWithInteger:highScore], @"highScore",
-                                                            [NSNumber numberWithInteger:midScore], @"midScore",
-                                                            [NSNumber numberWithInteger:lowScore], @"lowScore",
-                                                            [NSString stringWithString:teamNum], @"teamNum",
+                                                             [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                             [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                             [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                             [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                             [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                             [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                             [NSString stringWithString:teamNum], @"teamNum",
+                                                             [NSString stringWithString:initials], @"initials",
+                                                             [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
                 [self saveSuccess];
             }
@@ -468,12 +649,18 @@ NSArray *regionalNames;
             }
             if ([[dataDict objectForKey:@"Blue3"] objectForKey:currentMatchNum] == nil) {
                 [[dataDict objectForKey:@"Blue3"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [NSNumber numberWithInteger:highScore], @"highScore",
-                                                            [NSNumber numberWithInteger:midScore], @"midScore",
-                                                            [NSNumber numberWithInteger:lowScore], @"lowScore",
-                                                            [NSString stringWithString:teamNum], @"teamNum",
+                                                             [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                             [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                             [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                             [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                             [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                             [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                             [NSString stringWithString:teamNum], @"teamNum",
+                                                             [NSString stringWithString:initials], @"initials",
+                                                             [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
                 [self saveSuccess];
+                [self autoOn];
             }
             else{
                 [self overWriteAlert];
@@ -486,64 +673,88 @@ NSArray *regionalNames;
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    initials = [[alertView textFieldAtIndex:0] text];
-    if (initials.length != 3) {
-        UIAlertView *initialsAlert = [[UIAlertView alloc] initWithTitle:@"Really?" message:@"Come on dude, just enter your three initials. It's not that difficult." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        initialsAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    }
     if (buttonIndex == 1) {
-        NSLog(@"Entered Button Chooser");
         if ([pos isEqualToString:@"Red 1"]) {
             [[dataDict objectForKey:@"Red1"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [NSNumber numberWithInteger:highScore], @"highScore",
-                                                            [NSNumber numberWithInteger:midScore], @"midScore",
-                                                            [NSNumber numberWithInteger:lowScore], @"lowScore",
-                                                            [NSString stringWithString:teamNum], @"teamNum",
+                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                        [NSString stringWithString:teamNum], @"teamNum",
+                                                        [NSString stringWithString:initials], @"initials",
+                                                        [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
             [self saveSuccess];
         }
         else if([pos isEqualToString:@"Red 2"]){
             [[dataDict objectForKey:@"Red2"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [NSNumber numberWithInteger:highScore], @"highScore",
-                                                            [NSNumber numberWithInteger:midScore], @"midScore",
-                                                            [NSNumber numberWithInteger:lowScore], @"lowScore",
-                                                            [NSString stringWithString:teamNum], @"teamNum",
+                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                        [NSString stringWithString:teamNum], @"teamNum",
+                                                        [NSString stringWithString:initials], @"initials",
+                                                        [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
             [self saveSuccess];
         }
         else if([pos isEqualToString:@"Red 3"]){
             [[dataDict objectForKey:@"Red3"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [NSNumber numberWithInteger:highScore], @"highScore",
-                                                            [NSNumber numberWithInteger:midScore], @"midScore",
-                                                            [NSNumber numberWithInteger:lowScore], @"lowScore",
-                                                            [NSString stringWithString:teamNum], @"teamNum",
+                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                        [NSString stringWithString:teamNum], @"teamNum",
+                                                        [NSString stringWithString:initials], @"initials",
+                                                        [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
             [self saveSuccess];
         }
         else if ([pos isEqualToString:@"Blue 1"]){
             [[dataDict objectForKey:@"Blue1"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [NSNumber numberWithInteger:highScore], @"highScore",
-                                                            [NSNumber numberWithInteger:midScore], @"midScore",
-                                                            [NSNumber numberWithInteger:lowScore], @"lowScore",
-                                                            [NSString stringWithString:teamNum], @"teamNum",
+                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                         [NSString stringWithString:teamNum], @"teamNum",
+                                                         [NSString stringWithString:initials], @"initials",
+                                                         [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
             [self saveSuccess];
         }
         else if ([pos isEqualToString:@"Blue 2"]){
             [[dataDict objectForKey:@"Blue2"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [NSNumber numberWithInteger:highScore], @"highScore",
-                                                            [NSNumber numberWithInteger:midScore], @"midScore",
-                                                            [NSNumber numberWithInteger:lowScore], @"lowScore",
-                                                            [NSString stringWithString:teamNum], @"teamNum",
+                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                         [NSString stringWithString:teamNum], @"teamNum",
+                                                         [NSString stringWithString:initials], @"initials",
+                                                         [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
             [self saveSuccess];
         }
         else if ([pos isEqualToString:@"Blue 3"]){
             [[dataDict objectForKey:@"Blue3"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [NSNumber numberWithInteger:highScore], @"highScore",
-                                                            [NSNumber numberWithInteger:midScore], @"midScore",
-                                                            [NSNumber numberWithInteger:lowScore], @"lowScore",
-                                                            [NSString stringWithString:teamNum], @"teamNum",
+                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                         [NSString stringWithString:teamNum], @"teamNum",
+                                                         [NSString stringWithString:initials], @"initials",
+                                                         [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
             [self saveSuccess];
         }
@@ -568,15 +779,19 @@ NSArray *regionalNames;
                                          otherButtonTitles:nil];
     [alert show];
     
-    highScore = 0;
-    _highScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)highScore];
-    midScore = 0;
-    _midScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)midScore];
-    lowScore = 0;
-    _lowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)lowScore];
+    teleopHighScore = 0;
+    _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
+    autoHighScore = 0;
+    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
+    teleopMidScore = 0;
+    _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
+    autoMidScore = 0;
+    _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
+    teleopLowScore = 0;
+    _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
+    autoLowScore = 0;
+    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
     
-    _matchNumField.text = @"";
-    _teamNumField.text = @"";
 }
 
 - (IBAction)hideKeyboard:(id)sender {
