@@ -26,7 +26,7 @@ NSInteger autoLowScore;
 NSString *initials;
 NSString *scoutTeamNum;
 NSString *currentMatchNum;
-NSString *teamNum;
+NSString *currentTeamNum;
 NSString *currentRegional;
 
 NSArray *paths;
@@ -42,8 +42,10 @@ UISwipeGestureRecognizer *twoFingerDown;
 UIControl *greyOut;
 UIControl *setUpView;
 UISegmentedControl *red1Selector;
-UITextField *matchNumField;
-UITextField *teamNumField;
+UITextField *currentMatchNumField;
+NSAttributedString *currentMatchNumAtString;
+UITextField *scoutTeamNumField;
+NSAttributedString *currentTeamNumAtString;
 UITextField *initialsField;
 UIPickerView *regionalPicker;
 
@@ -118,37 +120,18 @@ NSArray *regionalNames;
         [red1Selector setFrame:red1SelectorRect];
         [setUpView addSubview:red1Selector];
         
-        CGRect matchNumFieldRect = CGRectMake(384, 220, 130, 40);
-        matchNumField = [[UITextField alloc] initWithFrame:matchNumFieldRect];
-        [matchNumField setBorderStyle:UITextBorderStyleRoundedRect];
-        [matchNumField setFont:[UIFont systemFontOfSize:15]];
-        [matchNumField setPlaceholder:@"Current Match #"];
-        [matchNumField setAutocorrectionType:UITextAutocorrectionTypeNo];
-        [matchNumField setKeyboardType:UIKeyboardTypeNumberPad];
-        [matchNumField setReturnKeyType:UIReturnKeyDone];
-        [matchNumField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
-        [matchNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
-        [matchNumField setTextAlignment:NSTextAlignmentCenter];
-        [setUpView addSubview:matchNumField];
+        CGRect initialsFieldLblRect = CGRectMake(129, 210, 100, 15);
+        UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
+        initialsFieldLbl.textAlignment = NSTextAlignmentCenter;
+        initialsFieldLbl.text = @"Enter your three initials";
+        initialsFieldLbl.adjustsFontSizeToFitWidth = YES;
+        [setUpView addSubview:initialsFieldLbl];
         
-        CGRect teamNumFieldRect = CGRectMake(264, 220, 100, 40);
-        teamNumField = [[UITextField alloc] initWithFrame:teamNumFieldRect];
-        [teamNumField setBorderStyle:UITextBorderStyleRoundedRect];
-        [teamNumField setFont:[UIFont systemFontOfSize:15]];
-        [teamNumField setPlaceholder:@"Your Team #"];
-        [teamNumField setAutocorrectionType:UITextAutocorrectionTypeNo];
-        [teamNumField setKeyboardType:UIKeyboardTypeNumberPad];
-        [teamNumField setReturnKeyType:UIReturnKeyDone];
-        [teamNumField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
-        [teamNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
-        [teamNumField setTextAlignment:NSTextAlignmentCenter];
-        [setUpView addSubview:teamNumField];
-        
-        CGRect initialsFieldRect = CGRectMake(114, 220, 130, 40);
+        CGRect initialsFieldRect = CGRectMake(114, 230, 130, 40);
         initialsField = [[UITextField alloc] initWithFrame:initialsFieldRect];
         [initialsField setBorderStyle:UITextBorderStyleRoundedRect];
         [initialsField setFont:[UIFont systemFontOfSize:15]];
-        [initialsField setPlaceholder:@"Your 3 Initials"];
+        [initialsField setPlaceholder:@"3 Initials"];
         [initialsField setAutocorrectionType:UITextAutocorrectionTypeNo];
         [initialsField setKeyboardType:UIKeyboardTypeDefault];
         [initialsField setReturnKeyType:UIReturnKeyDone];
@@ -156,6 +139,49 @@ NSArray *regionalNames;
         [initialsField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
         [initialsField setTextAlignment:NSTextAlignmentCenter];
         [setUpView addSubview:initialsField];
+        
+        CGRect scoutTeamNumFieldLblRect = CGRectMake(264, 210, 100, 15);
+        UILabel *scoutTeamNumFieldLbl = [[UILabel alloc] initWithFrame:scoutTeamNumFieldLblRect];
+        scoutTeamNumFieldLbl.textAlignment = NSTextAlignmentCenter;
+        scoutTeamNumFieldLbl.text = @"Enter YOUR team number";
+        scoutTeamNumFieldLbl.adjustsFontSizeToFitWidth = YES;
+        [setUpView addSubview:scoutTeamNumFieldLbl];
+        
+        CGRect scoutTeamNumFieldRect = CGRectMake(264, 230, 100, 40);
+        scoutTeamNumField = [[UITextField alloc] initWithFrame:scoutTeamNumFieldRect];
+        [scoutTeamNumField setBorderStyle:UITextBorderStyleRoundedRect];
+        [scoutTeamNumField setFont:[UIFont systemFontOfSize:15]];
+        [scoutTeamNumField setPlaceholder:@"Your Team #"];
+        [scoutTeamNumField setAutocorrectionType:UITextAutocorrectionTypeNo];
+        [scoutTeamNumField setKeyboardType:UIKeyboardTypeNumberPad];
+        [scoutTeamNumField setReturnKeyType:UIReturnKeyDone];
+        [scoutTeamNumField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+        [scoutTeamNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+        [scoutTeamNumField setTextAlignment:NSTextAlignmentCenter];
+        [setUpView addSubview:scoutTeamNumField];
+        if (scoutTeamNum) {
+            scoutTeamNumField.text = scoutTeamNum;
+        }
+        
+        CGRect currentMatchNumFieldLblRect = CGRectMake(384, 210, 130, 15);
+        UILabel *currentMatchNumFieldLbl = [[UILabel alloc] initWithFrame:currentMatchNumFieldLblRect];
+        currentMatchNumFieldLbl.textAlignment = NSTextAlignmentCenter;
+        currentMatchNumFieldLbl.text = @"Enter the current match number";
+        currentMatchNumFieldLbl.adjustsFontSizeToFitWidth = YES;
+        [setUpView addSubview:currentMatchNumFieldLbl];
+        
+        CGRect currentMatchNumFieldRect = CGRectMake(384, 230, 130, 40);
+        currentMatchNumField = [[UITextField alloc] initWithFrame:currentMatchNumFieldRect];
+        [currentMatchNumField setBorderStyle:UITextBorderStyleRoundedRect];
+        [currentMatchNumField setFont:[UIFont systemFontOfSize:15]];
+        [currentMatchNumField setPlaceholder:@"Current Match #"];
+        [currentMatchNumField setAutocorrectionType:UITextAutocorrectionTypeNo];
+        [currentMatchNumField setKeyboardType:UIKeyboardTypeNumberPad];
+        [currentMatchNumField setReturnKeyType:UIReturnKeyDone];
+        [currentMatchNumField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+        [currentMatchNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+        [currentMatchNumField setTextAlignment:NSTextAlignmentCenter];
+        [setUpView addSubview:currentMatchNumField];
         
         CGRect regionalPickerLblRect = CGRectMake(194, 305, 240, 30);
         UILabel *regionalPickerLbl = [[UILabel alloc] initWithFrame:regionalPickerLblRect];
@@ -206,9 +232,9 @@ NSArray *regionalNames;
         pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
     }
     initials = initialsField.text;
-    scoutTeamNum = teamNumField.text;
-    teamNum = @"1730";
-    currentMatchNum = matchNumField.text;
+    scoutTeamNum = scoutTeamNumField.text;
+    currentTeamNum = @"1730";
+    currentMatchNum = currentMatchNumField.text;
     currentRegional = [regionalNames objectAtIndex:[regionalPicker selectedRowInComponent:0]];
     
     if (!initials || initials.length != 3) {
@@ -219,7 +245,7 @@ NSArray *regionalNames;
                                              otherButtonTitles:nil];
         [alert show];
     }
-    else if (teamNumField.text.length == 0){
+    else if (scoutTeamNumField.text.length == 0){
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Enter your team number!"
                                                        message: @"Enter the team number of the team that you are on"
                                                       delegate: nil
@@ -227,7 +253,7 @@ NSArray *regionalNames;
                                              otherButtonTitles:nil];
         [alert show];
     }
-    else if (!currentMatchNum || matchNumField.text.length == 0){
+    else if (!currentMatchNum || currentMatchNumField.text.length == 0){
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No match number!!"
                                                        message: @"What you tryin' to get away with?!? Please enter the match number you're about to scout"
                                                       delegate: nil
@@ -251,16 +277,16 @@ NSArray *regionalNames;
                          completion:^(BOOL finished){
                              [greyOut removeFromSuperview];
                              [setUpView removeFromSuperview];
-                             //teamNum = teamNumField.text;
+                             //teamNum = scoutTeamNumField.text;
                              
                              
-                             NSAttributedString *matchNumString = [[NSAttributedString alloc] initWithString:currentMatchNum];
-                             [_matchNumEdit setAttributedTitle:matchNumString forState:UIControlStateNormal];
+                             currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
+                             [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
                              _matchNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
                              
                              
-                             NSAttributedString *teamNumString = [[NSAttributedString alloc] initWithString:teamNum];
-                             [_teamNumEdit setAttributedTitle:teamNumString forState:UIControlStateNormal];
+                             currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
+                             [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
                              _teamNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
                              
                              _initialsLbl.text = [[NSString alloc] initWithFormat:@"Your Initials: %@", initials];
@@ -268,6 +294,11 @@ NSArray *regionalNames;
                              _regionalNameLbl.text = currentRegional;
                              _regionalNameLbl.numberOfLines = 0;
                              [_regionalNameLbl sizeToFit];
+                             _regionalNameLbl.adjustsFontSizeToFitWidth = YES;
+                             _regionalNameLbl.textAlignment = NSTextAlignmentCenter;
+                             _regionalNameLbl.textColor = [UIColor colorWithWhite:0.2 alpha:0.8];
+                             _regionalNameLbl.layer.borderColor = [UIColor colorWithWhite:0.5 alpha:0.5].CGColor;
+                             _regionalNameLbl.layer.borderWidth = 1.0;
                              
                              twoFingerDown.enabled = true;
                          }];
@@ -522,10 +553,10 @@ NSArray *regionalNames;
     }
     
     if (_teamNumEdit.isHidden) {
-        teamNum = teamNumField.text;
+        currentTeamNum = scoutTeamNumField.text;
     }
     else{
-        teamNum = _teamNumEdit.titleLabel.text;
+        currentTeamNum = _teamNumEdit.titleLabel.text;
     }
     
     if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""]) {
@@ -537,7 +568,7 @@ NSArray *regionalNames;
         [alert show];
     }
     
-    else if (teamNum == nil || [teamNum isEqualToString:@""]) {
+    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO TEAM NUMBER"
                                                        message: @"Please enter a team number for this match."
                                                       delegate: nil
@@ -560,7 +591,8 @@ NSArray *regionalNames;
                                                                [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                                [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                                [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                               [NSString stringWithString:teamNum], @"teamNum",
+                                                               [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+                                                               [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                                [NSString stringWithString:initials], @"initials",
                                                                [NSString stringWithString:currentRegional], @"regional",
                                                                nil] forKey:currentMatchNum];
@@ -582,7 +614,8 @@ NSArray *regionalNames;
                                                             [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                             [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                             [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                            [NSString stringWithString:teamNum], @"teamNum",
+                                                            [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+                                                            [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                             [NSString stringWithString:initials], @"initials",
                                                             [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
@@ -604,7 +637,8 @@ NSArray *regionalNames;
                                                             [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                             [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                             [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                            [NSString stringWithString:teamNum], @"teamNum",
+                                                            [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+                                                            [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                             [NSString stringWithString:initials], @"initials",
                                                             [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
@@ -626,7 +660,8 @@ NSArray *regionalNames;
                                                              [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                              [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                              [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                             [NSString stringWithString:teamNum], @"teamNum",
+                                                             [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+                                                             [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                              [NSString stringWithString:initials], @"initials",
                                                              [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
@@ -648,7 +683,8 @@ NSArray *regionalNames;
                                                              [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                              [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                              [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                             [NSString stringWithString:teamNum], @"teamNum",
+                                                             [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+                                                             [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                              [NSString stringWithString:initials], @"initials",
                                                              [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
@@ -670,7 +706,8 @@ NSArray *regionalNames;
                                                              [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                              [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                              [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                             [NSString stringWithString:teamNum], @"teamNum",
+                                                             [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+                                                             [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                              [NSString stringWithString:initials], @"initials",
                                                              [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
@@ -697,8 +734,9 @@ NSArray *regionalNames;
                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                        [NSString stringWithString:teamNum], @"teamNum",
+                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                         [NSString stringWithString:initials], @"initials",
+                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                         [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
             [self saveSuccess];
@@ -711,7 +749,8 @@ NSArray *regionalNames;
                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                        [NSString stringWithString:teamNum], @"teamNum",
+                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                         [NSString stringWithString:initials], @"initials",
                                                         [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
@@ -725,7 +764,8 @@ NSArray *regionalNames;
                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                        [NSString stringWithString:teamNum], @"teamNum",
+                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                         [NSString stringWithString:initials], @"initials",
                                                         [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
@@ -739,7 +779,8 @@ NSArray *regionalNames;
                                                          [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                          [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                          [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                         [NSString stringWithString:teamNum], @"teamNum",
+                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                          [NSString stringWithString:initials], @"initials",
                                                          [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
@@ -753,7 +794,8 @@ NSArray *regionalNames;
                                                          [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                          [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                          [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                         [NSString stringWithString:teamNum], @"teamNum",
+                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                          [NSString stringWithString:initials], @"initials",
                                                          [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
@@ -767,7 +809,8 @@ NSArray *regionalNames;
                                                          [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                          [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                          [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                         [NSString stringWithString:teamNum], @"teamNum",
+                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                          [NSString stringWithString:initials], @"initials",
                                                          [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
@@ -807,13 +850,34 @@ NSArray *regionalNames;
     autoLowScore = 0;
     _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
     
+    NSInteger matchNumTranslator = [currentMatchNum integerValue];
+    matchNumTranslator++;
+    currentMatchNum = [[NSString alloc] initWithFormat:@"%ld", (long)matchNumTranslator];
+    currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
+    [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
+    
+    if (_matchNumEdit.hidden) {
+        _matchNumField.enabled = false;
+        _matchNumField.hidden = true;
+        _matchNumEdit.enabled = true;
+        _matchNumEdit.hidden = false;
+    }
+    if (_teamNumEdit.hidden) {
+        _teamNumField.enabled = false;
+        _teamNumField.hidden = true;
+        _teamNumEdit.enabled = true;
+        _teamNumEdit.hidden = false;
+    }
+    
+    [self autoOn];
+    
 }
 
 - (IBAction)hideKeyboard:(id)sender {
     [_matchNumField resignFirstResponder];
     [_teamNumField resignFirstResponder];
-    [teamNumField resignFirstResponder];
-    [matchNumField resignFirstResponder];
+    [scoutTeamNumField resignFirstResponder];
+    [currentMatchNumField resignFirstResponder];
     [initialsField resignFirstResponder];
 }
     
