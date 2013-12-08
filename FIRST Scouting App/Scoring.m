@@ -78,7 +78,7 @@ NSArray *regionalNames;
     
     autoYN = true;
     
-    regionalNames = @[@"Greater KC Regional", @"Cincinnati Regional", @"Cooler Than the Coolest Regional", @"Greater Division District", @"Divide by Zero Regional", @"Razorback Regional", @"Bayou Regional", @"World Champs"];
+    regionalNames = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line FIRST Robotics District Competition",@"Southfield FIRST Robotics District Competition",@"Granite State District Event",@"PNW FIRST Robotics Auburn Mountainview District Event",@"MAR FIRST Robotics Mt. Olive District Competition",@"MAR FIRST Robotics Hatboro-Horsham District Competition",@"Israel Regional",@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University FIRSTRobotics District Competition",@"Gull Lake FIRST Robotics District Competition",@"PNW FIRST Robotics Oregon City District Event",@"PNW FIRST Robotics Glacier Peak District Event",@"Groton District Event",@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba FIRST Robotics District Competition",@"Howell FIRST Robotics District Competition",@"MAR FIRST Robotics Springside Chestnut Hill District Competition",@"PNW FIRST Robotics Eastern Washington University District Event",@"PNW FIRST Robotics Mt. Vernon District Event",@"MAR FIRST Robotics Clifton District Competition",@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan FIRST Robotics District Competition",@"Great Lakes Bay Region FIRSTRobotics District Competition",@"Traverse City FIRST Robotics District Competition",@"PNW FIRST Robotics Wilsonville District Event",@"Rhode Island District Event",@"PNW FIRST Robotics Shorewood District Event",@"Southington District Event",@"MAR FIRST Robotics Lenape-Seneca District Competition",@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia FIRST Robotics District Competition",@"St. Joseph FIRST Robotics District Competition",@"Waterford FIRST Robotics District Competition",@"PNW FIRST Robotics Auburn District Event",@"PNW FIRST Robotics Central Washington University District Event",@"Hartford District Event",@"MAR FIRST Robotics Bridgewater-Raritan District Competition",@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford FIRST Robotics District Competition",@"Troy FIRST Robotics District Competition",@"PNW FIRST Robotics",@"Oregon State University District Event",@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -311,13 +311,28 @@ NSArray *regionalNames;
     return 1;
 }
 
+-(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
+    UILabel* tView = (UILabel *)view;
+    if (!tView) {
+        tView = [[UILabel alloc] init];
+        
+        tView.text = [regionalNames objectAtIndex:row];
+        
+        tView.textAlignment = NSTextAlignmentCenter;
+        tView.font = [UIFont systemFontOfSize:20];
+        tView.minimumScaleFactor = 0.2;
+        tView.adjustsFontSizeToFitWidth = YES;
+    }
+    return tView;
+}
+
 // tell the picker the title for a given component
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+/*-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
     NSString *title;
     title = [regionalNames objectAtIndex:row];
     
     return title;
-}
+}*/
 
 // tell the picker the width of each row for a given component
 -(CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
@@ -782,7 +797,7 @@ NSArray *regionalNames;
     teleopHighScore = 0;
     _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
     autoHighScore = 0;
-    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
+    _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
     teleopMidScore = 0;
     _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
     autoMidScore = 0;
