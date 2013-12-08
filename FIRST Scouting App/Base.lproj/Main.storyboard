@@ -148,7 +148,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KHg-J8-aA8">
-                                <rect key="frame" x="345" y="845" width="78" height="42"/>
+                                <rect key="frame" x="345" y="852" width="78" height="42"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
@@ -255,6 +255,50 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="Bph-0H-txc">
+                                <rect key="frame" x="473" y="776" width="94" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="largePenaltyChange:" destination="9pv-A4-QxB" eventType="valueChanged" id="HUR-7b-70T"/>
+                                </connections>
+                            </stepper>
+                            <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="Rao-87-LJV">
+                                <rect key="frame" x="202" y="776" width="94" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="smallPenaltyChange:" destination="9pv-A4-QxB" eventType="valueChanged" id="TuQ-41-2b2"/>
+                                </connections>
+                            </stepper>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Large Penalty" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ADz-A5-mZr">
+                                <rect key="frame" x="480" y="803" width="87" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Small Penalty" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bna-Uq-ncr">
+                                <rect key="frame" x="209" y="803" width="87" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="#" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LPK-9L-Eze">
+                                <rect key="frame" x="495" y="746" width="50" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="#" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v1t-Wp-jgq">
+                                <rect key="frame" x="224" y="746" width="50" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <connections>
@@ -268,9 +312,15 @@
                         <outlet property="autoMidScoreLbl" destination="20a-Xx-tId" id="Cu6-MJ-YfA"/>
                         <outlet property="autoTitleLbl" destination="mDS-z2-sBp" id="AoP-sm-lW5"/>
                         <outlet property="initialsLbl" destination="6a1-F6-T2r" id="TxM-gc-NwH"/>
+                        <outlet property="largePenaltyLbl" destination="LPK-9L-Eze" id="LPn-Uh-nAy"/>
+                        <outlet property="largePenaltyStepper" destination="Bph-0H-txc" id="qei-dP-PIM"/>
+                        <outlet property="largePenaltyTitleLbl" destination="ADz-A5-mZr" id="F5J-0h-YB2"/>
                         <outlet property="matchNumEdit" destination="jy0-Eg-Sz9" id="K5h-pf-Tqf"/>
                         <outlet property="matchNumField" destination="vtE-QU-CZK" id="F03-8i-VTU"/>
                         <outlet property="regionalNameLbl" destination="14x-I5-vam" id="1Sw-a6-sVK"/>
+                        <outlet property="smallPenaltyLbl" destination="v1t-Wp-jgq" id="zzZ-0R-aq3"/>
+                        <outlet property="smallPenaltyStepper" destination="Rao-87-LJV" id="TWx-wi-TIX"/>
+                        <outlet property="smallPenaltyTitleLbl" destination="Bna-Uq-ncr" id="11X-qu-02J"/>
                         <outlet property="teamNumEdit" destination="MyL-m1-Ysh" id="SV8-en-xQf"/>
                         <outlet property="teamNumField" destination="vNx-mH-a7v" id="JlT-Wy-xYT"/>
                         <outlet property="teleopHighScoreLbl" destination="JLX-Em-dag" id="Apd-oW-Rce"/>

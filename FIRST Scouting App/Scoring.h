@@ -29,6 +29,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *teleopLowScoreLbl;
 @property (weak, nonatomic) IBOutlet UILabel *autoLowScoreLbl;
 
+@property (weak, nonatomic) IBOutlet UILabel *smallPenaltyLbl;
+@property (weak, nonatomic) IBOutlet UILabel *smallPenaltyTitleLbl;
+@property (weak, nonatomic) IBOutlet UIStepper *smallPenaltyStepper;
+@property (weak, nonatomic) IBOutlet UILabel *largePenaltyLbl;
+@property (weak, nonatomic) IBOutlet UIStepper *largePenaltyStepper;
+@property (weak, nonatomic) IBOutlet UILabel *largePenaltyTitleLbl;
 
 
 

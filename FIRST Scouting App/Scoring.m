@@ -22,6 +22,8 @@ NSInteger teleopMidScore;
 NSInteger autoMidScore;
 NSInteger teleopLowScore;
 NSInteger autoLowScore;
+NSInteger smallPenaltyTally;
+NSInteger largePenaltyTally;
 
 NSString *initials;
 NSString *scoutTeamNum;
@@ -87,7 +89,7 @@ NSArray *regionalNames;
     [super viewDidAppear:animated];
     [NSThread sleepForTimeInterval:0.3];
     [self setUpScreen];
-    
+    [self autoOn];
 }
 
 -(void)setUpScreen{
@@ -401,6 +403,20 @@ NSArray *regionalNames;
     _teleopMidScoreLbl.alpha = 1;
     _teleopLowScoreLbl.alpha = 1;
     
+    _smallPenaltyLbl.enabled = true;
+    _smallPenaltyStepper.enabled = true;
+    _smallPenaltyStepper.tintColor = [UIColor redColor];
+    _smallPenaltyStepper.alpha = 1;
+    _smallPenaltyTitleLbl.enabled = true;
+    _smallPenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)smallPenaltyTally];
+    
+    _largePenaltyLbl.enabled = true;
+    _largePenaltyStepper.enabled = true;
+    _largePenaltyStepper.tintColor = [UIColor redColor];
+    _largePenaltyStepper.alpha = 1;
+    _largePenaltyTitleLbl.enabled = true;
+    _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
+    
     [UIView animateWithDuration:0.3 animations:^{
         _autoTitleLbl.alpha = 1;
         _autoHighScoreLbl.alpha = 1;
@@ -411,6 +427,16 @@ NSArray *regionalNames;
         _teleopHighScoreLbl.alpha = 0;
         _teleopMidScoreLbl.alpha = 0;
         _teleopLowScoreLbl.alpha = 0;
+        
+        _smallPenaltyLbl.enabled = false;
+        _smallPenaltyStepper.enabled = false;
+        _smallPenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+        _smallPenaltyTitleLbl.enabled = false;
+        
+        _largePenaltyLbl.enabled = false;
+        _largePenaltyStepper.enabled = false;
+        _largePenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+        _largePenaltyTitleLbl.enabled = false;
     }];
     
     NSLog(@"AUTO ON");
@@ -430,6 +456,17 @@ NSArray *regionalNames;
     _teleopHighScoreLbl.alpha = 0;
     _teleopMidScoreLbl.alpha = 0;
     _teleopLowScoreLbl.alpha = 0;
+    
+    _smallPenaltyLbl.enabled = false;
+    _smallPenaltyStepper.enabled = false;
+    _smallPenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+    _smallPenaltyTitleLbl.enabled = false;
+    
+    _largePenaltyLbl.enabled = false;
+    _largePenaltyStepper.enabled = false;
+    _largePenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+    _largePenaltyTitleLbl.enabled = false;
+    
     [UIView animateWithDuration:0.3 animations:^{
         _autoTitleLbl.alpha = 0;
         _autoHighScoreLbl.alpha = 0;
@@ -440,6 +477,18 @@ NSArray *regionalNames;
         _teleopHighScoreLbl.alpha = 1;
         _teleopMidScoreLbl.alpha = 1;
         _teleopLowScoreLbl.alpha = 1;
+        
+        _smallPenaltyLbl.enabled = true;
+        _smallPenaltyStepper.enabled = true;
+        _smallPenaltyStepper.tintColor = [UIColor redColor];
+        _smallPenaltyStepper.alpha = 1;
+        _smallPenaltyTitleLbl.enabled = true;
+        
+        _largePenaltyLbl.enabled = true;
+        _largePenaltyStepper.enabled = true;
+        _largePenaltyStepper.tintColor = [UIColor redColor];
+        _largePenaltyStepper.alpha = 1;
+        _largePenaltyTitleLbl.enabled = true;
     }];
     
     NSLog(@"AUTO OFF");
@@ -552,6 +601,17 @@ NSArray *regionalNames;
     [_teamNumField becomeFirstResponder];
 }
 
+- (IBAction)smallPenaltyChange:(id)sender {
+    smallPenaltyTally = _smallPenaltyStepper.value;
+    _smallPenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)smallPenaltyTally];
+}
+
+- (IBAction)largePenaltyChange:(id)sender {
+    largePenaltyTally = _largePenaltyStepper.value;
+    _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
+}
+
+
 - (IBAction)saveMatch:(id)sender {
     
     if (_matchNumEdit.isHidden) {
@@ -600,6 +660,8 @@ NSArray *regionalNames;
                                                                [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                                [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                                [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                               [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                               [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                                [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                                [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                                [NSString stringWithString:initials], @"initials",
@@ -623,6 +685,8 @@ NSArray *regionalNames;
                                                             [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                             [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                             [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                            [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                            [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                             [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                             [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                             [NSString stringWithString:initials], @"initials",
@@ -646,6 +710,8 @@ NSArray *regionalNames;
                                                             [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                             [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                             [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                            [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                            [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                             [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                             [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                             [NSString stringWithString:initials], @"initials",
@@ -669,6 +735,8 @@ NSArray *regionalNames;
                                                              [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                              [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                              [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                             [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                             [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                              [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                              [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                              [NSString stringWithString:initials], @"initials",
@@ -692,6 +760,8 @@ NSArray *regionalNames;
                                                              [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                              [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                              [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                             [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                             [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                              [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                              [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                              [NSString stringWithString:initials], @"initials",
@@ -715,6 +785,8 @@ NSArray *regionalNames;
                                                              [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                              [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                              [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                             [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                             [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                              [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                              [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                              [NSString stringWithString:initials], @"initials",
@@ -743,6 +815,8 @@ NSArray *regionalNames;
                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                        [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                        [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                         [NSString stringWithString:initials], @"initials",
                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
@@ -758,6 +832,8 @@ NSArray *regionalNames;
                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                        [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                        [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                         [NSString stringWithString:initials], @"initials",
@@ -773,6 +849,8 @@ NSArray *regionalNames;
                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                        [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                        [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                         [NSString stringWithString:initials], @"initials",
@@ -788,6 +866,8 @@ NSArray *regionalNames;
                                                          [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                          [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                          [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                         [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                         [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                          [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                          [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                          [NSString stringWithString:initials], @"initials",
@@ -803,6 +883,8 @@ NSArray *regionalNames;
                                                          [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                          [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                          [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                         [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                         [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                          [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                          [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                          [NSString stringWithString:initials], @"initials",
@@ -818,6 +900,8 @@ NSArray *regionalNames;
                                                          [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
                                                          [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
                                                          [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+                                                         [NSNumber numberWithInt:smallPenaltyTally], @"smallPenalties",
+                                                         [NSNumber numberWithInt:largePenaltyTally], @"largePenalties",
                                                          [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                          [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                          [NSString stringWithString:initials], @"initials",
@@ -858,6 +942,10 @@ NSArray *regionalNames;
     _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
     autoLowScore = 0;
     _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+    smallPenaltyTally = 0;
+    _smallPenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)smallPenaltyTally];
+    largePenaltyTally = 0;
+    _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
     
     NSInteger matchNumTranslator = [currentMatchNum integerValue];
     matchNumTranslator++;
