@@ -301,6 +301,22 @@ NSArray *regionalNames;
                              _regionalNameLbl.layer.borderWidth = 1.0;
                              
                              twoFingerDown.enabled = true;
+                             
+                             CGRect red1Rect = CGRectMake(282, 150, 200, 60);
+                             UILabel *red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
+                             red1Lbl.text = pos;
+                             red1Lbl.font = [UIFont boldSystemFontOfSize:25];
+                             red1Lbl.textColor = [UIColor whiteColor];
+                             red1Lbl.textAlignment = NSTextAlignmentCenter;
+                             red1Lbl.layer.cornerRadius = 5;
+                             if (red1Selector.selectedSegmentIndex < 3) {
+                                 red1Lbl.backgroundColor = [UIColor redColor];
+                             }
+                             else{
+                                 red1Lbl.backgroundColor = [UIColor blueColor];
+                             }
+                             [self.view addSubview:red1Lbl];
+                             
                          }];
         NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
     }
@@ -342,6 +358,7 @@ NSArray *regionalNames;
     return 1;
 }
 
+// give the picker its source of list items
 -(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
     UILabel* tView = (UILabel *)view;
     if (!tView) {
@@ -356,14 +373,6 @@ NSArray *regionalNames;
     }
     return tView;
 }
-
-// tell the picker the title for a given component
-/*-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
-    NSString *title;
-    title = [regionalNames objectAtIndex:row];
-    
-    return title;
-}*/
 
 // tell the picker the width of each row for a given component
 -(CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
@@ -406,6 +415,7 @@ NSArray *regionalNames;
     
     NSLog(@"AUTO ON");
 }
+
 -(void)autoOff{
     autoYN = false;
     twoFingerUp.enabled = true;
@@ -436,8 +446,7 @@ NSArray *regionalNames;
 }
 
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -553,7 +562,7 @@ NSArray *regionalNames;
     }
     
     if (_teamNumEdit.isHidden) {
-        currentTeamNum = scoutTeamNumField.text;
+        currentTeamNum = _teamNumField.text;
     }
     else{
         currentTeamNum = _teamNumEdit.titleLabel.text;
