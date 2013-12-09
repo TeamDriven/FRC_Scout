@@ -64,7 +64,7 @@ NSArray *week6Regionals;
 NSArray *week7Regionals;
 NSArray *allWeekRegionals;
 
-- (void)viewDidLoad{
+-(void)viewDidLoad{
     
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
@@ -125,7 +125,7 @@ NSArray *allWeekRegionals;
     [self autoOn];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return NO;
 }
@@ -436,7 +436,7 @@ NSArray *allWeekRegionals;
     
 }
 
-- (IBAction)reSignIn:(id)sender {
+-(IBAction)reSignIn:(id)sender {
     initials = nil;
     _matchNumField.enabled = false;
     _matchNumField.hidden = true;
@@ -454,7 +454,7 @@ NSArray *allWeekRegionals;
  ************ UIPicker code **************
  *****************************************/
 
--(void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
     //handle selection
 }
 
@@ -665,12 +665,12 @@ NSArray *allWeekRegionals;
     weekSelected = weekSelector.selectedSegmentIndex;
 }
 
-- (void)didReceiveMemoryWarning{
+-(void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)highPlus:(id)sender {
+-(IBAction)highPlus:(id)sender {
     if (autoYN) {
         autoHighScore++;
         _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
@@ -681,7 +681,7 @@ NSArray *allWeekRegionals;
     }
 }
 
-- (IBAction)highMinus:(id)sender {
+-(IBAction)highMinus:(id)sender {
     if (autoYN) {
         if (autoHighScore > 0) {
             autoHighScore--;
@@ -697,7 +697,7 @@ NSArray *allWeekRegionals;
     
 }
 
-- (IBAction)midPlus:(id)sender {
+-(IBAction)midPlus:(id)sender {
     if (autoYN) {
         autoMidScore++;
         _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
@@ -709,7 +709,7 @@ NSArray *allWeekRegionals;
     
 }
 
-- (IBAction)midMinus:(id)sender {
+-(IBAction)midMinus:(id)sender {
     if (autoYN) {
         if (autoMidScore > 0) {
             autoMidScore--;
@@ -725,7 +725,7 @@ NSArray *allWeekRegionals;
     
 }
 
-- (IBAction)lowPlus:(id)sender {
+-(IBAction)lowPlus:(id)sender {
     if (autoYN) {
         autoLowScore++;
         _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
@@ -736,7 +736,7 @@ NSArray *allWeekRegionals;
     }
 }
 
-- (IBAction)lowMinus:(id)sender {
+-(IBAction)lowMinus:(id)sender {
     if (autoYN) {
         if (autoLowScore > 0) {
             autoLowScore--;
@@ -752,7 +752,7 @@ NSArray *allWeekRegionals;
     
 }
 
-- (IBAction)matchNumberEdit:(id)sender {
+-(IBAction)matchNumberEdit:(id)sender {
     _matchNumEdit.hidden = true;
     _matchNumEdit.enabled = false;
     _matchNumField.hidden = false;
@@ -761,7 +761,7 @@ NSArray *allWeekRegionals;
     [_matchNumField becomeFirstResponder];
 }
 
-- (IBAction)teamNumberEdit:(id)sender {
+-(IBAction)teamNumberEdit:(id)sender {
     _teamNumEdit.hidden = true;
     _teamNumEdit.enabled = false;
     _teamNumField.hidden = false;
@@ -771,18 +771,18 @@ NSArray *allWeekRegionals;
     [_teamNumField becomeFirstResponder];
 }
 
-- (IBAction)smallPenaltyChange:(id)sender {
+-(IBAction)smallPenaltyChange:(id)sender {
     smallPenaltyTally = _smallPenaltyStepper.value;
     _smallPenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)smallPenaltyTally];
 }
 
-- (IBAction)largePenaltyChange:(id)sender {
+-(IBAction)largePenaltyChange:(id)sender {
     largePenaltyTally = _largePenaltyStepper.value;
     _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
 }
 
 
-- (IBAction)saveMatch:(id)sender {
+-(IBAction)saveMatch:(id)sender {
     
     if (_matchNumEdit.isHidden) {
         currentMatchNum = _matchNumField.text;
@@ -1140,7 +1140,7 @@ NSArray *allWeekRegionals;
     
 }
 
-- (IBAction)hideKeyboard:(id)sender {
+-(IBAction)hideKeyboard:(id)sender {
     [_matchNumField resignFirstResponder];
     [_teamNumField resignFirstResponder];
     [scoutTeamNumField resignFirstResponder];
