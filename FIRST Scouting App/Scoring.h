@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Globals.h"
 
-@interface LocationsFirstViewController : UIViewController <UIGestureRecognizerDelegate, UIPickerViewDelegate>
+@interface LocationsFirstViewController : UIViewController <UIGestureRecognizerDelegate, UIPickerViewDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *matchNumField;
 @property (weak, nonatomic) IBOutlet UITextField *teamNumField;

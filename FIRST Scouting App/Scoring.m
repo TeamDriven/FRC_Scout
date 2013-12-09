@@ -79,6 +79,8 @@ NSArray *allWeekRegionals;
     
     dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
     
+    self.matchNumField.delegate = self;
+    self.teamNumField.delegate = self;
     
     twoFingerUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(autoOn)];
     [twoFingerUp setNumberOfTouchesRequired:2];
@@ -123,6 +125,11 @@ NSArray *allWeekRegionals;
     [self autoOn];
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
+}
+
 -(void)setUpScreen{
     if (initials == nil) {
         initials = @"";
@@ -159,7 +166,7 @@ NSArray *allWeekRegionals;
         CGRect initialsFieldLblRect = CGRectMake(129, 210, 100, 15);
         UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
         initialsFieldLbl.textAlignment = NSTextAlignmentCenter;
-        initialsFieldLbl.text = @"Enter your three initials";
+        initialsFieldLbl.text = @"Enter YOUR three initials";
         initialsFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:initialsFieldLbl];
         
@@ -175,6 +182,7 @@ NSArray *allWeekRegionals;
         [initialsField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
         [initialsField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
         [initialsField setTextAlignment:NSTextAlignmentCenter];
+        [initialsField setDelegate:self];
         [setUpView addSubview:initialsField];
         
         CGRect scoutTeamNumFieldLblRect = CGRectMake(264, 210, 100, 15);
@@ -196,6 +204,7 @@ NSArray *allWeekRegionals;
         [scoutTeamNumField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
         [scoutTeamNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
         [scoutTeamNumField setTextAlignment:NSTextAlignmentCenter];
+        [scoutTeamNumField setDelegate:self];
         [setUpView addSubview:scoutTeamNumField];
         if (scoutTeamNum) {
             scoutTeamNumField.text = scoutTeamNum;
@@ -220,6 +229,7 @@ NSArray *allWeekRegionals;
         [currentMatchNumField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
         [currentMatchNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
         [currentMatchNumField setTextAlignment:NSTextAlignmentCenter];
+        [currentMatchNumField setDelegate:self];
         [setUpView addSubview:currentMatchNumField];
         
         CGRect weekSelectorLblRect = CGRectMake(54, 310, 30, 30);
