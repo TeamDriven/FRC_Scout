@@ -125,6 +125,8 @@ NSArray *allWeekRegionals;
 
 -(void)setUpScreen{
     if (initials == nil) {
+        initials = @"";
+        
         twoFingerUp.enabled = false;
         twoFingerDown.enabled = false;
         
@@ -167,6 +169,7 @@ NSArray *allWeekRegionals;
         [initialsField setFont:[UIFont systemFontOfSize:15]];
         [initialsField setPlaceholder:@"3 Initials"];
         [initialsField setAutocorrectionType:UITextAutocorrectionTypeNo];
+        [initialsField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [initialsField setKeyboardType:UIKeyboardTypeDefault];
         [initialsField setReturnKeyType:UIReturnKeyDone];
         [initialsField setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
