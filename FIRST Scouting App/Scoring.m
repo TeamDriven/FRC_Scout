@@ -44,6 +44,7 @@ UISwipeGestureRecognizer *twoFingerDown;
 UIControl *greyOut;
 UIControl *setUpView;
 UISegmentedControl *red1Selector;
+NSInteger red1Pos;
 UITextField *currentMatchNumField;
 NSAttributedString *currentMatchNumAtString;
 UITextField *scoutTeamNumField;
@@ -51,6 +52,7 @@ NSAttributedString *currentTeamNumAtString;
 UITextField *initialsField;
 UIPickerView *regionalPicker;
 UISegmentedControl *weekSelector;
+NSInteger weekSelected;
 
 NSArray *regionalNames;
 NSArray *week1Regionals;
@@ -60,6 +62,7 @@ NSArray *week4Regionals;
 NSArray *week5Regionals;
 NSArray *week6Regionals;
 NSArray *week7Regionals;
+NSArray *allWeekRegionals;
 
 - (void)viewDidLoad{
     
@@ -88,6 +91,8 @@ NSArray *week7Regionals;
     [twoFingerDown setDirection:UISwipeGestureRecognizerDirectionDown];
     [self.view addGestureRecognizer:twoFingerDown];
     
+    red1Pos = -1;
+    
     autoYN = true;
     
     regionalNames = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line FIRST Robotics District Competition",@"Southfield FIRST Robotics District Competition",@"Granite State District Event",@"PNW FIRST Robotics Auburn Mountainview District Event",@"MAR FIRST Robotics Mt. Olive District Competition",@"MAR FIRST Robotics Hatboro-Horsham District Competition",@"Israel Regional",@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University FIRSTRobotics District Competition",@"Gull Lake FIRST Robotics District Competition",@"PNW FIRST Robotics Oregon City District Event",@"PNW FIRST Robotics Glacier Peak District Event",@"Groton District Event",@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba FIRST Robotics District Competition",@"Howell FIRST Robotics District Competition",@"MAR FIRST Robotics Springside Chestnut Hill District Competition",@"PNW FIRST Robotics Eastern Washington University District Event",@"PNW FIRST Robotics Mt. Vernon District Event",@"MAR FIRST Robotics Clifton District Competition",@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan FIRST Robotics District Competition",@"Great Lakes Bay Region FIRSTRobotics District Competition",@"Traverse City FIRST Robotics District Competition",@"PNW FIRST Robotics Wilsonville District Event",@"Rhode Island District Event",@"PNW FIRST Robotics Shorewood District Event",@"Southington District Event",@"MAR FIRST Robotics Lenape-Seneca District Competition",@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia FIRST Robotics District Competition",@"St. Joseph FIRST Robotics District Competition",@"Waterford FIRST Robotics District Competition",@"PNW FIRST Robotics Auburn District Event",@"PNW FIRST Robotics Central Washington University District Event",@"Hartford District Event",@"MAR FIRST Robotics Bridgewater-Raritan District Competition",@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford FIRST Robotics District Competition",@"Troy FIRST Robotics District Competition",@"PNW FIRST Robotics Oregon State University District Event",@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
@@ -105,6 +110,10 @@ NSArray *week7Regionals;
     week6Regionals = @[@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford FIRST Robotics District Competition",@"Troy FIRST Robotics District Competition",@"PNW FIRST Robotics Oregon State University District Event"];
     
     week7Regionals = @[@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
+    
+    allWeekRegionals = @[regionalNames,week1Regionals,week2Regionals,week3Regionals,week4Regionals,week5Regionals,week6Regionals,week7Regionals];
+    
+    weekSelected = 0;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -143,6 +152,7 @@ NSArray *week7Regionals;
         red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3",  nil]];
         [red1Selector setFrame:red1SelectorRect];
         [setUpView addSubview:red1Selector];
+        red1Selector.selectedSegmentIndex = red1Pos;
         
         CGRect initialsFieldLblRect = CGRectMake(129, 210, 100, 15);
         UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
@@ -209,8 +219,16 @@ NSArray *week7Regionals;
         [currentMatchNumField setTextAlignment:NSTextAlignmentCenter];
         [setUpView addSubview:currentMatchNumField];
         
-        CGRect weekSelectorRect = CGRectMake(-40, 435, 215, 30);
-        weekSelector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"1", @"2", @"3", @"4", @"5", @"6", @"7+",  nil]];
+        CGRect weekSelectorLblRect = CGRectMake(54, 310, 30, 30);
+        UILabel *weekSelectorLbl = [[UILabel alloc] initWithFrame:weekSelectorLblRect];
+        weekSelectorLbl.textAlignment = NSTextAlignmentCenter;
+        weekSelectorLbl.text = @"Week";
+        weekSelectorLbl.adjustsFontSizeToFitWidth = YES;
+        weekSelectorLbl.textColor = [UIColor colorWithWhite:0.3 alpha:1.0];
+        [setUpView addSubview:weekSelectorLbl];
+        
+        CGRect weekSelectorRect = CGRectMake(-39, 433, 215, 30);
+        weekSelector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"All",@"1", @"2", @"3", @"4", @"5", @"6", @"7+",  nil]];
         [weekSelector setFrame:weekSelectorRect];
         [weekSelector addTarget:self action:@selector(changeWeek) forControlEvents:UIControlEventValueChanged];
         [setUpView addSubview:weekSelector];
@@ -226,6 +244,8 @@ NSArray *week7Regionals;
                 }
             }
         }
+        weekSelector.selectedSegmentIndex = weekSelected;
+        
         
         CGRect regionalPickerLblRect = CGRectMake(194, 305, 240, 30);
         UILabel *regionalPickerLbl = [[UILabel alloc] initWithFrame:regionalPickerLblRect];
@@ -270,7 +290,7 @@ NSArray *week7Regionals;
         NSMutableString *txt1 = [[NSMutableString alloc] initWithString:scoutTeamNumField.text];
         for (unsigned int i = 0; i < [txt1 length]; i++) {
             NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt1 characterAtIndex:i]];
-            if ([character integerValue] == 0) {
+            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
                                                                message: @"Please only enter numbers in the \"Your Team Number\" text field"
                                                               delegate: self
@@ -286,7 +306,7 @@ NSArray *week7Regionals;
         NSMutableString *txt2 = [[NSMutableString alloc] initWithString:currentMatchNumField.text];
         for (unsigned int i = 0; i < [txt2 length]; i++) {
             NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt2 characterAtIndex:i]];
-            if ([character integerValue] == 0) {
+            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
                                                                message: @"Please only enter numbers in the \"Current Match Number\" text field"
                                                               delegate: self
@@ -314,7 +334,7 @@ NSArray *week7Regionals;
     scoutTeamNum = scoutTeamNumField.text;
     currentTeamNum = @"1730";
     currentMatchNum = currentMatchNumField.text;
-    currentRegional = [regionalNames objectAtIndex:[regionalPicker selectedRowInComponent:0]];
+    currentRegional = [[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
     
     if (!initials || initials.length != 3) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You didn't enter 3 initials!"
@@ -356,7 +376,6 @@ NSArray *week7Regionals;
                          completion:^(BOOL finished){
                              [greyOut removeFromSuperview];
                              [setUpView removeFromSuperview];
-                             //teamNum = scoutTeamNumField.text;
                              
                              
                              currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
@@ -396,6 +415,7 @@ NSArray *week7Regionals;
                              }
                              [self.view addSubview:red1Lbl];
                              
+                             red1Pos = red1Selector.selectedSegmentIndex;
                          }];
         NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
     }
@@ -428,25 +448,25 @@ NSArray *week7Regionals;
 // tell the picker how many rows are available for a given component
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
     NSInteger numRows;
-    if (weekSelector.selectedSegmentIndex == -1) {
+    if (weekSelector.selectedSegmentIndex == 0) {
         numRows = regionalNames.count;
     }
-    else if (weekSelector.selectedSegmentIndex == 0){
+    else if (weekSelector.selectedSegmentIndex == 1){
         numRows = week1Regionals.count;
     }
-    else if (weekSelector.selectedSegmentIndex == 1){
+    else if (weekSelector.selectedSegmentIndex == 2){
         numRows = week2Regionals.count;
     }
-    else if (weekSelector.selectedSegmentIndex == 2){
+    else if (weekSelector.selectedSegmentIndex == 3){
         numRows = week3Regionals.count;
     }
-    else if (weekSelector.selectedSegmentIndex == 3){
+    else if (weekSelector.selectedSegmentIndex == 4){
         numRows = week4Regionals.count;
     }
-    else if (weekSelector.selectedSegmentIndex == 4){
+    else if (weekSelector.selectedSegmentIndex == 5){
         numRows = week5Regionals.count;
     }
-    else if (weekSelector.selectedSegmentIndex == 5){
+    else if (weekSelector.selectedSegmentIndex == 6){
         numRows = week6Regionals.count;
     }
     else{
@@ -467,28 +487,28 @@ NSArray *week7Regionals;
     if (!tView) {
         tView = [[UILabel alloc] init];
         
-        if (weekSelector.selectedSegmentIndex == -1) {
+        if (weekSelector.selectedSegmentIndex == 0) {
             tView.text = [regionalNames objectAtIndex:row];
         }
-        else if (weekSelector.selectedSegmentIndex == 0){
+        else if (weekSelector.selectedSegmentIndex == 1){
             tView.text = [week1Regionals objectAtIndex:row];
         }
-        else if (weekSelector.selectedSegmentIndex == 1){
+        else if (weekSelector.selectedSegmentIndex == 2){
             tView.text = [week2Regionals objectAtIndex:row];
         }
-        else if (weekSelector.selectedSegmentIndex == 2){
+        else if (weekSelector.selectedSegmentIndex == 3){
             tView.text = [week3Regionals objectAtIndex:row];
         }
-        else if (weekSelector.selectedSegmentIndex == 3){
+        else if (weekSelector.selectedSegmentIndex == 4){
             tView.text = [week4Regionals objectAtIndex:row];
         }
-        else if (weekSelector.selectedSegmentIndex == 4){
+        else if (weekSelector.selectedSegmentIndex == 5){
             tView.text = [week5Regionals objectAtIndex:row];
         }
-        else if (weekSelector.selectedSegmentIndex == 5){
+        else if (weekSelector.selectedSegmentIndex == 6){
             tView.text = [week6Regionals objectAtIndex:row];
         }
-        else if (weekSelector.selectedSegmentIndex == 6){
+        else if (weekSelector.selectedSegmentIndex == 7){
             tView.text = [week7Regionals objectAtIndex:row];
         }
         
@@ -619,8 +639,17 @@ NSArray *week7Regionals;
 }
 
 -(void)changeWeek{
-    [regionalPicker numberOfRowsInComponent:4];
-    [self picker]
+    if ([[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]containsObject:[[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]]]) {
+        NSString *regional = [[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
+        [regionalPicker reloadAllComponents];
+        [regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]indexOfObject:regional] inComponent:0 animated:YES];
+    }
+    else{
+       [regionalPicker reloadAllComponents];
+       [regionalPicker selectRow:0 inComponent:0 animated:YES];
+    }
+    
+    weekSelected = weekSelector.selectedSegmentIndex;
 }
 
 - (void)didReceiveMemoryWarning{
