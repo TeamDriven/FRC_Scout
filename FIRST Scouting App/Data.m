@@ -14,6 +14,13 @@
 
 @implementation Data
 
+NSArray *paths;
+NSString *scoutingDirectory;
+NSString *path;
+NSMutableDictionary *dataDict;
+
+NSMutableDictionary *resultDict;
+
 NSMutableArray *redScores;
 NSMutableArray *orangeScores;
 NSMutableArray *yellowScores;
@@ -26,8 +33,7 @@ NSInteger yellowOn;
 
 UIScrollView *scrollView;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -35,10 +41,21 @@ UIScrollView *scrollView;
     return self;
 }
 
-- (void)viewDidLoad
-{
+-(void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    scoutingDirectory = [paths objectAtIndex:0];
+    path = [scoutingDirectory stringByAppendingPathComponent:@"data.plist"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"data" ofType:@"plist"] toPath:path error:nil];
+    }
+    
+    dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
+    
+    resultDict = [[NSMutableDictionary alloc] init];
     
     numberOfRows = [NSNumber numberWithInt:4];
     
@@ -46,37 +63,35 @@ UIScrollView *scrollView;
     orangeOn = 1;
     yellowOn = 1;
     
-    [self createScrollViewWithWidth:[numberOfRows integerValue]];
+    [self createScrollViewWithDictionary:resultDict];
     
-    [self createBogusValues:[numberOfRows integerValue]];
-    
+    NSLog(@"%@", dataDict);
     
 }
 
-- (void)didReceiveMemoryWarning
-{
+-(void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)moreGraphsBtn:(id)sender {
+-(IBAction)moreGraphsBtn:(id)sender {
     NSArray *viewsToRemove = [scrollView subviews];
     for (UIView *v in viewsToRemove) {
         [v removeFromSuperview];
     }
     numberOfRows = [NSNumber numberWithInt:(arc4random()%20) + 1];
-    [self createScrollViewWithWidth:[numberOfRows integerValue]];
+    //[self createScrollViewWithWidth:[numberOfRows integerValue]];
     [self createBogusValues:[numberOfRows integerValue]];
 }
 
-- (IBAction)redSwitcher:(id)sender {
+-(IBAction)redSwitcher:(id)sender {
     if (_redSwitch.on) {
         redOn = 1;
         NSArray *viewsToRemove = [scrollView subviews];
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
         }
-        [self createScrollViewWithWidth:[numberOfRows integerValue]];
+        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
         [self createBogusValues:[numberOfRows integerValue]];
     }
     else{
@@ -85,18 +100,18 @@ UIScrollView *scrollView;
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
         }
-        [self createScrollViewWithWidth:[numberOfRows integerValue]];
+        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
         [self createBogusValues:[numberOfRows integerValue]];
     }
 }
-- (IBAction)orangeSwitcher:(id)sender {
+-(IBAction)orangeSwitcher:(id)sender {
     if (_orangeSwitch.on) {
         orangeOn = 1;
         NSArray *viewsToRemove = [scrollView subviews];
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
         }
-        [self createScrollViewWithWidth:[numberOfRows integerValue]];
+        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
         [self createBogusValues:[numberOfRows integerValue]];
     }
     else{
@@ -105,18 +120,18 @@ UIScrollView *scrollView;
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
         }
-        [self createScrollViewWithWidth:[numberOfRows integerValue]];
+        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
         [self createBogusValues:[numberOfRows integerValue]];
     }
 }
-- (IBAction)yellowSwitcher:(id)sender {
+-(IBAction)yellowSwitcher:(id)sender {
     if (_yellowSwitch.on) {
         yellowOn = 1;
         NSArray *viewsToRemove = [scrollView subviews];
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
         }
-        [self createScrollViewWithWidth:[numberOfRows integerValue]];
+        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
         [self createBogusValues:[numberOfRows integerValue]];
     }
     else{
@@ -125,33 +140,61 @@ UIScrollView *scrollView;
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
         }
-        [self createScrollViewWithWidth:[numberOfRows integerValue]];
+        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
         [self createBogusValues:[numberOfRows integerValue]];
     }
 }
-
-
-
-
-
-
-
-
 
 
 /* +++++++++++++++++++++++++++++++++++++++++
  +++++++++++++++  METHODS  +++++++++++++++++
  ++++++++++++++++++++++++++++++++++++++++++*/
 
--(void)createScrollViewWithWidth:(NSInteger)width{
+-(void)createScrollViewWithDictionary:(NSDictionary *)dict{
+    [scrollView removeFromSuperview];
     CGRect scrollRect = CGRectMake(40, 660, 688, 200);
     scrollView = [[UIScrollView alloc] initWithFrame:scrollRect];
     [scrollView setScrollEnabled:YES];
-    [scrollView setContentSize:CGSizeMake(width*60 + 10, 200)];
+    if (_teamSearchField.text.length > 0) {
+        NSArray *regionalKeys = [resultDict allKeys];
+        NSInteger lengthNeeded = 0;
+        for (int r  = 0; r < regionalKeys.count; r++) {
+            NSArray *matchKeys = [[resultDict objectForKey:[regionalKeys objectAtIndex:r]] allKeys];
+            for (int m = 0; m < matchKeys.count; m++) {
+                lengthNeeded += 60;
+            }
+            lengthNeeded += 20;
+        }
+        [scrollView setContentSize:CGSizeMake(lengthNeeded + 10, 200)];
+        NSLog(@"%d", lengthNeeded);
+    }
     scrollView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     [self.view addSubview:scrollView];
+    
+    [self createBarsWithDictionary:resultDict];
 }
 
+- (IBAction)teamNumEditingFinished:(id)sender {
+    [resultDict removeAllObjects];
+    NSArray *rAndBKeys = [dataDict allKeys];
+    for (int j = 0; j < rAndBKeys.count; j++) {
+        NSArray *regionalsKeys = [[dataDict objectForKey:[rAndBKeys objectAtIndex:j]] allKeys];
+        for (int i = 0; i < regionalsKeys.count; i++) {
+            NSArray *matchesKeys = [[[dataDict objectForKey:[rAndBKeys objectAtIndex:j]] objectForKey:[regionalsKeys objectAtIndex:i]] allKeys];
+            for (int q = 0; q < matchesKeys.count; q++) {
+                if ([[[[[dataDict objectForKey:[rAndBKeys objectAtIndex:j]] objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"currentTeamNum"] isEqualToString:_teamSearchField.text]) {
+                    if (![resultDict objectForKey:[regionalsKeys objectAtIndex:i]]) {
+                        [resultDict setObject:[NSMutableDictionary dictionary] forKey:[regionalsKeys objectAtIndex:i]];
+                    }
+                    [[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] setObject:[[[dataDict objectForKey:[rAndBKeys objectAtIndex:j]] objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] forKey:[matchesKeys objectAtIndex:q]];
+                }
+            }
+        }
+    }
+    
+    NSLog(@"%@", resultDict);
+    [self createScrollViewWithDictionary:resultDict];
+}
 
 -(void)createBogusValues:(NSInteger)amount{
     
@@ -184,6 +227,28 @@ UIScrollView *scrollView;
     [self numberOfBars:amount redValues:redScores orangeValues:orangeScores yellowValues:yellowScores];
 }
 
+-(void)createBarsWithDictionary:(NSDictionary *)dict{
+    if (_teamSearchField.text.length > 0) {
+        NSInteger regionalXCord = -70;
+        NSInteger matchXCord = 0;
+        NSArray *regionalKeys = [resultDict allKeys];
+        for (int r  = 0; r < regionalKeys.count; r++) {
+            matchXCord += 10;
+            CGRect regionalLabelRect = CGRectMake(regionalXCord, 95, 180, 10);
+            UILabel *regionalLabel = [[UILabel alloc] initWithFrame:regionalLabelRect];
+            regionalLabel.text = [regionalKeys objectAtIndex:r];
+            regionalLabel.textAlignment = NSTextAlignmentCenter;
+            regionalLabel.numberOfLines = 1;
+            regionalLabel.adjustsFontSizeToFitWidth = YES;
+            regionalLabel.font = [UIFont systemFontOfSize:8];
+            [scrollView addSubview:regionalLabel];
+            regionalLabel.transform = CGAffineTransformMakeRotation(-M_PI/2);
+            NSArray *matchKeys = [[resultDict objectForKey:[regionalKeys objectAtIndex:r]] allKeys];
+            for (int m = 0; m < matchKeys.count; m++) {
+            }
+        }
+    }
+}
 
 -(void)numberOfBars:(NSInteger)numBars redValues:(NSArray *)redVals orangeValues:(NSArray *)orangeVals yellowValues:(NSArray *)yellowVals{
     

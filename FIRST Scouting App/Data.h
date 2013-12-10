@@ -11,6 +11,8 @@
 
 @interface Data : UIViewController
 
+@property (weak, nonatomic) IBOutlet UITextField *teamSearchField;
+
 @property (weak, nonatomic) IBOutlet UISwitch *redSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *orangeSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *yellowSwitch;
