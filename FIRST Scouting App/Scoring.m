@@ -752,6 +752,7 @@ NSArray *allWeekRegionals;
     
 }
 
+
 -(IBAction)matchNumberEdit:(id)sender {
     _matchNumEdit.hidden = true;
     _matchNumEdit.enabled = false;
@@ -819,11 +820,14 @@ NSArray *allWeekRegionals;
     else{
         
         if ([pos  isEqualToString: @"Red 1"]) {
-            if ([dataDict objectForKey:@"Red1"] == nil) {
+            if (![dataDict objectForKey:@"Red1"]) {
                 [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Red1"];
             }
-            if ([[dataDict objectForKey:@"Red1"] objectForKey:currentMatchNum] == nil) {
-                [[dataDict objectForKey:@"Red1"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            if (![[dataDict objectForKey:@"Red1"] objectForKey:currentRegional]) {
+                [[dataDict objectForKey:@"Red1"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
+            }
+            if (![[[dataDict objectForKey:@"Red1"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
+                [[[dataDict objectForKey:@"Red1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                                [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                                [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -844,11 +848,14 @@ NSArray *allWeekRegionals;
             }
         }
         else if ([pos  isEqualToString: @"Red 2"]) {
-            if ([dataDict objectForKey:@"Red2"] == nil) {
+            if (![dataDict objectForKey:@"Red2"]) {
                 [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Red2"];
             }
-            if ([[dataDict objectForKey:@"Red2"] objectForKey:currentMatchNum] == nil) {
-                [[dataDict objectForKey:@"Red2"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            if (![[dataDict objectForKey:@"Red2"] objectForKey:currentRegional]) {
+                [[dataDict objectForKey:@"Red2"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
+            }
+            if (![[[dataDict objectForKey:@"Red2"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
+                [[[dataDict objectForKey:@"Red2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                             [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                             [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                             [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -869,11 +876,14 @@ NSArray *allWeekRegionals;
             }
         }
         else if ([pos  isEqualToString: @"Red 3"]) {
-            if ([dataDict objectForKey:@"Red3"] == nil) {
+            if (![dataDict objectForKey:@"Red3"]) {
                 [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Red3"];
             }
-            if ([[dataDict objectForKey:@"Red3"] objectForKey:currentMatchNum] == nil) {
-                [[dataDict objectForKey:@"Red3"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            if (![[dataDict objectForKey:@"Red3"] objectForKey:currentRegional]) {
+                [[dataDict objectForKey:@"Red3"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
+            }
+            if (![[[dataDict objectForKey:@"Red3"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
+                [[[dataDict objectForKey:@"Red3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                             [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                             [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                             [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -894,11 +904,14 @@ NSArray *allWeekRegionals;
             }
         }
         else if ([pos isEqualToString:@"Blue 1"]) {
-            if ([dataDict objectForKey:@"Blue1"] == nil) {
+            if (![dataDict objectForKey:@"Blue1"]) {
                 [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Blue1"];
             }
-            if ([[dataDict objectForKey:@"Blue1"] objectForKey:currentMatchNum] == nil) {
-                [[dataDict objectForKey:@"Blue1"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            if (![[dataDict objectForKey:@"Blue1"] objectForKey:currentRegional]) {
+                [[dataDict objectForKey:@"Blue1"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
+            }
+            if (![[[dataDict objectForKey:@"Blue1"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
+                [[[dataDict objectForKey:@"Blue1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                              [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                              [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                              [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -919,11 +932,14 @@ NSArray *allWeekRegionals;
             }
         }
         else if ([pos isEqualToString:@"Blue 2"]) {
-            if ([dataDict objectForKey:@"Blue2"] == nil) {
+            if (![dataDict objectForKey:@"Blue2"]) {
                 [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Blue2"];
             }
-            if ([[dataDict objectForKey:@"Blue2"] objectForKey:currentMatchNum] == nil) {
-                [[dataDict objectForKey:@"Blue2"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            if (![[dataDict objectForKey:@"Blue2"] objectForKey:currentRegional]) {
+                [[dataDict objectForKey:@"Blue2"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
+            }
+            if (![[[dataDict objectForKey:@"Blue2"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
+                [[[dataDict objectForKey:@"Blue2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                              [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                              [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                              [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -944,11 +960,14 @@ NSArray *allWeekRegionals;
             }
         }
         else if ([pos isEqualToString:@"Blue 3"]) {
-            if ([dataDict objectForKey:@"Blue3"] == nil) {
+            if (![dataDict objectForKey:@"Blue3"]) {
                 [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Blue3"];
             }
-            if ([[dataDict objectForKey:@"Blue3"] objectForKey:currentMatchNum] == nil) {
-                [[dataDict objectForKey:@"Blue3"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            if (![[dataDict objectForKey:@"Blue3"] objectForKey:currentRegional]) {
+                [[dataDict objectForKey:@"Blue3"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
+            }
+            if (![[[dataDict objectForKey:@"Blue3"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
+                [[[dataDict objectForKey:@"Blue3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                              [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                              [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                              [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -969,7 +988,6 @@ NSArray *allWeekRegionals;
                 [self overWriteAlert];
             }
         }
-        NSLog(@"%@", dataDict);
         [dataDict writeToFile:path atomically:YES];
     }
     
@@ -978,7 +996,7 @@ NSArray *allWeekRegionals;
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 1) {
         if ([pos isEqualToString:@"Red 1"]) {
-            [[dataDict objectForKey:@"Red1"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            [[[dataDict objectForKey:@"Red1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -995,7 +1013,7 @@ NSArray *allWeekRegionals;
             [self saveSuccess];
         }
         else if([pos isEqualToString:@"Red 2"]){
-            [[dataDict objectForKey:@"Red2"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            [[[dataDict objectForKey:@"Red2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -1012,7 +1030,7 @@ NSArray *allWeekRegionals;
             [self saveSuccess];
         }
         else if([pos isEqualToString:@"Red 3"]){
-            [[dataDict objectForKey:@"Red3"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            [[[dataDict objectForKey:@"Red3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -1029,7 +1047,7 @@ NSArray *allWeekRegionals;
             [self saveSuccess];
         }
         else if ([pos isEqualToString:@"Blue 1"]){
-            [[dataDict objectForKey:@"Blue1"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            [[[dataDict objectForKey:@"Blue1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                          [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                          [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                          [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -1046,7 +1064,7 @@ NSArray *allWeekRegionals;
             [self saveSuccess];
         }
         else if ([pos isEqualToString:@"Blue 2"]){
-            [[dataDict objectForKey:@"Blue2"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            [[[dataDict objectForKey:@"Blue2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                          [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                          [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                          [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -1063,7 +1081,7 @@ NSArray *allWeekRegionals;
             [self saveSuccess];
         }
         else if ([pos isEqualToString:@"Blue 3"]){
-            [[dataDict objectForKey:@"Blue3"] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+            [[[dataDict objectForKey:@"Blue3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                          [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
                                                          [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
                                                          [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
@@ -1135,6 +1153,8 @@ NSArray *allWeekRegionals;
         _teamNumEdit.enabled = true;
         _teamNumEdit.hidden = false;
     }
+    
+    NSLog(@"%@", dataDict);
     
     [self autoOn];
     
