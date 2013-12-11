@@ -140,7 +140,7 @@ UIScrollView *scrollView;
         [scrollView setContentSize:CGSizeMake(lengthNeeded + 10, 200)];
         NSLog(@"%ld", (long)lengthNeeded);
     }
-    scrollView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
+    scrollView.backgroundColor = [UIColor colorWithWhite:0.85 alpha:1];
     [self.view addSubview:scrollView];
     
     [self createBarsWithDictionary:dict];
