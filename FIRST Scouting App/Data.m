@@ -74,74 +74,46 @@ UIScrollView *scrollView;
     // Dispose of any resources that can be recreated.
 }
 
--(IBAction)moreGraphsBtn:(id)sender {
-    NSArray *viewsToRemove = [scrollView subviews];
-    for (UIView *v in viewsToRemove) {
-        [v removeFromSuperview];
-    }
-    numberOfRows = [NSNumber numberWithInt:(arc4random()%20) + 1];
-    //[self createScrollViewWithWidth:[numberOfRows integerValue]];
-    [self createBogusValues:[numberOfRows integerValue]];
-}
-
 -(IBAction)redSwitcher:(id)sender {
     if (_redSwitch.on) {
         redOn = true;
-        NSArray *viewsToRemove = [scrollView subviews];
-        for (UIView *v in viewsToRemove) {
-            [v removeFromSuperview];
+        if ([resultDict count] > 0) {
+            [self createBarsWithDictionary:resultDict];
         }
-        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
-        [self createBogusValues:[numberOfRows integerValue]];
     }
     else{
         redOn = false;
-        NSArray *viewsToRemove = [scrollView subviews];
-        for (UIView *v in viewsToRemove) {
-            [v removeFromSuperview];
+        if ([resultDict count] > 0) {
+            [self createBarsWithDictionary:resultDict];
         }
-        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
-        [self createBogusValues:[numberOfRows integerValue]];
     }
 }
 -(IBAction)orangeSwitcher:(id)sender {
     if (_orangeSwitch.on) {
         orangeOn = true;
-        NSArray *viewsToRemove = [scrollView subviews];
-        for (UIView *v in viewsToRemove) {
-            [v removeFromSuperview];
+        if ([resultDict count] > 0) {
+            [self createBarsWithDictionary:resultDict];
         }
-        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
-        [self createBogusValues:[numberOfRows integerValue]];
     }
     else{
         orangeOn = false;
-        NSArray *viewsToRemove = [scrollView subviews];
-        for (UIView *v in viewsToRemove) {
-            [v removeFromSuperview];
+        if ([resultDict count] > 0) {
+            [self createBarsWithDictionary:resultDict];
         }
-        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
-        [self createBogusValues:[numberOfRows integerValue]];
     }
 }
 -(IBAction)yellowSwitcher:(id)sender {
     if (_yellowSwitch.on) {
         yellowOn = true;
-        NSArray *viewsToRemove = [scrollView subviews];
-        for (UIView *v in viewsToRemove) {
-            [v removeFromSuperview];
+        if ([resultDict count] > 0) {
+            [self createBarsWithDictionary:resultDict];
         }
-        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
-        [self createBogusValues:[numberOfRows integerValue]];
     }
     else{
         yellowOn = false;
-        NSArray *viewsToRemove = [scrollView subviews];
-        for (UIView *v in viewsToRemove) {
-            [v removeFromSuperview];
+        if ([resultDict count] > 0) {
+            [self createBarsWithDictionary:resultDict];
         }
-        //[self createScrollViewWithWidth:[numberOfRows integerValue]];
-        [self createBogusValues:[numberOfRows integerValue]];
     }
 }
 
@@ -157,13 +129,13 @@ UIScrollView *scrollView;
     [scrollView setScrollEnabled:YES];
     if (_teamSearchField.text.length > 0) {
         NSArray *regionalKeys = [dict allKeys];
-        NSInteger lengthNeeded = 0;
+        NSInteger lengthNeeded = 10;
         for (int r  = 0; r < regionalKeys.count; r++) {
             NSArray *matchKeys = [[dict objectForKey:[regionalKeys objectAtIndex:r]] allKeys];
             for (int m = 0; m < matchKeys.count; m++) {
-                lengthNeeded += 60;
+                lengthNeeded += 40;
             }
-            lengthNeeded += 20;
+            lengthNeeded += 30;
         }
         [scrollView setContentSize:CGSizeMake(lengthNeeded + 10, 200)];
         NSLog(@"%ld", (long)lengthNeeded);
@@ -174,7 +146,7 @@ UIScrollView *scrollView;
     [self createBarsWithDictionary:dict];
 }
 
-- (IBAction)teamNumEditingFinished:(id)sender {
+-(IBAction)teamNumEditingFinished:(id)sender {
     [resultDict removeAllObjects];
     NSArray *rAndBKeys = [dataDict allKeys];
     for (int j = 0; j < rAndBKeys.count; j++) {
@@ -196,68 +168,97 @@ UIScrollView *scrollView;
     [self createScrollViewWithDictionary:resultDict];
 }
 
--(void)createBogusValues:(NSInteger)amount{
-    
-    redScores = [[NSMutableArray alloc] init];
-    orangeScores = [[NSMutableArray alloc] init];
-    yellowScores = [[NSMutableArray alloc] init];
-    
-    [redScores removeAllObjects];
-    [orangeScores removeAllObjects];
-    [yellowScores removeAllObjects];
-    
-    
-    for (int r = 0; r < amount; r++) {
-        [redScores addObject:[NSNumber numberWithInt:(arc4random() %60) + 1]];
-        //NSLog(@"R Loop %d", r);
-    }
-    
-    
-    for (int o = 0; o < amount; o++) {
-        [orangeScores addObject:[NSNumber numberWithInt:(arc4random() % 50) + 1]];
-    }
-    
-    
-    for (int y = 0; y < amount; y++) {
-        [yellowScores addObject:[NSNumber numberWithInt:(arc4random() %40) + 1]];
-    }
-    
-    //NSLog(@"\n RED: %@ \n ORANGE: %@ \n YELLOW: %@", redScores, orangeScores, yellowScores);
-    
-    [self numberOfBars:amount redValues:redScores orangeValues:orangeScores yellowValues:yellowScores];
-}
-
 -(void)createBarsWithDictionary:(NSDictionary *)dict{
+    for (UIView *v in [scrollView subviews]) {
+        [v removeFromSuperview];
+    }
     if (_teamSearchField.text.length > 0) {
         NSInteger regionalXCord = -70;
-        NSInteger matchXCord = 0;
+        NSInteger matchXCord = 25;
         NSArray *regionalKeys = [dict allKeys];
         NSInteger barWidth = 30;
         for (int r  = 0; r < regionalKeys.count; r++) {
-            matchXCord += 10;
             CGRect regionalLabelRect = CGRectMake(regionalXCord, 95, 180, 10);
             UILabel *regionalLabel = [[UILabel alloc] initWithFrame:regionalLabelRect];
-            regionalLabel.text = [regionalKeys objectAtIndex:r];
+            NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
+            regionalLabel.attributedText = [[NSAttributedString alloc] initWithString:[regionalKeys objectAtIndex:r]
+                                                                     attributes:underlineAttribute];
             regionalLabel.textAlignment = NSTextAlignmentCenter;
             regionalLabel.numberOfLines = 1;
             regionalLabel.adjustsFontSizeToFitWidth = YES;
             regionalLabel.font = [UIFont systemFontOfSize:8];
             [scrollView addSubview:regionalLabel];
             regionalLabel.transform = CGAffineTransformMakeRotation(-M_PI/2);
-            regionalXCord += 10;
-            NSArray *matchKeys = [[dict objectForKey:[regionalKeys objectAtIndex:r]] allKeys];
+            regionalXCord += 30;
+            if (r > 0) {
+                matchXCord += 30;
+            }
+            else{
+                matchXCord += 10;
+            }
+            NSMutableArray *matchKeys = [[NSMutableArray alloc] initWithArray:[[dict objectForKey:[regionalKeys objectAtIndex:r]] allKeys] ];
+            [matchKeys sortUsingComparator:^NSComparisonResult(NSString *str1, NSString *str2) {
+                return [str1 compare:str2 options:(NSNumericSearch)];
+            }];
             for (int m = 0; m < matchKeys.count; m++) {
-                NSInteger heightR = [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"teleopHighScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"teleopMidScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"teleopLowScore"] integerValue];
-                NSInteger yCordR = 150-heightR;
-                CGRect redRect = CGRectMake(matchXCord, yCordR, barWidth, heightR);
-                UIView *redBar = [[UIView alloc] initWithFrame:redRect];
-                redBar.backgroundColor = [UIColor redColor];
-                [scrollView addSubview:redBar];
+                NSInteger heightR;
+                NSInteger yCordR;
+                NSInteger heightO;
+                NSInteger yCordO;
+                NSInteger heightY;
+                NSInteger yCordY;
+                if (redOn) {
+                    heightR = [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"autoHighScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"autoMidScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"autoLowScore"] integerValue];
+                    yCordR = 150-heightR;
+                    CGRect redRect = CGRectMake(matchXCord, yCordR, barWidth, heightR);
+                    UIView *redBar = [[UIView alloc] initWithFrame:redRect];
+                    redBar.backgroundColor = [UIColor redColor];
+                    [scrollView addSubview:redBar];
+                }
+                else{
+                    heightR = 0;
+                    yCordR = 150-heightR;
+                    CGRect redRect = CGRectMake(matchXCord, yCordR, barWidth, heightR);
+                    UIView *redBar = [[UIView alloc] initWithFrame:redRect];
+                    redBar.backgroundColor = [UIColor redColor];
+                    [scrollView addSubview:redBar];
+                }
+                if (orangeOn) {
+                    heightO = [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"teleopHighScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"teleopMidScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"teleopLowScore"] integerValue];
+                    yCordO = yCordR - heightO;
+                    CGRect orangeRect = CGRectMake(matchXCord, yCordO, barWidth, heightO);
+                    UIView *orangeBar = [[UIView alloc] initWithFrame:orangeRect];
+                    orangeBar.backgroundColor = [UIColor orangeColor];
+                    [scrollView addSubview:orangeBar];
+                }
+                else{
+                    heightO = 0;
+                    yCordO = yCordR - heightO;
+                    CGRect orangeRect = CGRectMake(matchXCord, yCordO, barWidth, heightO);
+                    UIView *orangeBar = [[UIView alloc] initWithFrame:orangeRect];
+                    orangeBar.backgroundColor = [UIColor orangeColor];
+                    [scrollView addSubview:orangeBar];
+                }
+                if (yellowOn) {
+                    heightY = [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"endGameScore"] integerValue];
+                    yCordY = yCordO - heightY;
+                    CGRect yellowRect = CGRectMake(matchXCord, yCordY, barWidth, heightY);
+                    UIView *yellowBar = [[UIView alloc] initWithFrame:yellowRect];
+                    yellowBar.backgroundColor = [UIColor yellowColor];
+                    [scrollView addSubview:yellowBar];
+                }
+                else{
+                    heightY = 0;
+                    yCordY = yCordO - heightY;
+                    CGRect yellowRect = CGRectMake(matchXCord, yCordY, barWidth, heightY);
+                    UIView *yellowBar = [[UIView alloc] initWithFrame:yellowRect];
+                    yellowBar.backgroundColor = [UIColor yellowColor];
+                    [scrollView addSubview:yellowBar];
+                }
                 
-                NSInteger yCordLbl = 155;
+                NSInteger yCordLbl = 157;
                 CGRect lblRect = CGRectMake(matchXCord-4, yCordLbl, 40, barWidth);
                 UILabel *matchLabel = [[UILabel alloc] initWithFrame:lblRect];
-                
                 matchLabel.numberOfLines = 1;
                 matchLabel.text = [[NSString alloc] initWithFormat:@"Match %ld", (long)[[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"currentMatchNum"] integerValue]];
                 matchLabel.backgroundColor = [UIColor clearColor];
@@ -265,118 +266,12 @@ UIScrollView *scrollView;
                 matchLabel.font = [UIFont systemFontOfSize:8];
                 matchLabel.transform = CGAffineTransformMakeRotation(-M_PI / 2);
                 [scrollView addSubview:matchLabel];
-            }
-        }
-    }
-}
-
--(void)numberOfBars:(NSInteger)numBars redValues:(NSArray *)redVals orangeValues:(NSArray *)orangeVals yellowValues:(NSArray *)yellowVals{
-    
-    NSInteger width = 30;
-    
-    //numBars = numBars-1;
-    
-    
-    for (NSInteger i = 0; i < numBars; i++) {
-        
-        NSInteger xCord = 60*i + 20;
-        
-        if (redOn == 1) {
-            
-            NSInteger heightR = [redVals[i] integerValue];
-            NSInteger yCordR = 150-heightR;
-            
-            CGRect redRect = CGRectMake(xCord, yCordR, width, heightR);
-            UIView *redBar = [[UIView alloc] initWithFrame:redRect];
-            
-            redBar.backgroundColor = [UIColor redColor];
-            
-            NSInteger heightO = [orangeVals[i] integerValue];
-            NSInteger yCordO = yCordR-heightO;
-            UIView *orangeBar;
-            
-            if (orangeOn == 1) {
-                CGRect orangeRect = CGRectMake(xCord, yCordO, width, heightO);
-                orangeBar = [[UIView alloc] initWithFrame:orangeRect];
                 
-                orangeBar.backgroundColor = [UIColor orangeColor];
-            }
-            
-            NSInteger heightY = [yellowVals[i] integerValue];
-            NSInteger yCordY = yCordO-heightY;
-            UIView *yellowBar;
-            
-            if (yellowOn == 1) {
-                if (orangeOn == 0) {
-                    yCordY = yCordR-heightY;
-                }
+                matchXCord+=40;
                 
-                CGRect yellowRect = CGRectMake(xCord, yCordY, width, heightY);
-                yellowBar = [[UIView alloc] initWithFrame:yellowRect];
-                
-                yellowBar.backgroundColor = [UIColor yellowColor];
-            }
-            
-            
-            
-            [scrollView addSubview:redBar];
-            
-            if (orangeOn == 1) {
-                [scrollView addSubview:orangeBar];
-            }
-            if (yellowOn == 1) {
-                [scrollView addSubview:yellowBar];
+                regionalXCord += 40;
             }
         }
-        else if (redOn == 0 && orangeOn == 1){
-            
-            NSInteger heightO = [orangeVals[i] integerValue];
-            NSInteger yCordO = 150-heightO;
-            
-            CGRect orangeRect = CGRectMake(xCord, yCordO, width, heightO);
-            UIView *orangeBar = [[UIView alloc] initWithFrame:orangeRect];
-            
-            orangeBar.backgroundColor = [UIColor orangeColor];
-            
-            NSInteger heightY = [yellowVals[i] integerValue];
-            NSInteger yCordY = yCordO-heightY;
-            
-            CGRect yellowRect = CGRectMake(xCord, yCordY, width, heightY);
-            UIView *yellowBar = [[UIView alloc] initWithFrame:yellowRect];
-            
-            yellowBar.backgroundColor = [UIColor yellowColor];
-            
-            
-            [scrollView addSubview:orangeBar];
-            if (yellowOn == 1) {
-                [scrollView addSubview:yellowBar];
-            }
-        }
-        else if (redOn == 0 && orangeOn == 0 && yellowOn == 1){
-            NSInteger heightY = [yellowVals[i] integerValue];
-            NSInteger yCordY = 150-heightY;
-            
-            CGRect yellowRect = CGRectMake(xCord, yCordY, width, heightY);
-            UIView *yellowBar = [[UIView alloc] initWithFrame:yellowRect];
-            
-            yellowBar.backgroundColor = [UIColor yellowColor];
-            
-            [scrollView addSubview:yellowBar];
-        }
-        if (redOn == 1 || orangeOn == 1 || yellowOn == 1) {
-            NSInteger yCordLbl = 155;
-            CGRect lblRect = CGRectMake(xCord-4, yCordLbl, 40, width);
-            UILabel *matchLabel = [[UILabel alloc] initWithFrame:lblRect];
-        
-            matchLabel.numberOfLines = 1;
-            matchLabel.text = [[NSString alloc] initWithFormat:@"Match %ld", (long)i+1];
-            matchLabel.backgroundColor = [UIColor clearColor];
-            matchLabel.textColor = [UIColor blackColor];
-            matchLabel.font = [UIFont systemFontOfSize:8];
-            matchLabel.transform = CGAffineTransformMakeRotation(-M_PI / 2);
-            [scrollView addSubview:matchLabel];
-        }
-        
     }
 }
 
