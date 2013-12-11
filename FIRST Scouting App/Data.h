@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Globals.h"
 
-@interface Data : UIViewController
+@interface Data : UIViewController<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *teamSearchField;
 
@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *orangeSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *yellowSwitch;
 
+@property (weak, nonatomic) IBOutlet UIView *switchBackgroundView;
 
 
 @end

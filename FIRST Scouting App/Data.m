@@ -53,6 +53,8 @@ UIScrollView *scrollView;
         [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"data" ofType:@"plist"] toPath:path error:nil];
     }
     
+    _teamSearchField.delegate = self;
+    
     dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
     
     resultDict = [[NSMutableDictionary alloc] init];
@@ -64,6 +66,8 @@ UIScrollView *scrollView;
     yellowOn = 1;
     
     [self createScrollViewWithDictionary:resultDict];
+    
+    _switchBackgroundView.layer.cornerRadius = 10;
     
     NSLog(@"%@", dataDict);
     
@@ -124,7 +128,7 @@ UIScrollView *scrollView;
 
 -(void)createScrollViewWithDictionary:(NSDictionary *)dict{
     [scrollView removeFromSuperview];
-    CGRect scrollRect = CGRectMake(40, 660, 688, 200);
+    CGRect scrollRect = CGRectMake(40, 675, 688, 200);
     scrollView = [[UIScrollView alloc] initWithFrame:scrollRect];
     [scrollView setScrollEnabled:YES];
     if (_teamSearchField.text.length > 0) {
@@ -165,7 +169,19 @@ UIScrollView *scrollView;
     }
     
     NSLog(@"%@", resultDict);
-    [self createScrollViewWithDictionary:resultDict];
+    if ([resultDict count] > 0) {
+        [self createScrollViewWithDictionary:resultDict];
+    }
+    else{
+        if ([_teamSearchField.text length] > 0) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Uh Oh!"
+                                                       message: @"That team number is not in this iPad's database!"
+                                                      delegate: nil
+                                             cancelButtonTitle:@"Dang, alright then."
+                                             otherButtonTitles:nil];
+            [alert show];
+        }
+    }
 }
 
 -(void)createBarsWithDictionary:(NSDictionary *)dict{
@@ -275,7 +291,18 @@ UIScrollView *scrollView;
     }
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
+}
 
+- (IBAction)screenTapped:(id)sender {
+    [self hideKeyboard];
+}
+
+-(void)hideKeyboard{
+    [_teamSearchField resignFirstResponder];
+}
 
 
 
