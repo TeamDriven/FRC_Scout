@@ -27,9 +27,9 @@ NSMutableArray *yellowScores;
 
 NSNumber *numberOfRows;
 
-NSInteger redOn;
-NSInteger orangeOn;
-NSInteger yellowOn;
+Boolean redOn;
+Boolean orangeOn;
+Boolean yellowOn;
 
 UIScrollView *scrollView;
 
@@ -86,7 +86,7 @@ UIScrollView *scrollView;
 
 -(IBAction)redSwitcher:(id)sender {
     if (_redSwitch.on) {
-        redOn = 1;
+        redOn = true;
         NSArray *viewsToRemove = [scrollView subviews];
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
@@ -95,7 +95,7 @@ UIScrollView *scrollView;
         [self createBogusValues:[numberOfRows integerValue]];
     }
     else{
-        redOn = 0;
+        redOn = false;
         NSArray *viewsToRemove = [scrollView subviews];
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
@@ -106,7 +106,7 @@ UIScrollView *scrollView;
 }
 -(IBAction)orangeSwitcher:(id)sender {
     if (_orangeSwitch.on) {
-        orangeOn = 1;
+        orangeOn = true;
         NSArray *viewsToRemove = [scrollView subviews];
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
@@ -115,7 +115,7 @@ UIScrollView *scrollView;
         [self createBogusValues:[numberOfRows integerValue]];
     }
     else{
-        orangeOn = 0;
+        orangeOn = false;
         NSArray *viewsToRemove = [scrollView subviews];
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
@@ -126,7 +126,7 @@ UIScrollView *scrollView;
 }
 -(IBAction)yellowSwitcher:(id)sender {
     if (_yellowSwitch.on) {
-        yellowOn = 1;
+        yellowOn = true;
         NSArray *viewsToRemove = [scrollView subviews];
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
@@ -135,7 +135,7 @@ UIScrollView *scrollView;
         [self createBogusValues:[numberOfRows integerValue]];
     }
     else{
-        yellowOn = 0;
+        yellowOn = false;
         NSArray *viewsToRemove = [scrollView subviews];
         for (UIView *v in viewsToRemove) {
             [v removeFromSuperview];
@@ -156,22 +156,22 @@ UIScrollView *scrollView;
     scrollView = [[UIScrollView alloc] initWithFrame:scrollRect];
     [scrollView setScrollEnabled:YES];
     if (_teamSearchField.text.length > 0) {
-        NSArray *regionalKeys = [resultDict allKeys];
+        NSArray *regionalKeys = [dict allKeys];
         NSInteger lengthNeeded = 0;
         for (int r  = 0; r < regionalKeys.count; r++) {
-            NSArray *matchKeys = [[resultDict objectForKey:[regionalKeys objectAtIndex:r]] allKeys];
+            NSArray *matchKeys = [[dict objectForKey:[regionalKeys objectAtIndex:r]] allKeys];
             for (int m = 0; m < matchKeys.count; m++) {
                 lengthNeeded += 60;
             }
             lengthNeeded += 20;
         }
         [scrollView setContentSize:CGSizeMake(lengthNeeded + 10, 200)];
-        NSLog(@"%d", lengthNeeded);
+        NSLog(@"%ld", (long)lengthNeeded);
     }
     scrollView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     [self.view addSubview:scrollView];
     
-    [self createBarsWithDictionary:resultDict];
+    [self createBarsWithDictionary:dict];
 }
 
 - (IBAction)teamNumEditingFinished:(id)sender {
@@ -231,7 +231,8 @@ UIScrollView *scrollView;
     if (_teamSearchField.text.length > 0) {
         NSInteger regionalXCord = -70;
         NSInteger matchXCord = 0;
-        NSArray *regionalKeys = [resultDict allKeys];
+        NSArray *regionalKeys = [dict allKeys];
+        NSInteger barWidth = 30;
         for (int r  = 0; r < regionalKeys.count; r++) {
             matchXCord += 10;
             CGRect regionalLabelRect = CGRectMake(regionalXCord, 95, 180, 10);
@@ -243,8 +244,27 @@ UIScrollView *scrollView;
             regionalLabel.font = [UIFont systemFontOfSize:8];
             [scrollView addSubview:regionalLabel];
             regionalLabel.transform = CGAffineTransformMakeRotation(-M_PI/2);
-            NSArray *matchKeys = [[resultDict objectForKey:[regionalKeys objectAtIndex:r]] allKeys];
+            regionalXCord += 10;
+            NSArray *matchKeys = [[dict objectForKey:[regionalKeys objectAtIndex:r]] allKeys];
             for (int m = 0; m < matchKeys.count; m++) {
+                NSInteger heightR = [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"teleopHighScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"teleopMidScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"teleopLowScore"] integerValue];
+                NSInteger yCordR = 150-heightR;
+                CGRect redRect = CGRectMake(matchXCord, yCordR, barWidth, heightR);
+                UIView *redBar = [[UIView alloc] initWithFrame:redRect];
+                redBar.backgroundColor = [UIColor redColor];
+                [scrollView addSubview:redBar];
+                
+                NSInteger yCordLbl = 155;
+                CGRect lblRect = CGRectMake(matchXCord-4, yCordLbl, 40, barWidth);
+                UILabel *matchLabel = [[UILabel alloc] initWithFrame:lblRect];
+                
+                matchLabel.numberOfLines = 1;
+                matchLabel.text = [[NSString alloc] initWithFormat:@"Match %ld", (long)[[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"currentMatchNum"] integerValue]];
+                matchLabel.backgroundColor = [UIColor clearColor];
+                matchLabel.textColor = [UIColor blackColor];
+                matchLabel.font = [UIFont systemFontOfSize:8];
+                matchLabel.transform = CGAffineTransformMakeRotation(-M_PI / 2);
+                [scrollView addSubview:matchLabel];
             }
         }
     }
@@ -258,8 +278,9 @@ UIScrollView *scrollView;
     
     
     for (NSInteger i = 0; i < numBars; i++) {
-        //NSLog(@"TIME NUMBER %d", i);
+        
         NSInteger xCord = 60*i + 20;
+        
         if (redOn == 1) {
             
             NSInteger heightR = [redVals[i] integerValue];
