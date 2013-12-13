@@ -177,7 +177,7 @@ UIScrollView *scrollView;
         [scrollView setContentSize:CGSizeMake(lengthNeeded + 10, 200)];
         NSLog(@"%ld", (long)lengthNeeded);
     }
-    scrollView.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
+    scrollView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1];
     scrollView.layer.cornerRadius = 5;
     scrollView.layer.borderWidth = 2;
     scrollView.layer.borderColor = [UIColor colorWithWhite:0.88 alpha:1].CGColor;
