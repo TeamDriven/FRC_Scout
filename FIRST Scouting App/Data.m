@@ -69,6 +69,11 @@ UIScrollView *scrollView;
     
     _switchBackgroundView.layer.cornerRadius = 10;
     
+    _redSwitch.transform = CGAffineTransformMakeScale(0.7, 0.7);
+    _orangeSwitch.transform = CGAffineTransformMakeScale(0.7, 0.7);
+    _yellowSwitch.transform = CGAffineTransformMakeScale(0.7, 0.7);
+    
+    
     NSLog(@"%@", dataDict);
     
 }
@@ -161,7 +166,7 @@ UIScrollView *scrollView;
 
 -(void)createScrollViewWithDictionary:(NSDictionary *)dict{
     [scrollView removeFromSuperview];
-    CGRect scrollRect = CGRectMake(40, 675, 688, 200);
+    CGRect scrollRect = CGRectMake(40, 690, 688, 200);
     scrollView = [[UIScrollView alloc] initWithFrame:scrollRect];
     [scrollView setScrollEnabled:YES];
     if (_teamSearchField.text.length > 0) {
@@ -177,7 +182,7 @@ UIScrollView *scrollView;
         [scrollView setContentSize:CGSizeMake(lengthNeeded + 10, 200)];
         NSLog(@"%ld", (long)lengthNeeded);
     }
-    scrollView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1];
+    scrollView.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1];
     scrollView.layer.cornerRadius = 5;
     scrollView.layer.borderWidth = 2;
     scrollView.layer.borderColor = [UIColor colorWithWhite:0.88 alpha:1].CGColor;
