@@ -197,6 +197,71 @@ NSData *dataReceived;
     }
 }
 
+-(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
+    NSLog(@"DATA RECEIVED: %lu bytes!", (unsigned long)data.length);
+    dataReceived = data;
+    receivedDataDict = [[NSMutableDictionary alloc] init];
+    NSLog(@"Initializing ReceivedDataDict");
+    receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
+    NSLog(@"ReceivedDataDict is Unarchived");
+    
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Hey!"
+                                                   message: [[NSString alloc] initWithFormat:@"%@ is trying to send you data! Do you accept?", [peerID displayName]]
+                                                  delegate: self
+                                         cancelButtonTitle:@"Nuh Uh!!"
+                                         otherButtonTitles:@"Ok, I guess.",nil];
+    [alert show];
+    
+//    [self.view addSubview:greyOut];
+//    
+//    CGRect headsUpViewRect = CGRectMake(236, 400, 300, 200);
+//    headsUpView = [[UIView alloc] initWithFrame:headsUpViewRect];
+//    headsUpView.backgroundColor = [UIColor whiteColor];
+//    headsUpView.layer.cornerRadius = 10;
+//    
+//    CGRect headsUpTitleLblRect = CGRectMake(20, 20, 260, 30);
+//    UILabel *headsUpTitleLbl = [[UILabel alloc] initWithFrame:headsUpTitleLblRect];
+//    headsUpTitleLbl.text = [[NSString alloc] initWithFormat:@"%@ is trying to send you matches!", [peerID displayName]];
+//    headsUpTitleLbl.font = [UIFont systemFontOfSize:15];
+//    headsUpTitleLbl.textAlignment = NSTextAlignmentCenter;
+//    [headsUpView addSubview:headsUpTitleLbl];
+//    
+//    CGRect headsUpSubTitleLblRect = CGRectMake(50, 60, 200, 30);
+//    UILabel *headsUpSubTitleLbl = [[UILabel alloc] initWithFrame:headsUpSubTitleLblRect];
+//    headsUpSubTitleLbl.text = @"Do you accept their gift?";
+//    headsUpSubTitleLbl.font = [UIFont systemFontOfSize:10];
+//    headsUpSubTitleLbl.textAlignment = NSTextAlignmentCenter;
+//    [headsUpView addSubview:headsUpSubTitleLbl];
+//    
+//    CGRect confirmBtnRect = CGRectMake(200, 120, 80, 50);
+//    UIButton *confirmBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+//    [confirmBtn addTarget:self action:@selector(headsUpViewClickedButtonAtIndex1) forControlEvents:UIControlEventTouchUpInside];
+//    confirmBtn.frame = confirmBtnRect;
+//    [confirmBtn setTitle:@"Of Course!" forState:UIControlStateNormal];
+//    confirmBtn.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+//    [headsUpView addSubview:confirmBtn];
+//    confirmBtn.layer.cornerRadius = 5;
+//    
+//    CGRect cancelBtnRect = CGRectMake(20, 120, 80, 50);
+//    UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+//    [cancelBtn addTarget:self action:@selector(cancelHeadsUpView) forControlEvents:UIControlEventTouchUpInside];
+//    cancelBtn.frame = cancelBtnRect;
+//    [cancelBtn setTitle:@"Nuh Uh!!" forState:UIControlStateNormal];
+//    cancelBtn.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+//    [headsUpView addSubview:cancelBtn];
+//    cancelBtn.layer.cornerRadius = 5;
+//    
+//    headsUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
+//    [self.view addSubview:headsUpView];
+//    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+//                     animations:^{
+//                         headsUpView.transform = CGAffineTransformIdentity;
+//                     }
+//                     completion:^(BOOL finished){
+//                     }];
+    
+    NSLog(@"Should Show Alert");
+}
 
 -(void)cancelHeadsUpView{
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
