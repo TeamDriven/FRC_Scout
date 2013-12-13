@@ -71,9 +71,6 @@ NSData *dataReceived;
     
     self.mySession.delegate = self;
     
-    //_sendMatchesBtn.enabled = false;
-    //_sendMatchesBtn.alpha = 0.3;
-    
     
 }
 
@@ -119,8 +116,6 @@ NSData *dataReceived;
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
     if (state == MCSessionStateConnected) {
         NSLog(@"HOLY FRIGGIN CRAP YESSS!!!!");
-        //_sendMatchesBtn.enabled = true;
-        //_sendMatchesBtn.alpha = 1;
         self.sessionTwo = session;
     }
     else if (state == MCSessionStateNotConnected){
@@ -166,8 +161,6 @@ NSData *dataReceived;
     }
     else{
         [self.advertiser stop];
-        //_sendMatchesBtn.enabled = false;
-        //_sendMatchesBtn.alpha = 0.3;
     }
 }
 
