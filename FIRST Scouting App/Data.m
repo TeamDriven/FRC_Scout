@@ -121,35 +121,6 @@ UIScrollView *scrollView;
     }
 }
 
-
-/* +++++++++++++++++++++++++++++++++++++++++
- +++++++++++++++  METHODS  +++++++++++++++++
- ++++++++++++++++++++++++++++++++++++++++++*/
-
--(void)createScrollViewWithDictionary:(NSDictionary *)dict{
-    [scrollView removeFromSuperview];
-    CGRect scrollRect = CGRectMake(40, 675, 688, 200);
-    scrollView = [[UIScrollView alloc] initWithFrame:scrollRect];
-    [scrollView setScrollEnabled:YES];
-    if (_teamSearchField.text.length > 0) {
-        NSArray *regionalKeys = [dict allKeys];
-        NSInteger lengthNeeded = 10;
-        for (int r  = 0; r < regionalKeys.count; r++) {
-            NSArray *matchKeys = [[dict objectForKey:[regionalKeys objectAtIndex:r]] allKeys];
-            for (int m = 0; m < matchKeys.count; m++) {
-                lengthNeeded += 40;
-            }
-            lengthNeeded += 30;
-        }
-        [scrollView setContentSize:CGSizeMake(lengthNeeded + 10, 200)];
-        NSLog(@"%ld", (long)lengthNeeded);
-    }
-    scrollView.backgroundColor = [UIColor colorWithWhite:0.85 alpha:1];
-    [self.view addSubview:scrollView];
-    
-    [self createBarsWithDictionary:dict];
-}
-
 -(IBAction)teamNumEditingFinished:(id)sender {
     [resultDict removeAllObjects];
     NSArray *rAndBKeys = [dataDict allKeys];
@@ -184,6 +155,37 @@ UIScrollView *scrollView;
     }
 }
 
+/* +++++++++++++++++++++++++++++++++++++++++
+ +++++++++++++++  METHODS  +++++++++++++++++
+ ++++++++++++++++++++++++++++++++++++++++++*/
+
+-(void)createScrollViewWithDictionary:(NSDictionary *)dict{
+    [scrollView removeFromSuperview];
+    CGRect scrollRect = CGRectMake(40, 675, 688, 200);
+    scrollView = [[UIScrollView alloc] initWithFrame:scrollRect];
+    [scrollView setScrollEnabled:YES];
+    if (_teamSearchField.text.length > 0) {
+        NSArray *regionalKeys = [dict allKeys];
+        NSInteger lengthNeeded = 10;
+        for (int r  = 0; r < regionalKeys.count; r++) {
+            NSArray *matchKeys = [[dict objectForKey:[regionalKeys objectAtIndex:r]] allKeys];
+            for (int m = 0; m < matchKeys.count; m++) {
+                lengthNeeded += 40;
+            }
+            lengthNeeded += 30;
+        }
+        [scrollView setContentSize:CGSizeMake(lengthNeeded + 10, 200)];
+        NSLog(@"%ld", (long)lengthNeeded);
+    }
+    scrollView.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
+    scrollView.layer.cornerRadius = 5;
+    scrollView.layer.borderWidth = 2;
+    scrollView.layer.borderColor = [UIColor colorWithWhite:0.88 alpha:1].CGColor;
+    [self.view addSubview:scrollView];
+    
+    [self createBarsWithDictionary:dict];
+}
+
 -(void)createBarsWithDictionary:(NSDictionary *)dict{
     for (UIView *v in [scrollView subviews]) {
         [v removeFromSuperview];
@@ -201,8 +203,8 @@ UIScrollView *scrollView;
                                                                      attributes:underlineAttribute];
             regionalLabel.textAlignment = NSTextAlignmentCenter;
             regionalLabel.numberOfLines = 1;
-            regionalLabel.adjustsFontSizeToFitWidth = YES;
             regionalLabel.font = [UIFont systemFontOfSize:8];
+            regionalLabel.adjustsFontSizeToFitWidth = YES;
             [scrollView addSubview:regionalLabel];
             regionalLabel.transform = CGAffineTransformMakeRotation(-M_PI/2);
             regionalXCord += 30;
@@ -280,6 +282,7 @@ UIScrollView *scrollView;
                 matchLabel.backgroundColor = [UIColor clearColor];
                 matchLabel.textColor = [UIColor blackColor];
                 matchLabel.font = [UIFont systemFontOfSize:8];
+                matchLabel.adjustsFontSizeToFitWidth = YES;
                 matchLabel.transform = CGAffineTransformMakeRotation(-M_PI / 2);
                 [scrollView addSubview:matchLabel];
                 
@@ -296,7 +299,7 @@ UIScrollView *scrollView;
     return NO;
 }
 
-- (IBAction)screenTapped:(id)sender {
+-(IBAction)screenTapped:(id)sender {
     [self hideKeyboard];
 }
 
