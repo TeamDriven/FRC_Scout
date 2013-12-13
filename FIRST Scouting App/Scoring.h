@@ -36,6 +36,7 @@
 @property (weak, nonatomic) IBOutlet UIStepper *largePenaltyStepper;
 @property (weak, nonatomic) IBOutlet UILabel *largePenaltyTitleLbl;
 
+@property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 
 
 

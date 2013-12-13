@@ -20,19 +20,27 @@ NSString *path;
 NSMutableDictionary *dataDict;
 NSMutableDictionary *receivedDataDict;
 
+UIView *red1View;
+UIView *greyOut;
+UISegmentedControl *red1Selector;
+UIButton *saveBtn;
+
+UIView *headsUpView;
 
 NSInteger overWrite;
 
 NSString *key1;
 NSString *key2;
+NSString *key3;
 
 NSString *pos;
 
 NSData *dataToSend;
 NSData *dataReceived;
 
-- (void)viewDidLoad
-{
+
+
+- (void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     NSLog(@"%@", pos);
@@ -42,9 +50,53 @@ NSData *dataReceived;
     [_advertiseSwitcher setOn:false animated:YES];
     [_overWriteSwitch setOn:false animated:YES];
     
-    
-    //_sendMatchesBtn.enabled = false;
-    //_sendMatchesBtn.alpha = 0.3;
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    if (!pos && !red1View.superview) {
+        CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
+        greyOut = [[UIControl alloc] initWithFrame:greyOutRect];
+        greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
+        [self.view addSubview:greyOut];
+        
+        CGRect red1Rect = CGRectMake(186, 450, 400, 170);
+        red1View = [[UIView alloc] initWithFrame:red1Rect];
+        red1View.layer.cornerRadius = 10;
+        red1View.backgroundColor = [UIColor whiteColor];
+        
+        CGRect warningLblRect = CGRectMake(90, 20, 220, 30);
+        UILabel *warningLbl = [[UILabel alloc] initWithFrame:warningLblRect];
+        warningLbl.text = @"You are not signed in!";
+        warningLbl.font = [UIFont systemFontOfSize:20];
+        warningLbl.textAlignment = NSTextAlignmentCenter;
+        [red1View addSubview:warningLbl];
+        
+        CGRect red1SelectorRect = CGRectMake(30, 70, 340, 30);
+        red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3", nil]];
+        [red1Selector addTarget:self action:@selector(enableSaveBtn) forControlEvents:UIControlEventValueChanged];
+        red1Selector.frame = red1SelectorRect;
+        [red1View addSubview:red1Selector];
+        
+        CGRect saveBtnRect = CGRectMake(175, 120, 50, 30);
+        saveBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        saveBtn.frame = saveBtnRect;
+        [saveBtn addTarget:self action:@selector(makeRed1ViewDisappear) forControlEvents:UIControlEventTouchUpInside];
+        [saveBtn setTitle:@"Save" forState:UIControlStateNormal];
+        saveBtn.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+        [red1View addSubview:saveBtn];
+        saveBtn.layer.cornerRadius = 5;
+        saveBtn.enabled = false;
+        saveBtn.alpha = 0.3;
+        
+        red1View.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        [self.view addSubview:red1View];
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             red1View.transform = CGAffineTransformIdentity;
+                         }
+                         completion:^(BOOL finished){
+                         }];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -57,6 +109,22 @@ NSData *dataReceived;
 ********************    Reusable Methods    *****************************
 ************************************************************************/
 
+-(void)enableSaveBtn{
+    saveBtn.enabled = true;
+    saveBtn.alpha = 1;
+}
+
+-(void)makeRed1ViewDisappear{
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         red1View.transform = CGAffineTransformMakeScale(0.01, 0.01);
+                     }
+                     completion:^(BOOL finished){
+                         pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
+                         [red1View removeFromSuperview];
+                         [greyOut removeFromSuperview];
+                     }];
+}
 
 -(void)setUpMultiPeer{
     self.myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
@@ -129,21 +197,17 @@ NSData *dataReceived;
     }
 }
 
--(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
-    NSLog(@"DATA RECEIVED: %lu bytes!", (unsigned long)data.length);
-    dataReceived = data;
-    receivedDataDict = [[NSMutableDictionary alloc] init];
-    receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
-    UIAlertView *alert1 = [[UIAlertView alloc]initWithTitle: @"Hey!"
-                                                   message: [[NSString alloc] initWithFormat:@"%@ is trying to send you data! Will you accept it?", [peerID displayName]]
-                                                  delegate: self
-                                         cancelButtonTitle:@"NEVER!!"
-                                         otherButtonTitles:@"Yeah, I guess..." ,nil];
-    [alert1 show];
-    NSLog(@"Should Show Alert");
+
+-(void)cancelHeadsUpView{
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         headsUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
+                     }
+                     completion:^(BOOL finished){
+                         [headsUpView removeFromSuperview];
+                         [greyOut removeFromSuperview];
+                     }];
 }
-
-
 
 /************************************************************************
  ****************    Actions and Other Code    **************************
@@ -188,17 +252,21 @@ NSData *dataReceived;
     }
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1) {
-        for (key1 in receivedDataDict) {
-        if ([dataDict objectForKey:key1] == nil) {
-            NSLog(@"Writing new folder");
-            [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:key1];
+-(void)headsUpViewClickedButtonAtIndex1{
+    for (key1 in receivedDataDict) {
+    if (![dataDict objectForKey:key1]) {
+        NSLog(@"Writing new red/blue folder");
+        [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:key1];
+    }
+    for (key2 in [receivedDataDict objectForKey:key1]) {
+        if (![[dataDict objectForKey:key1] objectForKey:key2]) {
+            NSLog(@"Writing a new regional");
+            [[dataDict objectForKey:key1] setObject:[[receivedDataDict objectForKey:key1] objectForKey:key2] forKey:key2];
         }
-        for (key2 in [receivedDataDict objectForKey:key1]) {
-            if ([[dataDict objectForKey:key1] objectForKey:key2] == nil) {
-                NSLog(@"Writing a new file");
-                [[dataDict objectForKey:key1] setObject:[[receivedDataDict objectForKey:key1] objectForKey:key2] forKey:key2];
+        for (key3 in [[receivedDataDict objectForKey:key1] objectForKey:key2]) {
+            if (![[[dataDict objectForKey:key1] objectForKey:key2] objectForKey:key3]) {
+                NSLog(@"Writing a new match");
+                [[[dataDict objectForKey:key1] objectForKey:key2] setObject:[[[receivedDataDict objectForKey:key1] objectForKey:key2] objectForKey:key3] forKey:key3];
             }
             else{
                 if (overWrite == 1) {
@@ -212,8 +280,44 @@ NSData *dataReceived;
     receivedDataDict = nil;
     [_overWriteSwitch setOn:false animated:YES];
     }
+    [self cancelHeadsUpView];
 }
 
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 1) {
+        for (key1 in receivedDataDict) {
+            if (![dataDict objectForKey:key1]) {
+                NSLog(@"Writing new red/blue folder");
+                [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:key1];
+            }
+            for (key2 in [receivedDataDict objectForKey:key1]) {
+                if (![[dataDict objectForKey:key1] objectForKey:key2]) {
+                    NSLog(@"Writing a new regional");
+                    [[dataDict objectForKey:key1] setObject:[[receivedDataDict objectForKey:key1] objectForKey:key2] forKey:key2];
+                }
+                for (key3 in [[receivedDataDict objectForKey:key1] objectForKey:key2]) {
+                    if (![[[dataDict objectForKey:key1] objectForKey:key2] objectForKey:key3]) {
+                        NSLog(@"Writing a new match");
+                        [[[dataDict objectForKey:key1] objectForKey:key2] setObject:[[[receivedDataDict objectForKey:key1] objectForKey:key2] objectForKey:key3] forKey:key3];
+                    }
+                    else{
+                        if (overWrite == 1) {
+                            [[dataDict objectForKey:key1] setObject:[[receivedDataDict objectForKey:key1] objectForKey:key2] forKey:key2];
+                        }
+                    }
+                }
+            }
+            [dataDict writeToFile:path atomically:YES];
+            NSLog(@"%@", dataDict);
+            receivedDataDict = nil;
+            [_overWriteSwitch setOn:false animated:YES];
+        }
+        if (headsUpView.superview) {
+            [self cancelHeadsUpView];
+        }
+        
+    }
+}
 
 
 

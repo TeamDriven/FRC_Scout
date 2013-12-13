@@ -318,6 +318,7 @@
                         <outlet property="matchNumEdit" destination="jy0-Eg-Sz9" id="K5h-pf-Tqf"/>
                         <outlet property="matchNumField" destination="vtE-QU-CZK" id="F03-8i-VTU"/>
                         <outlet property="regionalNameLbl" destination="14x-I5-vam" id="1Sw-a6-sVK"/>
+                        <outlet property="saveBtn" destination="KHg-J8-aA8" id="7oP-Eg-BQd"/>
                         <outlet property="smallPenaltyLbl" destination="v1t-Wp-jgq" id="zzZ-0R-aq3"/>
                         <outlet property="smallPenaltyStepper" destination="Rao-87-LJV" id="TWx-wi-TIX"/>
                         <outlet property="smallPenaltyTitleLbl" destination="Bna-Uq-ncr" id="11X-qu-02J"/>
@@ -411,7 +412,7 @@
                                 <color key="backgroundColor" white="0.88" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-4H-0Yd">
-                                <rect key="frame" x="20" y="185" width="728" height="435"/>
+                                <rect key="frame" x="20" y="185" width="728" height="452"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
