@@ -31,6 +31,8 @@ NSString *currentMatchNum;
 NSString *currentTeamNum;
 NSString *currentRegional;
 
+NSString *currentMatchType;
+
 NSArray *paths;
 NSString *scoutingDirectory;
 NSString *path;
@@ -46,6 +48,7 @@ UIControl *setUpView;
 UISegmentedControl *red1Selector;
 NSInteger red1Pos;
 UITextField *currentMatchNumField;
+UISegmentedControl *matchTypeSelector;
 NSAttributedString *currentMatchNumAtString;
 UITextField *scoutTeamNumField;
 NSAttributedString *currentTeamNumAtString;
@@ -118,6 +121,8 @@ NSArray *allWeekRegionals;
     allWeekRegionals = @[regionalNames,week1Regionals,week2Regionals,week3Regionals,week4Regionals,week5Regionals,week6Regionals,week7Regionals];
     
     weekSelected = 0;
+    
+    currentMatchType = @"Q";
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -159,20 +164,20 @@ NSArray *allWeekRegionals;
         [setUpTitle setText:@"Sign in to Scout"];
         [setUpView addSubview:setUpTitle];
         
-        CGRect red1SelectorRect = CGRectMake(124, 150, 380, 30);
+        CGRect red1SelectorRect = CGRectMake(124, 130, 380, 30);
         red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3",  nil]];
         [red1Selector setFrame:red1SelectorRect];
         [setUpView addSubview:red1Selector];
         red1Selector.selectedSegmentIndex = red1Pos;
         
-        CGRect initialsFieldLblRect = CGRectMake(129, 210, 100, 15);
+        CGRect initialsFieldLblRect = CGRectMake(129, 190, 100, 15);
         UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
         initialsFieldLbl.textAlignment = NSTextAlignmentCenter;
         initialsFieldLbl.text = @"Enter YOUR three initials";
         initialsFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:initialsFieldLbl];
         
-        CGRect initialsFieldRect = CGRectMake(114, 230, 130, 40);
+        CGRect initialsFieldRect = CGRectMake(114, 210, 130, 40);
         initialsField = [[UITextField alloc] initWithFrame:initialsFieldRect];
         [initialsField setBorderStyle:UITextBorderStyleRoundedRect];
         [initialsField setFont:[UIFont systemFontOfSize:15]];
@@ -187,14 +192,14 @@ NSArray *allWeekRegionals;
         [initialsField setDelegate:self];
         [setUpView addSubview:initialsField];
         
-        CGRect scoutTeamNumFieldLblRect = CGRectMake(264, 210, 100, 15);
+        CGRect scoutTeamNumFieldLblRect = CGRectMake(264, 190, 100, 15);
         UILabel *scoutTeamNumFieldLbl = [[UILabel alloc] initWithFrame:scoutTeamNumFieldLblRect];
         scoutTeamNumFieldLbl.textAlignment = NSTextAlignmentCenter;
         scoutTeamNumFieldLbl.text = @"Enter YOUR team number";
         scoutTeamNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:scoutTeamNumFieldLbl];
         
-        CGRect scoutTeamNumFieldRect = CGRectMake(264, 230, 100, 40);
+        CGRect scoutTeamNumFieldRect = CGRectMake(264, 210, 100, 40);
         scoutTeamNumField = [[UITextField alloc] initWithFrame:scoutTeamNumFieldRect];
         [scoutTeamNumField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
         [scoutTeamNumField setBorderStyle:UITextBorderStyleRoundedRect];
@@ -212,14 +217,14 @@ NSArray *allWeekRegionals;
             scoutTeamNumField.text = scoutTeamNum;
         }
         
-        CGRect currentMatchNumFieldLblRect = CGRectMake(384, 210, 130, 15);
+        CGRect currentMatchNumFieldLblRect = CGRectMake(384, 190, 130, 15);
         UILabel *currentMatchNumFieldLbl = [[UILabel alloc] initWithFrame:currentMatchNumFieldLblRect];
         currentMatchNumFieldLbl.textAlignment = NSTextAlignmentCenter;
         currentMatchNumFieldLbl.text = @"Enter the current match number";
         currentMatchNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:currentMatchNumFieldLbl];
         
-        CGRect currentMatchNumFieldRect = CGRectMake(384, 230, 130, 40);
+        CGRect currentMatchNumFieldRect = CGRectMake(384, 210, 130, 40);
         currentMatchNumField = [[UITextField alloc] initWithFrame:currentMatchNumFieldRect];
         [currentMatchNumField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
         [currentMatchNumField setBorderStyle:UITextBorderStyleRoundedRect];
@@ -233,6 +238,15 @@ NSArray *allWeekRegionals;
         [currentMatchNumField setTextAlignment:NSTextAlignmentCenter];
         [currentMatchNumField setDelegate:self];
         [setUpView addSubview:currentMatchNumField];
+        
+        CGRect matchTypeSelectorRect = CGRectMake(364, 255, 170, 30);
+        matchTypeSelector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Qualification", @"Elimination", nil]];
+        matchTypeSelector.frame = matchTypeSelectorRect;
+        [matchTypeSelector addTarget:self action:@selector(changeMatchType) forControlEvents:UIControlEventValueChanged];
+        [setUpView addSubview:matchTypeSelector];
+        matchTypeSelector.selectedSegmentIndex = 0;
+        matchTypeSelector.transform = CGAffineTransformMakeScale(0.8, 0.8);
+        
         
         CGRect weekSelectorLblRect = CGRectMake(54, 310, 30, 30);
         UILabel *weekSelectorLbl = [[UILabel alloc] initWithFrame:weekSelectorLblRect];
@@ -654,6 +668,15 @@ NSArray *allWeekRegionals;
     NSLog(@"AUTO OFF");
 }
 
+-(void)changeMatchType{
+    if (matchTypeSelector.selectedSegmentIndex == 0) {
+        currentMatchType = @"Q";
+    }
+    else{
+        currentMatchType = @"E";
+    }
+}
+
 -(void)changeWeek{
     if ([[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]containsObject:[[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]]]) {
         NSString *regional = [[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
@@ -840,6 +863,7 @@ NSArray *allWeekRegionals;
                                                                [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                                [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                                [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                               [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                                [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                                [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                                [NSString stringWithString:initials], @"initials",
@@ -869,6 +893,7 @@ NSArray *allWeekRegionals;
                                                             [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                             [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                             [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                            [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                             [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                             [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                             [NSString stringWithString:initials], @"initials",
@@ -898,6 +923,7 @@ NSArray *allWeekRegionals;
                                                             [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                             [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                             [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                            [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                             [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                             [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                             [NSString stringWithString:initials], @"initials",
@@ -927,6 +953,7 @@ NSArray *allWeekRegionals;
                                                              [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                              [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                              [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                             [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                              [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                              [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                              [NSString stringWithString:initials], @"initials",
@@ -956,6 +983,7 @@ NSArray *allWeekRegionals;
                                                              [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                              [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                              [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                             [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                              [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                              [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                              [NSString stringWithString:initials], @"initials",
@@ -985,6 +1013,7 @@ NSArray *allWeekRegionals;
                                                              [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                              [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                              [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                             [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                              [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                              [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                              [NSString stringWithString:initials], @"initials",
@@ -1015,6 +1044,7 @@ NSArray *allWeekRegionals;
                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                         [NSString stringWithString:initials], @"initials",
                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
@@ -1033,6 +1063,7 @@ NSArray *allWeekRegionals;
                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                         [NSString stringWithString:initials], @"initials",
@@ -1051,6 +1082,7 @@ NSArray *allWeekRegionals;
                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                         [NSString stringWithString:initials], @"initials",
@@ -1069,6 +1101,7 @@ NSArray *allWeekRegionals;
                                                          [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                          [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                          [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                          [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                          [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                          [NSString stringWithString:initials], @"initials",
@@ -1087,6 +1120,7 @@ NSArray *allWeekRegionals;
                                                          [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                          [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                          [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                          [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                          [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                          [NSString stringWithString:initials], @"initials",
@@ -1105,6 +1139,7 @@ NSArray *allWeekRegionals;
                                                          [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
                                                          [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
                                                          [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
                                                          [NSString stringWithString:currentTeamNum], @"currentTeamNum",
                                                          [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                          [NSString stringWithString:initials], @"initials",

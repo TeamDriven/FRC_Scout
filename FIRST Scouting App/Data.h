@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "Globals.h"
+#import "MatchCell.h"
 
-@interface Data : UIViewController<UITextFieldDelegate>
+@interface Data : UIViewController<UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *teamSearchField;
 
@@ -19,5 +20,10 @@
 
 @property (weak, nonatomic) IBOutlet UIView *switchBackgroundView;
 
+@property (weak, nonatomic) IBOutlet UITableView *matchTableView;
+
+@property (weak, nonatomic) IBOutlet UILabel *autoAvgNum;
+@property (weak, nonatomic) IBOutlet UILabel *teleopAvgNum;
+@property (weak, nonatomic) IBOutlet UILabel *endgameAvgNum;
 
 @end

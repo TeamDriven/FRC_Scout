@@ -10,6 +10,7 @@
 		28203ADA1853175900F16A30 /* minus_dn.png in Resources */ = {isa = PBXBuildFile; fileRef = 28203AD91853175900F16A30 /* minus_dn.png */; };
 		2862D6A81854D4F900DC460F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A71854D4F900DC460F /* Images.xcassets */; };
 		2862D6AA1854D51300DC460F /* Binoculars60px.png in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A91854D51300DC460F /* Binoculars60px.png */; };
+		28C8C757185BB91F000FAE10 /* MatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C8C756185BB91F000FAE10 /* MatchCell.m */; };
 		28F619E6185319D90098AD44 /* minus_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F619E5185319D90098AD44 /* minus_up.png */; };
 		28F619E8185319DF0098AD44 /* plus_dn.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F619E7185319DF0098AD44 /* plus_dn.png */; };
 		28F619EA185319E40098AD44 /* plus_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F619E9185319E40098AD44 /* plus_up.png */; };
@@ -48,6 +49,8 @@
 		28203AD91853175900F16A30 /* minus_dn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = minus_dn.png; path = ../../../../../../../Users/louiebertoncin/Downloads/minus_dn.png; sourceTree = "<group>"; };
 		2862D6A71854D4F900DC460F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2862D6A91854D51300DC460F /* Binoculars60px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Binoculars60px.png; path = "../../../../../../../Users/louiebertoncin/Desktop/App Pics/Binoculars60px.png"; sourceTree = "<group>"; };
+		28C8C755185BB91F000FAE10 /* MatchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchCell.h; sourceTree = "<group>"; };
+		28C8C756185BB91F000FAE10 /* MatchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchCell.m; sourceTree = "<group>"; };
 		28F619E5185319D90098AD44 /* minus_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = minus_up.png; sourceTree = SOURCE_ROOT; };
 		28F619E7185319DF0098AD44 /* plus_dn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus_dn.png; sourceTree = SOURCE_ROOT; };
 		28F619E9185319E40098AD44 /* plus_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus_up.png; sourceTree = SOURCE_ROOT; };
@@ -159,6 +162,8 @@
 		8846FED71826D7D100B37E44 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				28C8C755185BB91F000FAE10 /* MatchCell.h */,
+				28C8C756185BB91F000FAE10 /* MatchCell.m */,
 				8846FEDF1826D7D200B37E44 /* LocationsAppDelegate.h */,
 				8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */,
 				8846FEEB1826D7D200B37E44 /* Binoculars30px.png */,
@@ -304,6 +309,7 @@
 			files = (
 				88ED27F81829FE58008F3FDF /* Data.m in Sources */,
 				8846FEDD1826D7D200B37E44 /* main.m in Sources */,
+				28C8C757185BB91F000FAE10 /* MatchCell.m in Sources */,
 				8846FEEA1826D7D200B37E44 /* Sharing.m in Sources */,
 				8846FEE11826D7D200B37E44 /* LocationsAppDelegate.m in Sources */,
 				888F0EF81850177F00412022 /* Globals.m in Sources */,

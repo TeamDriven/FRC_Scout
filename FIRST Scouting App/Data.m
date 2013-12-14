@@ -25,11 +25,14 @@ NSMutableArray *redScores;
 NSMutableArray *orangeScores;
 NSMutableArray *yellowScores;
 
-NSNumber *numberOfRows;
-
 Boolean redOn;
 Boolean orangeOn;
 Boolean yellowOn;
+
+NSInteger autoAvg;
+NSInteger teleopAvg;
+NSInteger endgameAvg;
+NSInteger numMatches;
 
 UIScrollView *scrollView;
 
@@ -55,11 +58,12 @@ UIScrollView *scrollView;
     
     _teamSearchField.delegate = self;
     
+    _matchTableView.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1].CGColor;
+    _matchTableView.layer.borderWidth = 1;
+    
     dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
     
     resultDict = [[NSMutableDictionary alloc] init];
-    
-    numberOfRows = [NSNumber numberWithInt:4];
     
     redOn = 1;
     orangeOn = 1;
@@ -139,6 +143,10 @@ UIScrollView *scrollView;
                         [resultDict setObject:[NSMutableDictionary dictionary] forKey:[regionalsKeys objectAtIndex:i]];
                     }
                     [[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] setObject:[[[dataDict objectForKey:[rAndBKeys objectAtIndex:j]] objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] forKey:[matchesKeys objectAtIndex:q]];
+                    autoAvg += [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"autoHighScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"autoMidScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"autoLowScore"] integerValue];
+                    teleopAvg += [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"teleopHighScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"teleopMidScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"teleopLowScore"] integerValue];
+                    //endgameAvg += [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"endgameScore"] integerValue];
+                    numMatches += 1;
                 }
             }
         }
@@ -146,7 +154,18 @@ UIScrollView *scrollView;
     
     NSLog(@"%@", resultDict);
     if ([resultDict count] > 0) {
+        autoAvg = autoAvg/numMatches;
+        teleopAvg = teleopAvg/numMatches;
+        //endgameAvg = endgameAvg/numMatches;
+        
+        _autoAvgNum.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoAvg];
+        _teleopAvgNum.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopAvg];
+        //_endgameAvgNum.text = [[NSString alloc] initWithFormat:@"%ld", (long)endgameAvg];
+        
         [self createScrollViewWithDictionary:resultDict];
+        [[self matchTableView] setDelegate:self];
+        [[self matchTableView] setDataSource:self];
+        [[self matchTableView] reloadData];
     }
     else{
         if ([_teamSearchField.text length] > 0) {
@@ -313,8 +332,63 @@ UIScrollView *scrollView;
 }
 
 
+// Set the number of sections based on how many arrays the sections array has within it
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return [[resultDict allKeys] count];
+}
+
+// Set the number of rows in each individual section based on the amount of objects in each array
+//   within the sections array
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    NSArray *regionals = [resultDict allKeys];
+    return [[resultDict objectForKey:[regionals objectAtIndex:section]] count];
+}
+
+// Set headers of sections from the "headers" array
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    NSArray *regionals = [resultDict allKeys];
+    NSLog(@"%@", [regionals objectAtIndex:section]);
+    return [regionals objectAtIndex:section];
+}
+
+// Create cells as the user scrolls
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"cellForRowAtIndexPath");
+    NSArray *regionals = [resultDict allKeys];
+    NSMutableArray *matches = [[NSMutableArray alloc] initWithArray:[[resultDict objectForKey:[regionals objectAtIndex:indexPath.section]] allKeys]];
+    [matches sortUsingComparator:^NSComparisonResult(NSString *str1, NSString *str2) {
+        return [str1 compare:str2 options:(NSNumericSearch)];
+    }];
+    
+    static NSString *cellIdentifier = @"matchCell";
+    MatchCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    if(!cell){
+        cell = [[MatchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    
+    cell.matchNumLbl.text = [[NSString alloc] initWithFormat:@"%@ %@", [[[resultDict objectForKey:[regionals objectAtIndex:indexPath.section]] objectForKey:[matches objectAtIndex:indexPath.row]] objectForKey:@"currentMatchType"],[[[resultDict objectForKey:[regionals objectAtIndex:indexPath.section]] objectForKey:[matches objectAtIndex:indexPath.row]] objectForKey:@"currentMatchNum"]];
+    cell.autoTotalNum.text = [[NSString alloc] initWithFormat:@"%ld", (long)[[[[resultDict objectForKey:[regionals objectAtIndex:indexPath.section]] objectForKey:[matches objectAtIndex:indexPath.row]] objectForKey:@"autoHighScore"] integerValue] + (long)[[[[resultDict objectForKey:[regionals objectAtIndex:indexPath.section]] objectForKey:[matches objectAtIndex:indexPath.row]] objectForKey:@"autoMidScore"] integerValue] + (long)[[[[resultDict objectForKey:[regionals objectAtIndex:indexPath.section]] objectForKey:[matches objectAtIndex:indexPath.row]] objectForKey:@"autoLowScore"] integerValue]];
+    cell.teleopTotalNum.text = [[NSString alloc] initWithFormat:@"%ld", (long)[[[[resultDict objectForKey:[regionals objectAtIndex:indexPath.section]] objectForKey:[matches objectAtIndex:indexPath.row]] objectForKey:@"teleopHighScore"] integerValue] + (long)[[[[resultDict objectForKey:[regionals objectAtIndex:indexPath.section]] objectForKey:[matches objectAtIndex:indexPath.row]] objectForKey:@"teleopMidScore"] integerValue] + (long)[[[[resultDict objectForKey:[regionals objectAtIndex:indexPath.section]] objectForKey:[matches objectAtIndex:indexPath.row]] objectForKey:@"teleopLowScore"] integerValue]];
+    
+    
+    return cell;
+}
 
 
 
 @end
+
+
+
+
+
+
+
+
+
+
