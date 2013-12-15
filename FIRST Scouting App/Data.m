@@ -29,10 +29,10 @@ Boolean redOn;
 Boolean orangeOn;
 Boolean yellowOn;
 
-NSInteger autoAvg;
-NSInteger teleopAvg;
-NSInteger endgameAvg;
-NSInteger numMatches;
+NSNumber *autoAvg;
+NSNumber *teleopAvg;
+NSNumber *endgameAvg;
+NSNumber *numMatches;
 
 UIScrollView *scrollView;
 
@@ -143,10 +143,10 @@ UIScrollView *scrollView;
                         [resultDict setObject:[NSMutableDictionary dictionary] forKey:[regionalsKeys objectAtIndex:i]];
                     }
                     [[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] setObject:[[[dataDict objectForKey:[rAndBKeys objectAtIndex:j]] objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] forKey:[matchesKeys objectAtIndex:q]];
-                    autoAvg += [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"autoHighScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"autoMidScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"autoLowScore"] integerValue];
-                    teleopAvg += [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"teleopHighScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"teleopMidScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"teleopLowScore"] integerValue];
+                    autoAvg = [NSNumber numberWithInteger:[[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"autoHighScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"autoMidScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"autoLowScore"] integerValue] + [autoAvg integerValue]];
+                    teleopAvg = [NSNumber numberWithInteger: [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"teleopHighScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"teleopMidScore"] integerValue] + [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"teleopLowScore"] integerValue] + [teleopAvg integerValue]];
                     //endgameAvg += [[[[resultDict objectForKey:[regionalsKeys objectAtIndex:i]] objectForKey:[matchesKeys objectAtIndex:q]] objectForKey:@"endgameScore"] integerValue];
-                    numMatches += 1;
+                    numMatches = [NSNumber numberWithInteger:[numMatches integerValue]+1];
                 }
             }
         }
@@ -154,12 +154,12 @@ UIScrollView *scrollView;
     
     NSLog(@"%@", resultDict);
     if ([resultDict count] > 0) {
-        autoAvg = autoAvg/numMatches;
-        teleopAvg = teleopAvg/numMatches;
+        autoAvg = [NSNumber numberWithFloat:[autoAvg floatValue]/[numMatches floatValue]];
+        teleopAvg = [NSNumber numberWithFloat:[teleopAvg floatValue]/[numMatches floatValue]];
         //endgameAvg = endgameAvg/numMatches;
         
-        _autoAvgNum.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoAvg];
-        _teleopAvgNum.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopAvg];
+        _autoAvgNum.text = [[NSString alloc] initWithFormat:@"%0.2f", [autoAvg floatValue]];
+        _teleopAvgNum.text = [[NSString alloc] initWithFormat:@"%0.2f", [teleopAvg floatValue]];
         //_endgameAvgNum.text = [[NSString alloc] initWithFormat:@"%ld", (long)endgameAvg];
         
         [self createScrollViewWithDictionary:resultDict];

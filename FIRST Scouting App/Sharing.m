@@ -19,13 +19,13 @@ NSString *scoutingDirectory;
 NSString *path;
 NSMutableDictionary *dataDict;
 NSMutableDictionary *receivedDataDict;
+NSString *senderPeer;
+MCPeerID *senderPeerID;
 
 UIView *red1View;
 UIView *greyOut;
 UISegmentedControl *red1Selector;
 UIButton *saveBtn;
-
-UIView *headsUpView;
 
 NSInteger overWrite;
 
@@ -38,9 +38,11 @@ NSString *pos;
 NSData *dataToSend;
 NSData *dataReceived;
 
+UIAlertView *receiveAlert;
+UIAlertView *sendBackAlert;
+bool sendAll;
 
-
-- (void)viewDidLoad{
+-(void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     NSLog(@"%@", pos);
@@ -50,6 +52,7 @@ NSData *dataReceived;
     [_advertiseSwitcher setOn:false animated:YES];
     [_overWriteSwitch setOn:false animated:YES];
     
+    sendAll = true;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -99,8 +102,7 @@ NSData *dataReceived;
     }
 }
 
-- (void)didReceiveMemoryWarning
-{
+-(void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -187,13 +189,14 @@ NSData *dataReceived;
         self.sessionTwo = session;
     }
     else if (state == MCSessionStateNotConnected){
-        
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Somebody Left!"
-                                                       message: [[NSString alloc] initWithFormat:@"%@", [peerID displayName]]
-                                                      delegate: nil
-                                             cancelButtonTitle:@"Got it bro"
-                                             otherButtonTitles:nil];
-        [alert show];
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Somebody Left!"
+                                                           message: [[NSString alloc] initWithFormat:@"%@", [peerID displayName]]
+                                                          delegate: nil
+                                                 cancelButtonTitle:@"Got it bro"
+                                                 otherButtonTitles:nil];
+            [alert show];
+        });
     }
 }
 
@@ -201,78 +204,21 @@ NSData *dataReceived;
     NSLog(@"DATA RECEIVED: %lu bytes!", (unsigned long)data.length);
     dataReceived = data;
     receivedDataDict = [[NSMutableDictionary alloc] init];
-    NSLog(@"Initializing ReceivedDataDict");
     receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
-    NSLog(@"ReceivedDataDict is Unarchived");
     
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Hey!"
-                                                   message: [[NSString alloc] initWithFormat:@"%@ is trying to send you data! Do you accept?", [peerID displayName]]
-                                                  delegate: self
-                                         cancelButtonTitle:@"Nuh Uh!!"
-                                         otherButtonTitles:@"Ok, I guess.",nil];
-    [alert show];
+    senderPeer = [peerID displayName];
+    senderPeerID = peerID;
     
-//    [self.view addSubview:greyOut];
-//    
-//    CGRect headsUpViewRect = CGRectMake(236, 400, 300, 200);
-//    headsUpView = [[UIView alloc] initWithFrame:headsUpViewRect];
-//    headsUpView.backgroundColor = [UIColor whiteColor];
-//    headsUpView.layer.cornerRadius = 10;
-//    
-//    CGRect headsUpTitleLblRect = CGRectMake(20, 20, 260, 30);
-//    UILabel *headsUpTitleLbl = [[UILabel alloc] initWithFrame:headsUpTitleLblRect];
-//    headsUpTitleLbl.text = [[NSString alloc] initWithFormat:@"%@ is trying to send you matches!", [peerID displayName]];
-//    headsUpTitleLbl.font = [UIFont systemFontOfSize:15];
-//    headsUpTitleLbl.textAlignment = NSTextAlignmentCenter;
-//    [headsUpView addSubview:headsUpTitleLbl];
-//    
-//    CGRect headsUpSubTitleLblRect = CGRectMake(50, 60, 200, 30);
-//    UILabel *headsUpSubTitleLbl = [[UILabel alloc] initWithFrame:headsUpSubTitleLblRect];
-//    headsUpSubTitleLbl.text = @"Do you accept their gift?";
-//    headsUpSubTitleLbl.font = [UIFont systemFontOfSize:10];
-//    headsUpSubTitleLbl.textAlignment = NSTextAlignmentCenter;
-//    [headsUpView addSubview:headsUpSubTitleLbl];
-//    
-//    CGRect confirmBtnRect = CGRectMake(200, 120, 80, 50);
-//    UIButton *confirmBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [confirmBtn addTarget:self action:@selector(headsUpViewClickedButtonAtIndex1) forControlEvents:UIControlEventTouchUpInside];
-//    confirmBtn.frame = confirmBtnRect;
-//    [confirmBtn setTitle:@"Of Course!" forState:UIControlStateNormal];
-//    confirmBtn.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
-//    [headsUpView addSubview:confirmBtn];
-//    confirmBtn.layer.cornerRadius = 5;
-//    
-//    CGRect cancelBtnRect = CGRectMake(20, 120, 80, 50);
-//    UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [cancelBtn addTarget:self action:@selector(cancelHeadsUpView) forControlEvents:UIControlEventTouchUpInside];
-//    cancelBtn.frame = cancelBtnRect;
-//    [cancelBtn setTitle:@"Nuh Uh!!" forState:UIControlStateNormal];
-//    cancelBtn.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
-//    [headsUpView addSubview:cancelBtn];
-//    cancelBtn.layer.cornerRadius = 5;
-//    
-//    headsUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
-//    [self.view addSubview:headsUpView];
-//    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
-//                     animations:^{
-//                         headsUpView.transform = CGAffineTransformIdentity;
-//                     }
-//                     completion:^(BOOL finished){
-//                     }];
-    
-    NSLog(@"Should Show Alert");
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        receiveAlert = [[UIAlertView alloc]initWithTitle: @"Hey!"
+                                                       message: [[NSString alloc] initWithFormat:@"%@ is trying to send you data! Do you accept?", senderPeer]
+                                                      delegate: self
+                                             cancelButtonTitle:@"Nuh Uh!!"
+                                             otherButtonTitles:@"Ok, I guess.",nil];
+        [receiveAlert show];
+    });
 }
 
--(void)cancelHeadsUpView{
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         headsUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
-                     }
-                     completion:^(BOOL finished){
-                         [headsUpView removeFromSuperview];
-                         [greyOut removeFromSuperview];
-                     }];
-}
 
 /************************************************************************
  ****************    Actions and Other Code    **************************
@@ -298,8 +244,17 @@ NSData *dataReceived;
     
     dataToSend = [NSKeyedArchiver archivedDataWithRootObject:dataDict];
     NSError *error;
-    NSArray *peerIDs = [self.sessionTwo connectedPeers];
+    NSArray *peerIDs;
+    if (sendAll) {
+        peerIDs = [self.sessionTwo connectedPeers];
+    }
+    else{
+        peerIDs = [NSArray arrayWithObjects:senderPeerID, nil];
+    }
+    
     [self.sessionTwo sendData:dataToSend toPeers:peerIDs withMode:MCSessionSendDataReliable error:&error];
+    
+    sendAll = true;
 }
 
 - (IBAction)switchOverwrite:(id)sender {
@@ -317,39 +272,8 @@ NSData *dataReceived;
     }
 }
 
--(void)headsUpViewClickedButtonAtIndex1{
-    for (key1 in receivedDataDict) {
-    if (![dataDict objectForKey:key1]) {
-        NSLog(@"Writing new red/blue folder");
-        [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:key1];
-    }
-    for (key2 in [receivedDataDict objectForKey:key1]) {
-        if (![[dataDict objectForKey:key1] objectForKey:key2]) {
-            NSLog(@"Writing a new regional");
-            [[dataDict objectForKey:key1] setObject:[[receivedDataDict objectForKey:key1] objectForKey:key2] forKey:key2];
-        }
-        for (key3 in [[receivedDataDict objectForKey:key1] objectForKey:key2]) {
-            if (![[[dataDict objectForKey:key1] objectForKey:key2] objectForKey:key3]) {
-                NSLog(@"Writing a new match");
-                [[[dataDict objectForKey:key1] objectForKey:key2] setObject:[[[receivedDataDict objectForKey:key1] objectForKey:key2] objectForKey:key3] forKey:key3];
-            }
-            else{
-                if (overWrite == 1) {
-                    [[dataDict objectForKey:key1] setObject:[[receivedDataDict objectForKey:key1] objectForKey:key2] forKey:key2];
-                }
-            }
-        }
-    }
-    [dataDict writeToFile:path atomically:YES];
-    NSLog(@"%@", dataDict);
-    receivedDataDict = nil;
-    [_overWriteSwitch setOn:false animated:YES];
-    }
-    [self cancelHeadsUpView];
-}
-
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1) {
+    if (buttonIndex == 1 && [alertView isEqual:receiveAlert]) {
         for (key1 in receivedDataDict) {
             if (![dataDict objectForKey:key1]) {
                 NSLog(@"Writing new red/blue folder");
@@ -376,11 +300,22 @@ NSData *dataReceived;
             NSLog(@"%@", dataDict);
             receivedDataDict = nil;
             [_overWriteSwitch setOn:false animated:YES];
-        }
-        if (headsUpView.superview) {
-            [self cancelHeadsUpView];
+            sendBackAlert = [[UIAlertView alloc]initWithTitle: [[NSString alloc] initWithFormat:@"You now have %@'s matches!", senderPeer]
+                                                           message: @"Would you like to send your matches back to them?"
+                                                          delegate: self
+                                                 cancelButtonTitle:@"No way"
+                                                 otherButtonTitles:@"Send back to sender", @"Send matches to all",nil];
+            [sendBackAlert show];
         }
         
+    }
+    if ([alertView isEqual:sendBackAlert] && buttonIndex == 1) {
+        sendAll = false;
+        [self sendMatches:nil];
+    }
+    if ([alertView isEqual:sendBackAlert] && buttonIndex == 2) {
+        sendAll = true;
+        [self sendMatches:nil];
     }
 }
 

@@ -138,8 +138,7 @@ NSArray *allWeekRegionals;
 }
 
 -(void)setUpScreen{
-    if (initials == nil) {
-        initials = @"";
+    if (initials == nil && !setUpView.superview) {
         
         twoFingerUp.enabled = false;
         twoFingerDown.enabled = false;
@@ -149,6 +148,7 @@ NSArray *allWeekRegionals;
         [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
         greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
         [self.view addSubview:greyOut];
+        
         
         CGRect setUpViewRect = CGRectMake(70, 100, 628, 700);
         setUpView = [[UIControl alloc] initWithFrame:setUpViewRect];
@@ -169,6 +169,7 @@ NSArray *allWeekRegionals;
         [red1Selector setFrame:red1SelectorRect];
         [setUpView addSubview:red1Selector];
         red1Selector.selectedSegmentIndex = red1Pos;
+        NSLog(@"Red 1 Pos: %d", red1Pos);
         
         CGRect initialsFieldLblRect = CGRectMake(129, 190, 100, 15);
         UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
@@ -313,7 +314,7 @@ NSArray *allWeekRegionals;
                          }];
 
         }
-    }
+}
 
 -(void)checkNumber{
     if (scoutTeamNumField.isEditing) {
@@ -449,8 +450,6 @@ NSArray *allWeekRegionals;
                          }];
         NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
     }
-    
-    
 }
 
 -(IBAction)reSignIn:(id)sender {
