@@ -142,6 +142,32 @@ NSArray *allWeekRegionals;
     weekSelected = 0;
     
     currentMatchType = @"Q";
+    
+    _teleopHighMinusBtn.alpha = 0;
+    _teleopHighMinusBtn.enabled = false;
+    _teleopHighPlusBtn.alpha = 0;
+    _teleopHighPlusBtn.enabled = false;
+    _teleopMidMinusBtn.alpha = 0;
+    _teleopMidMinusBtn.enabled = false;
+    _teleopMidPlusBtn.alpha = 0;
+    _teleopMidPlusBtn.enabled = false;
+    _teleopLowMinusBtn.alpha = 0;
+    _teleopLowMinusBtn.enabled = false;
+    _teleopLowPlusBtn.alpha = 0;
+    _teleopLowPlusBtn.enabled = false;
+    
+    _autoHighMinusBtn.alpha = 1;
+    _autoHighMinusBtn.enabled = true;
+    _autoHighPlusBtn.alpha = 1;
+    _autoHighPlusBtn.enabled = true;
+    _autoMidMinusBtn.alpha = 1;
+    _autoMidMinusBtn.enabled = true;
+    _autoMidPlusBtn.alpha = 1;
+    _autoMidPlusBtn.enabled = true;
+    _autoLowMinusBtn.alpha = 1;
+    _autoLowMinusBtn.enabled = true;
+    _autoLowPlusBtn.alpha = 1;
+    _autoLowPlusBtn.enabled = true;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -609,22 +635,34 @@ NSArray *allWeekRegionals;
     _largePenaltyTitleLbl.enabled = true;
     _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
     
-    [_highMinusBtn setImage:teleopMinusUp forState:UIControlStateNormal];
-    [_highPlusBtn setImage:teleopPlusUp forState:UIControlStateNormal];
-    [_midMinusBtn setImage:teleopMinusUp forState:UIControlStateNormal];
-    [_midPlusBtn setImage:teleopPlusUp forState:UIControlStateNormal];
-    [_lowMinusBtn setImage:teleopMinusUp forState:UIControlStateNormal];
-    [_lowPlusBtn setImage:teleopPlusUp forState:UIControlStateNormal];
+    _teleopHighMinusBtn.alpha = 1;
+    _teleopHighMinusBtn.enabled = true;
+    _teleopHighPlusBtn.alpha = 1;
+    _teleopHighPlusBtn.enabled = true;
+    _teleopMidMinusBtn.alpha = 1;
+    _teleopMidMinusBtn.enabled = true;
+    _teleopMidPlusBtn.alpha = 1;
+    _teleopMidPlusBtn.enabled = true;
+    _teleopLowMinusBtn.alpha = 1;
+    _teleopLowMinusBtn.enabled = true;
+    _teleopLowPlusBtn.alpha = 1;
+    _teleopLowPlusBtn.enabled = true;
+    
+    _autoHighMinusBtn.alpha = 0;
+    _autoHighMinusBtn.enabled = false;
+    _autoHighPlusBtn.alpha = 0;
+    _autoHighPlusBtn.enabled = false;
+    _autoMidMinusBtn.alpha = 0;
+    _autoMidMinusBtn.enabled = false;
+    _autoMidPlusBtn.alpha = 0;
+    _autoMidPlusBtn.enabled = false;
+    _autoLowMinusBtn.alpha = 0;
+    _autoLowMinusBtn.enabled = false;
+    _autoLowPlusBtn.alpha = 0;
+    _autoLowPlusBtn.enabled = false;
     
     
     [UIView animateWithDuration:0.3 animations:^{
-        [_highMinusBtn setImage:autoMinusUp forState:UIControlStateNormal];
-        [_highPlusBtn setImage:autoPlusUp forState:UIControlStateNormal];
-        [_midMinusBtn setImage:autoMinusUp forState:UIControlStateNormal];
-        [_midPlusBtn setImage:autoPlusUp forState:UIControlStateNormal];
-        [_lowMinusBtn setImage:autoMinusUp forState:UIControlStateNormal];
-        [_lowPlusBtn setImage:autoPlusUp forState:UIControlStateNormal];
-        
         _autoTitleLbl.alpha = 1;
         _autoHighScoreLbl.alpha = 1;
         _autoMidScoreLbl.alpha = 1;
@@ -644,6 +682,32 @@ NSArray *allWeekRegionals;
         _largePenaltyStepper.enabled = false;
         _largePenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
         _largePenaltyTitleLbl.enabled = false;
+        
+        _teleopHighMinusBtn.alpha = 0;
+        _teleopHighMinusBtn.enabled = false;
+        _teleopHighPlusBtn.alpha = 0;
+        _teleopHighPlusBtn.enabled = false;
+        _teleopMidMinusBtn.alpha = 0;
+        _teleopMidMinusBtn.enabled = false;
+        _teleopMidPlusBtn.alpha = 0;
+        _teleopMidPlusBtn.enabled = false;
+        _teleopLowMinusBtn.alpha = 0;
+        _teleopLowMinusBtn.enabled = false;
+        _teleopLowPlusBtn.alpha = 0;
+        _teleopLowPlusBtn.enabled = false;
+        
+        _autoHighMinusBtn.alpha = 1;
+        _autoHighMinusBtn.enabled = true;
+        _autoHighPlusBtn.alpha = 1;
+        _autoHighPlusBtn.enabled = true;
+        _autoMidMinusBtn.alpha = 1;
+        _autoMidMinusBtn.enabled = true;
+        _autoMidPlusBtn.alpha = 1;
+        _autoMidPlusBtn.enabled = true;
+        _autoLowMinusBtn.alpha = 1;
+        _autoLowMinusBtn.enabled = true;
+        _autoLowPlusBtn.alpha = 1;
+        _autoLowPlusBtn.enabled = true;
     }];
     
     NSLog(@"AUTO ON");
@@ -674,6 +738,32 @@ NSArray *allWeekRegionals;
     _largePenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
     _largePenaltyTitleLbl.enabled = false;
     
+    _teleopHighMinusBtn.alpha = 0;
+    _teleopHighMinusBtn.enabled = false;
+    _teleopHighPlusBtn.alpha = 0;
+    _teleopHighPlusBtn.enabled = false;
+    _teleopMidMinusBtn.alpha = 0;
+    _teleopMidMinusBtn.enabled = false;
+    _teleopMidPlusBtn.alpha = 0;
+    _teleopMidPlusBtn.enabled = false;
+    _teleopLowMinusBtn.alpha = 0;
+    _teleopLowMinusBtn.enabled = false;
+    _teleopLowPlusBtn.alpha = 0;
+    _teleopLowPlusBtn.enabled = false;
+    
+    _autoHighMinusBtn.alpha = 1;
+    _autoHighMinusBtn.enabled = true;
+    _autoHighPlusBtn.alpha = 1;
+    _autoHighPlusBtn.enabled = true;
+    _autoMidMinusBtn.alpha = 1;
+    _autoMidMinusBtn.enabled = true;
+    _autoMidPlusBtn.alpha = 1;
+    _autoMidPlusBtn.enabled = true;
+    _autoLowMinusBtn.alpha = 1;
+    _autoLowMinusBtn.enabled = true;
+    _autoLowPlusBtn.alpha = 1;
+    _autoLowPlusBtn.enabled = true;
+    
     [UIView animateWithDuration:0.3 animations:^{
         _autoTitleLbl.alpha = 0;
         _autoHighScoreLbl.alpha = 0;
@@ -696,6 +786,32 @@ NSArray *allWeekRegionals;
         _largePenaltyStepper.tintColor = [UIColor redColor];
         _largePenaltyStepper.alpha = 1;
         _largePenaltyTitleLbl.enabled = true;
+        
+        _teleopHighMinusBtn.alpha = 1;
+        _teleopHighMinusBtn.enabled = true;
+        _teleopHighPlusBtn.alpha = 1;
+        _teleopHighPlusBtn.enabled = true;
+        _teleopMidMinusBtn.alpha = 1;
+        _teleopMidMinusBtn.enabled = true;
+        _teleopMidPlusBtn.alpha = 1;
+        _teleopMidPlusBtn.enabled = true;
+        _teleopLowMinusBtn.alpha = 1;
+        _teleopLowMinusBtn.enabled = true;
+        _teleopLowPlusBtn.alpha = 1;
+        _teleopLowPlusBtn.enabled = true;
+        
+        _autoHighMinusBtn.alpha = 0;
+        _autoHighMinusBtn.enabled = false;
+        _autoHighPlusBtn.alpha = 0;
+        _autoHighPlusBtn.enabled = false;
+        _autoMidMinusBtn.alpha = 0;
+        _autoMidMinusBtn.enabled = false;
+        _autoMidPlusBtn.alpha = 0;
+        _autoMidPlusBtn.enabled = false;
+        _autoLowMinusBtn.alpha = 0;
+        _autoLowMinusBtn.enabled = false;
+        _autoLowPlusBtn.alpha = 0;
+        _autoLowPlusBtn.enabled = false;
     }];
     
     NSLog(@"AUTO OFF");
@@ -729,86 +845,70 @@ NSArray *allWeekRegionals;
     // Dispose of any resources that can be recreated.
 }
 
--(IBAction)highPlus:(id)sender {
-    if (autoYN) {
-        autoHighScore++;
+- (IBAction)autoHighPlus:(id)sender {
+    autoHighScore++;
+    _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
+}
+- (IBAction)teleopHighPlus:(id)sender {
+    teleopHighScore++;
+    _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
+}
+
+- (IBAction)autoHighMinus:(id)sender {
+    if (autoHighScore > 0) {
+        autoHighScore--;
         _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
     }
-    else{
-        teleopHighScore++;
+}
+- (IBAction)teleopHighMinus:(id)sender {
+    if (teleopHighScore > 0) {
+        teleopHighScore--;
         _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
     }
 }
 
--(IBAction)highMinus:(id)sender {
-    if (autoYN) {
-        if (autoHighScore > 0) {
-            autoHighScore--;
-            _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
-        }
-    }
-    else{
-        if (teleopHighScore > 0) {
-            teleopHighScore--;
-            _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
-    }
-    }
-    
+- (IBAction)autoMidPlus:(id)sender {
+    autoMidScore++;
+    _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
+}
+- (IBAction)teleopMidPlus:(id)sender {
+    teleopMidScore++;
+    _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
 }
 
--(IBAction)midPlus:(id)sender {
-    if (autoYN) {
-        autoMidScore++;
+- (IBAction)autoMidMinus:(id)sender {
+    if (autoMidScore > 0) {
+        autoMidScore--;
         _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
     }
-    else{
-        teleopMidScore++;
+}
+- (IBAction)teleopMidMinus:(id)sender {
+    if (teleopMidScore > 0) {
+        teleopMidScore--;
         _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
     }
-    
 }
 
--(IBAction)midMinus:(id)sender {
-    if (autoYN) {
-        if (autoMidScore > 0) {
-            autoMidScore--;
-            _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
-        }
-    }
-    else{
-        if (teleopMidScore > 0) {
-            teleopMidScore--;
-            _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
-        }
-    }
-    
+- (IBAction)autoLowPlus:(id)sender {
+    autoLowScore++;
+    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+}
+- (IBAction)teleopLowPlus:(id)sender {
+    teleopLowScore++;
+    _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
 }
 
--(IBAction)lowPlus:(id)sender {
-    if (autoYN) {
-        autoLowScore++;
+- (IBAction)autoLowMinus:(id)sender {
+    if (autoLowScore > 0) {
+        autoLowScore--;
         _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
     }
-    else{
-        teleopLowScore++;
+}
+- (IBAction)teleopLowMinus:(id)sender {
+    if (teleopLowScore > 0) {
+        teleopLowScore--;
         _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
     }
-}
-
--(IBAction)lowMinus:(id)sender {
-    if (autoYN) {
-        if (autoLowScore > 0) {
-            autoLowScore--;
-            _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
-        }
-    }
-    else{
-        if (teleopLowScore > 0) {
-            teleopLowScore--;
-            _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
-        }
-    }
-    
 }
 
 

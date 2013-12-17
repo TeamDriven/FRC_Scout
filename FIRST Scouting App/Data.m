@@ -132,6 +132,10 @@ UIScrollView *scrollView;
 
 -(IBAction)teamNumEditingFinished:(id)sender {
     [resultDict removeAllObjects];
+    autoAvg = nil;
+    teleopAvg = nil;
+    // endgameAvg = nil;
+    numMatches = nil;
     NSArray *rAndBKeys = [dataDict allKeys];
     for (int j = 0; j < rAndBKeys.count; j++) {
         NSArray *regionalsKeys = [[dataDict objectForKey:[rAndBKeys objectAtIndex:j]] allKeys];
@@ -350,14 +354,12 @@ UIScrollView *scrollView;
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     NSArray *regionals = [resultDict allKeys];
-    NSLog(@"%@", [regionals objectAtIndex:section]);
     return [regionals objectAtIndex:section];
 }
 
 // Create cells as the user scrolls
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"cellForRowAtIndexPath");
     NSArray *regionals = [resultDict allKeys];
     NSMutableArray *matches = [[NSMutableArray alloc] initWithArray:[[resultDict objectForKey:[regionals objectAtIndex:indexPath.section]] allKeys]];
     [matches sortUsingComparator:^NSComparisonResult(NSString *str1, NSString *str2) {

@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UvT-Jd-gFR">
-                                <rect key="frame" x="521" y="416" width="200" height="100"/>
+                                <rect key="frame" x="471" y="416" width="300" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" image="AutoPlusUp">
@@ -26,11 +26,50 @@
                                 <state key="selected" image="plus_dn.png"/>
                                 <state key="highlighted" image="AutoPlusDown"/>
                                 <connections>
-                                    <action selector="highPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="8yx-NF-oRt"/>
+                                    <action selector="autoHighPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="kjo-ZZ-dlH"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XBL-zr-PLV">
+                                <rect key="frame" x="471" y="416" width="300" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" image="TeleopPlusUp">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected" image="plus_dn.png"/>
+                                <state key="highlighted" image="TeleopPlusDown"/>
+                                <connections>
+                                    <action selector="teleopHighPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="D11-c8-Y1D"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bc6-aY-B8K">
+                                <rect key="frame" x="471" y="524" width="300" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" image="TeleopPlusUp">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected" image="plus_dn.png"/>
+                                <state key="highlighted" image="TeleopPlusDown"/>
+                                <connections>
+                                    <action selector="teleopMidPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="zHl-IO-k2s"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Flw-cK-OE4">
+                                <rect key="frame" x="471" y="632" width="300" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" image="TeleopPlusUp">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected" image="plus_dn.png"/>
+                                <state key="highlighted" image="TeleopPlusDown"/>
+                                <connections>
+                                    <action selector="teleopLowPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="V1j-BU-y9z"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4w7-r0-I0f">
-                                <rect key="frame" x="521" y="632" width="200" height="100"/>
+                                <rect key="frame" x="471" y="632" width="300" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" image="AutoPlusUp">
@@ -39,11 +78,11 @@
                                 <state key="selected" image="plus_dn.png"/>
                                 <state key="highlighted" image="AutoPlusDown"/>
                                 <connections>
-                                    <action selector="lowPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="iWN-9e-Ayz"/>
+                                    <action selector="autoLowPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="g0E-5d-QWH"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JAt-Lb-TH8">
-                                <rect key="frame" x="521" y="524" width="200" height="100"/>
+                                <rect key="frame" x="471" y="524" width="300" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" image="AutoPlusUp">
@@ -52,11 +91,11 @@
                                 <state key="selected" image="plus_dn.png"/>
                                 <state key="highlighted" image="AutoPlusDown"/>
                                 <connections>
-                                    <action selector="midPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="WUh-V7-o14"/>
+                                    <action selector="autoMidPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="X20-nW-Ptb"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M3O-Yl-Yhy">
-                                <rect key="frame" x="48" y="416" width="200" height="100"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M3O-Yl-Yhy">
+                                <rect key="frame" x="-2" y="416" width="300" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" image="AutoMinusUp">
@@ -64,11 +103,11 @@
                                 </state>
                                 <state key="highlighted" image="AutoMinusDown"/>
                                 <connections>
-                                    <action selector="highMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="ATq-mz-Oto"/>
+                                    <action selector="autoHighMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="EsF-g5-2pM"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mCd-K7-UWS">
-                                <rect key="frame" x="48" y="524" width="200" height="100"/>
+                                <rect key="frame" x="-2" y="524" width="300" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" image="AutoMinusUp">
@@ -76,11 +115,11 @@
                                 </state>
                                 <state key="highlighted" image="AutoMinusDown"/>
                                 <connections>
-                                    <action selector="midMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="JhI-Ab-S9R"/>
+                                    <action selector="autoMidMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="Cwt-ol-Miv"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Myg-Qc-vfz">
-                                <rect key="frame" x="48" y="632" width="200" height="100"/>
+                                <rect key="frame" x="-2" y="632" width="300" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" image="AutoMinusUp">
@@ -88,7 +127,7 @@
                                 </state>
                                 <state key="highlighted" image="AutoMinusDown"/>
                                 <connections>
-                                    <action selector="lowMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="HqZ-FT-fLC"/>
+                                    <action selector="autoLowMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="88y-6h-UYS"/>
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="High: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JLX-Em-dag">
@@ -299,6 +338,42 @@
                                 <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qSa-9o-T8b">
+                                <rect key="frame" x="-2" y="416" width="300" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" image="TeleopMinusUp">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted" image="TeleopMinusDown"/>
+                                <connections>
+                                    <action selector="teleopHighMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="Ncq-Ea-P9x"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfF-cd-CEi">
+                                <rect key="frame" x="-2" y="524" width="300" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" image="TeleopMinusUp">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted" image="TeleopMinusDown"/>
+                                <connections>
+                                    <action selector="teleopMidMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="irD-jp-M5r"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gR8-gI-NBt">
+                                <rect key="frame" x="-2" y="632" width="300" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" image="TeleopMinusUp">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted" image="TeleopMinusDown"/>
+                                <connections>
+                                    <action selector="teleopLowMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="xWH-2c-Rsj"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <connections>
@@ -307,22 +382,22 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Scoring" image="Binoculars" id="acW-dT-cKf"/>
                     <connections>
+                        <outlet property="autoHighMinusBtn" destination="M3O-Yl-Yhy" id="j9o-0p-eQ4"/>
+                        <outlet property="autoHighPlusBtn" destination="UvT-Jd-gFR" id="L62-ik-GSW"/>
                         <outlet property="autoHighScoreLbl" destination="81V-pQ-bxw" id="2d4-lY-yB1"/>
+                        <outlet property="autoLowMinusBtn" destination="Myg-Qc-vfz" id="YUw-3q-WTZ"/>
+                        <outlet property="autoLowPlusBtn" destination="4w7-r0-I0f" id="nzz-EJ-5TZ"/>
                         <outlet property="autoLowScoreLbl" destination="oa6-zu-SpX" id="XPZ-RH-sHh"/>
+                        <outlet property="autoMidMinusBtn" destination="mCd-K7-UWS" id="uEy-4X-NUT"/>
+                        <outlet property="autoMidPlusBtn" destination="JAt-Lb-TH8" id="fYg-te-jOq"/>
                         <outlet property="autoMidScoreLbl" destination="20a-Xx-tId" id="Cu6-MJ-YfA"/>
                         <outlet property="autoTitleLbl" destination="mDS-z2-sBp" id="AoP-sm-lW5"/>
-                        <outlet property="highMinusBtn" destination="M3O-Yl-Yhy" id="s2w-Nh-Ibg"/>
-                        <outlet property="highPlusBtn" destination="UvT-Jd-gFR" id="jCt-fl-luz"/>
                         <outlet property="initialsLbl" destination="6a1-F6-T2r" id="TxM-gc-NwH"/>
                         <outlet property="largePenaltyLbl" destination="LPK-9L-Eze" id="LPn-Uh-nAy"/>
                         <outlet property="largePenaltyStepper" destination="Bph-0H-txc" id="qei-dP-PIM"/>
                         <outlet property="largePenaltyTitleLbl" destination="ADz-A5-mZr" id="F5J-0h-YB2"/>
-                        <outlet property="lowMinusBtn" destination="Myg-Qc-vfz" id="4Is-El-3UY"/>
-                        <outlet property="lowPlusBtn" destination="4w7-r0-I0f" id="GLs-OZ-RMs"/>
                         <outlet property="matchNumEdit" destination="jy0-Eg-Sz9" id="K5h-pf-Tqf"/>
                         <outlet property="matchNumField" destination="vtE-QU-CZK" id="F03-8i-VTU"/>
-                        <outlet property="midMinusBtn" destination="mCd-K7-UWS" id="XUn-D0-ENg"/>
-                        <outlet property="midPlusBtn" destination="JAt-Lb-TH8" id="fnJ-VZ-5g3"/>
                         <outlet property="regionalNameLbl" destination="14x-I5-vam" id="1Sw-a6-sVK"/>
                         <outlet property="saveBtn" destination="KHg-J8-aA8" id="7oP-Eg-BQd"/>
                         <outlet property="smallPenaltyLbl" destination="v1t-Wp-jgq" id="zzZ-0R-aq3"/>
@@ -330,8 +405,14 @@
                         <outlet property="smallPenaltyTitleLbl" destination="Bna-Uq-ncr" id="11X-qu-02J"/>
                         <outlet property="teamNumEdit" destination="MyL-m1-Ysh" id="SV8-en-xQf"/>
                         <outlet property="teamNumField" destination="vNx-mH-a7v" id="JlT-Wy-xYT"/>
+                        <outlet property="teleopHighMinusBtn" destination="qSa-9o-T8b" id="i0f-nx-upB"/>
+                        <outlet property="teleopHighPlusBtn" destination="XBL-zr-PLV" id="Wj1-b2-xXj"/>
                         <outlet property="teleopHighScoreLbl" destination="JLX-Em-dag" id="Apd-oW-Rce"/>
+                        <outlet property="teleopLowMinusBtn" destination="gR8-gI-NBt" id="101-8p-BSa"/>
+                        <outlet property="teleopLowPlusBtn" destination="Flw-cK-OE4" id="a3T-ia-e7K"/>
                         <outlet property="teleopLowScoreLbl" destination="hfa-zd-DYp" id="0SZ-BV-qdY"/>
+                        <outlet property="teleopMidMinusBtn" destination="rfF-cd-CEi" id="2g0-Hj-Gz5"/>
+                        <outlet property="teleopMidPlusBtn" destination="bc6-aY-B8K" id="48v-hI-KJA"/>
                         <outlet property="teleopMidScoreLbl" destination="0K8-0x-VeE" id="kJc-Un-E2c"/>
                         <outlet property="teleopTitleLbl" destination="FB7-ii-Epa" id="1Zv-t4-NJi"/>
                     </connections>
@@ -666,6 +747,10 @@
         <image name="AutoPlusDown" width="200" height="100"/>
         <image name="AutoPlusUp" width="200" height="100"/>
         <image name="Binoculars" width="29" height="29"/>
+        <image name="TeleopMinusDown" width="200" height="100"/>
+        <image name="TeleopMinusUp" width="200" height="100"/>
+        <image name="TeleopPlusDown" width="200" height="100"/>
+        <image name="TeleopPlusUp" width="200" height="100"/>
         <image name="plus_dn.png" width="100" height="100"/>
         <image name="second" width="30" height="30"/>
     </resources>
