@@ -17,76 +17,76 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UvT-Jd-gFR">
-                                <rect key="frame" x="571" y="416" width="100" height="100"/>
+                                <rect key="frame" x="521" y="416" width="200" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" image="plus_up.png">
+                                <state key="normal" image="AutoPlusUp">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="selected" image="plus_dn.png"/>
-                                <state key="highlighted" image="plus_dn.png"/>
+                                <state key="highlighted" image="AutoPlusDown"/>
                                 <connections>
                                     <action selector="highPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="8yx-NF-oRt"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4w7-r0-I0f">
-                                <rect key="frame" x="571" y="632" width="100" height="100"/>
+                                <rect key="frame" x="521" y="632" width="200" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" image="plus_up.png">
+                                <state key="normal" image="AutoPlusUp">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="selected" image="plus_dn.png"/>
-                                <state key="highlighted" image="plus_dn.png"/>
+                                <state key="highlighted" image="AutoPlusDown"/>
                                 <connections>
                                     <action selector="lowPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="iWN-9e-Ayz"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JAt-Lb-TH8">
-                                <rect key="frame" x="571" y="524" width="100" height="100"/>
+                                <rect key="frame" x="521" y="524" width="200" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" image="plus_up.png">
+                                <state key="normal" image="AutoPlusUp">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="selected" image="plus_dn.png"/>
-                                <state key="highlighted" image="plus_dn.png"/>
+                                <state key="highlighted" image="AutoPlusDown"/>
                                 <connections>
                                     <action selector="midPlus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="WUh-V7-o14"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M3O-Yl-Yhy">
-                                <rect key="frame" x="98" y="416" width="100" height="100"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M3O-Yl-Yhy">
+                                <rect key="frame" x="48" y="416" width="200" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" image="minus_up.png">
+                                <state key="normal" image="AutoMinusUp">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <state key="highlighted" image="minus_dn.png"/>
+                                <state key="highlighted" image="AutoMinusDown"/>
                                 <connections>
                                     <action selector="highMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="ATq-mz-Oto"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mCd-K7-UWS">
-                                <rect key="frame" x="98" y="524" width="100" height="100"/>
+                                <rect key="frame" x="48" y="524" width="200" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" image="minus_up.png">
+                                <state key="normal" image="AutoMinusUp">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <state key="highlighted" image="minus_dn.png"/>
+                                <state key="highlighted" image="AutoMinusDown"/>
                                 <connections>
                                     <action selector="midMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="JhI-Ab-S9R"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Myg-Qc-vfz">
-                                <rect key="frame" x="98" y="632" width="100" height="100"/>
+                                <rect key="frame" x="48" y="632" width="200" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" image="minus_up.png">
+                                <state key="normal" image="AutoMinusUp">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <state key="highlighted" image="minus_dn.png"/>
+                                <state key="highlighted" image="AutoMinusDown"/>
                                 <connections>
                                     <action selector="lowMinus:" destination="9pv-A4-QxB" eventType="touchUpInside" id="HqZ-FT-fLC"/>
                                 </connections>
@@ -311,12 +311,18 @@
                         <outlet property="autoLowScoreLbl" destination="oa6-zu-SpX" id="XPZ-RH-sHh"/>
                         <outlet property="autoMidScoreLbl" destination="20a-Xx-tId" id="Cu6-MJ-YfA"/>
                         <outlet property="autoTitleLbl" destination="mDS-z2-sBp" id="AoP-sm-lW5"/>
+                        <outlet property="highMinusBtn" destination="M3O-Yl-Yhy" id="s2w-Nh-Ibg"/>
+                        <outlet property="highPlusBtn" destination="UvT-Jd-gFR" id="jCt-fl-luz"/>
                         <outlet property="initialsLbl" destination="6a1-F6-T2r" id="TxM-gc-NwH"/>
                         <outlet property="largePenaltyLbl" destination="LPK-9L-Eze" id="LPn-Uh-nAy"/>
                         <outlet property="largePenaltyStepper" destination="Bph-0H-txc" id="qei-dP-PIM"/>
                         <outlet property="largePenaltyTitleLbl" destination="ADz-A5-mZr" id="F5J-0h-YB2"/>
+                        <outlet property="lowMinusBtn" destination="Myg-Qc-vfz" id="4Is-El-3UY"/>
+                        <outlet property="lowPlusBtn" destination="4w7-r0-I0f" id="GLs-OZ-RMs"/>
                         <outlet property="matchNumEdit" destination="jy0-Eg-Sz9" id="K5h-pf-Tqf"/>
                         <outlet property="matchNumField" destination="vtE-QU-CZK" id="F03-8i-VTU"/>
+                        <outlet property="midMinusBtn" destination="mCd-K7-UWS" id="XUn-D0-ENg"/>
+                        <outlet property="midPlusBtn" destination="JAt-Lb-TH8" id="fnJ-VZ-5g3"/>
                         <outlet property="regionalNameLbl" destination="14x-I5-vam" id="1Sw-a6-sVK"/>
                         <outlet property="saveBtn" destination="KHg-J8-aA8" id="7oP-Eg-BQd"/>
                         <outlet property="smallPenaltyLbl" destination="v1t-Wp-jgq" id="zzZ-0R-aq3"/>
@@ -655,11 +661,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="AutoMinusDown" width="200" height="100"/>
+        <image name="AutoMinusUp" width="200" height="100"/>
+        <image name="AutoPlusDown" width="200" height="100"/>
+        <image name="AutoPlusUp" width="200" height="100"/>
         <image name="Binoculars" width="29" height="29"/>
-        <image name="minus_dn.png" width="100" height="100"/>
-        <image name="minus_up.png" width="100" height="100"/>
         <image name="plus_dn.png" width="100" height="100"/>
-        <image name="plus_up.png" width="100" height="100"/>
         <image name="second" width="30" height="30"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

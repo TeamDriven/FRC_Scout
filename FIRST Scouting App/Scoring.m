@@ -14,6 +14,15 @@
 
 @implementation LocationsFirstViewController
 
+UIImage *autoMinusUp;
+UIImage *autoPlusUp;
+UIImage *autoMinusDown;
+UIImage *autoPlusDown;
+UIImage *teleopMinusUp;
+UIImage *teleopPlusUp;
+UIImage *teleopMinusDown;
+UIImage *teleopPlusDown;
+
 Boolean autoYN;
 
 NSInteger teleopHighScore;
@@ -71,6 +80,16 @@ NSArray *allWeekRegionals;
     
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    autoMinusUp = [UIImage imageNamed:@"AutoMinusUp"];
+    autoPlusUp = [UIImage imageNamed:@"AutoPlusUp"];
+    autoMinusDown = [UIImage imageNamed:@"AutoMinusDown"];
+    autoPlusDown = [UIImage imageNamed:@"AutoPlusDown"];
+    
+    teleopMinusUp = [UIImage imageNamed:@"TeleopMinusUp"];
+    teleopPlusUp = [UIImage imageNamed:@"TeleopPlusUp"];
+    teleopMinusDown = [UIImage imageNamed:@"TeleopMinusDown"];
+    teleopPlusDown = [UIImage imageNamed:@"TeleopPlusDown"];
     
     paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     scoutingDirectory = [paths objectAtIndex:0];
@@ -169,7 +188,7 @@ NSArray *allWeekRegionals;
         [red1Selector setFrame:red1SelectorRect];
         [setUpView addSubview:red1Selector];
         red1Selector.selectedSegmentIndex = red1Pos;
-        NSLog(@"Red 1 Pos: %d", red1Pos);
+        NSLog(@"Red 1 Pos: %ld", (long)red1Pos);
         
         CGRect initialsFieldLblRect = CGRectMake(129, 190, 100, 15);
         UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
@@ -590,7 +609,22 @@ NSArray *allWeekRegionals;
     _largePenaltyTitleLbl.enabled = true;
     _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
     
+    [_highMinusBtn setImage:teleopMinusUp forState:UIControlStateNormal];
+    [_highPlusBtn setImage:teleopPlusUp forState:UIControlStateNormal];
+    [_midMinusBtn setImage:teleopMinusUp forState:UIControlStateNormal];
+    [_midPlusBtn setImage:teleopPlusUp forState:UIControlStateNormal];
+    [_lowMinusBtn setImage:teleopMinusUp forState:UIControlStateNormal];
+    [_lowPlusBtn setImage:teleopPlusUp forState:UIControlStateNormal];
+    
+    
     [UIView animateWithDuration:0.3 animations:^{
+        [_highMinusBtn setImage:autoMinusUp forState:UIControlStateNormal];
+        [_highPlusBtn setImage:autoPlusUp forState:UIControlStateNormal];
+        [_midMinusBtn setImage:autoMinusUp forState:UIControlStateNormal];
+        [_midPlusBtn setImage:autoPlusUp forState:UIControlStateNormal];
+        [_lowMinusBtn setImage:autoMinusUp forState:UIControlStateNormal];
+        [_lowPlusBtn setImage:autoPlusUp forState:UIControlStateNormal];
+        
         _autoTitleLbl.alpha = 1;
         _autoHighScoreLbl.alpha = 1;
         _autoMidScoreLbl.alpha = 1;

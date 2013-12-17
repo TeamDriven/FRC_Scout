@@ -38,6 +38,12 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 
+@property (weak, nonatomic) IBOutlet UIButton *highMinusBtn;
+@property (weak, nonatomic) IBOutlet UIButton *highPlusBtn;
+@property (weak, nonatomic) IBOutlet UIButton *midMinusBtn;
+@property (weak, nonatomic) IBOutlet UIButton *midPlusBtn;
+@property (weak, nonatomic) IBOutlet UIButton *lowMinusBtn;
+@property (weak, nonatomic) IBOutlet UIButton *lowPlusBtn;
 
 
 @end
