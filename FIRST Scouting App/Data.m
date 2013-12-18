@@ -36,6 +36,11 @@ NSNumber *numMatches;
 
 UIScrollView *scrollView;
 
+NSIndexPath *selectedRowIndex;
+UIView *greyOut;
+UIView *matchDetailView;
+
+
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -381,7 +386,84 @@ UIScrollView *scrollView;
     return cell;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    selectedRowIndex = indexPath;
+    MatchCell *selectedCell = (MatchCell *)[_matchTableView cellForRowAtIndexPath:indexPath];
+    
+    CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
+    greyOut = [[UIView alloc] initWithFrame:greyOutRect];
+    greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
+    [self.view addSubview:greyOut];
+    
+    CGRect matchDetailViewRect = CGRectMake(84, 162, 600, 600);
+    matchDetailView = [[UIView alloc] initWithFrame:matchDetailViewRect];
+    matchDetailView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:matchDetailView];
+    matchDetailView.layer.cornerRadius = 10;
+    
+    CGRect closeButtonRect = CGRectMake(530, 10, 60, 20);
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    closeButton.frame = closeButtonRect;
+    [closeButton addTarget:self action:@selector(closeMatchDetailView) forControlEvents:UIControlEventTouchUpInside];
+    [closeButton setTitle:@"Close X" forState:UIControlStateNormal];
+    [matchDetailView addSubview:closeButton];
+    
+    CGRect regionalTitleLblRect = CGRectMake(150, 27, 70, 20);
+    UILabel *regionalTitleLbl = [[UILabel alloc] initWithFrame:regionalTitleLblRect];
+    NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
+    regionalTitleLbl.attributedText = [[NSAttributedString alloc] initWithString:@"Event" attributes:underlineAttribute];
+    regionalTitleLbl.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
+    regionalTitleLbl.font = [UIFont systemFontOfSize:11];
+    regionalTitleLbl.textAlignment = NSTextAlignmentCenter;
+    [matchDetailView addSubview:regionalTitleLbl];
+    
+    CGRect regionalLblRect = CGRectMake(60, 45, 240, 20);
+    UILabel *regionalLbl = [[UILabel alloc] initWithFrame:regionalLblRect];
+    regionalLbl.text = [[NSString alloc] initWithFormat:@"%@", [_matchTableView headerViewForSection:selectedRowIndex.section].textLabel.text];
+    regionalLbl.font = [UIFont systemFontOfSize:18];
+    regionalLbl.adjustsFontSizeToFitWidth = YES;
+    regionalLbl.textAlignment = NSTextAlignmentCenter;
+    [matchDetailView addSubview:regionalLbl];
+    
+    CGRect matchTitleLblRect = CGRectMake(370, 27, 70, 20);
+    UILabel *matchTitleLbl = [[UILabel alloc] initWithFrame:matchTitleLblRect];
+    matchTitleLbl.attributedText = [[NSAttributedString alloc] initWithString:@"Match" attributes:underlineAttribute];
+    matchTitleLbl.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
+    matchTitleLbl.font = [UIFont systemFontOfSize:11];
+    matchTitleLbl.textAlignment = NSTextAlignmentCenter;
+    [matchDetailView addSubview:matchTitleLbl];
+    
+    CGRect matchTitleRect = CGRectMake(330, 40, 150, 30);
+    UILabel *matchTitle = [[UILabel alloc] initWithFrame:matchTitleRect];
+    matchTitle.text = [[NSString alloc] initWithFormat:@"%@", selectedCell.matchNumLbl.text];
+    matchTitle.font = [UIFont systemFontOfSize:20];
+    matchTitle.textAlignment = NSTextAlignmentCenter;
+    [matchDetailView addSubview:matchTitle];
+    
+    
+    
+    matchDetailView.transform = CGAffineTransformMakeScale(0.01, 0.01);
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         matchDetailView.transform = CGAffineTransformIdentity;
+                     }
+                     completion:^(BOOL finished){
+                     }];
+    
 
+}
+
+-(void)closeMatchDetailView{
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        matchDetailView.transform = CGAffineTransformMakeScale(0.01, 0.01);
+    }
+                     completion:^(BOOL finished){
+                         [greyOut removeFromSuperview];
+                         [matchDetailView removeFromSuperview];
+                         [_matchTableView deselectRowAtIndexPath:selectedRowIndex animated:YES];
+                         selectedRowIndex = nil;
+                     }];
+}
 
 @end
 

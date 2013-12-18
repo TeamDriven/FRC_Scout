@@ -327,7 +327,7 @@ NSArray *allWeekRegionals;
         [regionalPickerLbl setFont:[UIFont systemFontOfSize:18]];
         regionalPickerLbl.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
         [regionalPickerLbl setTextAlignment:NSTextAlignmentCenter];
-        [regionalPickerLbl setText:@"Select the regional you are at"];
+        [regionalPickerLbl setText:@"Select the event you are at"];
         [setUpView addSubview:regionalPickerLbl];
         
         CGRect regionalPickerRect = CGRectMake(104, 340, 420, 300);
