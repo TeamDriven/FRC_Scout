@@ -259,11 +259,11 @@ UIView *matchDetailView;
                 NSInteger heightY;
                 NSInteger yCordY;
                 if (redOn) {
-                    heightR = [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"autoHighScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"autoMidScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"autoLowScore"] integerValue];
+                    heightR = [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"autoHighScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"teleopMidScore"] integerValue] + [[[[dict objectForKey:[regionalKeys objectAtIndex:r]] objectForKey:[matchKeys objectAtIndex:m]] objectForKey:@"autoLowScore"] integerValue];
                     yCordR = 150-heightR;
                     CGRect redRect = CGRectMake(matchXCord, yCordR, barWidth, heightR);
                     UIView *redBar = [[UIView alloc] initWithFrame:redRect];
-                    redBar.backgroundColor = [UIColor redColor];
+                    redBar.backgroundColor = [UIColor orangeColor];
                     [scrollView addSubview:redBar];
                 }
                 else{
@@ -271,7 +271,7 @@ UIView *matchDetailView;
                     yCordR = 150-heightR;
                     CGRect redRect = CGRectMake(matchXCord, yCordR, barWidth, heightR);
                     UIView *redBar = [[UIView alloc] initWithFrame:redRect];
-                    redBar.backgroundColor = [UIColor redColor];
+                    redBar.backgroundColor = [UIColor orangeColor];
                     [scrollView addSubview:redBar];
                 }
                 if (orangeOn) {
@@ -279,7 +279,7 @@ UIView *matchDetailView;
                     yCordO = yCordR - heightO;
                     CGRect orangeRect = CGRectMake(matchXCord, yCordO, barWidth, heightO);
                     UIView *orangeBar = [[UIView alloc] initWithFrame:orangeRect];
-                    orangeBar.backgroundColor = [UIColor orangeColor];
+                    orangeBar.backgroundColor = [UIColor colorWithWhite:0.3 alpha:1.0];
                     [scrollView addSubview:orangeBar];
                 }
                 else{
@@ -287,7 +287,7 @@ UIView *matchDetailView;
                     yCordO = yCordR - heightO;
                     CGRect orangeRect = CGRectMake(matchXCord, yCordO, barWidth, heightO);
                     UIView *orangeBar = [[UIView alloc] initWithFrame:orangeRect];
-                    orangeBar.backgroundColor = [UIColor orangeColor];
+                    orangeBar.backgroundColor = [UIColor colorWithWhite:0.4 alpha:1.0];
                     [scrollView addSubview:orangeBar];
                 }
                 if (yellowOn) {
@@ -408,39 +408,57 @@ UIView *matchDetailView;
     [closeButton setTitle:@"Close X" forState:UIControlStateNormal];
     [matchDetailView addSubview:closeButton];
     
-    CGRect regionalTitleLblRect = CGRectMake(150, 27, 70, 20);
-    UILabel *regionalTitleLbl = [[UILabel alloc] initWithFrame:regionalTitleLblRect];
-    NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
-    regionalTitleLbl.attributedText = [[NSAttributedString alloc] initWithString:@"Event" attributes:underlineAttribute];
-    regionalTitleLbl.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
-    regionalTitleLbl.font = [UIFont systemFontOfSize:11];
-    regionalTitleLbl.textAlignment = NSTextAlignmentCenter;
-    [matchDetailView addSubview:regionalTitleLbl];
-    
-    CGRect regionalLblRect = CGRectMake(60, 45, 240, 20);
+    CGRect regionalLblRect = CGRectMake(35, 39, 280, 30);
     UILabel *regionalLbl = [[UILabel alloc] initWithFrame:regionalLblRect];
     regionalLbl.text = [[NSString alloc] initWithFormat:@"%@", [_matchTableView headerViewForSection:selectedRowIndex.section].textLabel.text];
-    regionalLbl.font = [UIFont systemFontOfSize:18];
+    regionalLbl.font = [UIFont boldSystemFontOfSize:18];
     regionalLbl.adjustsFontSizeToFitWidth = YES;
     regionalLbl.textAlignment = NSTextAlignmentCenter;
     [matchDetailView addSubview:regionalLbl];
     
-    CGRect matchTitleLblRect = CGRectMake(370, 27, 70, 20);
+    CGRect matchTitleLblRect = CGRectMake(330, 46, 70, 20);
     UILabel *matchTitleLbl = [[UILabel alloc] initWithFrame:matchTitleLblRect];
-    matchTitleLbl.attributedText = [[NSAttributedString alloc] initWithString:@"Match" attributes:underlineAttribute];
-    matchTitleLbl.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
-    matchTitleLbl.font = [UIFont systemFontOfSize:11];
-    matchTitleLbl.textAlignment = NSTextAlignmentCenter;
+    matchTitleLbl.text = @"Match:";
+    matchTitleLbl.textColor = [UIColor colorWithWhite:0.3 alpha:1.0];
+    matchTitleLbl.font = [UIFont systemFontOfSize:16];
+    matchTitleLbl.textAlignment = NSTextAlignmentRight;
     [matchDetailView addSubview:matchTitleLbl];
     
-    CGRect matchTitleRect = CGRectMake(330, 40, 150, 30);
+    CGRect matchTitleRect = CGRectMake(405, 40, 130, 30);
     UILabel *matchTitle = [[UILabel alloc] initWithFrame:matchTitleRect];
     matchTitle.text = [[NSString alloc] initWithFormat:@"%@", selectedCell.matchNumLbl.text];
-    matchTitle.font = [UIFont systemFontOfSize:20];
-    matchTitle.textAlignment = NSTextAlignmentCenter;
+    matchTitle.font = [UIFont boldSystemFontOfSize:20];
+    matchTitle.textAlignment = NSTextAlignmentLeft;
     [matchDetailView addSubview:matchTitle];
     
+    CGRect autoBoxRect = CGRectMake(70, 100, 200, 200);
+    UIView *autoBox = [[UIView alloc] initWithFrame:autoBoxRect];
+    autoBox.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:128.0/255.0 blue:0.0/255.0 alpha:0.5];
+    autoBox.layer.cornerRadius = 5;
+    [matchDetailView addSubview:autoBox];
     
+    CGRect autoTotalsLblRect = CGRectMake(70, 10, 60, 10);
+    UILabel *autoTotalsLbl = [[UILabel alloc] initWithFrame:autoTotalsLblRect];
+    NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
+    autoTotalsLbl.attributedText = [[NSAttributedString alloc] initWithString:@"Auto Totals" attributes:underlineAttribute];
+    autoTotalsLbl.font = [UIFont systemFontOfSize:10];
+    autoTotalsLbl.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+    autoTotalsLbl.textAlignment = NSTextAlignmentCenter;
+    [autoBox addSubview:autoTotalsLbl];
+    
+    CGRect teleopBoxRect = CGRectMake(330, 100, 200, 200);
+    UIView *teleopBox = [[UIView alloc] initWithFrame:teleopBoxRect];
+    teleopBox.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.5];
+    teleopBox.layer.cornerRadius = 5;
+    [matchDetailView addSubview:teleopBox];
+    
+    CGRect teleopTotalsLblRect = CGRectMake(60, 10, 80, 10);
+    UILabel *teleopTotalsLbl = [[UILabel alloc] initWithFrame:teleopTotalsLblRect];
+    teleopTotalsLbl.attributedText = [[NSAttributedString alloc] initWithString:@"Teleop Totals" attributes:underlineAttribute];
+    teleopTotalsLbl.font = [UIFont systemFontOfSize:10];
+    teleopTotalsLbl.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+    teleopTotalsLbl.textAlignment = NSTextAlignmentCenter;
+    [teleopBox addSubview:teleopTotalsLbl];
     
     matchDetailView.transform = CGAffineTransformMakeScale(0.01, 0.01);
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
