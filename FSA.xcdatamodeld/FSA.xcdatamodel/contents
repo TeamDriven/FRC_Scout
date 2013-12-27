@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B3116" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Match" representedClassName="Match" syncable="YES">
+        <attribute name="autoHighScore" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
+        <attribute name="autoLowScore" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
+        <attribute name="autoMidScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="endGame" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="matchNum" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="matchType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="penaltyLarge" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="penaltySmall" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="scoutInitials" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="teleHighScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="teleLowScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="teleMidScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="teamNum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matches" inverseEntity="Team" syncable="YES"/>
+    </entity>
+    <entity name="Recorder" representedClassName="Recorder" syncable="YES">
+        <relationship name="regionals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Regional" inverseName="whoRecorded" inverseEntity="Regional" syncable="YES"/>
+    </entity>
+    <entity name="Regional" representedClassName="Regional" syncable="YES">
+        <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="regionalIn" inverseEntity="Team" syncable="YES"/>
+        <relationship name="whoRecorded" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Recorder" inverseName="regionals" inverseEntity="Recorder" syncable="YES"/>
+    </entity>
+    <entity name="Team" representedClassName="Team" syncable="YES">
+        <relationship name="matches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamNum" inverseEntity="Match" syncable="YES"/>
+        <relationship name="regionalIn" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Regional" inverseName="teams" inverseEntity="Regional" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Match" positionX="160" positionY="192" width="128" height="238"/>
+        <element name="Team" positionX="133" positionY="63" width="128" height="73"/>
+        <element name="Regional" positionX="-54" positionY="72" width="128" height="73"/>
+        <element name="Recorder" positionX="-56" positionY="-27" width="128" height="58"/>
+    </elements>
+</model>

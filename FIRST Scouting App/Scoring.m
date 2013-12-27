@@ -14,14 +14,6 @@
 
 @implementation LocationsFirstViewController
 
-UIImage *autoMinusUp;
-UIImage *autoPlusUp;
-UIImage *autoMinusDown;
-UIImage *autoPlusDown;
-UIImage *teleopMinusUp;
-UIImage *teleopPlusUp;
-UIImage *teleopMinusDown;
-UIImage *teleopPlusDown;
 
 Boolean autoYN;
 
@@ -46,6 +38,12 @@ NSArray *paths;
 NSString *scoutingDirectory;
 NSString *path;
 NSMutableDictionary *dataDict;
+
+NSFileManager *fileManager;
+NSURL *documentsDirectory;
+NSString *documentName;
+NSURL *pathurl;
+UIManagedDocument *document;
 
 NSString *pos;
 
@@ -81,15 +79,24 @@ NSArray *allWeekRegionals;
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    autoMinusUp = [UIImage imageNamed:@"AutoMinusUp"];
-    autoPlusUp = [UIImage imageNamed:@"AutoPlusUp"];
-    autoMinusDown = [UIImage imageNamed:@"AutoMinusDown"];
-    autoPlusDown = [UIImage imageNamed:@"AutoPlusDown"];
+    fileManager = [NSFileManager defaultManager];
+    documentsDirectory = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+    documentName = @"FSA";
+    pathurl = [documentsDirectory URLByAppendingPathComponent:documentName];
+    document = [[UIManagedDocument alloc] initWithFileURL:pathurl];
     
-    teleopMinusUp = [UIImage imageNamed:@"TeleopMinusUp"];
-    teleopPlusUp = [UIImage imageNamed:@"TeleopPlusUp"];
-    teleopMinusDown = [UIImage imageNamed:@"TeleopMinusDown"];
-    teleopPlusDown = [UIImage imageNamed:@"TeleopPlusDown"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[pathurl path]]) {
+        [document openWithCompletionHandler:^(BOOL success){
+            if (success) NSLog(@"Found the document!");
+            if (!success) NSLog(@"Couldn't find the document at path: %@", pathurl);
+        }];
+    }
+    else{
+        [document saveToURL:pathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
+            if (success) NSLog(@"Created the document!");
+            if (!success) NSLog(@"Couldn't create the document at path: %@", pathurl);
+        }];
+    }
     
     paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     scoutingDirectory = [paths objectAtIndex:0];
