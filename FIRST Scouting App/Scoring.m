@@ -7,6 +7,8 @@
 //
 
 #import "Scoring.h"
+#import "Foundation/Foundation.h"
+#import "CoreData/CoreData.h"
 
 @interface LocationsFirstViewController ()
 
@@ -39,11 +41,11 @@ NSString *scoutingDirectory;
 NSString *path;
 NSMutableDictionary *dataDict;
 
-NSFileManager *fileManager;
-NSURL *documentsDirectory;
-NSString *documentName;
-NSURL *pathurl;
-UIManagedDocument *document;
+NSFileManager *FSAfileManager;
+NSURL *FSAdocumentsDirectory;
+NSString *FSAdocumentName;
+NSURL *FSApathurl;
+UIManagedDocument *FSAdocument;
 
 NSString *pos;
 
@@ -79,22 +81,22 @@ NSArray *allWeekRegionals;
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    fileManager = [NSFileManager defaultManager];
-    documentsDirectory = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
-    documentName = @"FSA";
-    pathurl = [documentsDirectory URLByAppendingPathComponent:documentName];
-    document = [[UIManagedDocument alloc] initWithFileURL:pathurl];
+    FSAfileManager = [NSFileManager defaultManager];
+    FSAdocumentsDirectory = [[FSAfileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+    FSAdocumentName = @"FSA";
+    FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
+    FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[pathurl path]]) {
-        [document openWithCompletionHandler:^(BOOL success){
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
+        [FSAdocument openWithCompletionHandler:^(BOOL success){
             if (success) NSLog(@"Found the document!");
-            if (!success) NSLog(@"Couldn't find the document at path: %@", pathurl);
+            if (!success) NSLog(@"Couldn't find the document at path: %@", FSApathurl);
         }];
     }
     else{
-        [document saveToURL:pathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
             if (success) NSLog(@"Created the document!");
-            if (!success) NSLog(@"Couldn't create the document at path: %@", pathurl);
+            if (!success) NSLog(@"Couldn't create the document at path: %@", FSApathurl);
         }];
     }
     
@@ -1167,6 +1169,21 @@ NSArray *allWeekRegionals;
             }
         }
         [dataDict writeToFile:path atomically:YES];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Recorder"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name contains %@", scoutTeamNum];
+        request.predicate = predicate;
+        
+        NSManagedObjectContext *context = FSAdocument.managedObjectContext;
+        NSManagedObject *recorder = [NSEntityDescription insertNewObjectForEntityForName:@"Recorder"
+                             inManagedObjectContext:context];
+        
+        NSError *error = nil;
+        NSUInteger count = [context countForFetchRequest:request error:&error];
+        
+        if (<#condition#>) {
+            <#statements#>
+        }
+        
     }
     
 }

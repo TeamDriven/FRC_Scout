@@ -9,6 +9,7 @@
         <attribute name="matchType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="penaltyLarge" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="penaltySmall" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="red1Pos" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="scoutInitials" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="teleHighScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="teleLowScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -16,20 +17,23 @@
         <relationship name="teamNum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matches" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Recorder" representedClassName="Recorder" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="regionals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Regional" inverseName="whoRecorded" inverseEntity="Regional" syncable="YES"/>
     </entity>
     <entity name="Regional" representedClassName="Regional" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="regionalIn" inverseEntity="Team" syncable="YES"/>
         <relationship name="whoRecorded" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Recorder" inverseName="regionals" inverseEntity="Recorder" syncable="YES"/>
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamNum" inverseEntity="Match" syncable="YES"/>
         <relationship name="regionalIn" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Regional" inverseName="teams" inverseEntity="Regional" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Match" positionX="160" positionY="192" width="128" height="238"/>
-        <element name="Team" positionX="133" positionY="63" width="128" height="73"/>
-        <element name="Regional" positionX="-54" positionY="72" width="128" height="73"/>
-        <element name="Recorder" positionX="-56" positionY="-27" width="128" height="58"/>
+        <element name="Match" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Recorder" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Regional" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Team" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

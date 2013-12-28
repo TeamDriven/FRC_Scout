@@ -2,7 +2,7 @@
 //  Recorder.m
 //  FIRST Scouting App
 //
-//  Created by Louie Bertoncin on 12/27/13.
+//  Created by Louie Bertoncin on 12/28/13.
 //  Copyright (c) 2013 teamDriven. All rights reserved.
 //
 
@@ -12,6 +12,7 @@
 
 @implementation Recorder
 
+@dynamic name;
 @dynamic regionals;
 
 @end
