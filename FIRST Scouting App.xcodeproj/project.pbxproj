@@ -127,14 +127,14 @@
 			isa = PBXGroup;
 			children = (
 				2821DE37186E0B000059CDF6 /* FSA.xcdatamodeld */,
-				28A22435186EBCCA00D630D3 /* Team.h */,
-				28A22436186EBCCA00D630D3 /* Team.m */,
 				28A22432186EBCC900D630D3 /* Recorder.h */,
 				28A22433186EBCC900D630D3 /* Recorder.m */,
-				28A2242F186EBCC900D630D3 /* Match.h */,
-				28A22430186EBCC900D630D3 /* Match.m */,
 				28A2242C186EBCC900D630D3 /* Regional.h */,
 				28A2242D186EBCC900D630D3 /* Regional.m */,
+				28A22435186EBCCA00D630D3 /* Team.h */,
+				28A22436186EBCCA00D630D3 /* Team.m */,
+				28A2242F186EBCC900D630D3 /* Match.h */,
+				28A22430186EBCC900D630D3 /* Match.m */,
 			);
 			name = DataModel;
 			sourceTree = "<group>";

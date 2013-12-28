@@ -9,6 +9,10 @@
 #import "Scoring.h"
 #import "Foundation/Foundation.h"
 #import "CoreData/CoreData.h"
+#import "Recorder.h"
+#import "Regional.h"
+#import "Team.h"
+#import "Match.h"
 
 @interface LocationsFirstViewController ()
 
@@ -417,7 +421,8 @@ NSArray *allWeekRegionals;
     }
     initials = initialsField.text;
     scoutTeamNum = scoutTeamNumField.text;
-    currentTeamNum = @"1730";
+    NSInteger randomTeamNum = arc4random() % 4000;
+    currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
     currentMatchNum = currentMatchNumField.text;
     currentRegional = [[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
     
@@ -1169,19 +1174,79 @@ NSArray *allWeekRegionals;
             }
         }
         [dataDict writeToFile:path atomically:YES];
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Recorder"];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name contains %@", scoutTeamNum];
-        request.predicate = predicate;
+        
+        
+        NSFetchRequest *recorderRequest = [NSFetchRequest fetchRequestWithEntityName:@"Recorder"];
+        NSPredicate *recorderPredicate = [NSPredicate predicateWithFormat:@"name contains %@", scoutTeamNum];
+        recorderRequest.predicate = recorderPredicate;
         
         NSManagedObjectContext *context = FSAdocument.managedObjectContext;
-        NSManagedObject *recorder = [NSEntityDescription insertNewObjectForEntityForName:@"Recorder"
-                             inManagedObjectContext:context];
         
-        NSError *error = nil;
-        NSUInteger count = [context countForFetchRequest:request error:&error];
         
-        if (<#condition#>) {
-            <#statements#>
+        NSError *recorderError = nil;
+        NSUInteger recorderCount = [context countForFetchRequest:recorderRequest error:&recorderError];
+        
+        if (recorderCount == NSNotFound || recorderCount == 0) {
+            NSLog(@"Recorder couldn't be found");
+            [context performBlock:^{
+                Recorder *newRecorder = [NSEntityDescription insertNewObjectForEntityForName:@"Recorder" inManagedObjectContext:context];
+                newRecorder.name = scoutTeamNum;
+                Regional *newRegional = [NSEntityDescription insertNewObjectForEntityForName:@"Regional" inManagedObjectContext:context];
+                newRegional.name = currentRegional;
+                [newRecorder addRegionalsObject:newRegional];
+                NSLog(@"Added Recorder: %@", newRecorder.name);
+                NSLog(@"Added Regional: %@", newRegional.name);
+            }];
+            
+        }
+        else if (recorderError){
+            NSLog(@"Recorder Error: %@", recorderError);
+        }
+        else{
+            NSLog(@"Found %lu recorder instances", (unsigned long)recorderCount);
+            NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
+            NSPredicate *regionalPredicate = [NSPredicate predicateWithFormat:@"name contains %@", currentRegional];
+            regionalRequest.predicate = regionalPredicate;
+            
+            NSError *regionalError = nil;
+            NSUInteger regionalCount = [context countForFetchRequest:regionalRequest error:&regionalError];
+            
+            if (regionalCount == NSNotFound || regionalCount == 0) {
+                [context performBlock:^{
+                    NSLog(@"Regional couldn't be found");
+                    NSError *error;
+                    NSArray *recorders = [context executeFetchRequest:recorderRequest error:&error];
+                    
+                    Recorder *resultRecorder = [recorders firstObject];
+                    NSLog(@"Team Number of Recorder: %@", resultRecorder.name);
+                    
+                    Regional *newRegional = [NSEntityDescription insertNewObjectForEntityForName:@"Regional" inManagedObjectContext:context];
+                    newRegional.name = currentRegional;
+                    [resultRecorder addRegionalsObject:newRegional];
+                    
+                    NSSet *regionalSet = [[NSSet alloc] initWithSet:resultRecorder.regionals];
+                    for (Regional *r in regionalSet) {
+                        NSLog(@"Regional: %@", r.name);
+                    }
+                }];
+            }
+            else if (regionalError){
+                NSLog(@"Regional Error: %@", regionalError);
+            }
+            else{
+                NSLog(@"Found %lu regional instances", (unsigned long)regionalCount);
+                [context performBlock:^{
+                    NSError *error;
+                    NSArray *regionals = [context executeFetchRequest:regionalRequest error:&error];
+                    
+                    for (Regional *r in regionals) {
+                        NSLog(@"Regional name: %@", r.name);
+                    }
+                }];
+            }
+            
+            
+            
         }
         
     }
@@ -1348,6 +1413,11 @@ NSArray *allWeekRegionals;
     currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
     [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
     
+    NSInteger randomTeamNum = arc4random() % 4000;
+    currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
+    currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
+    [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
+    
     if (_matchNumEdit.hidden) {
         _matchNumField.enabled = false;
         _matchNumField.hidden = true;
@@ -1361,7 +1431,7 @@ NSArray *allWeekRegionals;
         _teamNumEdit.hidden = false;
     }
     
-    NSLog(@"%@", dataDict);
+    //NSLog(@"%@", dataDict);
     
     [self autoOn];
     
