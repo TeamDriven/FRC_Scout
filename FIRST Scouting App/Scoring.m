@@ -50,6 +50,7 @@ NSURL *FSAdocumentsDirectory;
 NSString *FSAdocumentName;
 NSURL *FSApathurl;
 UIManagedDocument *FSAdocument;
+NSManagedObjectContext *context;
 
 NSString *pos;
 
@@ -1176,32 +1177,27 @@ NSArray *allWeekRegionals;
         [dataDict writeToFile:path atomically:YES];
         
         
+        
+        context = FSAdocument.managedObjectContext;
+        
+        
         NSFetchRequest *recorderRequest = [NSFetchRequest fetchRequestWithEntityName:@"Recorder"];
         NSPredicate *recorderPredicate = [NSPredicate predicateWithFormat:@"name contains %@", scoutTeamNum];
         recorderRequest.predicate = recorderPredicate;
         
-        NSManagedObjectContext *context = FSAdocument.managedObjectContext;
-        
-        
         NSError *recorderError = nil;
         NSUInteger recorderCount = [context countForFetchRequest:recorderRequest error:&recorderError];
         
+        //Searched and found no recorders saved
         if (recorderCount == NSNotFound || recorderCount == 0) {
             NSLog(@"Recorder couldn't be found");
-            [context performBlock:^{
-                Recorder *newRecorder = [NSEntityDescription insertNewObjectForEntityForName:@"Recorder" inManagedObjectContext:context];
-                newRecorder.name = scoutTeamNum;
-                Regional *newRegional = [NSEntityDescription insertNewObjectForEntityForName:@"Regional" inManagedObjectContext:context];
-                newRegional.name = currentRegional;
-                [newRecorder addRegionalsObject:newRegional];
-                NSLog(@"Added Recorder: %@", newRecorder.name);
-                NSLog(@"Added Regional: %@", newRegional.name);
-            }];
-            
+            [self createRecorder];
         }
+        //Some fetch error
         else if (recorderError){
             NSLog(@"Recorder Error: %@", recorderError);
         }
+        //Found a recorder already present and proceeds to adding a regional
         else{
             NSLog(@"Found %lu recorder instances", (unsigned long)recorderCount);
             NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
@@ -1211,6 +1207,7 @@ NSArray *allWeekRegionals;
             NSError *regionalError = nil;
             NSUInteger regionalCount = [context countForFetchRequest:regionalRequest error:&regionalError];
             
+            //Searched and found no regionals saved for that regional title
             if (regionalCount == NSNotFound || regionalCount == 0) {
                 [context performBlock:^{
                     NSLog(@"Regional couldn't be found");
@@ -1220,19 +1217,22 @@ NSArray *allWeekRegionals;
                     Recorder *resultRecorder = [recorders firstObject];
                     NSLog(@"Team Number of Recorder: %@", resultRecorder.name);
                     
-                    Regional *newRegional = [NSEntityDescription insertNewObjectForEntityForName:@"Regional" inManagedObjectContext:context];
-                    newRegional.name = currentRegional;
-                    [resultRecorder addRegionalsObject:newRegional];
-                    
                     NSSet *regionalSet = [[NSSet alloc] initWithSet:resultRecorder.regionals];
+                    NSLog(@"Regionals Recorded: \n");
                     for (Regional *r in regionalSet) {
                         NSLog(@"Regional: %@", r.name);
                     }
+                    
+                    [self createRegionalWithRecorder:resultRecorder];
+                    
+                    
                 }];
             }
+            //Some fetch error
             else if (regionalError){
                 NSLog(@"Regional Error: %@", regionalError);
             }
+            //Found a regional named the same as the current regional
             else{
                 NSLog(@"Found %lu regional instances", (unsigned long)regionalCount);
                 [context performBlock:^{
@@ -1241,6 +1241,9 @@ NSArray *allWeekRegionals;
                     
                     for (Regional *r in regionals) {
                         NSLog(@"Regional name: %@", r.name);
+                        if (r.name == currentRegional) {
+                            
+                        }
                     }
                 }];
             }
@@ -1251,6 +1254,49 @@ NSArray *allWeekRegionals;
         
     }
     
+}
+
+-(void)createRecorder{
+    [context performBlock:^{
+        Recorder *newRecorder = [NSEntityDescription insertNewObjectForEntityForName:@"Recorder" inManagedObjectContext:context];
+        newRecorder.name = scoutTeamNum;
+        [self createRegionalWithRecorder:newRecorder];
+    }];
+}
+-(void)createRegionalWithRecorder:(Recorder *)recorder{
+    [context performBlock:^{
+        Regional *newRegional = [NSEntityDescription insertNewObjectForEntityForName:@"Regional" inManagedObjectContext:context];
+        newRegional.name = currentRegional;
+        [recorder addRegionalsObject:newRegional];
+        [self createTeamWithRegional:newRegional];
+    }];
+}
+-(void)createTeamWithRegional:(Regional *)regional{
+    [context performBlock:^{
+        Team *newTeam = [NSEntityDescription insertNewObjectForEntityForName:@"Team" inManagedObjectContext:context];
+        newTeam.name = currentTeamNum;
+        [regional addTeamsObject:newTeam];
+        [self createMatchWithTeam:newTeam];
+    }];
+}
+-(void)createMatchWithTeam:(Team *)team{
+    [context performBlock:^{
+        Match *newMatch = [NSEntityDescription insertNewObjectForEntityForName:@"Match" inManagedObjectContext:context];
+        newMatch.matchNum = currentMatchNum;
+        newMatch.matchType = currentMatchType;
+        newMatch.teleHighScore = [NSNumber numberWithInteger:teleopHighScore];
+        newMatch.autoHighScore = [NSNumber numberWithInteger:autoHighScore];
+        newMatch.teleMidScore = [NSNumber numberWithInteger:teleopMidScore];
+        newMatch.autoMidScore = [NSNumber numberWithInteger:autoMidScore];
+        newMatch.teleLowScore = [NSNumber numberWithInteger:teleopLowScore];
+        newMatch.autoLowScore = [NSNumber numberWithInteger:autoLowScore];
+        //newMatch.endGame = [NSNumber numberWithInteger:endgame];
+        newMatch.penaltySmall = [NSNumber numberWithInteger:smallPenaltyTally];
+        newMatch.penaltyLarge = [NSNumber numberWithInteger:largePenaltyTally];
+        newMatch.red1Pos = pos;
+        newMatch.scoutInitials = initials;
+        [team addMatchesObject:newMatch];
+    }];
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{

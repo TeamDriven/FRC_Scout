@@ -17,7 +17,7 @@
 @property (nonatomic, retain) NSNumber * autoLowScore;
 @property (nonatomic, retain) NSNumber * autoMidScore;
 @property (nonatomic, retain) NSNumber * endGame;
-@property (nonatomic, retain) NSNumber * matchNum;
+@property (nonatomic, retain) NSString * matchNum;
 @property (nonatomic, retain) NSString * matchType;
 @property (nonatomic, retain) NSNumber * penaltyLarge;
 @property (nonatomic, retain) NSNumber * penaltySmall;

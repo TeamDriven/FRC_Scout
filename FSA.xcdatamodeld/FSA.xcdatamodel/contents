@@ -5,7 +5,7 @@
         <attribute name="autoLowScore" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="autoMidScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="endGame" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="matchNum" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="matchNum" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="matchType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="penaltyLarge" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="penaltySmall" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
