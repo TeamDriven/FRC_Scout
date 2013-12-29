@@ -81,6 +81,9 @@ NSArray *week6Regionals;
 NSArray *week7Regionals;
 NSArray *allWeekRegionals;
 
+Team *teamWithDuplicate;
+Match *duplicateMatch;
+
 -(void)viewDidLoad{
     
     [super viewDidLoad];
@@ -1017,7 +1020,6 @@ NSArray *allWeekRegionals;
                                                                [NSString stringWithString:initials], @"initials",
                                                                [NSString stringWithString:currentRegional], @"regional",
                                                                nil] forKey:currentMatchNum];
-                [self saveSuccess];
             }
             else{
                 [self overWriteAlert];
@@ -1047,7 +1049,6 @@ NSArray *allWeekRegionals;
                                                             [NSString stringWithString:initials], @"initials",
                                                             [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
-                [self saveSuccess];
             }
             else{
                 [self overWriteAlert];
@@ -1077,7 +1078,6 @@ NSArray *allWeekRegionals;
                                                             [NSString stringWithString:initials], @"initials",
                                                             [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
-                [self saveSuccess];
             }
             else{
                 [self overWriteAlert];
@@ -1107,7 +1107,6 @@ NSArray *allWeekRegionals;
                                                              [NSString stringWithString:initials], @"initials",
                                                              [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
-                [self saveSuccess];
             }
             else{
                 [self overWriteAlert];
@@ -1137,7 +1136,6 @@ NSArray *allWeekRegionals;
                                                              [NSString stringWithString:initials], @"initials",
                                                              [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
-                [self saveSuccess];
             }
             else{
                 [self overWriteAlert];
@@ -1167,7 +1165,6 @@ NSArray *allWeekRegionals;
                                                              [NSString stringWithString:initials], @"initials",
                                                              [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
-                [self saveSuccess];
                 [self autoOn];
             }
             else{
@@ -1191,7 +1188,9 @@ NSArray *allWeekRegionals;
         //Searched and found no recorders saved
         if (recorderCount == NSNotFound || recorderCount == 0) {
             NSLog(@"Recorder couldn't be found");
-            [self createRecorder];
+            [context performBlock:^{
+                [self createRecorder];
+            }];
         }
         //Some fetch error
         else if (recorderError){
@@ -1201,7 +1200,7 @@ NSArray *allWeekRegionals;
         else{
             NSLog(@"Found %lu recorder instances", (unsigned long)recorderCount);
             NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
-            NSPredicate *regionalPredicate = [NSPredicate predicateWithFormat:@"name contains %@", currentRegional];
+            NSPredicate *regionalPredicate = [NSPredicate predicateWithFormat:@"(name contains %@) AND (whoRecorded.name contains %@)", currentRegional, scoutTeamNum];
             regionalRequest.predicate = regionalPredicate;
             
             NSError *regionalError = nil;
@@ -1215,16 +1214,14 @@ NSArray *allWeekRegionals;
                     NSArray *recorders = [context executeFetchRequest:recorderRequest error:&error];
                     
                     Recorder *resultRecorder = [recorders firstObject];
-                    NSLog(@"Team Number of Recorder: %@", resultRecorder.name);
                     
                     NSSet *regionalSet = [[NSSet alloc] initWithSet:resultRecorder.regionals];
-                    NSLog(@"Regionals Recorded: \n");
+                    NSLog(@"\n Regionals Recorded by %@:", resultRecorder.name);
                     for (Regional *r in regionalSet) {
                         NSLog(@"Regional: %@", r.name);
                     }
                     
                     [self createRegionalWithRecorder:resultRecorder];
-                    
                     
                 }];
             }
@@ -1235,20 +1232,89 @@ NSArray *allWeekRegionals;
             //Found a regional named the same as the current regional
             else{
                 NSLog(@"Found %lu regional instances", (unsigned long)regionalCount);
-                [context performBlock:^{
-                    NSError *error;
-                    NSArray *regionals = [context executeFetchRequest:regionalRequest error:&error];
-                    
-                    for (Regional *r in regionals) {
-                        NSLog(@"Regional name: %@", r.name);
-                        if (r.name == currentRegional) {
-                            
+                NSFetchRequest *teamRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
+                NSPredicate *teamPredicate = [NSPredicate predicateWithFormat:@"(name contains %@) AND (regionalIn.name contains %@) AND (regionalIn.whoRecorded.name contains %@)", currentTeamNum, currentRegional, scoutTeamNum];
+                teamRequest.predicate = teamPredicate;
+                
+                NSError *teamError = nil;
+                NSUInteger teamCount = [context countForFetchRequest:teamRequest error:&teamError];
+                
+                //Searched and found no team saved for that team number in the regional
+                if (teamCount == NSNotFound || teamCount == 0) {
+                    [context performBlock:^{
+                        NSLog(@"Team couldn't be found");
+                        
+                        NSError *error;
+                        NSArray *regionals = [context executeFetchRequest:regionalRequest error:&error];
+                        
+                        Regional *resultRegional = [regionals firstObject];
+                        
+                        NSSet *teamSet = [[NSSet alloc] initWithSet:resultRegional.teams];
+                        NSLog(@"\n Teams Saved in %@:", resultRegional.name);
+                        for (Team *t in teamSet) {
+                            NSLog(@"Team: %@", t.name);
                         }
+                        
+                        [self createTeamWithRegional:resultRegional];
+                    }];
+                    
+                }
+                //Some error in fetching the team
+                else if(teamError){
+                    NSLog(@"Team Error: %@", teamError);
+                }
+                //Found more than zero teams labeled as the searched team number
+                else{
+                    NSLog(@"Found %lu team instances", (unsigned long)teamCount);
+                    NSFetchRequest *matchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Match"];
+                    NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum contains %@) AND (teamNum.name contains %@) AND (teamNum.regionalIn.name contains %@) AND (teamNum.regionalIn.whoRecorded.name contains %@)", currentMatchNum, currentTeamNum, currentRegional, scoutTeamNum];
+                    matchRequest.predicate = matchPredicate;
+                    
+                    NSError *matchError = nil;
+                    NSUInteger matchCount = [context countForFetchRequest:matchRequest error:&matchError];
+                    
+                    //Searched and found no matches with specified title
+                    if (matchCount == NSNotFound || matchCount == 0) {
+                        [context performBlock:^{
+                            NSLog(@"Match couldn't be found");
+                            
+                            NSError *error;
+                            NSArray *teams = [context executeFetchRequest:teamRequest error:&error];
+                            
+                            Team *resultTeam = [teams firstObject];
+                            
+                            NSSet *matchSet = [[NSSet alloc] initWithSet:resultTeam.matches];
+                            NSLog(@"\n Matches Saved under %@:", resultTeam.name);
+                            for (Match *m in matchSet) {
+                                NSLog(@"Match: %@", m.matchNum);
+                            }
+                            
+                            [self createMatchWithTeam:resultTeam];
+                        }];
                     }
-                }];
+                    //Some sort of error in fetching the match
+                    else if (matchError){
+                        NSLog(@"Match Error: %@", matchError);
+                    }
+                    //A match already exists for the one attempting to save
+                    else{
+                        NSLog(@"DUPLICATE");
+                        
+                        NSError *error;
+                        NSArray *teams = [context executeFetchRequest:teamRequest error:&error];
+                        
+                        teamWithDuplicate = [teams firstObject];
+                        
+                        NSError *error1;
+                        NSArray *matches = [context executeFetchRequest:matchRequest error:&error1];
+                        
+                        duplicateMatch = [matches firstObject];
+                        
+                    }
+                    
+                }
+                
             }
-            
-            
             
         }
         
@@ -1257,45 +1323,51 @@ NSArray *allWeekRegionals;
 }
 
 -(void)createRecorder{
-    [context performBlock:^{
-        Recorder *newRecorder = [NSEntityDescription insertNewObjectForEntityForName:@"Recorder" inManagedObjectContext:context];
-        newRecorder.name = scoutTeamNum;
-        [self createRegionalWithRecorder:newRecorder];
-    }];
+    Recorder *newRecorder = [NSEntityDescription insertNewObjectForEntityForName:@"Recorder" inManagedObjectContext:context];
+    newRecorder.name = scoutTeamNum;
+    NSLog(@"Created new recorder named: %@", newRecorder.name);
+    [self createRegionalWithRecorder:newRecorder];
 }
 -(void)createRegionalWithRecorder:(Recorder *)recorder{
-    [context performBlock:^{
-        Regional *newRegional = [NSEntityDescription insertNewObjectForEntityForName:@"Regional" inManagedObjectContext:context];
-        newRegional.name = currentRegional;
-        [recorder addRegionalsObject:newRegional];
-        [self createTeamWithRegional:newRegional];
-    }];
+    Regional *newRegional = [NSEntityDescription insertNewObjectForEntityForName:@"Regional" inManagedObjectContext:context];
+    newRegional.name = currentRegional;
+    [recorder addRegionalsObject:newRegional];
+    NSLog(@"Created new regional named: %@", newRegional.name);
+    [self createTeamWithRegional:newRegional];
 }
 -(void)createTeamWithRegional:(Regional *)regional{
-    [context performBlock:^{
-        Team *newTeam = [NSEntityDescription insertNewObjectForEntityForName:@"Team" inManagedObjectContext:context];
-        newTeam.name = currentTeamNum;
-        [regional addTeamsObject:newTeam];
-        [self createMatchWithTeam:newTeam];
-    }];
+    Team *newTeam = [NSEntityDescription insertNewObjectForEntityForName:@"Team" inManagedObjectContext:context];
+    newTeam.name = currentTeamNum;
+    [regional addTeamsObject:newTeam];
+    NSLog(@"Created new team titled: %@", newTeam.name);
+    [self createMatchWithTeam:newTeam];
 }
 -(void)createMatchWithTeam:(Team *)team{
+    Match *newMatch = [NSEntityDescription insertNewObjectForEntityForName:@"Match" inManagedObjectContext:context];
+    newMatch.matchNum = currentMatchNum;
+    newMatch.matchType = currentMatchType;
+    newMatch.teleHighScore = [NSNumber numberWithInteger:teleopHighScore];
+    newMatch.autoHighScore = [NSNumber numberWithInteger:autoHighScore];
+    newMatch.teleMidScore = [NSNumber numberWithInteger:teleopMidScore];
+    newMatch.autoMidScore = [NSNumber numberWithInteger:autoMidScore];
+    newMatch.teleLowScore = [NSNumber numberWithInteger:teleopLowScore];
+    newMatch.autoLowScore = [NSNumber numberWithInteger:autoLowScore];
+    //newMatch.endGame = [NSNumber numberWithInteger:endgame];
+    newMatch.penaltySmall = [NSNumber numberWithInteger:smallPenaltyTally];
+    newMatch.penaltyLarge = [NSNumber numberWithInteger:largePenaltyTally];
+    newMatch.red1Pos = pos;
+    newMatch.scoutInitials = initials;
+    [team addMatchesObject:newMatch];
+    NSLog(@"Created new match titled: %@", newMatch.matchNum);
+    [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){}];
+    duplicateMatch = nil;
+    teamWithDuplicate = nil;
+    [self saveSuccess];
+}
+-(void)overWriteMatch{
     [context performBlock:^{
-        Match *newMatch = [NSEntityDescription insertNewObjectForEntityForName:@"Match" inManagedObjectContext:context];
-        newMatch.matchNum = currentMatchNum;
-        newMatch.matchType = currentMatchType;
-        newMatch.teleHighScore = [NSNumber numberWithInteger:teleopHighScore];
-        newMatch.autoHighScore = [NSNumber numberWithInteger:autoHighScore];
-        newMatch.teleMidScore = [NSNumber numberWithInteger:teleopMidScore];
-        newMatch.autoMidScore = [NSNumber numberWithInteger:autoMidScore];
-        newMatch.teleLowScore = [NSNumber numberWithInteger:teleopLowScore];
-        newMatch.autoLowScore = [NSNumber numberWithInteger:autoLowScore];
-        //newMatch.endGame = [NSNumber numberWithInteger:endgame];
-        newMatch.penaltySmall = [NSNumber numberWithInteger:smallPenaltyTally];
-        newMatch.penaltyLarge = [NSNumber numberWithInteger:largePenaltyTally];
-        newMatch.red1Pos = pos;
-        newMatch.scoutInitials = initials;
-        [team addMatchesObject:newMatch];
+        [FSAdocument.managedObjectContext deleteObject:duplicateMatch];
+        [self createMatchWithTeam:teamWithDuplicate];
     }];
 }
 
@@ -1318,7 +1390,6 @@ NSArray *allWeekRegionals;
                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
                                                         [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
-            [self saveSuccess];
         }
         else if([pos isEqualToString:@"Red 2"]){
             [[[dataDict objectForKey:@"Red2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -1337,7 +1408,6 @@ NSArray *allWeekRegionals;
                                                         [NSString stringWithString:initials], @"initials",
                                                         [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
-            [self saveSuccess];
         }
         else if([pos isEqualToString:@"Red 3"]){
             [[[dataDict objectForKey:@"Red3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -1356,7 +1426,6 @@ NSArray *allWeekRegionals;
                                                         [NSString stringWithString:initials], @"initials",
                                                         [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
-            [self saveSuccess];
         }
         else if ([pos isEqualToString:@"Blue 1"]){
             [[[dataDict objectForKey:@"Blue1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -1375,7 +1444,6 @@ NSArray *allWeekRegionals;
                                                          [NSString stringWithString:initials], @"initials",
                                                          [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
-            [self saveSuccess];
         }
         else if ([pos isEqualToString:@"Blue 2"]){
             [[[dataDict objectForKey:@"Blue2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -1394,7 +1462,6 @@ NSArray *allWeekRegionals;
                                                          [NSString stringWithString:initials], @"initials",
                                                          [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
-            [self saveSuccess];
         }
         else if ([pos isEqualToString:@"Blue 3"]){
             [[[dataDict objectForKey:@"Blue3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -1413,9 +1480,9 @@ NSArray *allWeekRegionals;
                                                          [NSString stringWithString:initials], @"initials",
                                                          [NSString stringWithString:currentRegional], @"regional",
                                                             nil] forKey:currentMatchNum];
-            [self saveSuccess];
         }
-      NSLog(@"%@", dataDict);
+      //NSLog(@"%@", dataDict);
+        [self overWriteMatch];
     }
 }
 
