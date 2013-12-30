@@ -2,7 +2,7 @@
 //  Match.m
 //  FIRST Scouting App
 //
-//  Created by Louie Bertoncin on 12/28/13.
+//  Created by Louie Bertoncin on 12/29/13.
 //  Copyright (c) 2013 teamDriven. All rights reserved.
 //
 
@@ -20,11 +20,12 @@
 @dynamic matchType;
 @dynamic penaltyLarge;
 @dynamic penaltySmall;
+@dynamic red1Pos;
 @dynamic scoutInitials;
 @dynamic teleHighScore;
 @dynamic teleLowScore;
 @dynamic teleMidScore;
-@dynamic red1Pos;
+@dynamic recordingTeam;
 @dynamic teamNum;
 
 @end

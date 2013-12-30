@@ -9,8 +9,8 @@
 #import "Scoring.h"
 #import "Foundation/Foundation.h"
 #import "CoreData/CoreData.h"
-#import "Recorder.h"
 #import "Regional.h"
+#import "Regional+Category.h"
 #import "Team.h"
 #import "Match.h"
 
@@ -1178,139 +1178,112 @@ Match *duplicateMatch;
         context = FSAdocument.managedObjectContext;
         
         
-        NSFetchRequest *recorderRequest = [NSFetchRequest fetchRequestWithEntityName:@"Recorder"];
-        NSPredicate *recorderPredicate = [NSPredicate predicateWithFormat:@"name contains %@", scoutTeamNum];
-        recorderRequest.predicate = recorderPredicate;
+        NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
+        NSPredicate *regionalPredicate = [NSPredicate predicateWithFormat:@"name contains %@", currentRegional];
+        regionalRequest.predicate = regionalPredicate;
         
-        NSError *recorderError = nil;
-        NSUInteger recorderCount = [context countForFetchRequest:recorderRequest error:&recorderError];
+        NSError *regionalError = nil;
+        NSUInteger regionalCount = [context countForFetchRequest:regionalRequest error:&regionalError];
         
-        //Searched and found no recorders saved
-        if (recorderCount == NSNotFound || recorderCount == 0) {
-            NSLog(@"Recorder couldn't be found");
+        //Searched and found no regionals saved for that regional title
+        if (regionalCount == NSNotFound || regionalCount == 0) {
             [context performBlock:^{
-                [self createRecorder];
+                NSLog(@"Regional couldn't be found");
+                NSError *error;
+                NSArray *regionals = [context executeFetchRequest:regionalRequest error:&error];
+            
+                for (Regional *r in regionals) {
+                    NSLog(@"Regional: %@", r.name);
+                }
+                
+                //[self createRegionalWithRecorder:resultRecorder];
+                
             }];
         }
         //Some fetch error
-        else if (recorderError){
-            NSLog(@"Recorder Error: %@", recorderError);
+        else if (regionalError){
+            NSLog(@"Regional Error: %@", regionalError);
         }
-        //Found a recorder already present and proceeds to adding a regional
+        //Found a regional named the same as the current regional
         else{
-            NSLog(@"Found %lu recorder instances", (unsigned long)recorderCount);
-            NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
-            NSPredicate *regionalPredicate = [NSPredicate predicateWithFormat:@"(name contains %@) AND (whoRecorded.name contains %@)", currentRegional, scoutTeamNum];
-            regionalRequest.predicate = regionalPredicate;
+            NSLog(@"Found %lu regional instances", (unsigned long)regionalCount);
+            NSFetchRequest *teamRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
+            NSPredicate *teamPredicate = [NSPredicate predicateWithFormat:@"(name contains %@) AND (regionalIn.name contains %@)", currentTeamNum, currentRegional];
+            teamRequest.predicate = teamPredicate;
             
-            NSError *regionalError = nil;
-            NSUInteger regionalCount = [context countForFetchRequest:regionalRequest error:&regionalError];
+            NSError *teamError = nil;
+            NSUInteger teamCount = [context countForFetchRequest:teamRequest error:&teamError];
             
-            //Searched and found no regionals saved for that regional title
-            if (regionalCount == NSNotFound || regionalCount == 0) {
+            //Searched and found no team saved for that team number in the regional
+            if (teamCount == NSNotFound || teamCount == 0) {
                 [context performBlock:^{
-                    NSLog(@"Regional couldn't be found");
+                    NSLog(@"Team couldn't be found");
+                    
                     NSError *error;
-                    NSArray *recorders = [context executeFetchRequest:recorderRequest error:&error];
+                    NSArray *regionals = [context executeFetchRequest:regionalRequest error:&error];
                     
-                    Recorder *resultRecorder = [recorders firstObject];
+                    Regional *resultRegional = [regionals firstObject];
                     
-                    NSSet *regionalSet = [[NSSet alloc] initWithSet:resultRecorder.regionals];
-                    NSLog(@"\n Regionals Recorded by %@:", resultRecorder.name);
-                    for (Regional *r in regionalSet) {
-                        NSLog(@"Regional: %@", r.name);
+                    NSSet *teamSet = [[NSSet alloc] initWithSet:resultRegional.teams];
+                    NSLog(@"\n Teams Saved in %@:", resultRegional.name);
+                    for (Team *t in teamSet) {
+                        NSLog(@"Team: %@", t.name);
                     }
                     
-                    [self createRegionalWithRecorder:resultRecorder];
-                    
+                    [self createTeamWithRegional:resultRegional];
                 }];
+                
             }
-            //Some fetch error
-            else if (regionalError){
-                NSLog(@"Regional Error: %@", regionalError);
+            //Some error in fetching the team
+            else if(teamError){
+                NSLog(@"Team Error: %@", teamError);
             }
-            //Found a regional named the same as the current regional
+            //Found more than zero teams labeled as the searched team number
             else{
-                NSLog(@"Found %lu regional instances", (unsigned long)regionalCount);
-                NSFetchRequest *teamRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
-                NSPredicate *teamPredicate = [NSPredicate predicateWithFormat:@"(name contains %@) AND (regionalIn.name contains %@) AND (regionalIn.whoRecorded.name contains %@)", currentTeamNum, currentRegional, scoutTeamNum];
-                teamRequest.predicate = teamPredicate;
+                NSLog(@"Found %lu team instances", (unsigned long)teamCount);
+                NSFetchRequest *matchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Match"];
+                NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum contains %@) AND (teamNum.name contains %@) AND (teamNum.regionalIn.name contains %@) AND (teamNum.regionalIn.whoRecorded.name contains %@)", currentMatchNum, currentTeamNum, currentRegional, scoutTeamNum];
+                matchRequest.predicate = matchPredicate;
                 
-                NSError *teamError = nil;
-                NSUInteger teamCount = [context countForFetchRequest:teamRequest error:&teamError];
+                NSError *matchError = nil;
+                NSUInteger matchCount = [context countForFetchRequest:matchRequest error:&matchError];
                 
-                //Searched and found no team saved for that team number in the regional
-                if (teamCount == NSNotFound || teamCount == 0) {
+                //Searched and found no matches with specified title
+                if (matchCount == NSNotFound || matchCount == 0) {
                     [context performBlock:^{
-                        NSLog(@"Team couldn't be found");
-                        
-                        NSError *error;
-                        NSArray *regionals = [context executeFetchRequest:regionalRequest error:&error];
-                        
-                        Regional *resultRegional = [regionals firstObject];
-                        
-                        NSSet *teamSet = [[NSSet alloc] initWithSet:resultRegional.teams];
-                        NSLog(@"\n Teams Saved in %@:", resultRegional.name);
-                        for (Team *t in teamSet) {
-                            NSLog(@"Team: %@", t.name);
-                        }
-                        
-                        [self createTeamWithRegional:resultRegional];
-                    }];
-                    
-                }
-                //Some error in fetching the team
-                else if(teamError){
-                    NSLog(@"Team Error: %@", teamError);
-                }
-                //Found more than zero teams labeled as the searched team number
-                else{
-                    NSLog(@"Found %lu team instances", (unsigned long)teamCount);
-                    NSFetchRequest *matchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Match"];
-                    NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum contains %@) AND (teamNum.name contains %@) AND (teamNum.regionalIn.name contains %@) AND (teamNum.regionalIn.whoRecorded.name contains %@)", currentMatchNum, currentTeamNum, currentRegional, scoutTeamNum];
-                    matchRequest.predicate = matchPredicate;
-                    
-                    NSError *matchError = nil;
-                    NSUInteger matchCount = [context countForFetchRequest:matchRequest error:&matchError];
-                    
-                    //Searched and found no matches with specified title
-                    if (matchCount == NSNotFound || matchCount == 0) {
-                        [context performBlock:^{
-                            NSLog(@"Match couldn't be found");
-                            
-                            NSError *error;
-                            NSArray *teams = [context executeFetchRequest:teamRequest error:&error];
-                            
-                            Team *resultTeam = [teams firstObject];
-                            
-                            NSSet *matchSet = [[NSSet alloc] initWithSet:resultTeam.matches];
-                            NSLog(@"\n Matches Saved under %@:", resultTeam.name);
-                            for (Match *m in matchSet) {
-                                NSLog(@"Match: %@", m.matchNum);
-                            }
-                            
-                            [self createMatchWithTeam:resultTeam];
-                        }];
-                    }
-                    //Some sort of error in fetching the match
-                    else if (matchError){
-                        NSLog(@"Match Error: %@", matchError);
-                    }
-                    //A match already exists for the one attempting to save
-                    else{
-                        NSLog(@"DUPLICATE");
+                        NSLog(@"Match couldn't be found");
                         
                         NSError *error;
                         NSArray *teams = [context executeFetchRequest:teamRequest error:&error];
                         
-                        teamWithDuplicate = [teams firstObject];
+                        Team *resultTeam = [teams firstObject];
                         
-                        NSError *error1;
-                        NSArray *matches = [context executeFetchRequest:matchRequest error:&error1];
+                        NSSet *matchSet = [[NSSet alloc] initWithSet:resultTeam.matches];
+                        NSLog(@"\n Matches Saved under %@:", resultTeam.name);
+                        for (Match *m in matchSet) {
+                            NSLog(@"Match: %@", m.matchNum);
+                        }
                         
-                        duplicateMatch = [matches firstObject];
-                        
-                    }
+                        [self createMatchWithTeam:resultTeam];
+                    }];
+                }
+                //Some sort of error in fetching the match
+                else if (matchError){
+                    NSLog(@"Match Error: %@", matchError);
+                }
+                //A match already exists for the one attempting to save
+                else{
+                    NSLog(@"DUPLICATE");
+                    
+                    NSError *error;
+                    NSArray *teams = [context executeFetchRequest:teamRequest error:&error];
+                    
+                    teamWithDuplicate = [teams firstObject];
+                    
+                    NSError *error1;
+                    NSArray *matches = [context executeFetchRequest:matchRequest error:&error1];
+                    
+                    duplicateMatch = [matches firstObject];
                     
                 }
                 
@@ -1319,19 +1292,14 @@ Match *duplicateMatch;
         }
         
     }
-    
+
+
 }
 
--(void)createRecorder{
-    Recorder *newRecorder = [NSEntityDescription insertNewObjectForEntityForName:@"Recorder" inManagedObjectContext:context];
-    newRecorder.name = scoutTeamNum;
-    NSLog(@"Created new recorder named: %@", newRecorder.name);
-    [self createRegionalWithRecorder:newRecorder];
-}
--(void)createRegionalWithRecorder:(Recorder *)recorder{
+
+-(void)createRegional{
     Regional *newRegional = [NSEntityDescription insertNewObjectForEntityForName:@"Regional" inManagedObjectContext:context];
     newRegional.name = currentRegional;
-    [recorder addRegionalsObject:newRegional];
     NSLog(@"Created new regional named: %@", newRegional.name);
     [self createTeamWithRegional:newRegional];
 }
@@ -1357,6 +1325,7 @@ Match *duplicateMatch;
     newMatch.penaltyLarge = [NSNumber numberWithInteger:largePenaltyTally];
     newMatch.red1Pos = pos;
     newMatch.scoutInitials = initials;
+    newMatch.recordingTeam = scoutTeamNum;
     [team addMatchesObject:newMatch];
     NSLog(@"Created new match titled: %@", newMatch.matchNum);
     [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){}];
