@@ -40,6 +40,9 @@
     else{
         team = [NSEntityDescription insertNewObjectForEntityForName:@"Team" inManagedObjectContext:context];
         team.name = name;
+        
+        [rgnl addTeamsObject:team];
+        
         NSLog(@"Created a new team named: %@", team.name);
     }
     

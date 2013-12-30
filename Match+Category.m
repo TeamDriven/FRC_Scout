@@ -8,6 +8,7 @@
 
 #import "Match+Category.h"
 #import "Team.h"
+#import "Scoring.h"
 
 @implementation Match (Category)
 
@@ -16,7 +17,7 @@
     Match *match = nil;
     
     NSFetchRequest *matchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Match"];
-    NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum contains %@) AND (teamNum.name contains %@", [dict objectForKey:@"matchNum"], tm.name];
+    NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum contains %@) AND (teamNum.name contains %@)", [dict objectForKey:@"matchNum"], tm.name];
     matchRequest.predicate = matchPredicate;
     
     NSError *matchError;
@@ -42,7 +43,7 @@
         match.autoMidScore = [dict objectForKey:@"autoMidScore"];
         match.teleLowScore = [dict objectForKey:@"teleLowScore"];
         match.autoLowScore = [dict objectForKey:@"autoLowScore"];
-        match.endGame = [dict objectForKey:@"endGame"];
+        //match.endGame = [dict objectForKey:@"endGame"];
         match.penaltyLarge = [dict objectForKey:@"penaltyLarge"];
         match.penaltySmall = [dict objectForKey:@"penaltySmall"];
         match.red1Pos = [dict objectForKey:@"red1Pos"];
@@ -50,8 +51,12 @@
         match.scoutInitials = [dict objectForKey:@"scoutInitials"];
         match.matchType = [dict objectForKey:@"matchType"];
         match.matchNum = [dict objectForKey:@"matchNum"];
+        match.uniqeID = [dict objectForKey:@"uniqueID"];
         
-        NSLog(@"Created a new regional named: %@", match.matchNum);
+        [tm addMatchesObject:match];
+        
+        NSLog(@"Created a new match named: %@", match.matchNum);
+        
     }
     
     

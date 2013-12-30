@@ -11,9 +11,9 @@
 		2821DE39186E0B000059CDF6 /* FSA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2821DE37186E0B000059CDF6 /* FSA.xcdatamodeld */; };
 		28270E101871199100809047 /* Team+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E0F1871199100809047 /* Team+Category.m */; };
 		28270E141871247D00809047 /* Match+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E131871247D00809047 /* Match+Category.m */; };
-		285A1E131870E912002AA01C /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 285A1E121870E912002AA01C /* Match.m */; };
-		285A1E161870E913002AA01C /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 285A1E151870E913002AA01C /* Regional.m */; };
-		285A1E191870E913002AA01C /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 285A1E181870E913002AA01C /* Team.m */; };
+		28270E2018713B0600809047 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E1F18713B0600809047 /* Team.m */; };
+		28270E2318713B0700809047 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E2218713B0700809047 /* Match.m */; };
+		28270E2618713B0700809047 /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E2518713B0700809047 /* Regional.m */; };
 		285A1E1C1870E941002AA01C /* Regional+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 285A1E1B1870E941002AA01C /* Regional+Category.m */; };
 		2862D6A81854D4F900DC460F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A71854D4F900DC460F /* Images.xcassets */; };
 		2862D6AA1854D51300DC460F /* Binoculars60px.png in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A91854D51300DC460F /* Binoculars60px.png */; };
@@ -59,12 +59,12 @@
 		28270E0F1871199100809047 /* Team+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+Category.m"; sourceTree = "<group>"; };
 		28270E121871247D00809047 /* Match+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Match+Category.h"; sourceTree = "<group>"; };
 		28270E131871247D00809047 /* Match+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Match+Category.m"; sourceTree = "<group>"; };
-		285A1E111870E912002AA01C /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Match.h; path = "FIRST Scouting App/Match.h"; sourceTree = "<group>"; };
-		285A1E121870E912002AA01C /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Match.m; path = "FIRST Scouting App/Match.m"; sourceTree = "<group>"; };
-		285A1E141870E913002AA01C /* Regional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Regional.h; path = "FIRST Scouting App/Regional.h"; sourceTree = "<group>"; };
-		285A1E151870E913002AA01C /* Regional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Regional.m; path = "FIRST Scouting App/Regional.m"; sourceTree = "<group>"; };
-		285A1E171870E913002AA01C /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Team.h; path = "FIRST Scouting App/Team.h"; sourceTree = "<group>"; };
-		285A1E181870E913002AA01C /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Team.m; path = "FIRST Scouting App/Team.m"; sourceTree = "<group>"; };
+		28270E1E18713B0600809047 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
+		28270E1F18713B0600809047 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
+		28270E2118713B0700809047 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
+		28270E2218713B0700809047 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
+		28270E2418713B0700809047 /* Regional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regional.h; sourceTree = "<group>"; };
+		28270E2518713B0700809047 /* Regional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Regional.m; sourceTree = "<group>"; };
 		285A1E1A1870E941002AA01C /* Regional+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Regional+Category.h"; sourceTree = "<group>"; };
 		285A1E1B1870E941002AA01C /* Regional+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Regional+Category.m"; sourceTree = "<group>"; };
 		2862D6A71854D4F900DC460F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -143,8 +143,8 @@
 		28270E0D1871197600809047 /* Team */ = {
 			isa = PBXGroup;
 			children = (
-				285A1E171870E913002AA01C /* Team.h */,
-				285A1E181870E913002AA01C /* Team.m */,
+				28270E1E18713B0600809047 /* Team.h */,
+				28270E1F18713B0600809047 /* Team.m */,
 				28270E0E1871199100809047 /* Team+Category.h */,
 				28270E0F1871199100809047 /* Team+Category.m */,
 			);
@@ -154,8 +154,8 @@
 		28270E111871246D00809047 /* Match */ = {
 			isa = PBXGroup;
 			children = (
-				285A1E111870E912002AA01C /* Match.h */,
-				285A1E121870E912002AA01C /* Match.m */,
+				28270E2118713B0700809047 /* Match.h */,
+				28270E2218713B0700809047 /* Match.m */,
 				28270E121871247D00809047 /* Match+Category.h */,
 				28270E131871247D00809047 /* Match+Category.m */,
 			);
@@ -165,8 +165,8 @@
 		285A1E1D1870E9B1002AA01C /* Regional */ = {
 			isa = PBXGroup;
 			children = (
-				285A1E141870E913002AA01C /* Regional.h */,
-				285A1E151870E913002AA01C /* Regional.m */,
+				28270E2418713B0700809047 /* Regional.h */,
+				28270E2518713B0700809047 /* Regional.m */,
 				285A1E1A1870E941002AA01C /* Regional+Category.h */,
 				285A1E1B1870E941002AA01C /* Regional+Category.m */,
 			);
@@ -372,19 +372,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				285A1E191870E913002AA01C /* Team.m in Sources */,
+				28270E2618713B0700809047 /* Regional.m in Sources */,
 				88ED27F81829FE58008F3FDF /* Data.m in Sources */,
+				28270E2318713B0700809047 /* Match.m in Sources */,
 				8846FEDD1826D7D200B37E44 /* main.m in Sources */,
 				2821DE39186E0B000059CDF6 /* FSA.xcdatamodeld in Sources */,
 				285A1E1C1870E941002AA01C /* Regional+Category.m in Sources */,
+				28270E2018713B0600809047 /* Team.m in Sources */,
 				28C8C757185BB91F000FAE10 /* MatchCell.m in Sources */,
 				8846FEEA1826D7D200B37E44 /* Sharing.m in Sources */,
 				28270E141871247D00809047 /* Match+Category.m in Sources */,
 				28270E101871199100809047 /* Team+Category.m in Sources */,
 				8846FEE11826D7D200B37E44 /* LocationsAppDelegate.m in Sources */,
-				285A1E131870E912002AA01C /* Match.m in Sources */,
 				888F0EF81850177F00412022 /* Globals.m in Sources */,
-				285A1E161870E913002AA01C /* Regional.m in Sources */,
 				8846FEE71826D7D200B37E44 /* Scoring.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

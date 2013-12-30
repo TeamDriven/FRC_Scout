@@ -20,12 +20,13 @@
 @dynamic matchType;
 @dynamic penaltyLarge;
 @dynamic penaltySmall;
+@dynamic recordingTeam;
 @dynamic red1Pos;
 @dynamic scoutInitials;
 @dynamic teleHighScore;
 @dynamic teleLowScore;
 @dynamic teleMidScore;
-@dynamic recordingTeam;
+@dynamic uniqeID;
 @dynamic teamNum;
 
 @end

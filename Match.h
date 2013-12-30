@@ -21,12 +21,13 @@
 @property (nonatomic, retain) NSString * matchType;
 @property (nonatomic, retain) NSNumber * penaltyLarge;
 @property (nonatomic, retain) NSNumber * penaltySmall;
+@property (nonatomic, retain) NSString * recordingTeam;
 @property (nonatomic, retain) NSString * red1Pos;
 @property (nonatomic, retain) NSString * scoutInitials;
 @property (nonatomic, retain) NSNumber * teleHighScore;
 @property (nonatomic, retain) NSNumber * teleLowScore;
 @property (nonatomic, retain) NSNumber * teleMidScore;
-@property (nonatomic, retain) NSString * recordingTeam;
+@property (nonatomic, retain) NSNumber * uniqeID;
 @property (nonatomic, retain) Team *teamNum;
 
 @end
