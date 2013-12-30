@@ -7,6 +7,8 @@
 //
 
 #import "Sharing.h"
+#import "Foundation/Foundation.h"
+#import "CoreData/CoreData.h"
 
 @interface LocationsSecondViewController ()
 
@@ -42,6 +44,15 @@ UIAlertView *receiveAlert;
 UIAlertView *sendBackAlert;
 bool sendAll;
 
+NSFileManager *FSAfileManager;
+NSURL *FSAdocumentsDirectory;
+NSString *FSAdocumentName;
+NSURL *FSApathurl;
+UIManagedDocument *FSAdocument;
+NSManagedObjectContext *context;
+
+NSArray *allData;
+
 -(void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
@@ -51,6 +62,8 @@ bool sendAll;
     
     [_advertiseSwitcher setOn:false animated:YES];
     [_overWriteSwitch setOn:false animated:YES];
+    
+    
     
     sendAll = true;
 }
@@ -154,6 +167,27 @@ bool sendAll;
     }
     
     dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
+    
+    FSAfileManager = [NSFileManager defaultManager];
+    FSAdocumentsDirectory = [[FSAfileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+    FSAdocumentName = @"FSA";
+    FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
+    FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
+    context = FSAdocument.managedObjectContext;
+    
+    NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
+    NSError *regionalError = nil;
+    NSArray *regionals = [context executeFetchRequest:regionalRequest error:&regionalError];
+    
+    NSFetchRequest *teamRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
+    NSError *teamError = nil;
+    NSArray *teams = [context executeFetchRequest:teamRequest error:&teamError];
+    
+    NSFetchRequest *matchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Match"];
+    NSError *matchError = nil;
+    NSArray *matches = [context executeFetchRequest:matchRequest error:&matchError];
+    
+    allData = [[NSArray alloc] initWithObjects:regionals, teams, matches, nil];
 }
 
 -(void)dismissBrowserVC{

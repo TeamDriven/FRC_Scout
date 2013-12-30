@@ -97,6 +97,7 @@ NSDictionary *duplicateMatchDict;
     FSAdocumentName = @"FSA";
     FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
     FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
+    context = FSAdocument.managedObjectContext;
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
         [FSAdocument openWithCompletionHandler:^(BOOL success){
@@ -1177,9 +1178,6 @@ NSDictionary *duplicateMatchDict;
         [dataDict writeToFile:path atomically:YES];
         
         
-        
-        context = FSAdocument.managedObjectContext;
-        
         [context performBlock:^{
             Regional *rgnl = [Regional createRegionalWithName:currentRegional inManagedObjectContext:context];
             
@@ -1211,7 +1209,10 @@ NSDictionary *duplicateMatchDict;
                 [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
                     if (success) {
                         [self saveSuccess];
-                    };
+                    }
+                    else{
+                        NSLog(@"Didn't save correctly");
+                    }
                 }];
             }
             else{
@@ -1233,7 +1234,12 @@ NSDictionary *duplicateMatchDict;
         [FSAdocument.managedObjectContext deleteObject:duplicateMatch];
         [Match createMatchWithDictionary:duplicateMatchDict inTeam:teamWithDuplicate withManagedObjectContext:context];
         [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
-            [self saveSuccess];
+            if (success) {
+                [self saveSuccess];
+            }
+            else{
+                NSLog(@"Didn't overwrite correctly");
+            }
         }];
     }];
 }
