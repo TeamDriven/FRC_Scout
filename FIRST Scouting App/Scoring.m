@@ -1208,7 +1208,11 @@ NSDictionary *duplicateMatchDict;
             Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
             
             if ([match.uniqeID integerValue] == secs) {
-                [self saveSuccess];
+                [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+                    if (success) {
+                        [self saveSuccess];
+                    };
+                }];
             }
             else{
                 duplicateMatch = match;
@@ -1228,8 +1232,10 @@ NSDictionary *duplicateMatchDict;
     [context performBlock:^{
         [FSAdocument.managedObjectContext deleteObject:duplicateMatch];
         [Match createMatchWithDictionary:duplicateMatchDict inTeam:teamWithDuplicate withManagedObjectContext:context];
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+            [self saveSuccess];
+        }];
     }];
-    [self saveSuccess];
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
