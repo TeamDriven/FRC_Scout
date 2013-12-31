@@ -25,8 +25,8 @@
 NSArray *paths;
 NSString *scoutingDirectory;
 NSString *path;
-//NSMutableDictionary *dataDict;
-//NSMutableDictionary *receivedDataDict;
+NSMutableDictionary *dataDict;
+NSMutableDictionary *receivedDataDict;
 NSString *senderPeer;
 MCPeerID *senderPeerID;
 
@@ -198,10 +198,6 @@ NSArray *receivedArray;
     NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
     NSError *regionalError = nil;
     NSArray *regionals = [context executeFetchRequest:regionalRequest error:&regionalError];
-    NSMutableArray *regionalsArray = [[NSMutableArray alloc] init];
-    for (Regional *r in regionals) {
-        [regionalsArray addObject:r.name];
-    }
     
     NSFetchRequest *teamRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
     NSError *teamError = nil;
@@ -212,7 +208,7 @@ NSArray *receivedArray;
     NSError *matchError = nil;
     NSArray *matches = [context executeFetchRequest:matchRequest error:&matchError];
     
-    allData = [[NSArray alloc] initWithObjects:regionalsArray, teams, matches, nil];
+    allData = [[NSArray alloc] initWithObjects:regionals, teams, matches, nil];
     
 }
 
