@@ -9,6 +9,12 @@
 #import "Sharing.h"
 #import "Foundation/Foundation.h"
 #import "CoreData/CoreData.h"
+#import "Regional.h"
+#import "Regional+Category.h"
+#import "Team.h"
+#import "Team+Category.h"
+#import "Match.h"
+#import "Match+Category.h"
 
 @interface LocationsSecondViewController ()
 
@@ -52,20 +58,20 @@ UIManagedDocument *FSAdocument;
 NSManagedObjectContext *context;
 
 NSArray *allData;
+NSArray *receivedArray;
 
 -(void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     NSLog(@"%@", pos);
     
+    overWrite = 0;
+    
     [self setUpData];
     
     [_advertiseSwitcher setOn:false animated:YES];
     [_overWriteSwitch setOn:false animated:YES];
     
-    
-    
-    sendAll = true;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -158,6 +164,8 @@ NSArray *allData;
 }
 
 -(void)setUpData{
+    allData = nil;
+    
     paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     scoutingDirectory = [paths objectAtIndex:0];
     path = [scoutingDirectory stringByAppendingPathComponent:@"data.plist"];
@@ -237,11 +245,13 @@ NSArray *allData;
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
     NSLog(@"DATA RECEIVED: %lu bytes!", (unsigned long)data.length);
     dataReceived = data;
-    receivedDataDict = [[NSMutableDictionary alloc] init];
-    receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
+    
+    receivedArray = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
+    
+//    receivedDataDict = [[NSMutableDictionary alloc] init];
+//    receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
     
     senderPeer = [peerID displayName];
-    senderPeerID = peerID;
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         receiveAlert = [[UIAlertView alloc]initWithTitle: @"Hey!"
@@ -276,7 +286,7 @@ NSArray *allData;
 - (IBAction)sendMatches:(id)sender {
     [self setUpData];
     
-    dataToSend = [NSKeyedArchiver archivedDataWithRootObject:dataDict];
+    dataToSend = [NSKeyedArchiver archivedDataWithRootObject:allData];
     NSError *error;
     NSArray *peerIDs;
     if (sendAll) {
@@ -307,49 +317,64 @@ NSArray *allData;
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1 && [alertView isEqual:receiveAlert]) {
-        for (key1 in receivedDataDict) {
-            if (![dataDict objectForKey:key1]) {
-                NSLog(@"Writing new red/blue folder");
-                [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:key1];
-            }
-            for (key2 in [receivedDataDict objectForKey:key1]) {
-                if (![[dataDict objectForKey:key1] objectForKey:key2]) {
-                    NSLog(@"Writing a new regional");
-                    [[dataDict objectForKey:key1] setObject:[[receivedDataDict objectForKey:key1] objectForKey:key2] forKey:key2];
-                }
-                for (key3 in [[receivedDataDict objectForKey:key1] objectForKey:key2]) {
-                    if (![[[dataDict objectForKey:key1] objectForKey:key2] objectForKey:key3]) {
-                        NSLog(@"Writing a new match");
-                        [[[dataDict objectForKey:key1] objectForKey:key2] setObject:[[[receivedDataDict objectForKey:key1] objectForKey:key2] objectForKey:key3] forKey:key3];
-                    }
-                    else{
-                        if (overWrite == 1) {
-                            [[dataDict objectForKey:key1] setObject:[[receivedDataDict objectForKey:key1] objectForKey:key2] forKey:key2];
+    if ([alertView isEqual:receiveAlert] && buttonIndex == 1) {
+        [context performBlock:^{
+            for (Regional *r in [receivedArray objectAtIndex:0]) {
+                Regional *rgnl = [Regional createRegionalWithName:r.name inManagedObjectContext:context];
+                for (Team *t in [receivedArray objectAtIndex:1]) {
+                    Team *tm = [Team createTeamWithName:t.name inRegional:rgnl withManagedObjectContext:context];
+                    for (Match *m in [receivedArray objectAtIndex:2]) {
+                        NSDictionary *matchDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                   [NSNumber numberWithInteger:[m.teleHighScore integerValue]], @"teleHighScore",
+                                                   [NSNumber numberWithInteger:[m.autoHighScore integerValue]], @"autoHighScore",
+                                                   [NSNumber numberWithInteger:[m.teleMidScore integerValue]], @"teleMidScore",
+                                                   [NSNumber numberWithInteger:[m.autoMidScore integerValue]], @"autoMidScore",
+                                                   [NSNumber numberWithInteger:[m.teleLowScore integerValue]], @"teleLowScore",
+                                                   [NSNumber numberWithInteger:[m.autoLowScore integerValue]], @"autoLowScore",
+                                                   //[NSNumber numberWithInteger:endGame], @"endGame",
+                                                   [NSNumber numberWithInteger:[m.penaltyLarge integerValue]], @"penaltyLarge",
+                                                   [NSNumber numberWithInteger:[m.penaltySmall integerValue]], @"penaltySmall",
+                                                   [NSString stringWithString:m.red1Pos], @"red1Pos",
+                                                   [NSString stringWithString:m.recordingTeam], @"recordingTeam",
+                                                   [NSString stringWithString:m.scoutInitials], @"scoutInitials",
+                                                   [NSString stringWithString:m.matchType], @"matchType",
+                                                   [NSString stringWithString:m.matchNum], @"matchNum",
+                                                   [NSNumber numberWithInteger:[m.uniqeID integerValue]], @"uniqueID", nil];
+                        
+                        
+                        Match *mch = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+                        
+                        if ([mch.uniqeID integerValue] != [[matchDict objectForKey:@"uniqueID"] integerValue]) {
+                            if (overWrite == 1) {
+                                [FSAdocument.managedObjectContext deleteObject:mch];
+                                [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+                            }
                         }
                     }
                 }
             }
-            [dataDict writeToFile:path atomically:YES];
-            NSLog(@"%@", dataDict);
-            receivedDataDict = nil;
-            [_overWriteSwitch setOn:false animated:YES];
-            sendBackAlert = [[UIAlertView alloc]initWithTitle: [[NSString alloc] initWithFormat:@"You now have %@'s matches!", senderPeer]
-                                                           message: @"Would you like to send your matches back to them?"
-                                                          delegate: self
-                                                 cancelButtonTitle:@"No way"
-                                                 otherButtonTitles:@"Send back to sender", @"Send matches to all",nil];
-            [sendBackAlert show];
-        }
-        
+            
+            [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+                if (success) {
+                    for (Regional *rnl in [receivedArray objectAtIndex:0]) {
+                        NSLog(@"Successfully Transferred Regional: %@", rnl.name);
+                    }
+                }
+                else{
+                    NSLog(@"Didn't transfer regionals correctly.");
+                }
+            }];
+            
+            sendBackAlert = [[UIAlertView alloc] initWithTitle:@"Successfully Transferred!"
+                                                       message:@"Would you like to send your data to connected peers?"
+                                                      delegate:self
+                                             cancelButtonTitle:@"Nope!"
+                                             otherButtonTitles:@"Go for it", nil];
+            
+        }];
     }
-    if ([alertView isEqual:sendBackAlert] && buttonIndex == 1) {
-        sendAll = false;
-        [self sendMatches:nil];
-    }
-    if ([alertView isEqual:sendBackAlert] && buttonIndex == 2) {
-        sendAll = true;
-        [self sendMatches:nil];
+    else if ([alertView isEqual:sendBackAlert] == 1){
+        [self sendMatches:self];
     }
 }
 
