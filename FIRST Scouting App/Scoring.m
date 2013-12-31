@@ -232,6 +232,7 @@ NSDictionary *duplicateMatchDict;
         
         CGRect red1SelectorRect = CGRectMake(124, 130, 380, 30);
         red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3",  nil]];
+        
         [red1Selector setFrame:red1SelectorRect];
         [setUpView addSubview:red1Selector];
         red1Selector.selectedSegmentIndex = red1Pos;

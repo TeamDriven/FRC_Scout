@@ -25,8 +25,8 @@
 NSArray *paths;
 NSString *scoutingDirectory;
 NSString *path;
-NSMutableDictionary *dataDict;
-NSMutableDictionary *receivedDataDict;
+//NSMutableDictionary *dataDict;
+//NSMutableDictionary *receivedDataDict;
 NSString *senderPeer;
 MCPeerID *senderPeerID;
 
@@ -67,7 +67,25 @@ NSArray *receivedArray;
     
     overWrite = 0;
     
-    [self setUpData];
+    FSAfileManager = [NSFileManager defaultManager];
+    FSAdocumentsDirectory = [[FSAfileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+    FSAdocumentName = @"FSA";
+    FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
+    FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
+    context = FSAdocument.managedObjectContext;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
+        [FSAdocument openWithCompletionHandler:^(BOOL success){
+            if (success) NSLog(@"Found the document!");
+            if (!success) NSLog(@"Couldn't find the document at path: %@", FSApathurl);
+        }];
+    }
+    else{
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
+            if (success) NSLog(@"Created the document!");
+            if (!success) NSLog(@"Couldn't create the document at path: %@", FSApathurl);
+        }];
+    }
     
     [_advertiseSwitcher setOn:false animated:YES];
     [_overWriteSwitch setOn:false animated:YES];
@@ -165,37 +183,37 @@ NSArray *receivedArray;
 
 -(void)setUpData{
     allData = nil;
+    dataToSend = nil;
     
-    paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    scoutingDirectory = [paths objectAtIndex:0];
-    path = [scoutingDirectory stringByAppendingPathComponent:@"data.plist"];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"data" ofType:@"plist"] toPath:path error:nil];
-    }
-    
-    dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
-    
-    FSAfileManager = [NSFileManager defaultManager];
-    FSAdocumentsDirectory = [[FSAfileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
-    FSAdocumentName = @"FSA";
-    FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
-    FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
-    context = FSAdocument.managedObjectContext;
+//    paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    scoutingDirectory = [paths objectAtIndex:0];
+//    path = [scoutingDirectory stringByAppendingPathComponent:@"data.plist"];
+//    
+//    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+//        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"data" ofType:@"plist"] toPath:path error:nil];
+//    }
+//    
+//    dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
     
     NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
     NSError *regionalError = nil;
     NSArray *regionals = [context executeFetchRequest:regionalRequest error:&regionalError];
+    NSMutableArray *regionalsArray = [[NSMutableArray alloc] init];
+    for (Regional *r in regionals) {
+        [regionalsArray addObject:r.name];
+    }
     
     NSFetchRequest *teamRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
     NSError *teamError = nil;
     NSArray *teams = [context executeFetchRequest:teamRequest error:&teamError];
     
+    
     NSFetchRequest *matchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Match"];
     NSError *matchError = nil;
     NSArray *matches = [context executeFetchRequest:matchRequest error:&matchError];
     
-    allData = [[NSArray alloc] initWithObjects:regionals, teams, matches, nil];
+    allData = [[NSArray alloc] initWithObjects:regionalsArray, teams, matches, nil];
+    
 }
 
 -(void)dismissBrowserVC{
@@ -246,6 +264,7 @@ NSArray *receivedArray;
     NSLog(@"DATA RECEIVED: %lu bytes!", (unsigned long)data.length);
     dataReceived = data;
     
+    
     receivedArray = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
     
 //    receivedDataDict = [[NSMutableDictionary alloc] init];
@@ -289,12 +308,9 @@ NSArray *receivedArray;
     dataToSend = [NSKeyedArchiver archivedDataWithRootObject:allData];
     NSError *error;
     NSArray *peerIDs;
-    if (sendAll) {
-        peerIDs = [self.sessionTwo connectedPeers];
-    }
-    else{
-        peerIDs = [NSArray arrayWithObjects:senderPeerID, nil];
-    }
+    
+    peerIDs = [self.sessionTwo connectedPeers];
+    
     
     [self.sessionTwo sendData:dataToSend toPeers:peerIDs withMode:MCSessionSendDataReliable error:&error];
     
@@ -318,60 +334,64 @@ NSArray *receivedArray;
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if ([alertView isEqual:receiveAlert] && buttonIndex == 1) {
-        [context performBlock:^{
-            for (Regional *r in [receivedArray objectAtIndex:0]) {
-                Regional *rgnl = [Regional createRegionalWithName:r.name inManagedObjectContext:context];
-                for (Team *t in [receivedArray objectAtIndex:1]) {
-                    Team *tm = [Team createTeamWithName:t.name inRegional:rgnl withManagedObjectContext:context];
-                    for (Match *m in [receivedArray objectAtIndex:2]) {
-                        NSDictionary *matchDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                   [NSNumber numberWithInteger:[m.teleHighScore integerValue]], @"teleHighScore",
-                                                   [NSNumber numberWithInteger:[m.autoHighScore integerValue]], @"autoHighScore",
-                                                   [NSNumber numberWithInteger:[m.teleMidScore integerValue]], @"teleMidScore",
-                                                   [NSNumber numberWithInteger:[m.autoMidScore integerValue]], @"autoMidScore",
-                                                   [NSNumber numberWithInteger:[m.teleLowScore integerValue]], @"teleLowScore",
-                                                   [NSNumber numberWithInteger:[m.autoLowScore integerValue]], @"autoLowScore",
-                                                   //[NSNumber numberWithInteger:endGame], @"endGame",
-                                                   [NSNumber numberWithInteger:[m.penaltyLarge integerValue]], @"penaltyLarge",
-                                                   [NSNumber numberWithInteger:[m.penaltySmall integerValue]], @"penaltySmall",
-                                                   [NSString stringWithString:m.red1Pos], @"red1Pos",
-                                                   [NSString stringWithString:m.recordingTeam], @"recordingTeam",
-                                                   [NSString stringWithString:m.scoutInitials], @"scoutInitials",
-                                                   [NSString stringWithString:m.matchType], @"matchType",
-                                                   [NSString stringWithString:m.matchNum], @"matchNum",
-                                                   [NSNumber numberWithInteger:[m.uniqeID integerValue]], @"uniqueID", nil];
-                        
-                        
-                        Match *mch = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
-                        
-                        if ([mch.uniqeID integerValue] != [[matchDict objectForKey:@"uniqueID"] integerValue]) {
-                            if (overWrite == 1) {
-                                [FSAdocument.managedObjectContext deleteObject:mch];
-                                [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
-                            }
-                        }
-                    }
-                }
-            }
-            
-            [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
-                if (success) {
-                    for (Regional *rnl in [receivedArray objectAtIndex:0]) {
-                        NSLog(@"Successfully Transferred Regional: %@", rnl.name);
-                    }
-                }
-                else{
-                    NSLog(@"Didn't transfer regionals correctly.");
-                }
-            }];
-            
-            sendBackAlert = [[UIAlertView alloc] initWithTitle:@"Successfully Transferred!"
-                                                       message:@"Would you like to send your data to connected peers?"
-                                                      delegate:self
-                                             cancelButtonTitle:@"Nope!"
-                                             otherButtonTitles:@"Go for it", nil];
-            
-        }];
+        NSLog(@"Made it do receiveAlert button 1 pressed");
+//        [context performBlock:^{
+//            for (Regional *r in [receivedArray objectAtIndex:0]) {
+//                NSLog(@"Regional %d", [[receivedArray objectAtIndex:0] indexOfObject:r]);
+//                Regional *rgnl = [Regional createRegionalWithName:r.name inManagedObjectContext:context];
+//                for (Team *t in [receivedArray objectAtIndex:1]) {
+//                    NSLog(@"Team %d", [[receivedArray objectAtIndex:1] indexOfObject:t]);
+//                    Team *tm = [Team createTeamWithName:t.name inRegional:rgnl withManagedObjectContext:context];
+//                    for (Match *m in [receivedArray objectAtIndex:2]) {
+//                        NSLog(@"Match %d", [[receivedArray objectAtIndex:2] indexOfObject:m]);
+//                        NSDictionary *matchDict = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                                   [NSNumber numberWithInteger:[m.teleHighScore integerValue]], @"teleHighScore",
+//                                                   [NSNumber numberWithInteger:[m.autoHighScore integerValue]], @"autoHighScore",
+//                                                   [NSNumber numberWithInteger:[m.teleMidScore integerValue]], @"teleMidScore",
+//                                                   [NSNumber numberWithInteger:[m.autoMidScore integerValue]], @"autoMidScore",
+//                                                   [NSNumber numberWithInteger:[m.teleLowScore integerValue]], @"teleLowScore",
+//                                                   [NSNumber numberWithInteger:[m.autoLowScore integerValue]], @"autoLowScore",
+//                                                   //[NSNumber numberWithInteger:endGame], @"endGame",
+//                                                   [NSNumber numberWithInteger:[m.penaltyLarge integerValue]], @"penaltyLarge",
+//                                                   [NSNumber numberWithInteger:[m.penaltySmall integerValue]], @"penaltySmall",
+//                                                   [NSString stringWithString:m.red1Pos], @"red1Pos",
+//                                                   [NSString stringWithString:m.recordingTeam], @"recordingTeam",
+//                                                   [NSString stringWithString:m.scoutInitials], @"scoutInitials",
+//                                                   [NSString stringWithString:m.matchType], @"matchType",
+//                                                   [NSString stringWithString:m.matchNum], @"matchNum",
+//                                                   [NSNumber numberWithInteger:[m.uniqeID integerValue]], @"uniqueID", nil];
+//                        
+//                        
+//                        Match *mch = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+//                        
+//                        if ([mch.uniqeID integerValue] != [[matchDict objectForKey:@"uniqueID"] integerValue]) {
+//                            if (overWrite == 1) {
+//                                [FSAdocument.managedObjectContext deleteObject:mch];
+//                                [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            
+//            [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+//                if (success) {
+//                    for (Regional *rnl in [receivedArray objectAtIndex:0]) {
+//                        NSLog(@"Successfully Transferred Regional: %@", rnl.name);
+//                    }
+//                }
+//                else{
+//                    NSLog(@"Didn't transfer regionals correctly.");
+//                }
+//            }];
+//        
+//            sendBackAlert = [[UIAlertView alloc] initWithTitle:@"Successfully Transferred!"
+//                                                       message:@"Would you like to send your data to connected peers?"
+//                                                      delegate:self
+//                                             cancelButtonTitle:@"Nope!"
+//                                             otherButtonTitles:@"Go for it", nil];
+//            
+//        }];
     }
     else if ([alertView isEqual:sendBackAlert] == 1){
         [self sendMatches:self];
