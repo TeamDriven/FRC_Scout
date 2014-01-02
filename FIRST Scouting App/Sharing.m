@@ -36,19 +36,16 @@ UISegmentedControl *red1Selector;
 UIButton *saveBtn;
 
 NSInteger overWrite;
-
-NSString *key1;
-NSString *key2;
-NSString *key3;
+NSTimer *sendMatchesDelay;
 
 NSString *pos;
 
 NSData *dataToSend;
 NSData *dataReceived;
+bool sentOnce;
 
 UIAlertView *receiveAlert;
 UIAlertView *sendBackAlert;
-bool sendAll;
 
 NSFileManager *FSAfileManager;
 NSURL *FSAdocumentsDirectory;
@@ -57,13 +54,11 @@ NSURL *FSApathurl;
 UIManagedDocument *FSAdocument;
 NSManagedObjectContext *context;
 
-NSArray *allData;
-NSArray *receivedArray;
 
 -(void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    NSLog(@"%@", pos);
+    NSLog(@"Position: %@", pos);
     
     overWrite = 0;
     
@@ -90,6 +85,7 @@ NSArray *receivedArray;
     [_advertiseSwitcher setOn:false animated:YES];
     [_overWriteSwitch setOn:false animated:YES];
     
+    sentOnce = false;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -273,8 +269,6 @@ NSArray *receivedArray;
     receivedDataDict = [[NSMutableDictionary alloc] init];
     receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
     
-    NSLog(@"RECEIVED DATA DICT: %@", receivedDataDict);
-    
     senderPeer = [peerID displayName];
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -292,13 +286,13 @@ NSArray *receivedArray;
  ****************    Actions and Other Code    **************************
  ************************************************************************/
 
-- (IBAction)browseGO:(id)sender {
+-(IBAction)browseGO:(id)sender {
     
     [self setUpMultiPeer];
     [self presentViewController:self.browserVC animated:YES completion:nil];
 }
 
-- (IBAction)advertiseSwitch:(id)sender {
+-(IBAction)advertiseSwitch:(id)sender {
     if (_advertiseSwitcher.on) {
         [self setUpMultiPeer];
         [self.advertiser start];
@@ -308,7 +302,7 @@ NSArray *receivedArray;
     }
 }
 
-- (IBAction)sendMatches:(id)sender {
+-(IBAction)sendMatches:(id)sender {
     [self setUpData];
     
     dataToSend = [NSKeyedArchiver archivedDataWithRootObject:dataDict];
@@ -320,10 +314,22 @@ NSArray *receivedArray;
     
     [self.sessionTwo sendData:dataToSend toPeers:peerIDs withMode:MCSessionSendDataReliable error:&error];
     
-    sendAll = true;
+    _sendMatchesBtn.enabled = false;
+    _sendMatchesBtn.alpha = 0.5;
+    
+    sendMatchesDelay = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(reEnableSendMatchesBtn) userInfo:nil repeats:NO];
+    
+    sentOnce = true;
+}
+-(void)reEnableSendMatchesBtn{
+    _sendMatchesBtn.enabled = true;
+    _sendMatchesBtn.alpha = 1.0;
+    sentOnce = false;
+    [sendMatchesDelay invalidate];
+    sendMatchesDelay = nil;
 }
 
-- (IBAction)switchOverwrite:(id)sender {
+-(IBAction)switchOverwrite:(id)sender {
     if (_overWriteSwitch.on) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"WARNING"
                                                        message: @"By flipping this switch into the ON position, you are telling this app that any time someone sends you a match that you already have, their match will overwrite yours. If you DO NOT want this feature, flip the switch back off."
@@ -340,50 +346,80 @@ NSArray *receivedArray;
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if ([alertView isEqual:receiveAlert] && buttonIndex == 1) {
-        [context performBlock:^{
-            for (NSString *r in receivedDataDict) {
-                Regional *rgnl = [Regional createRegionalWithName:r inManagedObjectContext:context];
-                for (NSString *t in [receivedDataDict objectForKey:r]) {
-                    Team *tm = [Team createTeamWithName:t inRegional:rgnl withManagedObjectContext:context];
-                    for (NSString *m in [[receivedDataDict objectForKey:r] objectForKey:t]) {
-                        NSDictionary *matchDict = [[[receivedDataDict objectForKey:r] objectForKey:t] objectForKey:m];
-                        NSNumber *uniqueID = [NSNumber numberWithInteger:[[matchDict objectForKey:@"uniqueID"] integerValue]];
-                        Match *mtch = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
-                        
-                        if ([mtch.uniqeID integerValue] == [uniqueID integerValue]) {
-                            NSLog(@"Save Success!!");
-                        }
-                        else{
-                            if (overWrite == 1) {
-                                [FSAdocument.managedObjectContext deleteObject:mtch];
-                                [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
-                            }
+        [self dataDictToCoreData];
+    }
+    else if ([alertView isEqual:sendBackAlert] && buttonIndex == 1){
+        [self sendMatches:self];
+    }
+}
+
+-(void)dataDictToCoreData{
+    [context performBlock:^{
+        for (NSString *r in receivedDataDict) {
+            Regional *rgnl = [Regional createRegionalWithName:r inManagedObjectContext:context];
+            for (NSString *t in [receivedDataDict objectForKey:r]) {
+                Team *tm = [Team createTeamWithName:t inRegional:rgnl withManagedObjectContext:context];
+                for (NSString *m in [[receivedDataDict objectForKey:r] objectForKey:t]) {
+                    NSDictionary *matchDict = [[[receivedDataDict objectForKey:r] objectForKey:t] objectForKey:m];
+                    NSNumber *uniqueID = [NSNumber numberWithInteger:[[matchDict objectForKey:@"uniqueID"] integerValue]];
+                    Match *mtch = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+                    
+                    if ([mtch.uniqeID integerValue] == [uniqueID integerValue]) {
+                        NSLog(@"No conflicts!");
+                    }
+                    else{
+                        if (overWrite == 1) {
+                            [FSAdocument.managedObjectContext deleteObject:mtch];
+                            NSLog(@"Deleted the saved match");
+                            [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
                         }
                     }
                 }
             }
-            
-            [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
-                if (success) {
-                    NSLog(@"Saved transferred data");
-                }
-                else{
-                    NSLog(@"Didn't transfer regionals correctly.");
-                }
-            }];
+        }
         
-            sendBackAlert = [[UIAlertView alloc] initWithTitle:@"Successfully Transferred!"
-                                                       message:@"Would you like to send your data to connected peers?"
-                                                      delegate:self
-                                             cancelButtonTitle:@"Nope!"
-                                             otherButtonTitles:@"Go for it", nil];
-            
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+            if (success) {
+                NSLog(@"Saved transferred data");
+            }
+            else{
+                NSLog(@"Didn't transfer regionals correctly.");
+            }
         }];
-    }
-    else if ([alertView isEqual:sendBackAlert] == 1){
-        [self sendMatches:self];
-    }
+        
+        receivedDataDict = nil;
+        [self sendBackDataAlert];
+    }];
 }
+
+-(void)sendBackDataAlert{
+    if (!sentOnce) {
+        sendBackAlert = [[UIAlertView alloc] initWithTitle:@"Successfully Transferred!"
+                                               message:@"Would you like to send your data to connected peers?"
+                                              delegate:self
+                                     cancelButtonTitle:@"Nope!"
+                                     otherButtonTitles:@"Go for it", nil];
+        [sendBackAlert show];
+    }
+    else{
+        sendBackAlert = [[UIAlertView alloc] initWithTitle:@"Successfully Transferred!"
+                                                   message:@"Give yourself a pat on the back for both of us."
+                                                  delegate:self
+                                         cancelButtonTitle:@"K."
+                                         otherButtonTitles:nil];
+        [sendBackAlert show];
+    }
+    
+}
+
+
+
+
+
+
+
+
+
 
 
 
