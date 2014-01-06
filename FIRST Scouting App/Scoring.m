@@ -154,7 +154,6 @@ NSDictionary *duplicateMatchDict;
     [twoFingerUp setDirection:UISwipeGestureRecognizerDirectionUp];
     [self.view addGestureRecognizer:twoFingerUp];
     
-    
     twoFingerDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(autoOff)];
     [twoFingerDown setNumberOfTouchesRequired:2];
     [twoFingerDown setDirection:UISwipeGestureRecognizerDirectionDown];
@@ -473,6 +472,8 @@ NSDictionary *duplicateMatchDict;
     
     CGRect hostTableRect = CGRectMake(10, 130, 380, 300);
     hostTable = [[UITableView alloc] initWithFrame:hostTableRect style:UITableViewStylePlain];
+    hostTable.delegate = self;
+    hostTable.dataSource = self;
     hostTable.layer.cornerRadius = 5;
     hostTable.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.3];
     [shareScreen addSubview:hostTable];
@@ -683,6 +684,18 @@ NSDictionary *duplicateMatchDict;
     _teamNumEdit.enabled = true;
     _teamNumEdit.hidden = false;
     [self setUpScreen];
+}
+
+/*****************************************
+ ********** UITableView code *************
+ *****************************************/
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;    //count of section
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    return [catagorry count];    //count number of row from counting array hear cataGorry is An Array
 }
 
 /*****************************************
