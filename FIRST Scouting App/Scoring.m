@@ -23,8 +23,7 @@
 @implementation LocationsFirstViewController
 
 
-Boolean autoYN;
-
+//Match Data Variables
 NSInteger teleopHighScore;
 NSInteger autoHighScore;
 NSInteger teleopMidScore;
@@ -34,19 +33,25 @@ NSInteger autoLowScore;
 NSInteger smallPenaltyTally;
 NSInteger largePenaltyTally;
 
+
+//Match Defining Variables
 NSString *initials;
 NSString *scoutTeamNum;
 NSString *currentMatchNum;
 NSString *currentTeamNum;
 NSString *currentRegional;
-
+NSString *pos;
 NSString *currentMatchType;
 
+
+//plist Filepath
 NSArray *paths;
 NSString *scoutingDirectory;
 NSString *path;
 NSMutableDictionary *dataDict;
 
+
+//Core Data Filepath
 NSFileManager *FSAfileManager;
 NSURL *FSAdocumentsDirectory;
 NSString *FSAdocumentName;
@@ -54,11 +59,14 @@ NSURL *FSApathurl;
 UIManagedDocument *FSAdocument;
 NSManagedObjectContext *context;
 
-NSString *pos;
 
+//Finger Swipes
 UISwipeGestureRecognizer *twoFingerUp;
 UISwipeGestureRecognizer *twoFingerDown;
+Boolean autoYN;
 
+
+//SetUp Screen Declarations
 UIControl *greyOut;
 UIControl *setUpView;
 UISegmentedControl *red1Selector;
@@ -74,6 +82,16 @@ UIPickerView *regionalPicker;
 UISegmentedControl *weekSelector;
 NSInteger weekSelected;
 
+
+//Share Screen Declarations
+UIView *shareScreen;
+UISwitch *hostSwitch;
+bool host;
+UISwitch *joinSwitch;
+bool join;
+
+
+//Regional Arrays
 NSArray *regionalNames;
 NSArray *week1Regionals;
 NSArray *week2Regionals;
@@ -84,6 +102,8 @@ NSArray *week6Regionals;
 NSArray *week7Regionals;
 NSArray *allWeekRegionals;
 
+
+//Core Data Helpers
 Team *teamWithDuplicate;
 Match *duplicateMatch;
 NSDictionary *duplicateMatchDict;
@@ -164,6 +184,8 @@ NSDictionary *duplicateMatchDict;
     weekSelected = 0;
     
     currentMatchType = @"Q";
+    
+    host = false;
     
     _teleopHighMinusBtn.alpha = 0;
     _teleopHighMinusBtn.enabled = false;
@@ -384,6 +406,92 @@ NSDictionary *duplicateMatchDict;
         }
 }
 
+-(void)shareScreen{
+    CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
+    greyOut = [[UIControl alloc] initWithFrame:greyOutRect];
+    [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+    greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
+    [self.view addSubview:greyOut];
+    
+    CGRect shareScreenRect = CGRectMake(183, 264, 400, 500);
+    UIView *shareScreen = [[UIView alloc] initWithFrame:shareScreenRect];
+    shareScreen.backgroundColor = [UIColor whiteColor];
+    shareScreen.layer.cornerRadius = 10;
+    
+    CGRect instaShareTitleRect = CGRectMake(100, 10, 200, 20);
+    UILabel *instaShareTitle = [[UILabel alloc] initWithFrame:instaShareTitleRect];
+    instaShareTitle.text = @"Insta-Share Connect";
+    instaShareTitle.textAlignment = NSTextAlignmentCenter;
+    instaShareTitle.font = [UIFont boldSystemFontOfSize:18];
+    instaShareTitle.textColor = [UIColor colorWithRed:63.0/255.0 green:192.0/255.0 blue:255.0/255.0 alpha:1];
+    [shareScreen addSubview:instaShareTitle];
+    
+    CGRect hostSwitchLblRect = CGRectMake(75, 45, 50, 15);
+    UILabel *hostSwitchLbl = [[UILabel alloc] initWithFrame:hostSwitchLblRect];
+    hostSwitchLbl.text = @"Host";
+    hostSwitchLbl.textAlignment = NSTextAlignmentCenter;
+    hostSwitchLbl.font = [UIFont systemFontOfSize:12];
+    [shareScreen addSubview:hostSwitchLbl];
+    
+    CGRect hostSwitchRect = CGRectMake(75, 60, 50, 30);
+    hostSwitch = [[UISwitch alloc] initWithFrame:hostSwitchRect];
+    [hostSwitch addTarget:self action:@selector(hostSwitch) forControlEvents:UIControlEventValueChanged];
+    [shareScreen addSubview:hostSwitch];
+    
+    CGRect joinSwitchLblRect = CGRectMake(275, 45, 50, 15);
+    UILabel *joinSwitchLbl = [[UILabel alloc] initWithFrame:joinSwitchLblRect];
+    joinSwitchLbl.text = @"Join";
+    joinSwitchLbl.textAlignment = NSTextAlignmentCenter;
+    joinSwitchLbl.font = [UIFont systemFontOfSize:12];
+    [shareScreen addSubview:joinSwitchLbl];
+    
+    CGRect joinSwitchRect = CGRectMake(275, 60, 50, 30);
+    joinSwitch = [[UISwitch alloc] initWithFrame:joinSwitchRect];
+    [joinSwitch addTarget:self action:@selector(joinSwitch) forControlEvents:UIControlEventValueChanged];
+    [shareScreen addSubview:joinSwitch];
+    
+    CGRect hostTableRect = CGRectMake(10, 130, 380, 300);
+    UITableView *hostTable = [[UITableView alloc] initWithFrame:hostTableRect style:UITableViewStylePlain];
+    hostTable.layer.cornerRadius = 5;
+    hostTable.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+    [shareScreen addSubview:hostTable];
+    
+    CGRect doneButtonRect = CGRectMake(170, 450, 60, 40);
+    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    doneButton.frame = doneButtonRect;
+    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [doneButton addTarget:self action:@selector(closeShareView) forControlEvents:UIControlEventTouchUpInside];
+    doneButton.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
+    doneButton.layer.cornerRadius = 5;
+    [shareScreen addSubview:doneButton];
+    
+    [greyOut addSubview:shareScreen];
+}
+-(void)hostSwitch{
+    if (hostSwitch.on) {
+        host = true;
+        join = false;
+        [joinSwitch setOn:false animated:YES];
+    }
+    else{
+        host = false;
+    }
+}
+-(void)joinSwitch{
+    if (joinSwitch.on) {
+        join = true;
+        host = false;
+        [hostSwitch setOn:false animated:YES];
+    }
+    else{
+        join = false;
+    }
+}
+-(void)closeShareView{
+    [shareScreen removeFromSuperview];
+    [greyOut removeFromSuperview];
+}
+
 -(void)red1Changed{
     red1SelectedPos = red1Selector.selectedSegmentIndex;
 }
@@ -479,6 +587,7 @@ NSDictionary *duplicateMatchDict;
                          }
                          completion:^(BOOL finished){
                              
+                             [setUpView removeFromSuperview];
                              [greyOut removeFromSuperview];
                              
                              currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
@@ -632,6 +741,10 @@ NSDictionary *duplicateMatchDict;
 /*****************************************
  ********* Other code resume *************
  *****************************************/
+
+- (IBAction)instashare:(id)sender {
+    [self shareScreen];
+}
 
 -(void)autoOn{
     autoYN = true;

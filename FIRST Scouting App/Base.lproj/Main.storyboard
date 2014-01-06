@@ -279,7 +279,12 @@
                                 <rect key="frame" x="0.0" y="24" width="768" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
-                                    <navigationItem title="Score" id="vir-KK-4QB">
+                                    <navigationItem title="Scoring" id="vir-KK-4QB">
+                                        <barButtonItem key="leftBarButtonItem" title="Insta-Share" id="i0I-v6-Ste">
+                                            <connections>
+                                                <action selector="instashare:" destination="9pv-A4-QxB" id="fpW-eI-Npg"/>
+                                            </connections>
+                                        </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Change Sign-in Info" id="mFN-nh-7Mm">
                                             <connections>
                                                 <action selector="reSignIn:" destination="9pv-A4-QxB" id="mqE-7B-yje"/>
