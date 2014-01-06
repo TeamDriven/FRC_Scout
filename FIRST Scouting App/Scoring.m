@@ -89,6 +89,9 @@ UISwitch *hostSwitch;
 bool host;
 UISwitch *joinSwitch;
 bool join;
+UITableView *hostTable;
+UILabel *hostTableLbl;
+UIButton *doneButton;
 
 
 //Regional Arrays
@@ -426,6 +429,14 @@ NSDictionary *duplicateMatchDict;
     instaShareTitle.textColor = [UIColor colorWithRed:63.0/255.0 green:192.0/255.0 blue:255.0/255.0 alpha:1];
     [shareScreen addSubview:instaShareTitle];
     
+    CGRect closeButtonRect = CGRectMake(340, 5, 60, 20);
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    closeButton.frame = closeButtonRect;
+    [closeButton addTarget:self action:@selector(closeShareView) forControlEvents:UIControlEventTouchUpInside];
+    [closeButton setTitle:@"Close X" forState:UIControlStateNormal];
+    [shareScreen addSubview:closeButton];
+    closeButton.transform = CGAffineTransformMakeScale(0.8, 0.8);
+    
     CGRect hostSwitchLblRect = CGRectMake(75, 45, 50, 15);
     UILabel *hostSwitchLbl = [[UILabel alloc] initWithFrame:hostSwitchLblRect];
     hostSwitchLbl.text = @"Host";
@@ -437,6 +448,7 @@ NSDictionary *duplicateMatchDict;
     hostSwitch = [[UISwitch alloc] initWithFrame:hostSwitchRect];
     [hostSwitch addTarget:self action:@selector(hostSwitch) forControlEvents:UIControlEventValueChanged];
     [shareScreen addSubview:hostSwitch];
+    [hostSwitch setOn:host animated:YES];
     
     CGRect joinSwitchLblRect = CGRectMake(275, 45, 50, 15);
     UILabel *joinSwitchLbl = [[UILabel alloc] initWithFrame:joinSwitchLblRect];
@@ -449,21 +461,39 @@ NSDictionary *duplicateMatchDict;
     joinSwitch = [[UISwitch alloc] initWithFrame:joinSwitchRect];
     [joinSwitch addTarget:self action:@selector(joinSwitch) forControlEvents:UIControlEventValueChanged];
     [shareScreen addSubview:joinSwitch];
+    [joinSwitch setOn:join animated:YES];
+    
+    CGRect hostTableLblRect = CGRectMake(150, 110, 100, 15);
+    hostTableLbl = [[UILabel alloc] initWithFrame:hostTableLblRect];
+    hostTableLbl.text = @"Select a Host";
+    hostTableLbl.textAlignment = NSTextAlignmentCenter;
+    hostTableLbl.font = [UIFont systemFontOfSize:12];
+    [shareScreen addSubview:hostTableLbl];
+    hostTableLbl.enabled = join;
     
     CGRect hostTableRect = CGRectMake(10, 130, 380, 300);
-    UITableView *hostTable = [[UITableView alloc] initWithFrame:hostTableRect style:UITableViewStylePlain];
+    hostTable = [[UITableView alloc] initWithFrame:hostTableRect style:UITableViewStylePlain];
     hostTable.layer.cornerRadius = 5;
-    hostTable.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+    hostTable.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.3];
     [shareScreen addSubview:hostTable];
+    hostTable.userInteractionEnabled = join;
+    if (join) {
+        hostTable.alpha = 1;
+    }
+    else{
+        hostTable.alpha = 0.5;
+    }
     
-    CGRect doneButtonRect = CGRectMake(170, 450, 60, 40);
-    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    
+    CGRect doneButtonRect = CGRectMake(170, 445, 60, 40);
+    doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
     doneButton.frame = doneButtonRect;
     [doneButton setTitle:@"Done" forState:UIControlStateNormal];
     [doneButton addTarget:self action:@selector(closeShareView) forControlEvents:UIControlEventTouchUpInside];
     doneButton.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     doneButton.layer.cornerRadius = 5;
     [shareScreen addSubview:doneButton];
+    doneButton.enabled = host;
     
     [greyOut addSubview:shareScreen];
 }
@@ -472,9 +502,11 @@ NSDictionary *duplicateMatchDict;
         host = true;
         join = false;
         [joinSwitch setOn:false animated:YES];
+        doneButton.enabled = true;
     }
     else{
         host = false;
+        doneButton.enabled = false;
     }
 }
 -(void)joinSwitch{
@@ -482,9 +514,15 @@ NSDictionary *duplicateMatchDict;
         join = true;
         host = false;
         [hostSwitch setOn:false animated:YES];
+        hostTable.userInteractionEnabled = true;
+        hostTable.alpha = 1;
+        hostTableLbl.enabled = true;
     }
     else{
         join = false;
+        hostTable.userInteractionEnabled = false;
+        hostTable.alpha = 0.5;
+        hostTableLbl.enabled = false;
     }
 }
 -(void)closeShareView{
