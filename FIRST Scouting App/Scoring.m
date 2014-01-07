@@ -15,6 +15,7 @@
 #import "Team+Category.h"
 #import "Match.h"
 #import "Match+Category.h"
+#import "PeerCell.h"
 
 @interface LocationsFirstViewController ()
 
@@ -92,6 +93,7 @@ bool join;
 UITableView *hostTable;
 UILabel *hostTableLbl;
 UIButton *doneButton;
+NSMutableArray *peersArray;
 
 
 //Regional Arrays
@@ -188,6 +190,7 @@ NSDictionary *duplicateMatchDict;
     currentMatchType = @"Q";
     
     host = false;
+    join = false;
     
     _teleopHighMinusBtn.alpha = 0;
     _teleopHighMinusBtn.enabled = false;
@@ -214,6 +217,8 @@ NSDictionary *duplicateMatchDict;
     _autoLowMinusBtn.enabled = true;
     _autoLowPlusBtn.alpha = 1;
     _autoLowPlusBtn.enabled = true;
+    
+    peersArray = [[NSMutableArray alloc] initWithArray:@[@"ONE", @"TWO", @"THREE", @"FOUR"]];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -472,14 +477,17 @@ NSDictionary *duplicateMatchDict;
     
     CGRect hostTableRect = CGRectMake(10, 130, 380, 300);
     hostTable = [[UITableView alloc] initWithFrame:hostTableRect style:UITableViewStylePlain];
-    hostTable.delegate = self;
-    hostTable.dataSource = self;
     hostTable.layer.cornerRadius = 5;
     hostTable.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.3];
+    [hostTable setScrollEnabled:YES];
+    hostTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    [hostTable setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+    hostTable.rowHeight = 80;
     [shareScreen addSubview:hostTable];
     hostTable.userInteractionEnabled = join;
     if (join) {
         hostTable.alpha = 1;
+        [hostTable reloadData];
     }
     else{
         hostTable.alpha = 0.5;
@@ -512,18 +520,28 @@ NSDictionary *duplicateMatchDict;
 }
 -(void)joinSwitch{
     if (joinSwitch.on) {
+        hostTable.delegate = self;
+        hostTable.dataSource = self;
         join = true;
         host = false;
         [hostSwitch setOn:false animated:YES];
         hostTable.userInteractionEnabled = true;
         hostTable.alpha = 1;
         hostTableLbl.enabled = true;
+        [hostTable reloadData];
     }
     else{
         join = false;
         hostTable.userInteractionEnabled = false;
         hostTable.alpha = 0.5;
         hostTableLbl.enabled = false;
+        for (int i = [hostTable numberOfRowsInSection:0]-1; i > -1; i--) {
+            [peersArray removeLastObject];
+            NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+            [hostTable deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationLeft];
+            
+        }
+        
     }
 }
 -(void)closeShareView{
@@ -689,13 +707,38 @@ NSDictionary *duplicateMatchDict;
 /*****************************************
  ********** UITableView code *************
  *****************************************/
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;    //count of section
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return [catagorry count];    //count number of row from counting array hear cataGorry is An Array
+    return [peersArray count];
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *cellIdentifier = @"peerCellID";
+    
+    PeerCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    if (cell == nil)
+    {
+        cell = [[PeerCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                       reuseIdentifier:cellIdentifier];
+    }
+    
+    cell.peerLbl.text = [peersArray objectAtIndex:indexPath.row];
+    
+    
+    return cell;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return 80;
+    
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    NSLog(@"Index Path: %@", indexPath);
+    
 }
 
 /*****************************************
