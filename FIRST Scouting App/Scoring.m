@@ -88,6 +88,7 @@ NSInteger weekSelected;
 
 //Share Screen Declarations
 UIView *shareScreen;
+UIButton *closeButton;
 UISwitch *hostSwitch;
 bool host;
 UISwitch *joinSwitch;
@@ -101,6 +102,9 @@ MCNearbyServiceAdvertiser *advertiser;
 MCNearbyServiceBrowser *browser;
 MCSession *mySession;
 UIAlertView *inviteAlert;
+NSTimer *closeReenabler;
+PeerCell *lastSelectedCell;
+NSString *lastSelectedName;
 
 
 //Regional Arrays
@@ -169,6 +173,7 @@ NSDictionary *duplicateMatchDict;
     [self.view addGestureRecognizer:twoFingerDown];
     
     red1Pos = -1;
+    pos = nil;
     
     autoYN = true;
     
@@ -225,7 +230,7 @@ NSDictionary *duplicateMatchDict;
     _autoLowPlusBtn.alpha = 1;
     _autoLowPlusBtn.enabled = true;
     
-    peersArray = [[NSMutableArray alloc] initWithArray:@[@"ONE", @"TWO", @"THREE", @"FOUR"]];
+    peersArray = [[NSMutableArray alloc] init];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -269,7 +274,7 @@ NSDictionary *duplicateMatchDict;
         
         CGRect red1SelectorRect = CGRectMake(124, 130, 380, 30);
         red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3",  nil]];
-        [red1Selector addTarget:self action:@selector(red1Changed) forControlEvents:UIControlEventTouchUpInside];
+        [red1Selector addTarget:self action:@selector(red1Changed) forControlEvents:UIControlEventValueChanged];
         [red1Selector setFrame:red1SelectorRect];
         [setUpView addSubview:red1Selector];
         red1Selector.selectedSegmentIndex = red1Pos;
@@ -441,7 +446,7 @@ NSDictionary *duplicateMatchDict;
     [shareScreen addSubview:instaShareTitle];
     
     CGRect closeButtonRect = CGRectMake(340, 5, 60, 20);
-    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
     closeButton.frame = closeButtonRect;
     [closeButton addTarget:self action:@selector(closeShareView) forControlEvents:UIControlEventTouchUpInside];
     [closeButton setTitle:@"Close X" forState:UIControlStateNormal];
@@ -491,10 +496,16 @@ NSDictionary *duplicateMatchDict;
     [hostTable setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     hostTable.rowHeight = 80;
     [shareScreen addSubview:hostTable];
+    hostTable.delegate = self;
+    hostTable.dataSource = self;
     hostTable.userInteractionEnabled = join;
+    hostTable.layer.borderWidth = 1;
+    hostTable.layer.borderColor = [[UIColor colorWithWhite:0.7 alpha:0.3] CGColor];
     if (join) {
         hostTable.alpha = 1;
         [hostTable reloadData];
+        NSLog(@"Peers Array Count: %d", [peersArray count]);
+        NSLog(@"HostTable Count: %d", [hostTable numberOfRowsInSection:0]);
     }
     else{
         hostTable.alpha = 0.5;
@@ -519,19 +530,19 @@ NSDictionary *duplicateMatchDict;
         join = false;
         [joinSwitch setOn:false animated:YES];
         doneButton.enabled = true;
-        advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:nil serviceType:@"FRCSCOUT"];
+        advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:@{@"Name": [[UIDevice currentDevice] name]} serviceType:@"FRCSCOUT"];
         advertiser.delegate = self;
         [advertiser startAdvertisingPeer];
     }
     else{
         host = false;
         doneButton.enabled = false;
+        [advertiser stopAdvertisingPeer];
+        [mySession disconnect];
     }
 }
 -(void)joinSwitch{
     if (joinSwitch.on) {
-        hostTable.delegate = self;
-        hostTable.dataSource = self;
         join = true;
         host = false;
         [hostSwitch setOn:false animated:YES];
@@ -543,6 +554,7 @@ NSDictionary *duplicateMatchDict;
         browser = [[MCNearbyServiceBrowser alloc] initWithPeer:myPeerID serviceType:@"FRCSCOUT"];
         browser.delegate = self;
         [browser startBrowsingForPeers];
+        NSLog(@"After Started browsing for peers");
     }
     else{
         join = false;
@@ -554,7 +566,9 @@ NSDictionary *duplicateMatchDict;
             NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
             [hostTable deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationLeft];
         }
-        
+        [browser stopBrowsingForPeers];
+        [mySession disconnect];
+        lastSelectedCell = nil;
     }
 }
 -(void)closeShareView{
@@ -564,6 +578,8 @@ NSDictionary *duplicateMatchDict;
 
 -(void)red1Changed{
     red1SelectedPos = red1Selector.selectedSegmentIndex;
+    pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
+    NSLog(@"%@", pos);
 }
 
 -(void)checkNumber{
@@ -602,15 +618,11 @@ NSDictionary *duplicateMatchDict;
 }
 
 -(void)eraseSetUpScreen{
-    pos = nil;
     initials = nil;
     scoutTeamNum = nil;
     currentMatchNum = nil;
     currentRegional = nil;
     
-    if (red1SelectedPos >= 0 && red1SelectedPos <= 5) {
-        pos = [red1Selector titleForSegmentAtIndex:red1SelectedPos];
-    }
     initials = initialsField.text;
     scoutTeamNum = scoutTeamNumField.text;
     NSInteger randomTeamNum = arc4random() % 4000;
@@ -700,6 +712,7 @@ NSDictionary *duplicateMatchDict;
                              red1Pos = red1Selector.selectedSegmentIndex;
                              
                              myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
+                             NSLog(@"My Peer ID: %@", myPeerID.displayName);
                              mySession = [[MCSession alloc] initWithPeer:myPeerID];
                              mySession.delegate = self;
                          }];
@@ -728,7 +741,6 @@ NSDictionary *duplicateMatchDict;
     return 1;    //count of section
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
     return [peersArray count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -740,9 +752,19 @@ NSDictionary *duplicateMatchDict;
     {
         cell = [[PeerCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:cellIdentifier];
+        cell.uniqueID = [[NSString alloc] initWithString:lastSelectedName];
     }
     
-    cell.peerLbl.text = [peersArray objectAtIndex:indexPath.row];
+    cell.peerLbl.text = [[peersArray objectAtIndex:indexPath.row] displayName];
+    cell.backgroundColor = [UIColor whiteColor];
+    cell.userInteractionEnabled = true;
+    doneButton.enabled = false;
+    if (lastSelectedCell.uniqueID == cell.uniqueID) {
+        NSLog(@"UniqueID of last selected cell: %@", lastSelectedCell.uniqueID);
+        cell.backgroundColor = [UIColor greenColor];
+        cell.userInteractionEnabled = false;
+        doneButton.enabled = true;
+    }
     
     
     return cell;
@@ -754,19 +776,47 @@ NSDictionary *duplicateMatchDict;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    NSLog(@"Index Path: %@", indexPath);
+    closeButton.enabled = false;
+    
+    if (lastSelectedCell) {
+        lastSelectedCell.userInteractionEnabled = true;
+        lastSelectedCell.backgroundColor = [UIColor whiteColor];
+    }
+    
+    [hostTable deselectRowAtIndexPath:indexPath animated:YES];
+    PeerCell *selectedCell = (PeerCell *)[hostTable cellForRowAtIndexPath:indexPath];
+    selectedCell.userInteractionEnabled = false;
+    
+    lastSelectedCell = selectedCell;
     
     [browser invitePeer:[peersArray objectAtIndex:indexPath.row] toSession:mySession withContext:nil timeout:15];
+    //closeReenabler = [[NSTimer alloc] initWithFireDate:[NSDate date] interval:15 target:self selector:@selector(closeReEnabler) userInfo:nil repeats:NO];
 }
+//-(void)closeReEnabler{
+//    closeButton.enabled = true;
+//    [closeReenabler invalidate];
+//    closeReenabler = nil;
+//}
 
 /*****************************************
  *********** Multipeer Code **************
  *****************************************/
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info{
-    
+    NSLog(@"Found peer %@", peerID.displayName);
+    [peersArray addObject:peerID];
+    NSIndexPath *myIndex = [NSIndexPath indexPathForRow:[peersArray count]-1 inSection:0];
+    lastSelectedName = [info objectForKey:@"Name"];
+    [hostTable insertRowsAtIndexPaths:@[myIndex] withRowAnimation:UITableViewRowAnimationRight];
 }
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID{
-    
+    [peersArray removeObject:peerID];
+    NSLog(@"Lost %@", peerID.displayName);
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh!"
+                                                    message:[[NSString alloc] initWithFormat:@"%@ Left the Party!", peerID.displayName]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"Understood."
+                                          otherButtonTitles:nil];
+    [alert show];
 }
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *mySession))invitationHandler{
 //    inviteAlert = [[UIAlertView alloc] initWithTitle:[[NSString alloc] initWithFormat:@"%@ Wants To Join!", peerID]
@@ -774,17 +824,17 @@ NSDictionary *duplicateMatchDict;
 //                                                       delegate:self
 //                                              cancelButtonTitle:@"Sure!"
 //                                              otherButtonTitles:@"No Way!", nil];
-    [UIAlertView showWithTitle:[[NSString alloc] initWithFormat:@"%@ Wants To Join!", peerID] message:@"Do you accept?" cancelButtonTitle:@"No Way!" otherButtonTitles:@[@"Sure!"] completion:^(UIAlertView *inviteAlert, NSInteger buttonIndex){
+    [UIAlertView showWithTitle:[[NSString alloc] initWithFormat:@"%@ Wants To Join!", peerID.displayName] message:@"Do you accept?" cancelButtonTitle:@"No Way!" otherButtonTitles:@[@"Sure!"] completion:^(UIAlertView *inviteAlert, NSInteger buttonIndex){
         BOOL accept = (buttonIndex != inviteAlert.cancelButtonIndex) ? YES : NO;
         invitationHandler(accept, mySession);
     }];
 //    [inviteAlert show];
 }
 -(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
-    
+    NSLog(@"BrowserViewControllerDidFinish");
 }
 -(void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
-    
+    NSLog(@"BrowserViewControllerWasCancelled");
 }
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
     
@@ -801,11 +851,22 @@ NSDictionary *duplicateMatchDict;
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
     if (state == MCSessionStateConnected) {
         NSLog(@"Woohooo!!! It worked!!!");
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            doneButton.enabled = true;
+            closeButton.enabled = true;
+            UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Wahooo!!!" message:[[NSString alloc] initWithFormat:@"You connected to %@! Feel free to scout like normal and they will get your matches as you save them!", peerID.displayName] delegate:nil cancelButtonTitle:@"Awesometastic" otherButtonTitles:nil];
+            [connectedAlert show];
+            lastSelectedCell.backgroundColor = [UIColor greenColor];
+        });
     }
     else if (state == MCSessionStateNotConnected){
-        NSLog(@"Disconnected");
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh!" message:[[NSString alloc] initWithFormat:@"%@ disconnected from the group!", peerID] delegate:nil cancelButtonTitle:@"Understood." otherButtonTitles: nil];
-        [alert show];
+        NSLog(@"Somehow Disconnected");
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!" message:[[NSString alloc] initWithFormat:@"%@ either declined your invite or left the party!", peerID.displayName] delegate:nil cancelButtonTitle:@"Oh snap." otherButtonTitles:nil];
+            [connectedAlert show];
+            lastSelectedCell.userInteractionEnabled = true;
+            closeButton.enabled = true;
+        });
     }
 }
 

@@ -15,11 +15,7 @@
 		28270E2618713B0700809047 /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E2518713B0700809047 /* Regional.m */; };
 		285A1E1C1870E941002AA01C /* Regional+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 285A1E1B1870E941002AA01C /* Regional+Category.m */; };
 		2862D6A81854D4F900DC460F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A71854D4F900DC460F /* Images.xcassets */; };
-<<<<<<< HEAD
-		2862D6AA1854D51300DC460F /* Binoculars60px.png in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A91854D51300DC460F /* Binoculars60px.png */; };
 		2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2893226B187E637B00A225EE /* UIAlertView+Blocks.m */; };
-=======
->>>>>>> e6c571e0f386f38111508d0714a5838d7d64ec90
 		28BA303B187B84F5003776F5 /* PeerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BA303A187B84F5003776F5 /* PeerCell.m */; };
 		28C8C757185BB91F000FAE10 /* MatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C8C756185BB91F000FAE10 /* MatchCell.m */; };
 		8846FED11826D7D100B37E44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED01826D7D100B37E44 /* Foundation.framework */; };
@@ -31,7 +27,6 @@
 		8846FEE41826D7D200B37E44 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8846FEE21826D7D200B37E44 /* Main.storyboard */; };
 		8846FEE71826D7D200B37E44 /* Scoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEE61826D7D200B37E44 /* Scoring.m */; };
 		8846FEEA1826D7D200B37E44 /* Sharing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEE91826D7D200B37E44 /* Sharing.m */; };
-		8846FEEC1826D7D200B37E44 /* Binoculars30px.png in Resources */ = {isa = PBXBuildFile; fileRef = 8846FEEB1826D7D200B37E44 /* Binoculars30px.png */; };
 		8846FEF31826D7D200B37E44 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FEF21826D7D200B37E44 /* XCTest.framework */; };
 		8846FEF41826D7D200B37E44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED01826D7D100B37E44 /* Foundation.framework */; };
 		8846FEF51826D7D200B37E44 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED41826D7D100B37E44 /* UIKit.framework */; };
@@ -68,12 +63,8 @@
 		285A1E1A1870E941002AA01C /* Regional+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Regional+Category.h"; sourceTree = "<group>"; };
 		285A1E1B1870E941002AA01C /* Regional+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Regional+Category.m"; sourceTree = "<group>"; };
 		2862D6A71854D4F900DC460F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-<<<<<<< HEAD
-		2862D6A91854D51300DC460F /* Binoculars60px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Binoculars60px.png; path = "../../../../../../../Users/louiebertoncin/Desktop/App Pics/Binoculars60px.png"; sourceTree = "<group>"; };
 		2893226A187E637B00A225EE /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		2893226B187E637B00A225EE /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
-=======
->>>>>>> e6c571e0f386f38111508d0714a5838d7d64ec90
 		28BA3039187B84F5003776F5 /* PeerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerCell.h; sourceTree = "<group>"; };
 		28BA303A187B84F5003776F5 /* PeerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerCell.m; sourceTree = "<group>"; };
 		28C8C755185BB91F000FAE10 /* MatchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchCell.h; sourceTree = "<group>"; };
@@ -93,7 +84,6 @@
 		8846FEE61826D7D200B37E44 /* Scoring.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Scoring.m; sourceTree = "<group>"; };
 		8846FEE81826D7D200B37E44 /* Sharing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sharing.h; sourceTree = "<group>"; };
 		8846FEE91826D7D200B37E44 /* Sharing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sharing.m; sourceTree = "<group>"; };
-		8846FEEB1826D7D200B37E44 /* Binoculars30px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Binoculars30px.png; path = "/Users/louiebertoncin/Desktop/App Pics/Binoculars30px.png"; sourceTree = "<absolute>"; };
 		8846FEF11826D7D200B37E44 /* FIRST Scouting AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FIRST Scouting AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8846FEF21826D7D200B37E44 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		8846FEFA1826D7D200B37E44 /* FIRST Scouting AppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FIRST Scouting AppTests-Info.plist"; sourceTree = "<group>"; };
@@ -237,7 +227,6 @@
 				28BA303A187B84F5003776F5 /* PeerCell.m */,
 				8846FEDF1826D7D200B37E44 /* LocationsAppDelegate.h */,
 				8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */,
-				8846FEEB1826D7D200B37E44 /* Binoculars30px.png */,
 				8846FED81826D7D100B37E44 /* FIRST Scouting App-Info.plist */,
 				8846FED91826D7D100B37E44 /* InfoPlist.strings */,
 				8846FEDC1826D7D200B37E44 /* main.m */,
@@ -348,7 +337,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2862D6A81854D4F900DC460F /* Images.xcassets in Resources */,
-				8846FEEC1826D7D200B37E44 /* Binoculars30px.png in Resources */,
 				8846FEDB1826D7D100B37E44 /* InfoPlist.strings in Resources */,
 				8846FF131826DEB900B37E44 /* data.plist in Resources */,
 				8846FEE41826D7D200B37E44 /* Main.storyboard in Resources */,
