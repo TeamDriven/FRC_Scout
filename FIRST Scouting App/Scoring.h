@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "Globals.h"
+#import <MultipeerConnectivity/MultipeerConnectivity.h>
 
-@interface LocationsFirstViewController : UIViewController <UIGestureRecognizerDelegate, UIPickerViewDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface LocationsFirstViewController : UIViewController <UIGestureRecognizerDelegate, UIPickerViewDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, MCBrowserViewControllerDelegate, MCSessionDelegate, MCNearbyServiceAdvertiserDelegate, MCNearbyServiceBrowserDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *matchNumField;
 @property (weak, nonatomic) IBOutlet UITextField *teamNumField;

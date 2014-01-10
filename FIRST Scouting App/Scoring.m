@@ -16,6 +16,7 @@
 #import "Match.h"
 #import "Match+Category.h"
 #import "PeerCell.h"
+#import "UIAlertView+Blocks.h"
 
 @interface LocationsFirstViewController ()
 
@@ -50,6 +51,7 @@ NSArray *paths;
 NSString *scoutingDirectory;
 NSString *path;
 NSMutableDictionary *dataDict;
+UIAlertView *overWriteAlert;
 
 
 //Core Data Filepath
@@ -94,6 +96,11 @@ UITableView *hostTable;
 UILabel *hostTableLbl;
 UIButton *doneButton;
 NSMutableArray *peersArray;
+MCPeerID *myPeerID;
+MCNearbyServiceAdvertiser *advertiser;
+MCNearbyServiceBrowser *browser;
+MCSession *mySession;
+UIAlertView *inviteAlert;
 
 
 //Regional Arrays
@@ -512,6 +519,9 @@ NSDictionary *duplicateMatchDict;
         join = false;
         [joinSwitch setOn:false animated:YES];
         doneButton.enabled = true;
+        advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:nil serviceType:@"FRCSCOUT"];
+        advertiser.delegate = self;
+        [advertiser startAdvertisingPeer];
     }
     else{
         host = false;
@@ -525,21 +535,24 @@ NSDictionary *duplicateMatchDict;
         join = true;
         host = false;
         [hostSwitch setOn:false animated:YES];
+        doneButton.enabled = false;
         hostTable.userInteractionEnabled = true;
         hostTable.alpha = 1;
         hostTableLbl.enabled = true;
         [hostTable reloadData];
+        browser = [[MCNearbyServiceBrowser alloc] initWithPeer:myPeerID serviceType:@"FRCSCOUT"];
+        browser.delegate = self;
+        [browser startBrowsingForPeers];
     }
     else{
         join = false;
         hostTable.userInteractionEnabled = false;
         hostTable.alpha = 0.5;
         hostTableLbl.enabled = false;
-        for (int i = [hostTable numberOfRowsInSection:0]-1; i > -1; i--) {
+        for (long i = [hostTable numberOfRowsInSection:0]-1; i > -1; i--) {
             [peersArray removeLastObject];
             NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
             [hostTable deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationLeft];
-            
         }
         
     }
@@ -561,7 +574,7 @@ NSDictionary *duplicateMatchDict;
             if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
                                                                message: @"Please only enter numbers in the \"Your Team Number\" text field"
-                                                              delegate: self
+                                                              delegate: nil
                                                      cancelButtonTitle:@"Sorry..."
                                                      otherButtonTitles:nil];
                 [alert show];
@@ -577,7 +590,7 @@ NSDictionary *duplicateMatchDict;
             if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
                                                                message: @"Please only enter numbers in the \"Current Match Number\" text field"
-                                                              delegate: self
+                                                              delegate: nil
                                                      cancelButtonTitle:@"Sorry..."
                                                      otherButtonTitles:nil];
                 [alert show];
@@ -685,6 +698,10 @@ NSDictionary *duplicateMatchDict;
                              [self.view addSubview:red1Lbl];
                              
                              red1Pos = red1Selector.selectedSegmentIndex;
+                             
+                             myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
+                             mySession = [[MCSession alloc] initWithPeer:myPeerID];
+                             mySession.delegate = self;
                          }];
         NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
     }
@@ -739,7 +756,59 @@ NSDictionary *duplicateMatchDict;
     
     NSLog(@"Index Path: %@", indexPath);
     
+    [browser invitePeer:[peersArray objectAtIndex:indexPath.row] toSession:mySession withContext:nil timeout:15];
 }
+
+/*****************************************
+ *********** Multipeer Code **************
+ *****************************************/
+-(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info{
+    
+}
+-(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID{
+    
+}
+-(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *mySession))invitationHandler{
+//    inviteAlert = [[UIAlertView alloc] initWithTitle:[[NSString alloc] initWithFormat:@"%@ Wants To Join!", peerID]
+//                                                        message:@"Do you accept?"
+//                                                       delegate:self
+//                                              cancelButtonTitle:@"Sure!"
+//                                              otherButtonTitles:@"No Way!", nil];
+    [UIAlertView showWithTitle:[[NSString alloc] initWithFormat:@"%@ Wants To Join!", peerID] message:@"Do you accept?" cancelButtonTitle:@"No Way!" otherButtonTitles:@[@"Sure!"] completion:^(UIAlertView *inviteAlert, NSInteger buttonIndex){
+        BOOL accept = (buttonIndex != inviteAlert.cancelButtonIndex) ? YES : NO;
+        invitationHandler(accept, mySession);
+    }];
+//    [inviteAlert show];
+}
+-(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
+    
+}
+-(void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
+    
+}
+-(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
+    
+}
+-(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
+    
+}
+-(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
+    
+}
+-(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
+    
+}
+-(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
+    if (state == MCSessionStateConnected) {
+        NSLog(@"Woohooo!!! It worked!!!");
+    }
+    else if (state == MCSessionStateNotConnected){
+        NSLog(@"Disconnected");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh!" message:[[NSString alloc] initWithFormat:@"%@ disconnected from the group!", peerID] delegate:nil cancelButtonTitle:@"Understood." otherButtonTitles: nil];
+        [alert show];
+    }
+}
+
 
 /*****************************************
  ************ UIPicker code **************
@@ -1457,7 +1526,7 @@ NSDictionary *duplicateMatchDict;
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1) {
+    if ([alertView isEqual:overWriteAlert] && buttonIndex == 1) {
         if ([pos isEqualToString:@"Red 1"]) {
             [[[dataDict objectForKey:@"Red1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
@@ -1572,12 +1641,12 @@ NSDictionary *duplicateMatchDict;
 }
 
 -(void)overWriteAlert{
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"MATCH ALREADY EXISTS"
+    UIAlertView *overWriteAlert = [[UIAlertView alloc]initWithTitle: @"MATCH ALREADY EXISTS"
                                                    message: @"Did you mean a different match? Or would you like to overwrite the existing match?"
                                                   delegate: self
                                          cancelButtonTitle:@"Edit Match"
                                          otherButtonTitles:@"Overwrite",nil];
-    [alert show];
+    [overWriteAlert show];
 }
 
 -(void)saveSuccess{

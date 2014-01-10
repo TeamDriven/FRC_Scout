@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>D251699E-5092-42B4-BE12-B66D7E08C8F6</string>
+	<string>57E6F5AF-0F95-43B6-88C9-6D6DEED4770B</string>
 	<key>IDESourceControlProjectName</key>
 	<string>FIRST Scouting App</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -14,9 +14,11 @@
 		<string>https://github.com/TeamDriven/ScoutingApp.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>FIRST Scouting App.xcodeproj/project.xcworkspace</string>
+	<string>ScoutingApp/FIRST Scouting App.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>27998073-37FC-4BD2-9A52-09F1A87C5A27</key>
+		<string>../../..</string>
 		<key>A4E883D5-6D71-4DA7-8807-F156DD693154</key>
 		<string>../..</string>
 	</dict>
@@ -25,9 +27,17 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>A4E883D5-6D71-4DA7-8807-F156DD693154</string>
+	<string>27998073-37FC-4BD2-9A52-09F1A87C5A27</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>27998073-37FC-4BD2-9A52-09F1A87C5A27</string>
+			<key>IDESourceControlWCCName</key>
+			<string>FIRST Scouting App</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
