@@ -298,6 +298,7 @@ NSDictionary *duplicateMatchDict;
         
         CGRect initialsFieldRect = CGRectMake(114, 210, 130, 40);
         initialsField = [[UITextField alloc] initWithFrame:initialsFieldRect];
+        [initialsField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
         [initialsField setBorderStyle:UITextBorderStyleRoundedRect];
         [initialsField setFont:[UIFont systemFontOfSize:15]];
         [initialsField setPlaceholder:@"3 Initials"];
@@ -685,6 +686,20 @@ NSDictionary *duplicateMatchDict;
                 [txt2 deleteCharactersInRange:NSMakeRange(i, 1)];
                 currentMatchNumField.text = [[NSString alloc] initWithString:txt2];
             }
+        }
+    }
+    if (initialsField.isEditing) {
+        NSMutableString *txt3 = [[NSMutableString alloc] initWithString:initialsField.text];
+        for (unsigned int i = 0; i < [txt3 length]; i++) {
+            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt3 characterAtIndex:i]];
+            if ([character isEqualToString:@" "]) {
+                [txt3 deleteCharactersInRange:NSMakeRange(i, 1)];
+                initialsField.text = [[NSString alloc] initWithString:txt3];
+            }
+        }
+        if ([txt3 length] > 3) {
+            [txt3 deleteCharactersInRange:NSMakeRange(3, 1)];
+            initialsField.text = [[NSString alloc] initWithString:txt3];
         }
     }
 }
