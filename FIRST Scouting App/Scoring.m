@@ -1737,114 +1737,114 @@ NSDictionary *duplicateMatchDict;
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if ([alertView isEqual:overWriteAlert] && buttonIndex == 1) {
-        if ([pos isEqualToString:@"Red 1"]) {
-            [[[dataDict objectForKey:@"Red1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-                                                        [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-                                                        [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
-                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-                                                        [NSString stringWithString:initials], @"initials",
-                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-                                                        [NSString stringWithString:currentRegional], @"regional",
-                                                            nil] forKey:currentMatchNum];
-        }
-        else if([pos isEqualToString:@"Red 2"]){
-            [[[dataDict objectForKey:@"Red2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-                                                        [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-                                                        [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
-                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-                                                        [NSString stringWithString:initials], @"initials",
-                                                        [NSString stringWithString:currentRegional], @"regional",
-                                                            nil] forKey:currentMatchNum];
-        }
-        else if([pos isEqualToString:@"Red 3"]){
-            [[[dataDict objectForKey:@"Red3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-                                                        [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-                                                        [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
-                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-                                                        [NSString stringWithString:initials], @"initials",
-                                                        [NSString stringWithString:currentRegional], @"regional",
-                                                            nil] forKey:currentMatchNum];
-        }
-        else if ([pos isEqualToString:@"Blue 1"]){
-            [[[dataDict objectForKey:@"Blue1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
-                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-                                                         [NSString stringWithString:initials], @"initials",
-                                                         [NSString stringWithString:currentRegional], @"regional",
-                                                            nil] forKey:currentMatchNum];
-        }
-        else if ([pos isEqualToString:@"Blue 2"]){
-            [[[dataDict objectForKey:@"Blue2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
-                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-                                                         [NSString stringWithString:initials], @"initials",
-                                                         [NSString stringWithString:currentRegional], @"regional",
-                                                            nil] forKey:currentMatchNum];
-        }
-        else if ([pos isEqualToString:@"Blue 3"]){
-            [[[dataDict objectForKey:@"Blue3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
-                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-                                                         [NSString stringWithString:initials], @"initials",
-                                                         [NSString stringWithString:currentRegional], @"regional",
-                                                            nil] forKey:currentMatchNum];
-        }
+//        if ([pos isEqualToString:@"Red 1"]) {
+//            [[[dataDict objectForKey:@"Red1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+//                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+//                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+//                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+//                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+//                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+//                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+//                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
+//                                                        [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
+//                                                        [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+//                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
+//                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+//                                                        [NSString stringWithString:initials], @"initials",
+//                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
+//                                                        [NSString stringWithString:currentRegional], @"regional",
+//                                                            nil] forKey:currentMatchNum];
+//        }
+//        else if([pos isEqualToString:@"Red 2"]){
+//            [[[dataDict objectForKey:@"Red2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+//                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+//                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+//                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+//                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+//                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+//                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+//                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
+//                                                        [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
+//                                                        [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+//                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
+//                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+//                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
+//                                                        [NSString stringWithString:initials], @"initials",
+//                                                        [NSString stringWithString:currentRegional], @"regional",
+//                                                            nil] forKey:currentMatchNum];
+//        }
+//        else if([pos isEqualToString:@"Red 3"]){
+//            [[[dataDict objectForKey:@"Red3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+//                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+//                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+//                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+//                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+//                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+//                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+//                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
+//                                                        [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
+//                                                        [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+//                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
+//                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+//                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
+//                                                        [NSString stringWithString:initials], @"initials",
+//                                                        [NSString stringWithString:currentRegional], @"regional",
+//                                                            nil] forKey:currentMatchNum];
+//        }
+//        else if ([pos isEqualToString:@"Blue 1"]){
+//            [[[dataDict objectForKey:@"Blue1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+//                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+//                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+//                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+//                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+//                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+//                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+//                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
+//                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
+//                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+//                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
+//                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+//                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
+//                                                         [NSString stringWithString:initials], @"initials",
+//                                                         [NSString stringWithString:currentRegional], @"regional",
+//                                                            nil] forKey:currentMatchNum];
+//        }
+//        else if ([pos isEqualToString:@"Blue 2"]){
+//            [[[dataDict objectForKey:@"Blue2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+//                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+//                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+//                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+//                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+//                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+//                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+//                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
+//                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
+//                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+//                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
+//                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+//                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
+//                                                         [NSString stringWithString:initials], @"initials",
+//                                                         [NSString stringWithString:currentRegional], @"regional",
+//                                                            nil] forKey:currentMatchNum];
+//        }
+//        else if ([pos isEqualToString:@"Blue 3"]){
+//            [[[dataDict objectForKey:@"Blue3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+//                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
+//                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+//                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
+//                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+//                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
+//                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+//                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
+//                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
+//                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
+//                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
+//                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
+//                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
+//                                                         [NSString stringWithString:initials], @"initials",
+//                                                         [NSString stringWithString:currentRegional], @"regional",
+//                                                            nil] forKey:currentMatchNum];
+//        }
       //NSLog(@"%@", dataDict);
         [self overWriteMatch];
     }
