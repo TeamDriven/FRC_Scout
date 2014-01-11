@@ -11,6 +11,7 @@
 @interface PeerCell : UITableViewCell
 
 @property(nonatomic, strong)UILabel *peerLbl;
+@property(nonatomic, strong)UILabel *connectedLbl;
 @property(nonatomic, retain)NSString *uniqueID;
 
 @end
