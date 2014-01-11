@@ -104,6 +104,8 @@ MCPeerID *myPeerID;
 MCNearbyServiceAdvertiser *advertiser;
 MCNearbyServiceBrowser *browser;
 MCSession *mySession;
+NSMutableArray *connectedPeersAry;
+NSArray *alreadyConnectedArray;
 UIAlertView *inviteAlert;
 NSTimer *closeReenabler;
 PeerCell *lastSelectedCell;
@@ -183,6 +185,7 @@ NSDictionary *duplicateMatchDict;
     pos = nil;
     NSDate *date = [NSDate date];
     myUniqueID = [[NSString alloc] initWithFormat:@"%ld", (long)[date timeIntervalSince1970]];
+    connectedPeersAry = [[NSMutableArray alloc] init];
     
     autoYN = true;
     
@@ -572,11 +575,18 @@ NSDictionary *duplicateMatchDict;
         join = false;
         myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
         NSLog(@"My Peer ID: %@", myPeerID.displayName);
-        mySession = [[MCSession alloc] initWithPeer:myPeerID];
-        mySession.delegate = self;
+        if (!mySession) {
+            mySession = [[MCSession alloc] initWithPeer:myPeerID];
+            mySession.delegate = self;
+        }
         [joinSwitch setOn:false animated:YES];
         doneButton.enabled = true;
-        advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:@{@"Name": myUniqueID} serviceType:@"FRCSCOUT"];
+        NSMutableString *discoveryInfoString = [[NSMutableString alloc] initWithString:[[NSString alloc] initWithFormat:@"%@:", myUniqueID]];
+        for (NSString *s in connectedPeersAry) {
+            discoveryInfoString = [[NSMutableString alloc] initWithFormat:@"%@%@,", discoveryInfoString, s];
+        }
+        [discoveryInfoString deleteCharactersInRange:NSMakeRange([discoveryInfoString length] - 1, 1)];
+        advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:@{@"DiscoveryString" : discoveryInfoString} serviceType:@"FRCSCOUT"];
         advertiser.delegate = self;
         [advertiser startAdvertisingPeer];
         [self joinSwitch];
@@ -595,8 +605,10 @@ NSDictionary *duplicateMatchDict;
         host = false;
         myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
         NSLog(@"My Peer ID: %@", myPeerID.displayName);
-        mySession = [[MCSession alloc] initWithPeer:myPeerID];
-        mySession.delegate = self;
+        if (!mySession) {
+            mySession = [[MCSession alloc] initWithPeer:myPeerID];
+            mySession.delegate = self;
+        }
         [hostSwitch setOn:false animated:YES];
         doneButton.enabled = false;
         hostTable.userInteractionEnabled = true;
@@ -824,9 +836,11 @@ NSDictionary *duplicateMatchDict;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;    //count of section
 }
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [peersArray count];
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *cellIdentifier = @"peerCellID";
     
@@ -849,15 +863,26 @@ NSDictionary *duplicateMatchDict;
         cell.userInteractionEnabled = false;
         doneButton.enabled = true;
     }
+    if ([alreadyConnectedArray containsObject:myPeerID.displayName]) {
+        cell.alreadyConnectedLbl.text = [[NSString alloc] initWithFormat:@"Already has a %@", myPeerID.displayName];
+        cell.alreadyConnectedLbl.alpha = 1;
+        cell.userInteractionEnabled = false;
+    }
+    else{
+        cell.alreadyConnectedLbl.alpha = 0;
+        cell.userInteractionEnabled = true;
+    }
     
     
     return cell;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     return 80;
     
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     closeButton.enabled = false;
@@ -887,7 +912,12 @@ NSDictionary *duplicateMatchDict;
  *****************************************/
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info{
     NSLog(@"Found peer %@", peerID.displayName);
-    if (![[info objectForKey:@"Name"] isEqualToString:myUniqueID]) {
+    NSString *infoString = [[NSString alloc] initWithString:[info objectForKey:@"DiscoveryString"]];
+    NSLog(@"INFO STRING: %@", infoString);
+    NSString *uniqueIDString = [[infoString componentsSeparatedByString:@":"] firstObject];
+    alreadyConnectedArray = [[[infoString componentsSeparatedByString:@":"] lastObject] componentsSeparatedByString:@","];
+    
+    if (![uniqueIDString isEqualToString:myUniqueID]) {
         NSLog(@"Not my Unique ID");
         if ([hostTable numberOfRowsInSection:0] == 0) {
             safe = true;
@@ -899,18 +929,19 @@ NSDictionary *duplicateMatchDict;
                 safe = true;
             }
         }
-        if (safe) {
-            NSLog(@"safe loop");
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                [peersArray addObject:peerID];
-                NSIndexPath *myIndex = [NSIndexPath indexPathForRow:[peersArray count]-1 inSection:0];
-                lastSelectedName = [info objectForKey:@"Name"];
-                [hostTable insertRowsAtIndexPaths:@[myIndex] withRowAnimation:UITableViewRowAnimationRight];
-                safe = false;
-            });
-        }
+    }
+    if (safe) {
+        NSLog(@"safe loop");
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [peersArray addObject:peerID];
+            NSIndexPath *myIndex = [NSIndexPath indexPathForRow:[peersArray count]-1 inSection:0];
+            lastSelectedName = uniqueIDString;
+            [hostTable insertRowsAtIndexPaths:@[myIndex] withRowAnimation:UITableViewRowAnimationRight];
+            safe = false;
+        });
     }
 }
+
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID{
     for (long i = [hostTable numberOfRowsInSection:0]-1; i > -1; i--) {
         PeerCell *checkCell = (PeerCell *)[hostTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
@@ -928,6 +959,7 @@ NSDictionary *duplicateMatchDict;
     }
     
 }
+
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *mySession))invitationHandler{
     NSLog(@"Received invite from %@", peerID.displayName);
     [UIAlertView showWithTitle:[[NSString alloc] initWithFormat:@"%@ Wants To Join!", peerID.displayName] message:@"Do you accept?" cancelButtonTitle:@"No Way!" otherButtonTitles:@[@"Sure!"] completion:^(UIAlertView *inviteAlert, NSInteger buttonIndex){
@@ -935,15 +967,18 @@ NSDictionary *duplicateMatchDict;
         invitationHandler(accept, mySession);
     }];
 }
+
 -(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
     NSLog(@"BrowserViewControllerDidFinish");
 }
 -(void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
     NSLog(@"BrowserViewControllerWasCancelled");
 }
+
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
     
 }
+
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
     NSLog(@"Received Data with length of: %ld", (long)[data length]);
     NSDictionary *receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -979,12 +1014,15 @@ NSDictionary *duplicateMatchDict;
         }];
     }];
 }
+
 -(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
     
 }
+
 -(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
     
 }
+
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
     if (state == MCSessionStateConnected) {
         NSLog(@"Woohooo!!! It worked!!!");
@@ -994,6 +1032,19 @@ NSDictionary *duplicateMatchDict;
             UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Wahooo!!!" message:[[NSString alloc] initWithFormat:@"You connected to %@! Feel free to scout like normal and they will get your matches as you save them!", peerID.displayName] delegate:nil cancelButtonTitle:@"Awesometastic" otherButtonTitles:nil];
             [connectedAlert show];
             lastSelectedCell.connectedLbl.alpha = 1;
+            [connectedPeersAry addObject:peerID.displayName];
+            if (host) {
+                [advertiser stopAdvertisingPeer];
+                advertiser = nil;
+                NSMutableString *discoveryInfoString = [[NSMutableString alloc] initWithString:[[NSString alloc] initWithFormat:@"%@:", myUniqueID]];
+                for (NSString *s in connectedPeersAry) {
+                    discoveryInfoString = [[NSMutableString alloc] initWithFormat:@"%@%@,", discoveryInfoString, s];
+                }
+                [discoveryInfoString deleteCharactersInRange:NSMakeRange([discoveryInfoString length] - 1, 1)];
+                advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:@{@"DiscoveryString" : discoveryInfoString} serviceType:@"FRCSCOUT"];
+                advertiser.delegate = self;
+                [advertiser startAdvertisingPeer];
+            }
         });
     }
     else if (state == MCSessionStateNotConnected){
@@ -1003,10 +1054,25 @@ NSDictionary *duplicateMatchDict;
             [connectedAlert show];
             for (long i = [hostTable numberOfRowsInSection:0]-1; i > -1; i--) {
                 PeerCell *checkCell = (PeerCell *)[hostTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
+                NSLog(@"In da for loop");
                 if ([peerID.displayName isEqualToString:checkCell.peerLbl.text]) {
                     [peersArray removeObjectAtIndex:[hostTable indexPathForCell:checkCell].row];
                     [hostTable deleteRowsAtIndexPaths:@[[hostTable indexPathForCell:checkCell]] withRowAnimation:UITableViewRowAnimationLeft];
                     lastSelectedCell = nil;
+                    [connectedPeersAry removeObject:peerID.displayName];
+                    NSLog(@"CONNECTED PEERS ARRAY: %@", connectedPeersAry);
+                    if (host) {
+                        [advertiser stopAdvertisingPeer];
+                        advertiser = nil;
+                        NSMutableString *discoveryInfoString = [[NSMutableString alloc] initWithString:[[NSString alloc] initWithFormat:@"%@:", myUniqueID]];
+                        for (NSString *s in connectedPeersAry) {
+                            discoveryInfoString = [[NSMutableString alloc] initWithFormat:@"%@%@,", discoveryInfoString, s];
+                        }
+                        [discoveryInfoString deleteCharactersInRange:NSMakeRange([discoveryInfoString length] - 1, 1)];
+                        advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:@{@"DiscoveryString" : discoveryInfoString} serviceType:@"FRCSCOUT"];
+                        advertiser.delegate = self;
+                        [advertiser startAdvertisingPeer];
+                    }
                 }
             }
             
@@ -1014,6 +1080,7 @@ NSDictionary *duplicateMatchDict;
         });
     }
 }
+
 -(void)setUpData{
     dictToSend = nil;
     dictToSend = [[NSMutableDictionary alloc] init];

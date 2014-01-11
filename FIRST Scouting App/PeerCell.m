@@ -28,6 +28,12 @@
         self.connectedLbl.textColor = [UIColor greenColor];
         [self addSubview:self.connectedLbl];
         
+        self.alreadyConnectedLbl = [[UILabel alloc] initWithFrame:CGRectMake(15, 30, 120, 20)];
+        self.alreadyConnectedLbl.textAlignment = NSTextAlignmentLeft;
+        self.alreadyConnectedLbl.font = [UIFont systemFontOfSize:12];
+        self.alreadyConnectedLbl.textColor = [UIColor redColor];
+        self.alreadyConnectedLbl.alpha = 0;
+        [self addSubview:self.alreadyConnectedLbl];
         
     }
     return self;
