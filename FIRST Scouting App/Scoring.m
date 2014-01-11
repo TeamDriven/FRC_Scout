@@ -597,6 +597,7 @@ NSDictionary *duplicateMatchDict;
         [advertiser stopAdvertisingPeer];
         [mySession disconnect];
         advertiser = nil;
+        [connectedPeersAry removeAllObjects];
     }
 }
 -(void)joinSwitch{
@@ -634,6 +635,7 @@ NSDictionary *duplicateMatchDict;
         [mySession disconnect];
         lastSelectedCell = nil;
         browser = nil;
+        [connectedPeersAry removeAllObjects];
     }
 }
 -(void)closeShareView{
@@ -924,7 +926,7 @@ NSDictionary *duplicateMatchDict;
         }
         for (long i = [hostTable numberOfRowsInSection:0]-1; i > -1; i--) {
             PeerCell *checkCell = (PeerCell *)[hostTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
-            if (![checkCell.uniqueID isEqualToString:[info objectForKey:@"Name"]]) {
+            if (![checkCell.uniqueID isEqualToString:uniqueIDString]) {
                 NSLog(@"Safe");
                 safe = true;
             }
@@ -1050,8 +1052,8 @@ NSDictionary *duplicateMatchDict;
     else if (state == MCSessionStateNotConnected){
         NSLog(@"Somehow Disconnected");
         dispatch_async(dispatch_get_main_queue(), ^(void){
-            UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!" message:[[NSString alloc] initWithFormat:@"The connection to %@ is broken!", peerID.displayName] delegate:nil cancelButtonTitle:@"Oh snap." otherButtonTitles:nil];
-            [connectedAlert show];
+//            UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!" message:[[NSString alloc] initWithFormat:@"The connection to %@ is broken!", peerID.displayName] delegate:nil cancelButtonTitle:@"Oh snap." otherButtonTitles:nil];
+//            [connectedAlert show];
             for (long i = [hostTable numberOfRowsInSection:0]-1; i > -1; i--) {
                 PeerCell *checkCell = (PeerCell *)[hostTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
                 NSLog(@"In da for loop");
