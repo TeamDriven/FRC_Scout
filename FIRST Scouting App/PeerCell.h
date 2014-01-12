@@ -14,5 +14,6 @@
 @property(nonatomic, strong)UILabel *peerLbl;
 @property(nonatomic, strong)UILabel *connectedLbl;
 @property(nonatomic, retain)NSString *uniqueID;
+@property(nonatomic, retain)NSArray *peersConnected;
 
 @end

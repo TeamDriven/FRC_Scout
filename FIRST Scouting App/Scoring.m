@@ -93,19 +93,20 @@ UIButton *closeButton;
 UILabel *hostSwitchLbl;
 UISwitch *hostSwitch;
 bool host;
-UILabel *joinSwitchLbl;
-UISwitch *joinSwitch;
-bool join;
-UITableView *hostTable;
-UILabel *hostTableLbl;
+UILabel *visibleSwitchLbl;
+UISwitch *visibleSwitch;
+bool visible;
+UITableView *visibleTable;
+UILabel *visibleTableLbl;
 UIButton *doneButton;
+UIAlertView *inviteAlert;
+MCPeerID *inviterPeerID;
+NSArray *arrayInvitationHandler;
 NSMutableArray *peersArray;
 MCPeerID *myPeerID;
 MCNearbyServiceAdvertiser *advertiser;
 MCNearbyServiceBrowser *browser;
 MCSession *mySession;
-NSMutableArray *connectedPeersAry;
-NSArray *alreadyConnectedArray;
 UIAlertView *inviteAlert;
 NSTimer *closeReenabler;
 PeerCell *lastSelectedCell;
@@ -185,7 +186,6 @@ NSDictionary *duplicateMatchDict;
     pos = nil;
     NSDate *date = [NSDate date];
     myUniqueID = [[NSString alloc] initWithFormat:@"%ld", (long)[date timeIntervalSince1970]];
-    connectedPeersAry = [[NSMutableArray alloc] init];
     
     autoYN = true;
     
@@ -214,7 +214,7 @@ NSDictionary *duplicateMatchDict;
     currentMatchType = @"Q";
     
     host = false;
-    join = false;
+    visible = false;
     
     _teleopHighMinusBtn.alpha = 0;
     _teleopHighMinusBtn.enabled = false;
@@ -479,47 +479,47 @@ NSDictionary *duplicateMatchDict;
     [shareScreen addSubview:hostSwitch];
     [hostSwitch setOn:host animated:YES];
     
-    CGRect joinSwitchLblRect = CGRectMake(275, 45, 50, 15);
-    joinSwitchLbl = [[UILabel alloc] initWithFrame:joinSwitchLblRect];
-    joinSwitchLbl.text = @"Join";
-    joinSwitchLbl.textAlignment = NSTextAlignmentCenter;
-    joinSwitchLbl.font = [UIFont systemFontOfSize:12];
-    [shareScreen addSubview:joinSwitchLbl];
+    CGRect visibleSwitchLblRect = CGRectMake(275, 45, 50, 15);
+    visibleSwitchLbl = [[UILabel alloc] initWithFrame:visibleSwitchLblRect];
+    visibleSwitchLbl.text = @"Visible";
+    visibleSwitchLbl.textAlignment = NSTextAlignmentCenter;
+    visibleSwitchLbl.font = [UIFont systemFontOfSize:12];
+    [shareScreen addSubview:visibleSwitchLbl];
     
-    CGRect joinSwitchRect = CGRectMake(275, 60, 50, 30);
-    joinSwitch = [[UISwitch alloc] initWithFrame:joinSwitchRect];
-    [joinSwitch addTarget:self action:@selector(joinSwitch) forControlEvents:UIControlEventValueChanged];
-    [shareScreen addSubview:joinSwitch];
-    [joinSwitch setOn:join animated:YES];
+    CGRect visibleSwitchRect = CGRectMake(275, 60, 50, 30);
+    visibleSwitch = [[UISwitch alloc] initWithFrame:visibleSwitchRect];
+    [visibleSwitch addTarget:self action:@selector(visibleSwitch) forControlEvents:UIControlEventValueChanged];
+    [shareScreen addSubview:visibleSwitch];
+    [visibleSwitch setOn:visible animated:YES];
     
-    CGRect hostTableLblRect = CGRectMake(150, 110, 100, 15);
-    hostTableLbl = [[UILabel alloc] initWithFrame:hostTableLblRect];
-    hostTableLbl.text = @"Select a Host";
-    hostTableLbl.textAlignment = NSTextAlignmentCenter;
-    hostTableLbl.font = [UIFont systemFontOfSize:12];
-    [shareScreen addSubview:hostTableLbl];
-    hostTableLbl.enabled = join;
+    CGRect visibleTableLblRect = CGRectMake(100, 110, 200, 15);
+    visibleTableLbl = [[UILabel alloc] initWithFrame:visibleTableLblRect];
+    visibleTableLbl.text = @"Who's in Range to Invite";
+    visibleTableLbl.textAlignment = NSTextAlignmentCenter;
+    visibleTableLbl.font = [UIFont systemFontOfSize:12];
+    [shareScreen addSubview:visibleTableLbl];
+    visibleTableLbl.enabled = visible;
     
-    CGRect hostTableRect = CGRectMake(10, 130, 380, 300);
-    hostTable = [[UITableView alloc] initWithFrame:hostTableRect style:UITableViewStylePlain];
-    hostTable.layer.cornerRadius = 5;
-    hostTable.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.3];
-    [hostTable setScrollEnabled:YES];
-    hostTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    [hostTable setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-    hostTable.rowHeight = 80;
-    [shareScreen addSubview:hostTable];
-    hostTable.delegate = self;
-    hostTable.dataSource = self;
-    hostTable.userInteractionEnabled = join;
-    hostTable.layer.borderWidth = 1;
-    hostTable.layer.borderColor = [[UIColor colorWithWhite:0.7 alpha:0.3] CGColor];
-    if (join) {
-        hostTable.alpha = 1;
-        [hostTable reloadData];
+    CGRect visibleTableRect = CGRectMake(10, 130, 380, 300);
+    visibleTable = [[UITableView alloc] initWithFrame:visibleTableRect style:UITableViewStylePlain];
+    visibleTable.layer.cornerRadius = 5;
+    visibleTable.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.3];
+    [visibleTable setScrollEnabled:YES];
+    visibleTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    [visibleTable setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+    visibleTable.rowHeight = 80;
+    [shareScreen addSubview:visibleTable];
+    visibleTable.delegate = self;
+    visibleTable.dataSource = self;
+    visibleTable.userInteractionEnabled = visible;
+    visibleTable.layer.borderWidth = 1;
+    visibleTable.layer.borderColor = [[UIColor colorWithWhite:0.7 alpha:0.3] CGColor];
+    if (visible) {
+        visibleTable.alpha = 1;
+        [visibleTable reloadData];
     }
     else{
-        hostTable.alpha = 0.5;
+        visibleTable.alpha = 0.5;
     }
     
     
@@ -539,11 +539,11 @@ NSDictionary *duplicateMatchDict;
     hostSwitchLbl.hidden = true;
     hostSwitch.hidden = true;
     hostSwitch.enabled = false;
-    joinSwitchLbl.hidden = true;
-    joinSwitch.hidden = true;
-    joinSwitch.enabled = false;
-    hostTableLbl.hidden = true;
-    hostTable.hidden = true;
+    visibleSwitchLbl.hidden = true;
+    visibleSwitch.hidden = true;
+    visibleSwitch.enabled = false;
+    visibleTableLbl.hidden = true;
+    visibleTable.hidden = true;
     doneButton.hidden = true;
     doneButton.enabled = false;
     shareScreen.frame = CGRectMake(0, 0, 1, 1);
@@ -559,11 +559,11 @@ NSDictionary *duplicateMatchDict;
                          hostSwitchLbl.hidden = false;
                          hostSwitch.hidden = false;
                          hostSwitch.enabled = true;
-                         joinSwitchLbl.hidden = false;
-                         joinSwitch.hidden = false;
-                         joinSwitch.enabled = true;
-                         hostTableLbl.hidden = false;
-                         hostTable.hidden = false;
+                         visibleSwitchLbl.hidden = false;
+                         visibleSwitch.hidden = false;
+                         visibleSwitch.enabled = true;
+                         visibleTableLbl.hidden = false;
+                         visibleTable.hidden = false;
                          doneButton.hidden = false;
                          doneButton.enabled = host;
                      }];
@@ -572,70 +572,64 @@ NSDictionary *duplicateMatchDict;
 -(void)hostSwitch{
     if (hostSwitch.on) {
         host = true;
-        join = false;
+        visible = false;
         myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
         NSLog(@"My Peer ID: %@", myPeerID.displayName);
         if (!mySession) {
             mySession = [[MCSession alloc] initWithPeer:myPeerID];
             mySession.delegate = self;
         }
-        [joinSwitch setOn:false animated:YES];
+        [visibleSwitch setOn:false animated:YES];
         doneButton.enabled = true;
-        NSMutableString *discoveryInfoString = [[NSMutableString alloc] initWithString:[[NSString alloc] initWithFormat:@"%@:", myUniqueID]];
-        for (NSString *s in connectedPeersAry) {
-            discoveryInfoString = [[NSMutableString alloc] initWithFormat:@"%@%@,", discoveryInfoString, s];
-        }
-        [discoveryInfoString deleteCharactersInRange:NSMakeRange([discoveryInfoString length] - 1, 1)];
-        advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:@{@"DiscoveryString" : discoveryInfoString} serviceType:@"FRCSCOUT"];
-        advertiser.delegate = self;
-        [advertiser startAdvertisingPeer];
-        [self joinSwitch];
-    }
-    else{
-        host = false;
-        doneButton.enabled = false;
-        [advertiser stopAdvertisingPeer];
-        [mySession disconnect];
-        advertiser = nil;
-        [connectedPeersAry removeAllObjects];
-    }
-}
--(void)joinSwitch{
-    if (joinSwitch.on) {
-        join = true;
-        host = false;
-        myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
-        NSLog(@"My Peer ID: %@", myPeerID.displayName);
-        if (!mySession) {
-            mySession = [[MCSession alloc] initWithPeer:myPeerID];
-            mySession.delegate = self;
-        }
-        [hostSwitch setOn:false animated:YES];
-        doneButton.enabled = false;
-        hostTable.userInteractionEnabled = true;
-        hostTable.alpha = 1;
-        hostTableLbl.enabled = true;
-        [hostTable reloadData];
+        visibleTable.userInteractionEnabled = true;
+        visibleTable.alpha = 1;
+        visibleTableLbl.enabled = true;
+        [visibleTable reloadData];
         browser = [[MCNearbyServiceBrowser alloc] initWithPeer:myPeerID serviceType:@"FRCSCOUT"];
         browser.delegate = self;
         [browser startBrowsingForPeers];
+        [self visibleSwitch];
+    }
+    else{
+        host = false;
+        visibleTable.userInteractionEnabled = false;
+        visibleTable.alpha = 0.5;
+        visibleTableLbl.enabled = false;
+        for (long i = [visibleTable numberOfRowsInSection:0]-1; i > -1; i--) {
+            [peersArray removeLastObject];
+            NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+            [visibleTable deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationLeft];
+        }
+        doneButton.enabled = false;
+        [browser stopBrowsingForPeers];
+        lastSelectedCell = nil;
+        if (!visibleSwitch.on) {
+            [mySession disconnect];
+        }
+    }
+}
+-(void)visibleSwitch{
+    if (visibleSwitch.on) {
+        visible = true;
+        host = false;
+        myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
+        [hostSwitch setOn:false animated:YES];
+        doneButton.enabled = false;
+        advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:@{@"DiscoveryString" : myUniqueID} serviceType:@"FRCSCOUT"];
+        advertiser.delegate = self;
+        [advertiser startAdvertisingPeer];
+        if (!mySession) {
+            mySession = [[MCSession alloc] initWithPeer:myPeerID];
+            mySession.delegate = self;
+        }
         [self hostSwitch];
     }
     else{
-        join = false;
-        hostTable.userInteractionEnabled = false;
-        hostTable.alpha = 0.5;
-        hostTableLbl.enabled = false;
-        for (long i = [hostTable numberOfRowsInSection:0]-1; i > -1; i--) {
-            [peersArray removeLastObject];
-            NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
-            [hostTable deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationLeft];
+        visible = false;
+        [advertiser stopAdvertisingPeer];
+        if (!hostSwitch.on) {
+            [mySession disconnect];
         }
-        [browser stopBrowsingForPeers];
-        [mySession disconnect];
-        lastSelectedCell = nil;
-        browser = nil;
-        [connectedPeersAry removeAllObjects];
     }
 }
 -(void)closeShareView{
@@ -645,11 +639,11 @@ NSDictionary *duplicateMatchDict;
     hostSwitchLbl.hidden = true;
     hostSwitch.hidden = true;
     hostSwitch.enabled = false;
-    joinSwitchLbl.hidden = true;
-    joinSwitch.hidden = true;
-    joinSwitch.enabled = false;
-    hostTableLbl.hidden = true;
-    hostTable.hidden = true;
+    visibleSwitchLbl.hidden = true;
+    visibleSwitch.hidden = true;
+    visibleSwitch.enabled = false;
+    visibleTableLbl.hidden = true;
+    visibleTable.hidden = true;
     doneButton.hidden = true;
     doneButton.enabled = false;
     [greyOut addSubview:shareScreen];
@@ -853,26 +847,32 @@ NSDictionary *duplicateMatchDict;
         cell = [[PeerCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:cellIdentifier];
         cell.uniqueID = [[NSString alloc] initWithString:lastSelectedName];
+        NSLog(@"Unique ID: %@", cell.uniqueID);
     }
+    NSString *smallString;
+    if ([myPeerID.displayName isEqualToString:@"Red 1"]) {smallString = @"0";}
+    else if ([myPeerID.displayName isEqualToString:@"Red 2"]){smallString = @"1";}
+    else if ([myPeerID.displayName isEqualToString:@"Red 3"]){smallString = @"2";}
+    else if ([myPeerID.displayName isEqualToString:@"Blue 1"]){smallString = @"3";}
+    else if ([myPeerID.displayName isEqualToString:@"Blue 2"]){smallString = @"4";}
+    else if ([myPeerID.displayName isEqualToString:@"Blue 3"]){smallString = @"5";}
     
     cell.peerLbl.text = [[peersArray objectAtIndex:indexPath.row] displayName];
     cell.connectedLbl.alpha = 0;
     cell.userInteractionEnabled = true;
     doneButton.enabled = false;
+    cell.alreadyConnectedLbl.alpha = 0;
+    cell.userInteractionEnabled = true;
     if ([lastSelectedCell.uniqueID isEqualToString:cell.uniqueID]) {
         NSLog(@"UniqueID of last selected cell: %@", lastSelectedCell.uniqueID);
         cell.connectedLbl.alpha = 1;
         cell.userInteractionEnabled = false;
         doneButton.enabled = true;
     }
-    if ([alreadyConnectedArray containsObject:myPeerID.displayName]) {
+    else if ([cell.peersConnected containsObject:smallString]) {
         cell.alreadyConnectedLbl.text = [[NSString alloc] initWithFormat:@"Already has a %@", myPeerID.displayName];
         cell.alreadyConnectedLbl.alpha = 1;
         cell.userInteractionEnabled = false;
-    }
-    else{
-        cell.alreadyConnectedLbl.alpha = 0;
-        cell.userInteractionEnabled = true;
     }
     
     
@@ -889,21 +889,11 @@ NSDictionary *duplicateMatchDict;
     
     closeButton.enabled = false;
     
-    if (lastSelectedCell) {
-        lastSelectedCell.userInteractionEnabled = true;
-        lastSelectedCell.connectedLbl.alpha = 0;
-        [mySession disconnect];
-        mySession = nil;
-        
-        mySession = [[MCSession alloc] initWithPeer:myPeerID];
-        mySession.delegate = self;
-    }
     
-    [hostTable deselectRowAtIndexPath:indexPath animated:YES];
-    PeerCell *selectedCell = (PeerCell *)[hostTable cellForRowAtIndexPath:indexPath];
+    [visibleTable deselectRowAtIndexPath:indexPath animated:YES];
+    PeerCell *selectedCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:indexPath];
     selectedCell.userInteractionEnabled = false;
-    
-    lastSelectedCell = selectedCell;
+    lastSelectedCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:indexPath];
     
     [browser invitePeer:[peersArray objectAtIndex:indexPath.row] toSession:mySession withContext:nil timeout:15];
 }
@@ -914,21 +904,19 @@ NSDictionary *duplicateMatchDict;
  *****************************************/
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info{
     NSLog(@"Found peer %@", peerID.displayName);
-    NSString *infoString = [[NSString alloc] initWithString:[info objectForKey:@"DiscoveryString"]];
-    NSLog(@"INFO STRING: %@", infoString);
-    NSString *uniqueIDString = [[infoString componentsSeparatedByString:@":"] firstObject];
-    alreadyConnectedArray = [[[infoString componentsSeparatedByString:@":"] lastObject] componentsSeparatedByString:@","];
-    
+    NSString *uniqueIDString = [[NSString alloc] initWithString:[info objectForKey:@"DiscoveryString"]];
     if (![uniqueIDString isEqualToString:myUniqueID]) {
         NSLog(@"Not my Unique ID");
-        if ([hostTable numberOfRowsInSection:0] == 0) {
+        if ([visibleTable numberOfRowsInSection:0] == 0) {
             safe = true;
         }
-        for (long i = [hostTable numberOfRowsInSection:0]-1; i > -1; i--) {
-            PeerCell *checkCell = (PeerCell *)[hostTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
-            if (![checkCell.uniqueID isEqualToString:uniqueIDString]) {
-                NSLog(@"Safe");
-                safe = true;
+        else{
+            for (long i = [visibleTable numberOfRowsInSection:0]-1; i > -1; i--) {
+                PeerCell *checkCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
+                if (![checkCell.uniqueID isEqualToString:uniqueIDString]) {
+                    NSLog(@"Safe");
+                    safe = true;
+                }
             }
         }
     }
@@ -938,22 +926,22 @@ NSDictionary *duplicateMatchDict;
             [peersArray addObject:peerID];
             NSIndexPath *myIndex = [NSIndexPath indexPathForRow:[peersArray count]-1 inSection:0];
             lastSelectedName = uniqueIDString;
-            [hostTable insertRowsAtIndexPaths:@[myIndex] withRowAnimation:UITableViewRowAnimationRight];
+            [visibleTable insertRowsAtIndexPaths:@[myIndex] withRowAnimation:UITableViewRowAnimationRight];
             safe = false;
         });
     }
 }
 
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID{
-    for (long i = [hostTable numberOfRowsInSection:0]-1; i > -1; i--) {
-        PeerCell *checkCell = (PeerCell *)[hostTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
+    for (long i = [visibleTable numberOfRowsInSection:0]-1; i > -1; i--) {
+        PeerCell *checkCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
         if ([peerID.displayName isEqualToString:checkCell.peerLbl.text]) {
             NSLog(@"lostPeer");
             if (!safe) {
                 NSLog(@"Not Safe");
                 dispatch_async(dispatch_get_main_queue(), ^(void){
-                    [peersArray removeObjectAtIndex:[hostTable indexPathForCell:checkCell].row];
-                    [hostTable deleteRowsAtIndexPaths:@[[hostTable indexPathForCell:checkCell]] withRowAnimation:UITableViewRowAnimationLeft];
+                    [peersArray removeObjectAtIndex:[visibleTable indexPathForCell:checkCell].row];
+                    [visibleTable deleteRowsAtIndexPaths:@[[visibleTable indexPathForCell:checkCell]] withRowAnimation:UITableViewRowAnimationLeft];
                     lastSelectedCell = nil;
                 });
             }
@@ -962,12 +950,31 @@ NSDictionary *duplicateMatchDict;
     
 }
 
--(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *mySession))invitationHandler{
+-(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL accept, MCSession *session))invitationHandler{
     NSLog(@"Received invite from %@", peerID.displayName);
-    [UIAlertView showWithTitle:[[NSString alloc] initWithFormat:@"%@ Wants To Join!", peerID.displayName] message:@"Do you accept?" cancelButtonTitle:@"No Way!" otherButtonTitles:@[@"Sure!"] completion:^(UIAlertView *inviteAlert, NSInteger buttonIndex){
+    
+    [UIAlertView showWithTitle:[[NSString alloc] initWithFormat:@"%@ Invites you to their group!", peerID.displayName] message:@"Do you accept?" cancelButtonTitle:@"No Way!" otherButtonTitles:@[@"Sure!"] completion:^(UIAlertView *inviteAlert, NSInteger buttonIndex){
         BOOL accept = (buttonIndex != inviteAlert.cancelButtonIndex) ? YES : NO;
         invitationHandler(accept, mySession);
     }];
+    
+//    -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *mySession))invitationHandler{
+//        NSLog(@"Received invite from %@", peerID.displayName);
+//        [UIAlertView showWithTitle:[[NSString alloc] initWithFormat:@"%@ Wants To Join!", peerID.displayName] message:@"Do you accept?" cancelButtonTitle:@"No Way!" otherButtonTitles:@[@"Sure!"] completion:^(UIAlertView *inviteAlert, NSInteger buttonIndex){
+//            BOOL accept = (buttonIndex != inviteAlert.cancelButtonIndex) ? YES : NO;
+//            invitationHandler(accept, mySession);
+//        }];
+//    }
+    
+//    invitationHandler(YES, mySession);
+    
+//    inviterPeerID = [MCPeerID alloc];
+//    inviterPeerID = peerID;
+//    arrayInvitationHandler = [NSArray arrayWithObject:[invitationHandler copy]];
+//    
+//    inviteAlert = [[UIAlertView alloc] initWithTitle:[[NSString alloc] initWithFormat:@"%@ invites you to their group!", peerID.displayName] message:@"Do you accept?" delegate:self cancelButtonTitle:@"No Way!" otherButtonTitles:@"Sure!", nil];
+//    [inviteAlert show];
+    
 }
 
 -(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
@@ -1028,58 +1035,28 @@ NSDictionary *duplicateMatchDict;
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
     if (state == MCSessionStateConnected) {
         NSLog(@"Woohooo!!! It worked!!!");
+        if (visible) {
+            [advertiser stopAdvertisingPeer];
+        }
         dispatch_async(dispatch_get_main_queue(), ^(void){
             doneButton.enabled = true;
             closeButton.enabled = true;
             UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Wahooo!!!" message:[[NSString alloc] initWithFormat:@"You connected to %@! Feel free to scout like normal and they will get your matches as you save them!", peerID.displayName] delegate:nil cancelButtonTitle:@"Awesometastic" otherButtonTitles:nil];
             [connectedAlert show];
             lastSelectedCell.connectedLbl.alpha = 1;
-            [connectedPeersAry addObject:peerID.displayName];
-            if (host) {
-                [advertiser stopAdvertisingPeer];
-                advertiser = nil;
-                NSMutableString *discoveryInfoString = [[NSMutableString alloc] initWithString:[[NSString alloc] initWithFormat:@"%@:", myUniqueID]];
-                for (NSString *s in connectedPeersAry) {
-                    discoveryInfoString = [[NSMutableString alloc] initWithFormat:@"%@%@,", discoveryInfoString, s];
-                }
-                [discoveryInfoString deleteCharactersInRange:NSMakeRange([discoveryInfoString length] - 1, 1)];
-                advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:@{@"DiscoveryString" : discoveryInfoString} serviceType:@"FRCSCOUT"];
-                advertiser.delegate = self;
-                [advertiser startAdvertisingPeer];
-            }
         });
     }
     else if (state == MCSessionStateNotConnected){
         NSLog(@"Somehow Disconnected");
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-//            UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!" message:[[NSString alloc] initWithFormat:@"The connection to %@ is broken!", peerID.displayName] delegate:nil cancelButtonTitle:@"Oh snap." otherButtonTitles:nil];
-//            [connectedAlert show];
-            for (long i = [hostTable numberOfRowsInSection:0]-1; i > -1; i--) {
-                PeerCell *checkCell = (PeerCell *)[hostTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
-                NSLog(@"In da for loop");
-                if ([peerID.displayName isEqualToString:checkCell.peerLbl.text]) {
-                    [peersArray removeObjectAtIndex:[hostTable indexPathForCell:checkCell].row];
-                    [hostTable deleteRowsAtIndexPaths:@[[hostTable indexPathForCell:checkCell]] withRowAnimation:UITableViewRowAnimationLeft];
-                    lastSelectedCell = nil;
-                    [connectedPeersAry removeObject:peerID.displayName];
-                    NSLog(@"CONNECTED PEERS ARRAY: %@", connectedPeersAry);
-                    if (host) {
-                        [advertiser stopAdvertisingPeer];
-                        advertiser = nil;
-                        NSMutableString *discoveryInfoString = [[NSMutableString alloc] initWithString:[[NSString alloc] initWithFormat:@"%@:", myUniqueID]];
-                        for (NSString *s in connectedPeersAry) {
-                            discoveryInfoString = [[NSMutableString alloc] initWithFormat:@"%@%@,", discoveryInfoString, s];
-                        }
-                        [discoveryInfoString deleteCharactersInRange:NSMakeRange([discoveryInfoString length] - 1, 1)];
-                        advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:@{@"DiscoveryString" : discoveryInfoString} serviceType:@"FRCSCOUT"];
-                        advertiser.delegate = self;
-                        [advertiser startAdvertisingPeer];
-                    }
-                }
-            }
-            
-            closeButton.enabled = true;
-        });
+        if (visible) {
+            [advertiser startAdvertisingPeer];
+            dispatch_async(dispatch_get_main_queue(), ^(void){
+                UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!" message:[[NSString alloc] initWithFormat:@"The connection to %@ is broken!", peerID.displayName] delegate:nil cancelButtonTitle:@"Oh snap." otherButtonTitles:nil];
+                [connectedAlert show];
+            });
+        }
+        
+        closeButton.enabled = true;
     }
 }
 
@@ -1575,184 +1552,6 @@ NSDictionary *duplicateMatchDict;
     }
     
     else{
-//        if ([pos  isEqualToString: @"Red 1"]) {
-//            if (![dataDict objectForKey:@"Red1"]) {
-//                [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Red1"];
-//            }
-//            if (![[dataDict objectForKey:@"Red1"] objectForKey:currentRegional]) {
-//                [[dataDict objectForKey:@"Red1"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
-//            }
-//            if (![[[dataDict objectForKey:@"Red1"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
-//                [[[dataDict objectForKey:@"Red1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                               [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                               [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                               [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                               [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                               [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                               [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                               [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                               [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                               [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                               [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                               [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                               [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                               [NSString stringWithString:initials], @"initials",
-//                                                               [NSString stringWithString:currentRegional], @"regional",
-//                                                               nil] forKey:currentMatchNum];
-//            }
-//            else{
-//                //[self overWriteAlert];
-//            }
-//        }
-//        else if ([pos  isEqualToString: @"Red 2"]) {
-//            if (![dataDict objectForKey:@"Red2"]) {
-//                [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Red2"];
-//            }
-//            if (![[dataDict objectForKey:@"Red2"] objectForKey:currentRegional]) {
-//                [[dataDict objectForKey:@"Red2"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
-//            }
-//            if (![[[dataDict objectForKey:@"Red2"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
-//                [[[dataDict objectForKey:@"Red2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                            [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                            [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                            [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                            [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                            [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                            [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                            [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                            [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                            [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                            [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                            [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                            [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                            [NSString stringWithString:initials], @"initials",
-//                                                            [NSString stringWithString:currentRegional], @"regional",
-//                                                            nil] forKey:currentMatchNum];
-//            }
-//            else{
-//                //[self overWriteAlert];
-//            }
-//        }
-//        else if ([pos  isEqualToString: @"Red 3"]) {
-//            if (![dataDict objectForKey:@"Red3"]) {
-//                [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Red3"];
-//            }
-//            if (![[dataDict objectForKey:@"Red3"] objectForKey:currentRegional]) {
-//                [[dataDict objectForKey:@"Red3"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
-//            }
-//            if (![[[dataDict objectForKey:@"Red3"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
-//                [[[dataDict objectForKey:@"Red3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                            [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                            [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                            [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                            [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                            [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                            [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                            [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                            [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                            [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                            [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                            [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                            [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                            [NSString stringWithString:initials], @"initials",
-//                                                            [NSString stringWithString:currentRegional], @"regional",
-//                                                            nil] forKey:currentMatchNum];
-//            }
-//            else{
-//                //[self overWriteAlert];
-//            }
-//        }
-//        else if ([pos isEqualToString:@"Blue 1"]) {
-//            if (![dataDict objectForKey:@"Blue1"]) {
-//                [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Blue1"];
-//            }
-//            if (![[dataDict objectForKey:@"Blue1"] objectForKey:currentRegional]) {
-//                [[dataDict objectForKey:@"Blue1"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
-//            }
-//            if (![[[dataDict objectForKey:@"Blue1"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
-//                [[[dataDict objectForKey:@"Blue1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                             [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                             [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                             [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                             [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                             [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                             [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                             [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                             [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                             [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                             [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                             [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                             [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                             [NSString stringWithString:initials], @"initials",
-//                                                             [NSString stringWithString:currentRegional], @"regional",
-//                                                            nil] forKey:currentMatchNum];
-//            }
-//            else{
-//                //[self overWriteAlert];
-//            }
-//        }
-//        else if ([pos isEqualToString:@"Blue 2"]) {
-//            if (![dataDict objectForKey:@"Blue2"]) {
-//                [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Blue2"];
-//            }
-//            if (![[dataDict objectForKey:@"Blue2"] objectForKey:currentRegional]) {
-//                [[dataDict objectForKey:@"Blue2"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
-//            }
-//            if (![[[dataDict objectForKey:@"Blue2"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
-//                [[[dataDict objectForKey:@"Blue2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                             [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                             [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                             [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                             [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                             [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                             [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                             [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                             [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                             [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                             [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                             [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                             [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                             [NSString stringWithString:initials], @"initials",
-//                                                             [NSString stringWithString:currentRegional], @"regional",
-//                                                            nil] forKey:currentMatchNum];
-//            }
-//            else{
-//                //[self overWriteAlert];
-//            }
-//        }
-//        else if ([pos isEqualToString:@"Blue 3"]) {
-//            if (![dataDict objectForKey:@"Blue3"]) {
-//                [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:@"Blue3"];
-//            }
-//            if (![[dataDict objectForKey:@"Blue3"] objectForKey:currentRegional]) {
-//                [[dataDict objectForKey:@"Blue3"] setObject:[NSMutableDictionary dictionary] forKey:currentRegional];
-//            }
-//            if (![[[dataDict objectForKey:@"Blue3"] objectForKey:currentRegional] objectForKey:currentMatchNum]) {
-//                [[[dataDict objectForKey:@"Blue3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                             [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                             [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                             [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                             [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                             [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                             [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                             [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                             [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                             [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                             [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                             [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                             [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                             [NSString stringWithString:initials], @"initials",
-//                                                             [NSString stringWithString:currentRegional], @"regional",
-//                                                            nil] forKey:currentMatchNum];
-//                [self autoOn];
-//            }
-//            else{
-//                //[self overWriteAlert];
-//            }
-//        }
-//        [dataDict writeToFile:path atomically:YES];
-        
-        
         [context performBlock:^{
             Regional *rgnl = [Regional createRegionalWithName:currentRegional inManagedObjectContext:context];
             
@@ -1821,117 +1620,25 @@ NSDictionary *duplicateMatchDict;
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if ([alertView isEqual:overWriteAlert] && buttonIndex == 1) {
-//        if ([pos isEqualToString:@"Red 1"]) {
-//            [[[dataDict objectForKey:@"Red1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                        [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                        [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                        [NSString stringWithString:initials], @"initials",
-//                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                        [NSString stringWithString:currentRegional], @"regional",
-//                                                            nil] forKey:currentMatchNum];
-//        }
-//        else if([pos isEqualToString:@"Red 2"]){
-//            [[[dataDict objectForKey:@"Red2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                        [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                        [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                        [NSString stringWithString:initials], @"initials",
-//                                                        [NSString stringWithString:currentRegional], @"regional",
-//                                                            nil] forKey:currentMatchNum];
-//        }
-//        else if([pos isEqualToString:@"Red 3"]){
-//            [[[dataDict objectForKey:@"Red3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                        [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                        [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                        [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                        [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                        [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                        [NSString stringWithString:initials], @"initials",
-//                                                        [NSString stringWithString:currentRegional], @"regional",
-//                                                            nil] forKey:currentMatchNum];
-//        }
-//        else if ([pos isEqualToString:@"Blue 1"]){
-//            [[[dataDict objectForKey:@"Blue1"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                         [NSString stringWithString:initials], @"initials",
-//                                                         [NSString stringWithString:currentRegional], @"regional",
-//                                                            nil] forKey:currentMatchNum];
-//        }
-//        else if ([pos isEqualToString:@"Blue 2"]){
-//            [[[dataDict objectForKey:@"Blue2"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                         [NSString stringWithString:initials], @"initials",
-//                                                         [NSString stringWithString:currentRegional], @"regional",
-//                                                            nil] forKey:currentMatchNum];
-//        }
-//        else if ([pos isEqualToString:@"Blue 3"]){
-//            [[[dataDict objectForKey:@"Blue3"] objectForKey:currentRegional] setObject:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                                         [NSNumber numberWithInteger:teleopHighScore], @"teleopHighScore",
-//                                                         [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                         [NSNumber numberWithInteger:teleopMidScore], @"teleopMidScore",
-//                                                         [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                         [NSNumber numberWithInteger:teleopLowScore], @"teleopLowScore",
-//                                                         [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                         [NSNumber numberWithInteger:smallPenaltyTally], @"smallPenalties",
-//                                                         [NSNumber numberWithInteger:largePenaltyTally], @"largePenalties",
-//                                                         [NSString stringWithString:currentMatchNum], @"currentMatchNum",
-//                                                         [NSString stringWithString:currentMatchType], @"currentMatchType",
-//                                                         [NSString stringWithString:currentTeamNum], @"currentTeamNum",
-//                                                         [NSString stringWithString:scoutTeamNum], @"scoutTeamNum",
-//                                                         [NSString stringWithString:initials], @"initials",
-//                                                         [NSString stringWithString:currentRegional], @"regional",
-//                                                            nil] forKey:currentMatchNum];
-//        }
-      //NSLog(@"%@", dataDict);
         [self overWriteMatch];
     }
+//    if ([alertView isEqual:inviteAlert]) {
+//        BOOL accept = (buttonIndex != alertView.cancelButtonIndex) ? YES : NO;
+//        
+//        MCSession *session;
+//        if(accept) {
+//            session = [[MCSession alloc] initWithPeer:myPeerID];
+//            session.delegate = self;
+//        }
+//        
+//        if (accept) {
+//            NSLog(@"Made it to this one with accept true");
+//        }
+//        
+//        
+//        void (^invitationHandler)(BOOL, MCSession *) = [arrayInvitationHandler objectAtIndex:0];
+//        invitationHandler(accept, mySession);
+//    }
 }
 
 -(void)overWriteAlert{

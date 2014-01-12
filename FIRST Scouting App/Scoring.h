@@ -12,6 +12,8 @@
 
 @interface LocationsFirstViewController : UIViewController <UIGestureRecognizerDelegate, UIPickerViewDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, MCBrowserViewControllerDelegate, MCSessionDelegate, MCNearbyServiceAdvertiserDelegate, MCNearbyServiceBrowserDelegate>
 
+@property (strong, nonatomic) MCSession *session;
+
 @property (weak, nonatomic) IBOutlet UITextField *matchNumField;
 @property (weak, nonatomic) IBOutlet UITextField *teamNumField;
 @property (weak, nonatomic) IBOutlet UIButton *matchNumEdit;
