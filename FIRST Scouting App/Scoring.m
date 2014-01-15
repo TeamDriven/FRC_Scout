@@ -869,7 +869,11 @@ NSDictionary *duplicateMatchDict;
         cell.userInteractionEnabled = false;
         doneButton.enabled = true;
     }
-    else if ([cell.peersConnected containsObject:smallString]) {
+    NSMutableArray *peerNamesArray = [[NSMutableArray alloc] init];
+    for (MCPeerID *i in peersArray) {
+        [peerNamesArray addObject:i.displayName];
+    }
+    if ([peerNamesArray containsObject:smallString] || [smallString isEqualToString:pos]) {
         cell.alreadyConnectedLbl.text = [[NSString alloc] initWithFormat:@"Already has a %@", myPeerID.displayName];
         cell.alreadyConnectedLbl.alpha = 1;
         cell.userInteractionEnabled = false;
@@ -957,24 +961,6 @@ NSDictionary *duplicateMatchDict;
         BOOL accept = (buttonIndex != inviteAlert.cancelButtonIndex) ? YES : NO;
         invitationHandler(accept, mySession);
     }];
-    
-//    -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *mySession))invitationHandler{
-//        NSLog(@"Received invite from %@", peerID.displayName);
-//        [UIAlertView showWithTitle:[[NSString alloc] initWithFormat:@"%@ Wants To Join!", peerID.displayName] message:@"Do you accept?" cancelButtonTitle:@"No Way!" otherButtonTitles:@[@"Sure!"] completion:^(UIAlertView *inviteAlert, NSInteger buttonIndex){
-//            BOOL accept = (buttonIndex != inviteAlert.cancelButtonIndex) ? YES : NO;
-//            invitationHandler(accept, mySession);
-//        }];
-//    }
-    
-//    invitationHandler(YES, mySession);
-    
-//    inviterPeerID = [MCPeerID alloc];
-//    inviterPeerID = peerID;
-//    arrayInvitationHandler = [NSArray arrayWithObject:[invitationHandler copy]];
-//    
-//    inviteAlert = [[UIAlertView alloc] initWithTitle:[[NSString alloc] initWithFormat:@"%@ invites you to their group!", peerID.displayName] message:@"Do you accept?" delegate:self cancelButtonTitle:@"No Way!" otherButtonTitles:@"Sure!", nil];
-//    [inviteAlert show];
-    
 }
 
 -(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
@@ -1044,6 +1030,7 @@ NSDictionary *duplicateMatchDict;
             UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Wahooo!!!" message:[[NSString alloc] initWithFormat:@"You connected to %@! Feel free to scout like normal and they will get your matches as you save them!", peerID.displayName] delegate:nil cancelButtonTitle:@"Awesometastic" otherButtonTitles:nil];
             [connectedAlert show];
             lastSelectedCell.connectedLbl.alpha = 1;
+            [visibleTable reloadData];
         });
     }
     else if (state == MCSessionStateNotConnected){
@@ -1055,7 +1042,9 @@ NSDictionary *duplicateMatchDict;
                 [connectedAlert show];
             });
         }
-        
+        if (host) {
+            [visibleTable reloadData];
+        }
         closeButton.enabled = true;
     }
 }
@@ -1622,23 +1611,6 @@ NSDictionary *duplicateMatchDict;
     if ([alertView isEqual:overWriteAlert] && buttonIndex == 1) {
         [self overWriteMatch];
     }
-//    if ([alertView isEqual:inviteAlert]) {
-//        BOOL accept = (buttonIndex != alertView.cancelButtonIndex) ? YES : NO;
-//        
-//        MCSession *session;
-//        if(accept) {
-//            session = [[MCSession alloc] initWithPeer:myPeerID];
-//            session.delegate = self;
-//        }
-//        
-//        if (accept) {
-//            NSLog(@"Made it to this one with accept true");
-//        }
-//        
-//        
-//        void (^invitationHandler)(BOOL, MCSession *) = [arrayInvitationHandler objectAtIndex:0];
-//        invitationHandler(accept, mySession);
-//    }
 }
 
 -(void)overWriteAlert{
