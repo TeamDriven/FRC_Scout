@@ -1174,57 +1174,6 @@ NSDictionary *duplicateMatchDict;
     autoYN = true;
     twoFingerUp.enabled = false;
     twoFingerDown.enabled = true;
-//
-//    _autoTitleLbl.alpha = 0;
-//    _autoHighScoreLbl.alpha = 0;
-//    _autoMidScoreLbl.alpha = 0;
-//    _autoLowScoreLbl.alpha = 0;
-//    
-//    _teleopTitleLbl.alpha = 1;
-//    _teleopHighScoreLbl.alpha = 1;
-//    _teleopMidScoreLbl.alpha = 1;
-//    _teleopLowScoreLbl.alpha = 1;
-//    
-//    _smallPenaltyLbl.enabled = true;
-//    _smallPenaltyStepper.enabled = true;
-//    _smallPenaltyStepper.tintColor = [UIColor redColor];
-//    _smallPenaltyStepper.alpha = 1;
-//    _smallPenaltyTitleLbl.enabled = true;
-//    _smallPenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)smallPenaltyTally];
-//    
-//    _largePenaltyLbl.enabled = true;
-//    _largePenaltyStepper.enabled = true;
-//    _largePenaltyStepper.tintColor = [UIColor redColor];
-//    _largePenaltyStepper.alpha = 1;
-//    _largePenaltyTitleLbl.enabled = true;
-//    _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
-//    
-//    _teleopHighMinusBtn.alpha = 1;
-//    _teleopHighMinusBtn.enabled = true;
-//    _teleopHighPlusBtn.alpha = 1;
-//    _teleopHighPlusBtn.enabled = true;
-//    _teleopMidMinusBtn.alpha = 1;
-//    _teleopMidMinusBtn.enabled = true;
-//    _teleopMidPlusBtn.alpha = 1;
-//    _teleopMidPlusBtn.enabled = true;
-//    _teleopLowMinusBtn.alpha = 1;
-//    _teleopLowMinusBtn.enabled = true;
-//    _teleopLowPlusBtn.alpha = 1;
-//    _teleopLowPlusBtn.enabled = true;
-//    
-//    _autoHighMinusBtn.alpha = 0;
-//    _autoHighMinusBtn.enabled = false;
-//    _autoHighPlusBtn.alpha = 0;
-//    _autoHighPlusBtn.enabled = false;
-//    _autoMidMinusBtn.alpha = 0;
-//    _autoMidMinusBtn.enabled = false;
-//    _autoMidPlusBtn.alpha = 0;
-//    _autoMidPlusBtn.enabled = false;
-//    _autoLowMinusBtn.alpha = 0;
-//    _autoLowMinusBtn.enabled = false;
-//    _autoLowPlusBtn.alpha = 0;
-//    _autoLowPlusBtn.enabled = false;
-    
     
     [UIView animateWithDuration:0.3 animations:^{
         _autoTitleLbl.alpha = 1;
@@ -1281,52 +1230,6 @@ NSDictionary *duplicateMatchDict;
     autoYN = false;
     twoFingerUp.enabled = true;
     twoFingerDown.enabled = false;
-//
-//    _autoTitleLbl.alpha = 1;
-//    _autoHighScoreLbl.alpha = 1;
-//    _autoMidScoreLbl.alpha = 1;
-//    _autoLowScoreLbl.alpha = 1;
-//    
-//    _teleopTitleLbl.alpha = 0;
-//    _teleopHighScoreLbl.alpha = 0;
-//    _teleopMidScoreLbl.alpha = 0;
-//    _teleopLowScoreLbl.alpha = 0;
-//    
-//    _smallPenaltyLbl.enabled = false;
-//    _smallPenaltyStepper.enabled = false;
-//    _smallPenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
-//    _smallPenaltyTitleLbl.enabled = false;
-//    
-//    _largePenaltyLbl.enabled = false;
-//    _largePenaltyStepper.enabled = false;
-//    _largePenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
-//    _largePenaltyTitleLbl.enabled = false;
-//    
-//    _teleopHighMinusBtn.alpha = 0;
-//    _teleopHighMinusBtn.enabled = false;
-//    _teleopHighPlusBtn.alpha = 0;
-//    _teleopHighPlusBtn.enabled = false;
-//    _teleopMidMinusBtn.alpha = 0;
-//    _teleopMidMinusBtn.enabled = false;
-//    _teleopMidPlusBtn.alpha = 0;
-//    _teleopMidPlusBtn.enabled = false;
-//    _teleopLowMinusBtn.alpha = 0;
-//    _teleopLowMinusBtn.enabled = false;
-//    _teleopLowPlusBtn.alpha = 0;
-//    _teleopLowPlusBtn.enabled = false;
-//    
-//    _autoHighMinusBtn.alpha = 1;
-//    _autoHighMinusBtn.enabled = true;
-//    _autoHighPlusBtn.alpha = 1;
-//    _autoHighPlusBtn.enabled = true;
-//    _autoMidMinusBtn.alpha = 1;
-//    _autoMidMinusBtn.enabled = true;
-//    _autoMidPlusBtn.alpha = 1;
-//    _autoMidPlusBtn.enabled = true;
-//    _autoLowMinusBtn.alpha = 1;
-//    _autoLowMinusBtn.enabled = true;
-//    _autoLowPlusBtn.alpha = 1;
-//    _autoLowPlusBtn.enabled = true;
     
     [UIView animateWithDuration:0.3 animations:^{
         _autoTitleLbl.alpha = 0;
