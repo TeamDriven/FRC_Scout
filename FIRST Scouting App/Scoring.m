@@ -248,6 +248,10 @@ NSDictionary *duplicateMatchDict;
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [NSThread sleepForTimeInterval:0.3];
+    if (setUpView) {
+        [setUpView removeFromSuperview];
+        [greyOut removeFromSuperview];
+    }
     [self setUpScreen];
     [self autoOn];
 }
