@@ -37,31 +37,36 @@
 
 float startX = 0;
 float startY = 0;
--(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [[event allTouches] anyObject];
+-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     
-    if( [touch view] == _imageView)
-    {
-        CGPoint location = [touch locationInView:self.view];
-        startX = self.view.center.x;
-        startY = location.y - _imageView.center.y;
+    if ([[event touchesForView:_imageView] count] == 1) {
+        UITouch *touch = [[event allTouches] anyObject];
+        
+        if( [touch view] == _imageView)
+        {
+            CGPoint location = [touch locationInView:self.view];
+            startX = self.view.center.x;
+            startY = location.y - _imageView.center.y;
+        }
     }
 }
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    UITouch *touch = [[event allTouches] anyObject];
-    if( [touch view] == _imageView)
-    {
-        CGPoint location = [touch locationInView:self.view];
-        location.x = startX;
-        location.y = location.y - startY;
-        if (location.y > 897) {
-            location.y = 897;
+    
+    if ([[event touchesForView:_imageView] count] == 1) {
+        UITouch *touch = [[event allTouches] anyObject];
+        if( [touch view] == _imageView)
+        {
+            CGPoint location = [touch locationInView:self.view];
+            location.x = startX;
+            location.y = location.y - startY;
+            if (location.y > 897) {
+                location.y = 897;
+            }
+            else if (location.y < 75){
+                location.y = 75;
+            }
+            _imageView.center = location;
         }
-        else if (location.y < 75){
-            location.y = 75;
-        }
-        _imageView.center = location;
     }
 }
 
