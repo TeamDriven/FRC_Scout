@@ -10,10 +10,19 @@
 
 @interface Globals : NSObject
 
+// Red 1, Red 2, etc
 extern NSString *pos;
+
+// Scout's three initials
 extern NSString *initials;
+
+// Team number of the scout's team
 extern NSString *scoutTeamNum;
+
+// Regional that the scouter is in at the time
 extern NSString *currentRegional;
+
+// All regionals in the 2014 season in chronological order
 extern NSArray *regionalNames;
 
 @end

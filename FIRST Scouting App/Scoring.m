@@ -46,14 +46,6 @@ NSString *pos;
 NSString *currentMatchType;
 
 
-//plist Filepath
-NSArray *paths;
-NSString *scoutingDirectory;
-NSString *path;
-NSMutableDictionary *dataDict;
-UIAlertView *overWriteAlert;
-
-
 //Core Data Filepath
 NSFileManager *FSAfileManager;
 NSURL *FSAdocumentsDirectory;
@@ -133,12 +125,15 @@ NSInteger secs;
 Team *teamWithDuplicate;
 Match *duplicateMatch;
 NSDictionary *duplicateMatchDict;
+UIAlertView *overWriteAlert;
 
 -(void)viewDidLoad{
     
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
+    
+    // *** Map to Core Data ***
     FSAfileManager = [NSFileManager defaultManager];
     FSAdocumentsDirectory = [[FSAfileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
     FSAdocumentName = @"FSA";
@@ -158,64 +153,75 @@ NSDictionary *duplicateMatchDict;
             if (!success) NSLog(@"Couldn't create the document at path: %@", FSApathurl);
         }];
     }
+    // *** Done Mapping to Core Data **
     
-    paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    scoutingDirectory = [paths objectAtIndex:0];
-    path = [scoutingDirectory stringByAppendingPathComponent:@"data.plist"];
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"data" ofType:@"plist"] toPath:path error:nil];
-    }
-    
-    dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
-    
+    //Helps prepare for keyboard to appear/disappear (on storyboard UI)
     self.matchNumField.delegate = self;
     self.teamNumField.delegate = self;
     
+    //Autonomous On Gesture
     twoFingerUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(autoOn)];
     [twoFingerUp setNumberOfTouchesRequired:2];
     [twoFingerUp setDirection:UISwipeGestureRecognizerDirectionUp];
     [self.view addGestureRecognizer:twoFingerUp];
     
+    //Autonomous Off Gesture
     twoFingerDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(autoOff)];
     [twoFingerDown setNumberOfTouchesRequired:2];
     [twoFingerDown setDirection:UISwipeGestureRecognizerDirectionDown];
     [self.view addGestureRecognizer:twoFingerDown];
     
+    // Autonomous Boolean
+    autoYN = true;
+    
+    // Helps prepare the setUpView
     red1Pos = -1;
     pos = nil;
+    // Creates a unique ID for the app to use for Multipeer interactions
     NSDate *date = [NSDate date];
     myUniqueID = [[NSString alloc] initWithFormat:@"%ld", (long)[date timeIntervalSince1970]];
     
-    autoYN = true;
     
     _saveBtn.layer.cornerRadius = 5;
     
+    //All Regionals in 2014
     regionalNames = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line District Competition",@"Southfield District Competition",@"Granite State District Event",@"PNW Auburn Mountainview District Event",@"MAR Mt. Olive District Competition",@"MAR Hatboro-Horsham District Comp.",@"Israel Regional",@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University District Competition",@"Gull Lake District Competition",@"PNW Oregon City District Event",@"PNW Glacier Peak District Event",@"Groton District Event",@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba District Competition",@"Howell District Competition",@"MAR Springside Chestnut Hill District Comp.",@"PNW Eastern Wash. University District Event",@"PNW Mt. Vernon District Event",@"MAR Clifton District Competition",@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan District Competition",@"Great Lakes Bay Region District Competition",@"Traverse City District Competition",@"PNW Wilsonville District Event",@"Rhode Island District Event",@"PNW Shorewood District Event",@"Southington District Event",@"MAR Lenape-Seneca District Competition",@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia District Competition",@"St. Joseph District Competition",@"Waterford District Competition",@"PNW Auburn District Event",@"PNW Central Wash. University District Event",@"Hartford District Event",@"MAR Bridgewater-Raritan District Competition",@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford District Competition",@"Troy District Competition",@"PNW Oregon State University District Event",@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
    
+    //Week 1 Regionals of 2014
     week1Regionals = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line District Competition",@"Southfield District Competition",@"Granite State District Event",@"PNW Auburn Mountainview District Event",@"MAR Mt. Olive District Competition",@"MAR Hatboro-Horsham District Comp.",@"Israel Regional"];
     
+    //Week 2 Regionals of 2014
     week2Regionals = @[@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University District Competition",@"Gull Lake District Competition",@"PNW Oregon City District Event",@"PNW Glacier Peak District Event",@"Groton District Event"];
     
+    //Week 3 Regionals of 2014
     week3Regionals = @[@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba District Competition",@"Howell District Competition",@"MAR Springside Chestnut Hill District Comp.",@"PNW Eastern Wash. University District Event",@"PNW Mt. Vernon District Event",@"MAR Clifton District Competition"];
     
+    //Week 4 Regionals of 2014
     week4Regionals = @[@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan District Competition",@"Great Lakes Bay Region District Competition",@"Traverse City District Competition",@"PNW Wilsonville District Event",@"Rhode Island District Event",@"PNW Shorewood District Event",@"Southington District Event",@"MAR Lenape-Seneca District Competition"];
     
+    //Week 5 Regionals of 2014
     week5Regionals = @[@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia District Competition",@"St. Joseph District Competition",@"Waterford District Competition",@"PNW Auburn District Event",@"PNW Central Wash. University District Event",@"Hartford District Event",@"MAR Bridgewater-Raritan District Competition"];
     
+    //Week 6 Regionals of 2014
     week6Regionals = @[@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford District Competition",@"Troy District Competition",@"PNW Oregon State University District Event"];
     
+    //Week 7+ Regionals of 2014
     week7Regionals = @[@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
     
     allWeekRegionals = @[regionalNames,week1Regionals,week2Regionals,week3Regionals,week4Regionals,week5Regionals,week6Regionals,week7Regionals];
     
+    //Value for WeekSelector UISegmentedControl to start at
     weekSelected = 0;
     
+    //Match type: Qualifying vs. Elimination
     currentMatchType = @"Q";
     
+    //Multipeer roles booleans
     host = false;
     visible = false;
     
+    //Sets up storyboard UI
     _teleopHighMinusBtn.alpha = 0;
     _teleopHighMinusBtn.enabled = false;
     _teleopHighPlusBtn.alpha = 0;
@@ -242,9 +248,11 @@ NSDictionary *duplicateMatchDict;
     _autoLowPlusBtn.alpha = 1;
     _autoLowPlusBtn.enabled = true;
     
+    //Mutable array of connected peers in the Multipeer Connection
     peersArray = [[NSMutableArray alloc] init];
 }
 
+//Sets up UI and setUpView. Recreates setUpView if it already exists (fixes crash when switching pages before interaction)
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [NSThread sleepForTimeInterval:0.3];
@@ -256,31 +264,34 @@ NSDictionary *duplicateMatchDict;
     [self autoOn];
 }
 
+//Removes textfield if the return key is pressed
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return NO;
 }
 
+//Creates the initial UIView that the user interacts with
 -(void)setUpScreen{
     if (initials == nil && !greyOut.superview) {
         
         twoFingerUp.enabled = false;
         twoFingerDown.enabled = false;
         
+        //Grays out the screen behind the setUpScreen
         CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
         greyOut = [[UIControl alloc] initWithFrame:greyOutRect];
         [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
         greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
         [self.view addSubview:greyOut];
         
-        
+        //The white rectangle UIView that is the setUpView
         CGRect setUpViewRect = CGRectMake(70, 100, 628, 700);
         setUpView = [[UIControl alloc] initWithFrame:setUpViewRect];
         [setUpView addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
         setUpView.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
         setUpView.layer.cornerRadius = 10;
         
-        
+        //Title at the top of the setUpView
         CGRect setUpTitleRect = CGRectMake(214, 50, 200, 50);
         UILabel *setUpTitle = [[UILabel alloc] initWithFrame:setUpTitleRect];
         [setUpTitle setFont:[UIFont systemFontOfSize:25]];
@@ -288,6 +299,7 @@ NSDictionary *duplicateMatchDict;
         [setUpTitle setText:@"Sign in to Scout"];
         [setUpView addSubview:setUpTitle];
         
+        //UISegmentedControl for selecting what position the scout is
         CGRect red1SelectorRect = CGRectMake(124, 130, 380, 30);
         red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3",  nil]];
         [red1Selector addTarget:self action:@selector(red1Changed) forControlEvents:UIControlEventValueChanged];
@@ -296,6 +308,7 @@ NSDictionary *duplicateMatchDict;
         red1Selector.selectedSegmentIndex = red1Pos;
         NSLog(@"Red 1 Pos: %ld", (long)red1Pos);
         
+        //Labels the scout initials field
         CGRect initialsFieldLblRect = CGRectMake(129, 190, 100, 15);
         UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
         initialsFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -303,6 +316,7 @@ NSDictionary *duplicateMatchDict;
         initialsFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:initialsFieldLbl];
         
+        //Textfield for the user to enter their initials in
         CGRect initialsFieldRect = CGRectMake(114, 210, 130, 40);
         initialsField = [[UITextField alloc] initWithFrame:initialsFieldRect];
         [initialsField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -319,6 +333,7 @@ NSDictionary *duplicateMatchDict;
         [initialsField setDelegate:self];
         [setUpView addSubview:initialsField];
         
+        //Labels the scout's team number field
         CGRect scoutTeamNumFieldLblRect = CGRectMake(264, 190, 100, 15);
         UILabel *scoutTeamNumFieldLbl = [[UILabel alloc] initWithFrame:scoutTeamNumFieldLblRect];
         scoutTeamNumFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -326,6 +341,7 @@ NSDictionary *duplicateMatchDict;
         scoutTeamNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:scoutTeamNumFieldLbl];
         
+        //Textfield for the scout's own team number to be entered in
         CGRect scoutTeamNumFieldRect = CGRectMake(264, 210, 100, 40);
         scoutTeamNumField = [[UITextField alloc] initWithFrame:scoutTeamNumFieldRect];
         [scoutTeamNumField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -344,6 +360,7 @@ NSDictionary *duplicateMatchDict;
             scoutTeamNumField.text = scoutTeamNum;
         }
         
+        //Labels the current match field textfield
         CGRect currentMatchNumFieldLblRect = CGRectMake(384, 190, 130, 15);
         UILabel *currentMatchNumFieldLbl = [[UILabel alloc] initWithFrame:currentMatchNumFieldLblRect];
         currentMatchNumFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -351,6 +368,7 @@ NSDictionary *duplicateMatchDict;
         currentMatchNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:currentMatchNumFieldLbl];
         
+        //Textfield for the user to input whatever the match number is for the match they are about to watch (only needed on the initial setup, it's taken care of afterwards)
         CGRect currentMatchNumFieldRect = CGRectMake(384, 210, 130, 40);
         currentMatchNumField = [[UITextField alloc] initWithFrame:currentMatchNumFieldRect];
         [currentMatchNumField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -365,6 +383,7 @@ NSDictionary *duplicateMatchDict;
         [currentMatchNumField setTextAlignment:NSTextAlignmentCenter];
         [currentMatchNumField setDelegate:self];
         [setUpView addSubview:currentMatchNumField];
+        
         
         CGRect matchTypeSelectorRect = CGRectMake(364, 255, 170, 30);
         matchTypeSelector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Qualification", @"Elimination", nil]];
