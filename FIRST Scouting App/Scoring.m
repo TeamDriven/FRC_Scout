@@ -252,6 +252,7 @@ UIAlertView *overWriteAlert;
     peersArray = [[NSMutableArray alloc] init];
 }
 
+//Sets up UI and setUpView. Recreates setUpView if it already exists (fixes crash when switching pages before interaction)
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [NSThread sleepForTimeInterval:0.3];
@@ -263,31 +264,34 @@ UIAlertView *overWriteAlert;
     [self autoOn];
 }
 
+//Removes textfield if the return key is pressed
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return NO;
 }
 
+//Creates the initial UIView that the user interacts with
 -(void)setUpScreen{
     if (initials == nil && !greyOut.superview) {
         
         twoFingerUp.enabled = false;
         twoFingerDown.enabled = false;
         
+        //Grays out the screen behind the setUpScreen
         CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
         greyOut = [[UIControl alloc] initWithFrame:greyOutRect];
         [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
         greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
         [self.view addSubview:greyOut];
         
-        
+        //The white rectangle UIView that is the setUpView
         CGRect setUpViewRect = CGRectMake(70, 100, 628, 700);
         setUpView = [[UIControl alloc] initWithFrame:setUpViewRect];
         [setUpView addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
         setUpView.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
         setUpView.layer.cornerRadius = 10;
         
-        
+        //Title at the top of the setUpView
         CGRect setUpTitleRect = CGRectMake(214, 50, 200, 50);
         UILabel *setUpTitle = [[UILabel alloc] initWithFrame:setUpTitleRect];
         [setUpTitle setFont:[UIFont systemFontOfSize:25]];
@@ -295,6 +299,7 @@ UIAlertView *overWriteAlert;
         [setUpTitle setText:@"Sign in to Scout"];
         [setUpView addSubview:setUpTitle];
         
+        //UISegmentedControl for selecting what position the scout is
         CGRect red1SelectorRect = CGRectMake(124, 130, 380, 30);
         red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3",  nil]];
         [red1Selector addTarget:self action:@selector(red1Changed) forControlEvents:UIControlEventValueChanged];
@@ -303,6 +308,7 @@ UIAlertView *overWriteAlert;
         red1Selector.selectedSegmentIndex = red1Pos;
         NSLog(@"Red 1 Pos: %ld", (long)red1Pos);
         
+        //Labels the scout initials field
         CGRect initialsFieldLblRect = CGRectMake(129, 190, 100, 15);
         UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
         initialsFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -310,6 +316,7 @@ UIAlertView *overWriteAlert;
         initialsFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:initialsFieldLbl];
         
+        //Textfield for the user to enter their initials in
         CGRect initialsFieldRect = CGRectMake(114, 210, 130, 40);
         initialsField = [[UITextField alloc] initWithFrame:initialsFieldRect];
         [initialsField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -326,6 +333,7 @@ UIAlertView *overWriteAlert;
         [initialsField setDelegate:self];
         [setUpView addSubview:initialsField];
         
+        //Labels the scout's team number field
         CGRect scoutTeamNumFieldLblRect = CGRectMake(264, 190, 100, 15);
         UILabel *scoutTeamNumFieldLbl = [[UILabel alloc] initWithFrame:scoutTeamNumFieldLblRect];
         scoutTeamNumFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -333,6 +341,7 @@ UIAlertView *overWriteAlert;
         scoutTeamNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:scoutTeamNumFieldLbl];
         
+        //Textfield for the scout's own team number to be entered in
         CGRect scoutTeamNumFieldRect = CGRectMake(264, 210, 100, 40);
         scoutTeamNumField = [[UITextField alloc] initWithFrame:scoutTeamNumFieldRect];
         [scoutTeamNumField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -351,6 +360,7 @@ UIAlertView *overWriteAlert;
             scoutTeamNumField.text = scoutTeamNum;
         }
         
+        //Labels the current match field textfield
         CGRect currentMatchNumFieldLblRect = CGRectMake(384, 190, 130, 15);
         UILabel *currentMatchNumFieldLbl = [[UILabel alloc] initWithFrame:currentMatchNumFieldLblRect];
         currentMatchNumFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -358,6 +368,7 @@ UIAlertView *overWriteAlert;
         currentMatchNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:currentMatchNumFieldLbl];
         
+        //Textfield for the user to input whatever the match number is for the match they are about to watch (only needed on the initial setup, it's taken care of afterwards)
         CGRect currentMatchNumFieldRect = CGRectMake(384, 210, 130, 40);
         currentMatchNumField = [[UITextField alloc] initWithFrame:currentMatchNumFieldRect];
         [currentMatchNumField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -372,6 +383,7 @@ UIAlertView *overWriteAlert;
         [currentMatchNumField setTextAlignment:NSTextAlignmentCenter];
         [currentMatchNumField setDelegate:self];
         [setUpView addSubview:currentMatchNumField];
+        
         
         CGRect matchTypeSelectorRect = CGRectMake(364, 255, 170, 30);
         matchTypeSelector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Qualification", @"Elimination", nil]];
