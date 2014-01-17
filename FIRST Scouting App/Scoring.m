@@ -25,7 +25,7 @@
 @implementation LocationsFirstViewController
 
 
-//Match Data Variables
+// Match Data Variables
 NSInteger teleopHighScore;
 NSInteger autoHighScore;
 NSInteger teleopMidScore;
@@ -36,7 +36,7 @@ NSInteger smallPenaltyTally;
 NSInteger largePenaltyTally;
 
 
-//Match Defining Variables
+// Match Defining Variables
 NSString *initials;
 NSString *scoutTeamNum;
 NSString *currentMatchNum;
@@ -46,7 +46,7 @@ NSString *pos;
 NSString *currentMatchType;
 
 
-//Core Data Filepath
+// Core Data Filepath
 NSFileManager *FSAfileManager;
 NSURL *FSAdocumentsDirectory;
 NSString *FSAdocumentName;
@@ -55,13 +55,13 @@ UIManagedDocument *FSAdocument;
 NSManagedObjectContext *context;
 
 
-//Finger Swipes
+// Finger Swipes
 UISwipeGestureRecognizer *twoFingerUp;
 UISwipeGestureRecognizer *twoFingerDown;
 Boolean autoYN;
 
 
-//SetUp Screen Declarations
+// SetUp Screen Declarations
 UIControl *greyOut;
 UIControl *setUpView;
 UISegmentedControl *red1Selector;
@@ -78,7 +78,7 @@ UISegmentedControl *weekSelector;
 NSInteger weekSelected;
 
 
-//Share Screen Declarations
+// Share Screen Declarations
 UIView *shareScreen;
 UILabel *instaShareTitle;
 UIButton *closeButton;
@@ -108,7 +108,7 @@ BOOL safe;
 NSMutableDictionary *dictToSend;
 
 
-//Regional Arrays
+// Regional Arrays
 NSArray *regionalNames;
 NSArray *week1Regionals;
 NSArray *week2Regionals;
@@ -120,7 +120,7 @@ NSArray *week7Regionals;
 NSArray *allWeekRegionals;
 
 
-//Core Data Helpers
+// Core Data Helpers
 NSInteger secs;
 Team *teamWithDuplicate;
 Match *duplicateMatch;
@@ -156,17 +156,17 @@ UIAlertView *overWriteAlert;
     // *** Done Mapping to Core Data **
     
     
-    //Helps prepare for keyboard to appear/disappear (on storyboard UI)
+    // Helps prepare for keyboard to appear/disappear (on storyboard UI)
     self.matchNumField.delegate = self;
     self.teamNumField.delegate = self;
     
-    //Autonomous On Gesture
+    // Autonomous On Gesture
     twoFingerUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(autoOn)];
     [twoFingerUp setNumberOfTouchesRequired:2];
     [twoFingerUp setDirection:UISwipeGestureRecognizerDirectionUp];
     [self.view addGestureRecognizer:twoFingerUp];
     
-    //Autonomous Off Gesture
+    // Autonomous Off Gesture
     twoFingerDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(autoOff)];
     [twoFingerDown setNumberOfTouchesRequired:2];
     [twoFingerDown setDirection:UISwipeGestureRecognizerDirectionDown];
@@ -185,43 +185,43 @@ UIAlertView *overWriteAlert;
     
     _saveBtn.layer.cornerRadius = 5;
     
-    //All Regionals in 2014
+    // All Regionals in 2014
     regionalNames = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line District Competition",@"Southfield District Competition",@"Granite State District Event",@"PNW Auburn Mountainview District Event",@"MAR Mt. Olive District Competition",@"MAR Hatboro-Horsham District Comp.",@"Israel Regional",@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University District Competition",@"Gull Lake District Competition",@"PNW Oregon City District Event",@"PNW Glacier Peak District Event",@"Groton District Event",@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba District Competition",@"Howell District Competition",@"MAR Springside Chestnut Hill District Comp.",@"PNW Eastern Wash. University District Event",@"PNW Mt. Vernon District Event",@"MAR Clifton District Competition",@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan District Competition",@"Great Lakes Bay Region District Competition",@"Traverse City District Competition",@"PNW Wilsonville District Event",@"Rhode Island District Event",@"PNW Shorewood District Event",@"Southington District Event",@"MAR Lenape-Seneca District Competition",@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia District Competition",@"St. Joseph District Competition",@"Waterford District Competition",@"PNW Auburn District Event",@"PNW Central Wash. University District Event",@"Hartford District Event",@"MAR Bridgewater-Raritan District Competition",@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford District Competition",@"Troy District Competition",@"PNW Oregon State University District Event",@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
    
-    //Week 1 Regionals of 2014
+    // Week 1 Regionals of 2014
     week1Regionals = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line District Competition",@"Southfield District Competition",@"Granite State District Event",@"PNW Auburn Mountainview District Event",@"MAR Mt. Olive District Competition",@"MAR Hatboro-Horsham District Comp.",@"Israel Regional"];
     
-    //Week 2 Regionals of 2014
+    // Week 2 Regionals of 2014
     week2Regionals = @[@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University District Competition",@"Gull Lake District Competition",@"PNW Oregon City District Event",@"PNW Glacier Peak District Event",@"Groton District Event"];
     
-    //Week 3 Regionals of 2014
+    // Week 3 Regionals of 2014
     week3Regionals = @[@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba District Competition",@"Howell District Competition",@"MAR Springside Chestnut Hill District Comp.",@"PNW Eastern Wash. University District Event",@"PNW Mt. Vernon District Event",@"MAR Clifton District Competition"];
     
-    //Week 4 Regionals of 2014
+    // Week 4 Regionals of 2014
     week4Regionals = @[@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan District Competition",@"Great Lakes Bay Region District Competition",@"Traverse City District Competition",@"PNW Wilsonville District Event",@"Rhode Island District Event",@"PNW Shorewood District Event",@"Southington District Event",@"MAR Lenape-Seneca District Competition"];
     
-    //Week 5 Regionals of 2014
+    // Week 5 Regionals of 2014
     week5Regionals = @[@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia District Competition",@"St. Joseph District Competition",@"Waterford District Competition",@"PNW Auburn District Event",@"PNW Central Wash. University District Event",@"Hartford District Event",@"MAR Bridgewater-Raritan District Competition"];
     
-    //Week 6 Regionals of 2014
+    // Week 6 Regionals of 2014
     week6Regionals = @[@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford District Competition",@"Troy District Competition",@"PNW Oregon State University District Event"];
     
-    //Week 7+ Regionals of 2014
+    // Week 7+ Regionals of 2014
     week7Regionals = @[@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
     
     allWeekRegionals = @[regionalNames,week1Regionals,week2Regionals,week3Regionals,week4Regionals,week5Regionals,week6Regionals,week7Regionals];
     
-    //Value for WeekSelector UISegmentedControl to start at
+    // Value for WeekSelector UISegmentedControl to start at
     weekSelected = 0;
     
-    //Match type: Qualifying vs. Elimination
+    // Match type: Qualifying vs. Elimination
     currentMatchType = @"Q";
     
-    //Multipeer roles booleans
+    // Multipeer roles booleans
     host = false;
     visible = false;
     
-    //Sets up storyboard UI
+    // Sets up storyboard UI
     _teleopHighMinusBtn.alpha = 0;
     _teleopHighMinusBtn.enabled = false;
     _teleopHighPlusBtn.alpha = 0;
@@ -248,11 +248,11 @@ UIAlertView *overWriteAlert;
     _autoLowPlusBtn.alpha = 1;
     _autoLowPlusBtn.enabled = true;
     
-    //Mutable array of connected peers in the Multipeer Connection
+    // Mutable array of connected peers in the Multipeer Connection
     peersArray = [[NSMutableArray alloc] init];
 }
 
-//Sets up UI and setUpView. Recreates setUpView if it already exists (fixes crash when switching pages before interaction)
+// Sets up UI and setUpView. Recreates setUpView if it already exists (fixes crash when switching pages before interaction)
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [NSThread sleepForTimeInterval:0.3];
@@ -264,34 +264,34 @@ UIAlertView *overWriteAlert;
     [self autoOn];
 }
 
-//Removes textfield if the return key is pressed
+// Removes textfield if the return key is pressed
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return NO;
 }
 
-//Creates the initial UIView that the user interacts with
+// Creates the initial UIView that the user interacts with
 -(void)setUpScreen{
     if (initials == nil && !greyOut.superview) {
         
         twoFingerUp.enabled = false;
         twoFingerDown.enabled = false;
         
-        //Grays out the screen behind the setUpScreen
+        // Grays out the screen behind the setUpScreen
         CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
         greyOut = [[UIControl alloc] initWithFrame:greyOutRect];
         [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
         greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
         [self.view addSubview:greyOut];
         
-        //The white rectangle UIView that is the setUpView
+        // The white rectangle UIView that is the setUpView
         CGRect setUpViewRect = CGRectMake(70, 100, 628, 700);
         setUpView = [[UIControl alloc] initWithFrame:setUpViewRect];
         [setUpView addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
         setUpView.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
         setUpView.layer.cornerRadius = 10;
         
-        //Title at the top of the setUpView
+        // Title at the top of the setUpView
         CGRect setUpTitleRect = CGRectMake(214, 50, 200, 50);
         UILabel *setUpTitle = [[UILabel alloc] initWithFrame:setUpTitleRect];
         [setUpTitle setFont:[UIFont systemFontOfSize:25]];
@@ -299,7 +299,7 @@ UIAlertView *overWriteAlert;
         [setUpTitle setText:@"Sign in to Scout"];
         [setUpView addSubview:setUpTitle];
         
-        //UISegmentedControl for selecting what position the scout is
+        // UISegmentedControl for selecting what position the scout is
         CGRect red1SelectorRect = CGRectMake(124, 130, 380, 30);
         red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3",  nil]];
         [red1Selector addTarget:self action:@selector(red1Changed) forControlEvents:UIControlEventValueChanged];
@@ -308,7 +308,7 @@ UIAlertView *overWriteAlert;
         red1Selector.selectedSegmentIndex = red1Pos;
         NSLog(@"Red 1 Pos: %ld", (long)red1Pos);
         
-        //Labels the scout initials field
+        // Labels the scout initials field
         CGRect initialsFieldLblRect = CGRectMake(129, 190, 100, 15);
         UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
         initialsFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -316,7 +316,7 @@ UIAlertView *overWriteAlert;
         initialsFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:initialsFieldLbl];
         
-        //Textfield for the user to enter their initials in
+        // Textfield for the user to enter their initials in
         CGRect initialsFieldRect = CGRectMake(114, 210, 130, 40);
         initialsField = [[UITextField alloc] initWithFrame:initialsFieldRect];
         [initialsField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -333,7 +333,7 @@ UIAlertView *overWriteAlert;
         [initialsField setDelegate:self];
         [setUpView addSubview:initialsField];
         
-        //Labels the scout's team number field
+        // Labels the scout's team number field
         CGRect scoutTeamNumFieldLblRect = CGRectMake(264, 190, 100, 15);
         UILabel *scoutTeamNumFieldLbl = [[UILabel alloc] initWithFrame:scoutTeamNumFieldLblRect];
         scoutTeamNumFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -341,7 +341,7 @@ UIAlertView *overWriteAlert;
         scoutTeamNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:scoutTeamNumFieldLbl];
         
-        //Textfield for the scout's own team number to be entered in
+        // Textfield for the scout's own team number to be entered in
         CGRect scoutTeamNumFieldRect = CGRectMake(264, 210, 100, 40);
         scoutTeamNumField = [[UITextField alloc] initWithFrame:scoutTeamNumFieldRect];
         [scoutTeamNumField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -360,7 +360,7 @@ UIAlertView *overWriteAlert;
             scoutTeamNumField.text = scoutTeamNum;
         }
         
-        //Labels the current match field textfield
+        // Labels the current match field textfield
         CGRect currentMatchNumFieldLblRect = CGRectMake(384, 190, 130, 15);
         UILabel *currentMatchNumFieldLbl = [[UILabel alloc] initWithFrame:currentMatchNumFieldLblRect];
         currentMatchNumFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -368,7 +368,7 @@ UIAlertView *overWriteAlert;
         currentMatchNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:currentMatchNumFieldLbl];
         
-        //Textfield for the user to input whatever the match number is for the match they are about to watch (only needed on the initial setup, it's taken care of afterwards)
+        // Textfield for the user to input whatever the match number is for the match they are about to watch (only needed on the initial setup, it's taken care of afterwards)
         CGRect currentMatchNumFieldRect = CGRectMake(384, 210, 130, 40);
         currentMatchNumField = [[UITextField alloc] initWithFrame:currentMatchNumFieldRect];
         [currentMatchNumField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -384,7 +384,7 @@ UIAlertView *overWriteAlert;
         [currentMatchNumField setDelegate:self];
         [setUpView addSubview:currentMatchNumField];
         
-        
+        // Select either Qual or Elim match type (for data storage purposes)
         CGRect matchTypeSelectorRect = CGRectMake(364, 255, 170, 30);
         matchTypeSelector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Qualification", @"Elimination", nil]];
         matchTypeSelector.frame = matchTypeSelectorRect;
@@ -393,7 +393,7 @@ UIAlertView *overWriteAlert;
         matchTypeSelector.selectedSegmentIndex = 0;
         matchTypeSelector.transform = CGAffineTransformMakeScale(0.8, 0.8);
         
-        
+        // Title for week selector UISegmentedControl
         CGRect weekSelectorLblRect = CGRectMake(54, 310, 30, 30);
         UILabel *weekSelectorLbl = [[UILabel alloc] initWithFrame:weekSelectorLblRect];
         weekSelectorLbl.textAlignment = NSTextAlignmentCenter;
@@ -402,6 +402,7 @@ UIAlertView *overWriteAlert;
         weekSelectorLbl.textColor = [UIColor colorWithWhite:0.3 alpha:1.0];
         [setUpView addSubview:weekSelectorLbl];
         
+        // Narrows the selection list by week selected by user
         CGRect weekSelectorRect = CGRectMake(-39, 433, 215, 30);
         weekSelector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"All",@"1", @"2", @"3", @"4", @"5", @"6", @"7+",  nil]];
         [weekSelector setFrame:weekSelectorRect];
@@ -421,7 +422,7 @@ UIAlertView *overWriteAlert;
         }
         weekSelector.selectedSegmentIndex = weekSelected;
         
-        
+        // Label for the Regional Picker
         CGRect regionalPickerLblRect = CGRectMake(194, 305, 240, 30);
         UILabel *regionalPickerLbl = [[UILabel alloc] initWithFrame:regionalPickerLblRect];
         [regionalPickerLbl setFont:[UIFont systemFontOfSize:18]];
@@ -430,6 +431,7 @@ UIAlertView *overWriteAlert;
         [regionalPickerLbl setText:@"Select the event you are at"];
         [setUpView addSubview:regionalPickerLbl];
         
+        // Displays all regionals for user to select from
         CGRect regionalPickerRect = CGRectMake(104, 340, 420, 300);
         regionalPicker = [[UIPickerView alloc] initWithFrame:regionalPickerRect];
         regionalPicker.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.5];
@@ -441,6 +443,7 @@ UIAlertView *overWriteAlert;
             [regionalPicker selectRow:[regionalNames indexOfObject:currentRegional] inComponent:0 animated:YES];
         }
         
+        // Save and exit button
         UIButton *saveSetupButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [saveSetupButton addTarget:self action:@selector(eraseSetUpScreen) forControlEvents:UIControlEventTouchUpInside];
         [saveSetupButton setTitle:@"Save Settings" forState:UIControlStateNormal];
@@ -449,6 +452,7 @@ UIAlertView *overWriteAlert;
         [setUpView addSubview:saveSetupButton];
         saveSetupButton.layer.cornerRadius = 5;
         
+        // Zoom small animation
         setUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
         [greyOut addSubview:setUpView];
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
@@ -461,18 +465,22 @@ UIAlertView *overWriteAlert;
         }
 }
 
+// Creates custom screen for Multipeer Connectivity
 -(void)shareScreen{
+    // Gray background behind the view
     CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
     greyOut = [[UIControl alloc] initWithFrame:greyOutRect];
     [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
     greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
     [self.view addSubview:greyOut];
     
+    // The view itself
     CGRect shareScreenRect = CGRectMake(0, 0, 400, 500);
     shareScreen = [[UIView alloc] initWithFrame:shareScreenRect];
     shareScreen.backgroundColor = [UIColor whiteColor];
     shareScreen.layer.cornerRadius = 10;
     
+    // Title for the pop-up screen
     CGRect instaShareTitleRect = CGRectMake(100, 10, 200, 20);
     instaShareTitle = [[UILabel alloc] initWithFrame:instaShareTitleRect];
     instaShareTitle.text = @"Insta-Share Connect";
@@ -481,6 +489,7 @@ UIAlertView *overWriteAlert;
     instaShareTitle.textColor = [UIColor colorWithRed:63.0/255.0 green:192.0/255.0 blue:255.0/255.0 alpha:1];
     [shareScreen addSubview:instaShareTitle];
     
+    // Exit button on the top right
     CGRect closeButtonRect = CGRectMake(340, 5, 60, 20);
     closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
     closeButton.frame = closeButtonRect;
@@ -489,6 +498,7 @@ UIAlertView *overWriteAlert;
     [shareScreen addSubview:closeButton];
     closeButton.transform = CGAffineTransformMakeScale(0.8, 0.8);
     
+    // Labels the Host Switch
     CGRect hostSwitchLblRect = CGRectMake(75, 45, 50, 15);
     hostSwitchLbl = [[UILabel alloc] initWithFrame:hostSwitchLblRect];
     hostSwitchLbl.text = @"Host";
@@ -496,12 +506,14 @@ UIAlertView *overWriteAlert;
     hostSwitchLbl.font = [UIFont systemFontOfSize:12];
     [shareScreen addSubview:hostSwitchLbl];
     
+    // Initiates the Browser role of Multipeer Connectivity
     CGRect hostSwitchRect = CGRectMake(75, 60, 50, 30);
     hostSwitch = [[UISwitch alloc] initWithFrame:hostSwitchRect];
     [hostSwitch addTarget:self action:@selector(hostSwitch) forControlEvents:UIControlEventValueChanged];
     [shareScreen addSubview:hostSwitch];
     [hostSwitch setOn:host animated:YES];
     
+    // Labels the Visible Switch
     CGRect visibleSwitchLblRect = CGRectMake(275, 45, 50, 15);
     visibleSwitchLbl = [[UILabel alloc] initWithFrame:visibleSwitchLblRect];
     visibleSwitchLbl.text = @"Visible";
@@ -509,12 +521,14 @@ UIAlertView *overWriteAlert;
     visibleSwitchLbl.font = [UIFont systemFontOfSize:12];
     [shareScreen addSubview:visibleSwitchLbl];
     
+    // Initiates the Advertiser role of Multipeer Connectivity
     CGRect visibleSwitchRect = CGRectMake(275, 60, 50, 30);
     visibleSwitch = [[UISwitch alloc] initWithFrame:visibleSwitchRect];
     [visibleSwitch addTarget:self action:@selector(visibleSwitch) forControlEvents:UIControlEventValueChanged];
     [shareScreen addSubview:visibleSwitch];
     [visibleSwitch setOn:visible animated:YES];
     
+    // Labels the "Who's Visible" table
     CGRect visibleTableLblRect = CGRectMake(100, 110, 200, 15);
     visibleTableLbl = [[UILabel alloc] initWithFrame:visibleTableLblRect];
     visibleTableLbl.text = @"Who's in Range to Invite";
@@ -523,6 +537,7 @@ UIAlertView *overWriteAlert;
     [shareScreen addSubview:visibleTableLbl];
     visibleTableLbl.enabled = visible;
     
+    // Displays all advertisers in range of the browser (host)
     CGRect visibleTableRect = CGRectMake(10, 130, 380, 300);
     visibleTable = [[UITableView alloc] initWithFrame:visibleTableRect style:UITableViewStylePlain];
     visibleTable.layer.cornerRadius = 5;
@@ -545,7 +560,7 @@ UIAlertView *overWriteAlert;
         visibleTable.alpha = 0.5;
     }
     
-    
+    // Finish process (only enabled after a connection is established)
     CGRect doneButtonRect = CGRectMake(170, 445, 60, 40);
     doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
     doneButton.frame = doneButtonRect;
@@ -555,7 +570,7 @@ UIAlertView *overWriteAlert;
     doneButton.layer.cornerRadius = 5;
     [shareScreen addSubview:doneButton];
     
-    
+    // Hides and disables subviews of the ShareScreen so it doesn't look weird on the animation
     instaShareTitle.hidden = true;
     closeButton.hidden = true;
     closeButton.enabled = false;
@@ -569,6 +584,8 @@ UIAlertView *overWriteAlert;
     visibleTable.hidden = true;
     doneButton.hidden = true;
     doneButton.enabled = false;
+    
+    // Animates the ShareScreen to zoom in from the top left corner (where the button is)
     shareScreen.frame = CGRectMake(0, 0, 1, 1);
     [greyOut addSubview:shareScreen];
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
@@ -576,6 +593,7 @@ UIAlertView *overWriteAlert;
                          shareScreen.frame = CGRectMake(183, 264, 400, 500);
                      }
                      completion:^(BOOL finished){
+                         // Shows and enables subviews of ShareScreen after animation is done
                          instaShareTitle.hidden = false;
                          closeButton.hidden = false;
                          closeButton.enabled = true;
@@ -592,6 +610,8 @@ UIAlertView *overWriteAlert;
                      }];
     
 }
+
+// Initiates the Browser (host) role in Multipeer
 -(void)hostSwitch{
     if (hostSwitch.on) {
         host = true;
@@ -631,6 +651,7 @@ UIAlertView *overWriteAlert;
         }
     }
 }
+// Initiates the Advertiser (visible) role in Multipeer
 -(void)visibleSwitch{
     if (visibleSwitch.on) {
         visible = true;
@@ -655,6 +676,7 @@ UIAlertView *overWriteAlert;
         }
     }
 }
+// Takes away the ShareView with animation
 -(void)closeShareView{
     instaShareTitle.hidden = true;
     closeButton.hidden = true;
@@ -669,6 +691,8 @@ UIAlertView *overWriteAlert;
     visibleTable.hidden = true;
     doneButton.hidden = true;
     doneButton.enabled = false;
+    
+    // Zooms the ShareScreen small and back up to the top left corner
     [greyOut addSubview:shareScreen];
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
@@ -680,13 +704,16 @@ UIAlertView *overWriteAlert;
                          }];
 }
 
+// Called by the red1Selector UISegmentedControl in the SetUpView so that the scout's position is changed precisely when user changes it
 -(void)red1Changed{
     red1SelectedPos = red1Selector.selectedSegmentIndex;
     pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
     NSLog(@"%@", pos);
 }
 
+// Limits the three UITextFields in the SetUpView to only allow inputs that they are meant to have
 -(void)checkNumber{
+    // Makes sure only numbers are entered in these two fields
     if (scoutTeamNumField.isEditing) {
         NSMutableString *txt1 = [[NSMutableString alloc] initWithString:scoutTeamNumField.text];
         for (unsigned int i = 0; i < [txt1 length]; i++) {
@@ -719,6 +746,7 @@ UIAlertView *overWriteAlert;
             }
         }
     }
+    // Limits the initialsField to 3 characters
     if (initialsField.isEditing) {
         NSMutableString *txt3 = [[NSMutableString alloc] initWithString:initialsField.text];
         for (unsigned int i = 0; i < [txt3 length]; i++) {
@@ -735,6 +763,7 @@ UIAlertView *overWriteAlert;
     }
 }
 
+// Checks values and closes SetUpScreen after the "Save Settings" button is pressed
 -(void)eraseSetUpScreen{
     initials = nil;
     scoutTeamNum = nil;
@@ -743,11 +772,15 @@ UIAlertView *overWriteAlert;
     
     initials = initialsField.text;
     scoutTeamNum = scoutTeamNumField.text;
+    
+    // Creates a random team number for the scout to watch to simulate a loaded match schedule
     NSInteger randomTeamNum = arc4random() % 4000;
+    
     currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
     currentMatchNum = currentMatchNumField.text;
     currentRegional = [[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
     
+    // Checks for the correct number of initials
     if (!initials || initials.length != 3) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You didn't enter 3 initials!"
                                                        message: @"Please enter your three initials to show that you are scouting these matches"
@@ -756,6 +789,7 @@ UIAlertView *overWriteAlert;
                                              otherButtonTitles:nil];
         [alert show];
     }
+    // Checks for something to be entered in the scout's team number field
     else if (scoutTeamNumField.text.length == 0){
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Enter your team number!"
                                                        message: @"Enter the team number of the team that you are on"
@@ -764,6 +798,7 @@ UIAlertView *overWriteAlert;
                                              otherButtonTitles:nil];
         [alert show];
     }
+    // Checks for the current match number to have something entered in it
     else if (!currentMatchNum || currentMatchNumField.text.length == 0){
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No match number!!"
                                                        message: @"What you tryin' to get away with?!? Please enter the match number you're about to scout"
@@ -772,6 +807,7 @@ UIAlertView *overWriteAlert;
                                              otherButtonTitles:nil];
         [alert show];
     }
+    // Checks to make sure that the user selected a scouting position
     else if(!pos){
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You did not select which position you're scouting!"
                                                        message: @"Sorry to ruin your day, but in order to make this work out best for the both of us, you gotta select which position you are scouting (Red 1, Red 2, etc.)"
@@ -780,6 +816,7 @@ UIAlertView *overWriteAlert;
                                              otherButtonTitles:nil];
         [alert show];
     }
+    // If all tests pass, then the screen closes with a zoom small animation
     else{
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
@@ -790,17 +827,19 @@ UIAlertView *overWriteAlert;
                              [setUpView removeFromSuperview];
                              [greyOut removeFromSuperview];
                              
+                             // Updates editable values for the scout UI
                              currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
                              [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
                              _matchNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
-                             
                              
                              currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
                              [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
                              _teamNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
                              
+                             // Shows the initials of the scout
                              _initialsLbl.text = [[NSString alloc] initWithFormat:@"Your Initials: %@", initials];
                              
+                             // Displays the regional name in the top left corner in a box
                              _regionalNameLbl.text = currentRegional;
                              _regionalNameLbl.numberOfLines = 0;
                              [_regionalNameLbl sizeToFit];
@@ -812,6 +851,7 @@ UIAlertView *overWriteAlert;
                              
                              twoFingerDown.enabled = true;
                              
+                             // Shows the scouts position nice and large-like in the top center of the screen
                              CGRect red1Rect = CGRectMake(282, 150, 200, 60);
                              UILabel *red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
                              red1Lbl.text = pos;
@@ -835,6 +875,7 @@ UIAlertView *overWriteAlert;
     }
 }
 
+// Opens up the SetUpScreen once more after it has been closed once already (if users rotate)
 -(IBAction)reSignIn:(id)sender {
     initials = nil;
     _matchNumField.enabled = false;
