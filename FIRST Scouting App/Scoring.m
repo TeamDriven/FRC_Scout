@@ -102,7 +102,7 @@ MCSession *mySession;
 UIAlertView *inviteAlert;
 NSTimer *closeReenabler;
 PeerCell *lastSelectedCell;
-NSString *lastSelectedName;
+NSString *peerFoundID;
 NSString *myUniqueID;
 BOOL safe;
 NSMutableDictionary *dictToSend;
@@ -765,7 +765,7 @@ UIAlertView *overWriteAlert;
 
 
 /**********************************
- *********** SetUpScreen **********
+ ********** SetUpScreen ***********
  **********************************/
 
 // Called by the red1Selector UISegmentedControl in the SetUpView so that the scout's position is changed precisely when user changes it
@@ -832,6 +832,91 @@ UIAlertView *overWriteAlert;
     return NO;
 }
 
+/*---------------------------------
+ --------- UIPicker code ----------
+ ---------------------------------*/
+
+// Tell the picker how many rows are available for a given component based on WeekSelector selection
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
+    NSInteger numRows;
+    if (weekSelector.selectedSegmentIndex == 0) {
+        numRows = regionalNames.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 1){
+        numRows = week1Regionals.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 2){
+        numRows = week2Regionals.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 3){
+        numRows = week3Regionals.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 4){
+        numRows = week4Regionals.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 5){
+        numRows = week5Regionals.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 6){
+        numRows = week6Regionals.count;
+    }
+    else{
+        numRows = week7Regionals.count;
+    }
+    
+    return numRows;
+}
+
+// Tell the picker how many components it will have (1)
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
+    return 1;
+}
+
+// Give the picker its source of list items based on WeekSelector's selection
+-(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
+    UILabel* tView = (UILabel *)view;
+    if (!tView) {
+        tView = [[UILabel alloc] init];
+        
+        if (weekSelector.selectedSegmentIndex == 0) {
+            tView.text = [regionalNames objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 1){
+            tView.text = [week1Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 2){
+            tView.text = [week2Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 3){
+            tView.text = [week3Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 4){
+            tView.text = [week4Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 5){
+            tView.text = [week5Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 6){
+            tView.text = [week6Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 7){
+            tView.text = [week7Regionals objectAtIndex:row];
+        }
+        
+        tView.textAlignment = NSTextAlignmentCenter;
+        tView.font = [UIFont systemFontOfSize:20];
+        tView.minimumScaleFactor = 0.2;
+        tView.adjustsFontSizeToFitWidth = YES;
+    }
+    return tView;
+}
+
+// Tell the picker the width of each row for a given component (420)
+-(CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
+    int sectionWidth = 420;
+    
+    return sectionWidth;
+}
 
 /***********************************
  *********** ShareScreen ***********
@@ -904,29 +989,37 @@ UIAlertView *overWriteAlert;
 }
 
 
-/*****************************************
- ********** UITableView code *************
- *****************************************/
+/*-----------------------------------
+ ------- Visible Table Code ---------
+ -----------------------------------*/
+
+// Returns 1. No other sections needed for the Advertising peers
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;    //count of section
+    return 1;
 }
 
+// Returns the number of peers that the Browser detects
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [peersArray count];
 }
 
+// Creates the cells for the table
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *cellIdentifier = @"peerCellID";
     
     PeerCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
+    // Create the cell if it doesn't exist
     if (cell == nil)
     {
         cell = [[PeerCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:cellIdentifier];
-        cell.uniqueID = [[NSString alloc] initWithString:lastSelectedName];
+        // Stores the Advertiser's uniqueID in the cell's property
+        cell.uniqueID = [[NSString alloc] initWithString:peerFoundID];
         NSLog(@"Unique ID: %@", cell.uniqueID);
     }
+    
+    // Converts the shortened discovery string into a string that matches the pos variable
     NSString *smallString;
     if ([myPeerID.displayName isEqualToString:@"Red 1"]) {smallString = @"0";}
     else if ([myPeerID.displayName isEqualToString:@"Red 2"]){smallString = @"1";}
@@ -935,22 +1028,29 @@ UIAlertView *overWriteAlert;
     else if ([myPeerID.displayName isEqualToString:@"Blue 2"]){smallString = @"4";}
     else if ([myPeerID.displayName isEqualToString:@"Blue 3"]){smallString = @"5";}
     
+    // Displays the discovered scout's postition name
     cell.peerLbl.text = [[peersArray objectAtIndex:indexPath.row] displayName];
+    
+    // Hides the labels for connecting info
     cell.connectedLbl.alpha = 0;
     cell.userInteractionEnabled = true;
     doneButton.enabled = false;
     cell.alreadyConnectedLbl.alpha = 0;
     cell.userInteractionEnabled = true;
+    
+    // If the cell represents the last selected peer, then make the connected label visible
     if ([lastSelectedCell.uniqueID isEqualToString:cell.uniqueID]) {
         NSLog(@"UniqueID of last selected cell: %@", lastSelectedCell.uniqueID);
         cell.connectedLbl.alpha = 1;
         cell.userInteractionEnabled = false;
         doneButton.enabled = true;
     }
+    
     NSMutableArray *peerNamesArray = [[NSMutableArray alloc] init];
     for (MCPeerID *i in peersArray) {
         [peerNamesArray addObject:i.displayName];
     }
+    // If there is already a scout for that position in the group, this disallows user interaction and shows the alreadyConnected label
     if ([peerNamesArray containsObject:smallString] || [smallString isEqualToString:pos]) {
         cell.alreadyConnectedLbl.text = [[NSString alloc] initWithFormat:@"Already has a %@", myPeerID.displayName];
         cell.alreadyConnectedLbl.alpha = 1;
@@ -961,16 +1061,18 @@ UIAlertView *overWriteAlert;
     return cell;
 }
 
+// Returns the height of the cell (80)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     return 80;
     
 }
 
+// Invites the peer associated with the cell selected
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    // Disables the exit button so the user doesn't stop the process short of completion
     closeButton.enabled = false;
-    
     
     [visibleTable deselectRowAtIndexPath:indexPath animated:YES];
     PeerCell *selectedCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:indexPath];
@@ -981,9 +1083,11 @@ UIAlertView *overWriteAlert;
 }
 
 
-/*****************************************
- *********** Multipeer Code **************
- *****************************************/
+/*-----------------------------------
+ --------- Multipeer Code -----------
+ -----------------------------------*/
+
+// Adds the peer to the table if the peer doesn't already exist there
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info{
     NSLog(@"Found peer %@", peerID.displayName);
     NSString *uniqueIDString = [[NSString alloc] initWithString:[info objectForKey:@"DiscoveryString"]];
@@ -1007,13 +1111,14 @@ UIAlertView *overWriteAlert;
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [peersArray addObject:peerID];
             NSIndexPath *myIndex = [NSIndexPath indexPathForRow:[peersArray count]-1 inSection:0];
-            lastSelectedName = uniqueIDString;
+            peerFoundID = uniqueIDString;
             [visibleTable insertRowsAtIndexPaths:@[myIndex] withRowAnimation:UITableViewRowAnimationRight];
             safe = false;
         });
     }
 }
 
+// Removes the peer from the list if the Browser no longer sees them
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID{
     for (long i = [visibleTable numberOfRowsInSection:0]-1; i > -1; i--) {
         PeerCell *checkCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
@@ -1032,6 +1137,7 @@ UIAlertView *overWriteAlert;
     
 }
 
+//
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL accept, MCSession *session))invitationHandler{
     NSLog(@"Received invite from %@", peerID.displayName);
     
@@ -1149,95 +1255,7 @@ UIAlertView *overWriteAlert;
                                                                                         [NSNumber numberWithInteger:secs], @"uniqueID", nil] forKey:currentMatchNum];
 }
 
-/*****************************************
- ************ UIPicker code **************
- *****************************************/
 
--(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-    //handle selection
-}
-
-// tell the picker how many rows are available for a given component
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
-    NSInteger numRows;
-    if (weekSelector.selectedSegmentIndex == 0) {
-        numRows = regionalNames.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 1){
-        numRows = week1Regionals.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 2){
-        numRows = week2Regionals.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 3){
-        numRows = week3Regionals.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 4){
-        numRows = week4Regionals.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 5){
-        numRows = week5Regionals.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 6){
-        numRows = week6Regionals.count;
-    }
-    else{
-        numRows = week7Regionals.count;
-    }
-    
-    return numRows;
-}
-
-// tell the picker how many components it will have
--(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
-    return 1;
-}
-
-// give the picker its source of list items
--(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
-    UILabel* tView = (UILabel *)view;
-    if (!tView) {
-        tView = [[UILabel alloc] init];
-        
-        if (weekSelector.selectedSegmentIndex == 0) {
-            tView.text = [regionalNames objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 1){
-            tView.text = [week1Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 2){
-            tView.text = [week2Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 3){
-            tView.text = [week3Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 4){
-            tView.text = [week4Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 5){
-            tView.text = [week5Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 6){
-            tView.text = [week6Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 7){
-            tView.text = [week7Regionals objectAtIndex:row];
-        }
-        
-        tView.textAlignment = NSTextAlignmentCenter;
-        tView.font = [UIFont systemFontOfSize:20];
-        tView.minimumScaleFactor = 0.2;
-        tView.adjustsFontSizeToFitWidth = YES;
-    }
-    return tView;
-}
-
-// tell the picker the width of each row for a given component
--(CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
-    int sectionWidth = 420;
-    
-    return sectionWidth;
-}
 
 
 /*****************************************
