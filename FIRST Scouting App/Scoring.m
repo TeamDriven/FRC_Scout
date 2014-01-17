@@ -129,7 +129,7 @@ UIAlertView *overWriteAlert;
 
 
 /***********************************
- *********** Set Up Code ***********
+ ************ Set Up ***************
  ***********************************/
 
 // Sets up variables and things at beginning
@@ -1290,7 +1290,7 @@ UIAlertView *overWriteAlert;
 
 
 /*****************************************
- ********* Other code resume *************
+ ******** User Interaction Code **********
  *****************************************/
 
 // Activated by two finger swipe up (changes to auto UI)
@@ -1408,6 +1408,7 @@ UIAlertView *overWriteAlert;
     NSLog(@"AUTO OFF");
 }
 
+
 // Adds to the respective high scores
 - (IBAction)autoHighPlus:(id)sender {
     autoHighScore++;
@@ -1477,6 +1478,7 @@ UIAlertView *overWriteAlert;
     }
 }
 
+
 // Makes the match number editable
 -(IBAction)matchNumberEdit:(id)sender {
     _matchNumEdit.hidden = true;
@@ -1509,15 +1511,17 @@ UIAlertView *overWriteAlert;
 }
 
 
+// Saves data that the user recorded on their screen
 -(IBAction)saveMatch:(id)sender {
     
+    // If the match number was edited by the user during that match
     if (_matchNumEdit.isHidden) {
         currentMatchNum = _matchNumField.text;
     }
     else{
         currentMatchNum = _matchNumEdit.titleLabel.text;
     }
-    
+    // If the team number was edited by the user during the match
     if (_teamNumEdit.isHidden) {
         currentTeamNum = _teamNumField.text;
     }
@@ -1525,6 +1529,7 @@ UIAlertView *overWriteAlert;
         currentTeamNum = _teamNumEdit.titleLabel.text;
     }
     
+    // If for some reason there was no match number (Shouldn't occur, but just in case)
     if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO MATCH NUMBER"
                                                        message: @"Please enter a match number for this match."
@@ -1533,7 +1538,7 @@ UIAlertView *overWriteAlert;
                                              otherButtonTitles:nil];
         [alert show];
     }
-    
+    // Another unlikely case: No team number. Also shouldn't happen, but a good safety net
     else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO TEAM NUMBER"
                                                        message: @"Please enter a team number for this match."
@@ -1542,13 +1547,14 @@ UIAlertView *overWriteAlert;
                                              otherButtonTitles:nil];
         [alert show];
     }
-    
+    // If everything checks out, save the match locally
     else{
         [context performBlock:^{
             Regional *rgnl = [Regional createRegionalWithName:currentRegional inManagedObjectContext:context];
             
             Team *tm = [Team createTeamWithName:currentTeamNum inRegional:rgnl withManagedObjectContext:context];
             
+            // Create a uniqueID for this match
             NSDate *now = [NSDate date];
             secs = [now timeIntervalSince1970];
             
@@ -1571,6 +1577,7 @@ UIAlertView *overWriteAlert;
             
             Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
             
+            // If the match doesn't exist
             if ([match.uniqeID integerValue] == secs) {
                 [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
                     if (success) {
@@ -1582,6 +1589,7 @@ UIAlertView *overWriteAlert;
                 }];
             }
             else{
+                // Temporarily store the match and team that there was a duplicate of and call the AlertView
                 duplicateMatch = match;
                 teamWithDuplicate = tm;
                 duplicateMatchDict = matchDict;
@@ -1594,7 +1602,7 @@ UIAlertView *overWriteAlert;
 
 }
 
-
+// Called by the overWriteAlert AlertView affirmative response
 -(void)overWriteMatch{
     [context performBlock:^{
         [FSAdocument.managedObjectContext deleteObject:duplicateMatch];
@@ -1610,12 +1618,15 @@ UIAlertView *overWriteAlert;
     }];
 }
 
+// Handles UIAlertViews that appear for the user
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    // If the user does want to overwrite the conflicting match
     if ([alertView isEqual:overWriteAlert] && buttonIndex == 1) {
         [self overWriteMatch];
     }
 }
 
+// Creates the UIAlertView for notifying the user that there is a conflict in saving matches
 -(void)overWriteAlert{
     UIAlertView *overWriteAlert = [[UIAlertView alloc]initWithTitle: @"MATCH ALREADY EXISTS"
                                                    message: @"Did you mean a different match? Or would you like to overwrite the existing match?"
@@ -1625,7 +1636,9 @@ UIAlertView *overWriteAlert;
     [overWriteAlert show];
 }
 
+// Alerts user that there was a successful save and sends the match data on to connected peers
 -(void)saveSuccess{
+    // AlertView to show there was a successful save
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Success!"
                                                    message: @"You have saved the match!"
                                                   delegate: nil
@@ -1633,11 +1646,13 @@ UIAlertView *overWriteAlert;
                                          otherButtonTitles:nil];
     [alert show];
     
+    // Sends data to connected peers
     [self setUpData];
     NSData *dataToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
     NSError *error;
     [mySession sendData:dataToSend toPeers:[mySession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
     
+    // Reset all the scores and labels
     teleopHighScore = 0;
     _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
     autoHighScore = 0;
@@ -1655,17 +1670,20 @@ UIAlertView *overWriteAlert;
     largePenaltyTally = 0;
     _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
     
+    // Increment match number by 1
     NSInteger matchNumTranslator = [currentMatchNum integerValue];
     matchNumTranslator++;
     currentMatchNum = [[NSString alloc] initWithFormat:@"%ld", (long)matchNumTranslator];
     currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
     [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
     
+    // Generate a random team number to simulate a loaded schedule
     NSInteger randomTeamNum = arc4random() % 4000;
     currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
     currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
     [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
     
+    // Reset editability of match and team numbers
     if (_matchNumEdit.hidden) {
         _matchNumField.enabled = false;
         _matchNumField.hidden = true;
@@ -1679,12 +1697,12 @@ UIAlertView *overWriteAlert;
         _teamNumEdit.hidden = false;
     }
     
-    //NSLog(@"%@", dataDict);
-    
+    // Turns autonomous mode on
     [self autoOn];
     
 }
 
+// Hides any given keyboard. Kinda self-explanatory
 -(IBAction)hideKeyboard:(id)sender {
     [_matchNumField resignFirstResponder];
     [_teamNumField resignFirstResponder];
