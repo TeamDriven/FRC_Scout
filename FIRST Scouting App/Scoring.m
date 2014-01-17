@@ -258,6 +258,11 @@ UIAlertView *overWriteAlert;
     peersArray = [[NSMutableArray alloc] init];
 }
 
+-(void)didReceiveMemoryWarning{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
 // Sets up UI and setUpView. Recreates setUpView if it already exists (fixes crash when switching pages before interaction)
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
@@ -1288,6 +1293,7 @@ UIAlertView *overWriteAlert;
  ********* Other code resume *************
  *****************************************/
 
+// Activated by two finger swipe up (changes to auto UI)
 -(void)autoOn{
     autoYN = true;
     twoFingerUp.enabled = false;
@@ -1343,7 +1349,7 @@ UIAlertView *overWriteAlert;
     
     NSLog(@"AUTO ON");
 }
-
+// Activated by two finger swipe down (changes to telop UI)
 -(void)autoOff{
     autoYN = false;
     twoFingerUp.enabled = true;
@@ -1402,11 +1408,7 @@ UIAlertView *overWriteAlert;
     NSLog(@"AUTO OFF");
 }
 
--(void)didReceiveMemoryWarning{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
+// Adds to the respective high scores
 - (IBAction)autoHighPlus:(id)sender {
     autoHighScore++;
     _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
@@ -1415,7 +1417,7 @@ UIAlertView *overWriteAlert;
     teleopHighScore++;
     _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
 }
-
+// Subtracts from the respective high scores
 - (IBAction)autoHighMinus:(id)sender {
     if (autoHighScore > 0) {
         autoHighScore--;
@@ -1429,6 +1431,7 @@ UIAlertView *overWriteAlert;
     }
 }
 
+// Adds to the respective mid scores
 - (IBAction)autoMidPlus:(id)sender {
     autoMidScore++;
     _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
@@ -1437,7 +1440,7 @@ UIAlertView *overWriteAlert;
     teleopMidScore++;
     _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
 }
-
+// Subtracts from the respective mid scores
 - (IBAction)autoMidMinus:(id)sender {
     if (autoMidScore > 0) {
         autoMidScore--;
@@ -1451,6 +1454,7 @@ UIAlertView *overWriteAlert;
     }
 }
 
+// Adds to the respective low scores
 - (IBAction)autoLowPlus:(id)sender {
     autoLowScore++;
     _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
@@ -1459,7 +1463,7 @@ UIAlertView *overWriteAlert;
     teleopLowScore++;
     _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
 }
-
+// Subtracts from the respective low scores
 - (IBAction)autoLowMinus:(id)sender {
     if (autoLowScore > 0) {
         autoLowScore--;
@@ -1473,7 +1477,7 @@ UIAlertView *overWriteAlert;
     }
 }
 
-
+// Makes the match number editable
 -(IBAction)matchNumberEdit:(id)sender {
     _matchNumEdit.hidden = true;
     _matchNumEdit.enabled = false;
@@ -1482,7 +1486,7 @@ UIAlertView *overWriteAlert;
     _matchNumField.text = _matchNumEdit.titleLabel.text;
     [_matchNumField becomeFirstResponder];
 }
-
+// Makes the team number editable
 -(IBAction)teamNumberEdit:(id)sender {
     _teamNumEdit.hidden = true;
     _teamNumEdit.enabled = false;
@@ -1493,11 +1497,12 @@ UIAlertView *overWriteAlert;
     [_teamNumField becomeFirstResponder];
 }
 
+// Changes the value for the number of small penalties recorded
 -(IBAction)smallPenaltyChange:(id)sender {
     smallPenaltyTally = _smallPenaltyStepper.value;
     _smallPenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)smallPenaltyTally];
 }
-
+// Changes the value for the number of large penalties recorded
 -(IBAction)largePenaltyChange:(id)sender {
     largePenaltyTally = _largePenaltyStepper.value;
     _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
