@@ -25,7 +25,7 @@
 @implementation LocationsFirstViewController
 
 
-//Match Data Variables
+// Match Data Variables
 NSInteger teleopHighScore;
 NSInteger autoHighScore;
 NSInteger teleopMidScore;
@@ -36,7 +36,7 @@ NSInteger smallPenaltyTally;
 NSInteger largePenaltyTally;
 
 
-//Match Defining Variables
+// Match Defining Variables
 NSString *initials;
 NSString *scoutTeamNum;
 NSString *currentMatchNum;
@@ -46,7 +46,7 @@ NSString *pos;
 NSString *currentMatchType;
 
 
-//Core Data Filepath
+// Core Data Filepath
 NSFileManager *FSAfileManager;
 NSURL *FSAdocumentsDirectory;
 NSString *FSAdocumentName;
@@ -55,13 +55,13 @@ UIManagedDocument *FSAdocument;
 NSManagedObjectContext *context;
 
 
-//Finger Swipes
+// Finger Swipes
 UISwipeGestureRecognizer *twoFingerUp;
 UISwipeGestureRecognizer *twoFingerDown;
 Boolean autoYN;
 
 
-//SetUp Screen Declarations
+// SetUp Screen Declarations
 UIControl *greyOut;
 UIControl *setUpView;
 UISegmentedControl *red1Selector;
@@ -78,7 +78,7 @@ UISegmentedControl *weekSelector;
 NSInteger weekSelected;
 
 
-//Share Screen Declarations
+// Share Screen Declarations
 UIView *shareScreen;
 UILabel *instaShareTitle;
 UIButton *closeButton;
@@ -102,13 +102,13 @@ MCSession *mySession;
 UIAlertView *inviteAlert;
 NSTimer *closeReenabler;
 PeerCell *lastSelectedCell;
-NSString *lastSelectedName;
+NSString *peerFoundID;
 NSString *myUniqueID;
 BOOL safe;
 NSMutableDictionary *dictToSend;
 
 
-//Regional Arrays
+// Regional Arrays
 NSArray *regionalNames;
 NSArray *week1Regionals;
 NSArray *week2Regionals;
@@ -120,13 +120,19 @@ NSArray *week7Regionals;
 NSArray *allWeekRegionals;
 
 
-//Core Data Helpers
+// Core Data Helpers
 NSInteger secs;
 Team *teamWithDuplicate;
 Match *duplicateMatch;
 NSDictionary *duplicateMatchDict;
 UIAlertView *overWriteAlert;
 
+
+/***********************************
+ *********** Set Up Code ***********
+ ***********************************/
+
+// Sets up variables and things at beginning
 -(void)viewDidLoad{
     
     [super viewDidLoad];
@@ -156,17 +162,17 @@ UIAlertView *overWriteAlert;
     // *** Done Mapping to Core Data **
     
     
-    //Helps prepare for keyboard to appear/disappear (on storyboard UI)
+    // Helps prepare for keyboard to appear/disappear (on storyboard UI)
     self.matchNumField.delegate = self;
     self.teamNumField.delegate = self;
     
-    //Autonomous On Gesture
+    // Autonomous On Gesture
     twoFingerUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(autoOn)];
     [twoFingerUp setNumberOfTouchesRequired:2];
     [twoFingerUp setDirection:UISwipeGestureRecognizerDirectionUp];
     [self.view addGestureRecognizer:twoFingerUp];
     
-    //Autonomous Off Gesture
+    // Autonomous Off Gesture
     twoFingerDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(autoOff)];
     [twoFingerDown setNumberOfTouchesRequired:2];
     [twoFingerDown setDirection:UISwipeGestureRecognizerDirectionDown];
@@ -185,43 +191,43 @@ UIAlertView *overWriteAlert;
     
     _saveBtn.layer.cornerRadius = 5;
     
-    //All Regionals in 2014
+    // All Regionals in 2014
     regionalNames = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line District Competition",@"Southfield District Competition",@"Granite State District Event",@"PNW Auburn Mountainview District Event",@"MAR Mt. Olive District Competition",@"MAR Hatboro-Horsham District Comp.",@"Israel Regional",@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University District Competition",@"Gull Lake District Competition",@"PNW Oregon City District Event",@"PNW Glacier Peak District Event",@"Groton District Event",@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba District Competition",@"Howell District Competition",@"MAR Springside Chestnut Hill District Comp.",@"PNW Eastern Wash. University District Event",@"PNW Mt. Vernon District Event",@"MAR Clifton District Competition",@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan District Competition",@"Great Lakes Bay Region District Competition",@"Traverse City District Competition",@"PNW Wilsonville District Event",@"Rhode Island District Event",@"PNW Shorewood District Event",@"Southington District Event",@"MAR Lenape-Seneca District Competition",@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia District Competition",@"St. Joseph District Competition",@"Waterford District Competition",@"PNW Auburn District Event",@"PNW Central Wash. University District Event",@"Hartford District Event",@"MAR Bridgewater-Raritan District Competition",@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford District Competition",@"Troy District Competition",@"PNW Oregon State University District Event",@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
    
-    //Week 1 Regionals of 2014
+    // Week 1 Regionals of 2014
     week1Regionals = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line District Competition",@"Southfield District Competition",@"Granite State District Event",@"PNW Auburn Mountainview District Event",@"MAR Mt. Olive District Competition",@"MAR Hatboro-Horsham District Comp.",@"Israel Regional"];
     
-    //Week 2 Regionals of 2014
+    // Week 2 Regionals of 2014
     week2Regionals = @[@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University District Competition",@"Gull Lake District Competition",@"PNW Oregon City District Event",@"PNW Glacier Peak District Event",@"Groton District Event"];
     
-    //Week 3 Regionals of 2014
+    // Week 3 Regionals of 2014
     week3Regionals = @[@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba District Competition",@"Howell District Competition",@"MAR Springside Chestnut Hill District Comp.",@"PNW Eastern Wash. University District Event",@"PNW Mt. Vernon District Event",@"MAR Clifton District Competition"];
     
-    //Week 4 Regionals of 2014
+    // Week 4 Regionals of 2014
     week4Regionals = @[@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan District Competition",@"Great Lakes Bay Region District Competition",@"Traverse City District Competition",@"PNW Wilsonville District Event",@"Rhode Island District Event",@"PNW Shorewood District Event",@"Southington District Event",@"MAR Lenape-Seneca District Competition"];
     
-    //Week 5 Regionals of 2014
+    // Week 5 Regionals of 2014
     week5Regionals = @[@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia District Competition",@"St. Joseph District Competition",@"Waterford District Competition",@"PNW Auburn District Event",@"PNW Central Wash. University District Event",@"Hartford District Event",@"MAR Bridgewater-Raritan District Competition"];
     
-    //Week 6 Regionals of 2014
+    // Week 6 Regionals of 2014
     week6Regionals = @[@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford District Competition",@"Troy District Competition",@"PNW Oregon State University District Event"];
     
-    //Week 7+ Regionals of 2014
+    // Week 7+ Regionals of 2014
     week7Regionals = @[@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
     
     allWeekRegionals = @[regionalNames,week1Regionals,week2Regionals,week3Regionals,week4Regionals,week5Regionals,week6Regionals,week7Regionals];
     
-    //Value for WeekSelector UISegmentedControl to start at
+    // Value for WeekSelector UISegmentedControl to start at
     weekSelected = 0;
     
-    //Match type: Qualifying vs. Elimination
+    // Match type: Qualifying vs. Elimination
     currentMatchType = @"Q";
     
-    //Multipeer roles booleans
+    // Multipeer roles booleans
     host = false;
     visible = false;
     
-    //Sets up storyboard UI
+    // Sets up storyboard UI
     _teleopHighMinusBtn.alpha = 0;
     _teleopHighMinusBtn.enabled = false;
     _teleopHighPlusBtn.alpha = 0;
@@ -248,11 +254,11 @@ UIAlertView *overWriteAlert;
     _autoLowPlusBtn.alpha = 1;
     _autoLowPlusBtn.enabled = true;
     
-    //Mutable array of connected peers in the Multipeer Connection
+    // Mutable array of connected peers in the Multipeer Connection
     peersArray = [[NSMutableArray alloc] init];
 }
 
-//Sets up UI and setUpView. Recreates setUpView if it already exists (fixes crash when switching pages before interaction)
+// Sets up UI and setUpView. Recreates setUpView if it already exists (fixes crash when switching pages before interaction)
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [NSThread sleepForTimeInterval:0.3];
@@ -264,34 +270,28 @@ UIAlertView *overWriteAlert;
     [self autoOn];
 }
 
-//Removes textfield if the return key is pressed
--(BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    return NO;
-}
-
-//Creates the initial UIView that the user interacts with
+// Creates the initial UIView that the user interacts with
 -(void)setUpScreen{
     if (initials == nil && !greyOut.superview) {
         
         twoFingerUp.enabled = false;
         twoFingerDown.enabled = false;
         
-        //Grays out the screen behind the setUpScreen
+        // Grays out the screen behind the setUpScreen
         CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
         greyOut = [[UIControl alloc] initWithFrame:greyOutRect];
         [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
         greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
         [self.view addSubview:greyOut];
         
-        //The white rectangle UIView that is the setUpView
+        // The white rectangle UIView that is the setUpView
         CGRect setUpViewRect = CGRectMake(70, 100, 628, 700);
         setUpView = [[UIControl alloc] initWithFrame:setUpViewRect];
         [setUpView addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
         setUpView.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
         setUpView.layer.cornerRadius = 10;
         
-        //Title at the top of the setUpView
+        // Title at the top of the setUpView
         CGRect setUpTitleRect = CGRectMake(214, 50, 200, 50);
         UILabel *setUpTitle = [[UILabel alloc] initWithFrame:setUpTitleRect];
         [setUpTitle setFont:[UIFont systemFontOfSize:25]];
@@ -299,7 +299,7 @@ UIAlertView *overWriteAlert;
         [setUpTitle setText:@"Sign in to Scout"];
         [setUpView addSubview:setUpTitle];
         
-        //UISegmentedControl for selecting what position the scout is
+        // UISegmentedControl for selecting what position the scout is
         CGRect red1SelectorRect = CGRectMake(124, 130, 380, 30);
         red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3",  nil]];
         [red1Selector addTarget:self action:@selector(red1Changed) forControlEvents:UIControlEventValueChanged];
@@ -308,7 +308,7 @@ UIAlertView *overWriteAlert;
         red1Selector.selectedSegmentIndex = red1Pos;
         NSLog(@"Red 1 Pos: %ld", (long)red1Pos);
         
-        //Labels the scout initials field
+        // Labels the scout initials field
         CGRect initialsFieldLblRect = CGRectMake(129, 190, 100, 15);
         UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
         initialsFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -316,7 +316,7 @@ UIAlertView *overWriteAlert;
         initialsFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:initialsFieldLbl];
         
-        //Textfield for the user to enter their initials in
+        // Textfield for the user to enter their initials in
         CGRect initialsFieldRect = CGRectMake(114, 210, 130, 40);
         initialsField = [[UITextField alloc] initWithFrame:initialsFieldRect];
         [initialsField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -333,7 +333,7 @@ UIAlertView *overWriteAlert;
         [initialsField setDelegate:self];
         [setUpView addSubview:initialsField];
         
-        //Labels the scout's team number field
+        // Labels the scout's team number field
         CGRect scoutTeamNumFieldLblRect = CGRectMake(264, 190, 100, 15);
         UILabel *scoutTeamNumFieldLbl = [[UILabel alloc] initWithFrame:scoutTeamNumFieldLblRect];
         scoutTeamNumFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -341,7 +341,7 @@ UIAlertView *overWriteAlert;
         scoutTeamNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:scoutTeamNumFieldLbl];
         
-        //Textfield for the scout's own team number to be entered in
+        // Textfield for the scout's own team number to be entered in
         CGRect scoutTeamNumFieldRect = CGRectMake(264, 210, 100, 40);
         scoutTeamNumField = [[UITextField alloc] initWithFrame:scoutTeamNumFieldRect];
         [scoutTeamNumField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -360,7 +360,7 @@ UIAlertView *overWriteAlert;
             scoutTeamNumField.text = scoutTeamNum;
         }
         
-        //Labels the current match field textfield
+        // Labels the current match field textfield
         CGRect currentMatchNumFieldLblRect = CGRectMake(384, 190, 130, 15);
         UILabel *currentMatchNumFieldLbl = [[UILabel alloc] initWithFrame:currentMatchNumFieldLblRect];
         currentMatchNumFieldLbl.textAlignment = NSTextAlignmentCenter;
@@ -368,7 +368,7 @@ UIAlertView *overWriteAlert;
         currentMatchNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:currentMatchNumFieldLbl];
         
-        //Textfield for the user to input whatever the match number is for the match they are about to watch (only needed on the initial setup, it's taken care of afterwards)
+        // Textfield for the user to input whatever the match number is for the match they are about to watch (only needed on the initial setup, it's taken care of afterwards)
         CGRect currentMatchNumFieldRect = CGRectMake(384, 210, 130, 40);
         currentMatchNumField = [[UITextField alloc] initWithFrame:currentMatchNumFieldRect];
         [currentMatchNumField addTarget:self action:@selector(checkNumber) forControlEvents:UIControlEventEditingChanged];
@@ -384,7 +384,7 @@ UIAlertView *overWriteAlert;
         [currentMatchNumField setDelegate:self];
         [setUpView addSubview:currentMatchNumField];
         
-        
+        // Select either Qual or Elim match type (for data storage purposes)
         CGRect matchTypeSelectorRect = CGRectMake(364, 255, 170, 30);
         matchTypeSelector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Qualification", @"Elimination", nil]];
         matchTypeSelector.frame = matchTypeSelectorRect;
@@ -393,7 +393,7 @@ UIAlertView *overWriteAlert;
         matchTypeSelector.selectedSegmentIndex = 0;
         matchTypeSelector.transform = CGAffineTransformMakeScale(0.8, 0.8);
         
-        
+        // Title for week selector UISegmentedControl
         CGRect weekSelectorLblRect = CGRectMake(54, 310, 30, 30);
         UILabel *weekSelectorLbl = [[UILabel alloc] initWithFrame:weekSelectorLblRect];
         weekSelectorLbl.textAlignment = NSTextAlignmentCenter;
@@ -402,6 +402,7 @@ UIAlertView *overWriteAlert;
         weekSelectorLbl.textColor = [UIColor colorWithWhite:0.3 alpha:1.0];
         [setUpView addSubview:weekSelectorLbl];
         
+        // Narrows the selection list by week selected by user
         CGRect weekSelectorRect = CGRectMake(-39, 433, 215, 30);
         weekSelector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"All",@"1", @"2", @"3", @"4", @"5", @"6", @"7+",  nil]];
         [weekSelector setFrame:weekSelectorRect];
@@ -421,7 +422,7 @@ UIAlertView *overWriteAlert;
         }
         weekSelector.selectedSegmentIndex = weekSelected;
         
-        
+        // Label for the Regional Picker
         CGRect regionalPickerLblRect = CGRectMake(194, 305, 240, 30);
         UILabel *regionalPickerLbl = [[UILabel alloc] initWithFrame:regionalPickerLblRect];
         [regionalPickerLbl setFont:[UIFont systemFontOfSize:18]];
@@ -430,6 +431,7 @@ UIAlertView *overWriteAlert;
         [regionalPickerLbl setText:@"Select the event you are at"];
         [setUpView addSubview:regionalPickerLbl];
         
+        // Displays all regionals for user to select from
         CGRect regionalPickerRect = CGRectMake(104, 340, 420, 300);
         regionalPicker = [[UIPickerView alloc] initWithFrame:regionalPickerRect];
         regionalPicker.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.5];
@@ -441,6 +443,7 @@ UIAlertView *overWriteAlert;
             [regionalPicker selectRow:[regionalNames indexOfObject:currentRegional] inComponent:0 animated:YES];
         }
         
+        // Save and exit button
         UIButton *saveSetupButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [saveSetupButton addTarget:self action:@selector(eraseSetUpScreen) forControlEvents:UIControlEventTouchUpInside];
         [saveSetupButton setTitle:@"Save Settings" forState:UIControlStateNormal];
@@ -449,6 +452,7 @@ UIAlertView *overWriteAlert;
         [setUpView addSubview:saveSetupButton];
         saveSetupButton.layer.cornerRadius = 5;
         
+        // Zoom small animation
         setUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
         [greyOut addSubview:setUpView];
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
@@ -460,19 +464,151 @@ UIAlertView *overWriteAlert;
 
         }
 }
+// Checks values and closes SetUpScreen after the "Save Settings" button is pressed
+-(void)eraseSetUpScreen{
+    initials = nil;
+    scoutTeamNum = nil;
+    currentMatchNum = nil;
+    currentRegional = nil;
+    
+    initials = initialsField.text;
+    scoutTeamNum = scoutTeamNumField.text;
+    
+    // Creates a random team number for the scout to watch to simulate a loaded match schedule
+    NSInteger randomTeamNum = arc4random() % 4000;
+    
+    currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
+    currentMatchNum = currentMatchNumField.text;
+    currentRegional = [[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
+    
+    // Checks for the correct number of initials
+    if (!initials || initials.length != 3) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You didn't enter 3 initials!"
+                                                       message: @"Please enter your three initials to show that you are scouting these matches"
+                                                      delegate: nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    // Checks for something to be entered in the scout's team number field
+    else if (scoutTeamNumField.text.length == 0){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Enter your team number!"
+                                                       message: @"Enter the team number of the team that you are on"
+                                                      delegate: nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    // Checks for the current match number to have something entered in it
+    else if (!currentMatchNum || currentMatchNumField.text.length == 0){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No match number!!"
+                                                       message: @"What you tryin' to get away with?!? Please enter the match number you're about to scout"
+                                                      delegate: nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    // Checks to make sure that the user selected a scouting position
+    else if(!pos){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You did not select which position you're scouting!"
+                                                       message: @"Sorry to ruin your day, but in order to make this work out best for the both of us, you gotta select which position you are scouting (Red 1, Red 2, etc.)"
+                                                      delegate: nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    // If all tests pass, then the screen closes with a zoom small animation
+    else{
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             setUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
+                         }
+                         completion:^(BOOL finished){
+                             
+                             [setUpView removeFromSuperview];
+                             [greyOut removeFromSuperview];
+                             
+                             // Updates editable values for the scout UI
+                             currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
+                             [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
+                             _matchNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
+                             
+                             currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
+                             [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
+                             _teamNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
+                             
+                             // Shows the initials of the scout
+                             _initialsLbl.text = [[NSString alloc] initWithFormat:@"Your Initials: %@", initials];
+                             
+                             // Displays the regional name in the top left corner in a box
+                             _regionalNameLbl.text = currentRegional;
+                             _regionalNameLbl.numberOfLines = 0;
+                             [_regionalNameLbl sizeToFit];
+                             _regionalNameLbl.adjustsFontSizeToFitWidth = YES;
+                             _regionalNameLbl.textAlignment = NSTextAlignmentCenter;
+                             _regionalNameLbl.textColor = [UIColor colorWithWhite:0.2 alpha:0.8];
+                             _regionalNameLbl.layer.borderColor = [UIColor colorWithWhite:0.5 alpha:0.5].CGColor;
+                             _regionalNameLbl.layer.borderWidth = 1.0;
+                             
+                             twoFingerDown.enabled = true;
+                             
+                             // Shows the scouts position nice and large-like in the top center of the screen
+                             CGRect red1Rect = CGRectMake(282, 150, 200, 60);
+                             UILabel *red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
+                             red1Lbl.text = pos;
+                             red1Lbl.font = [UIFont boldSystemFontOfSize:25];
+                             red1Lbl.textColor = [UIColor whiteColor];
+                             red1Lbl.textAlignment = NSTextAlignmentCenter;
+                             red1Lbl.layer.cornerRadius = 5;
+                             if (red1Selector.selectedSegmentIndex < 3) {
+                                 red1Lbl.backgroundColor = [UIColor redColor];
+                             }
+                             else{
+                                 red1Lbl.backgroundColor = [UIColor blueColor];
+                             }
+                             [self.view addSubview:red1Lbl];
+                             
+                             red1Pos = red1Selector.selectedSegmentIndex;
+                             
+                             
+                         }];
+        NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
+    }
+}
+// Opens up the SetUpScreen once more after it has been closed once already (if users rotate)
+-(IBAction)reSignIn:(id)sender {
+    initials = nil;
+    _matchNumField.enabled = false;
+    _matchNumField.hidden = true;
+    _matchNumEdit.enabled = true;
+    _matchNumEdit.hidden = false;
+    
+    _teamNumField.enabled = false;
+    _teamNumField.hidden = true;
+    _teamNumEdit.enabled = true;
+    _teamNumEdit.hidden = false;
+    [self setUpScreen];
+}
 
+- (IBAction)instashare:(id)sender {
+    [self shareScreen];
+}
+// Creates custom screen for Multipeer Connectivity
 -(void)shareScreen{
+    // Gray background behind the view
     CGRect greyOutRect = CGRectMake(0, 0, 768, 1024);
     greyOut = [[UIControl alloc] initWithFrame:greyOutRect];
     [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
     greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
     [self.view addSubview:greyOut];
     
+    // The view itself
     CGRect shareScreenRect = CGRectMake(0, 0, 400, 500);
     shareScreen = [[UIView alloc] initWithFrame:shareScreenRect];
     shareScreen.backgroundColor = [UIColor whiteColor];
     shareScreen.layer.cornerRadius = 10;
     
+    // Title for the pop-up screen
     CGRect instaShareTitleRect = CGRectMake(100, 10, 200, 20);
     instaShareTitle = [[UILabel alloc] initWithFrame:instaShareTitleRect];
     instaShareTitle.text = @"Insta-Share Connect";
@@ -481,6 +617,7 @@ UIAlertView *overWriteAlert;
     instaShareTitle.textColor = [UIColor colorWithRed:63.0/255.0 green:192.0/255.0 blue:255.0/255.0 alpha:1];
     [shareScreen addSubview:instaShareTitle];
     
+    // Exit button on the top right
     CGRect closeButtonRect = CGRectMake(340, 5, 60, 20);
     closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
     closeButton.frame = closeButtonRect;
@@ -489,6 +626,7 @@ UIAlertView *overWriteAlert;
     [shareScreen addSubview:closeButton];
     closeButton.transform = CGAffineTransformMakeScale(0.8, 0.8);
     
+    // Labels the Host Switch
     CGRect hostSwitchLblRect = CGRectMake(75, 45, 50, 15);
     hostSwitchLbl = [[UILabel alloc] initWithFrame:hostSwitchLblRect];
     hostSwitchLbl.text = @"Host";
@@ -496,12 +634,14 @@ UIAlertView *overWriteAlert;
     hostSwitchLbl.font = [UIFont systemFontOfSize:12];
     [shareScreen addSubview:hostSwitchLbl];
     
+    // Initiates the Browser role of Multipeer Connectivity
     CGRect hostSwitchRect = CGRectMake(75, 60, 50, 30);
     hostSwitch = [[UISwitch alloc] initWithFrame:hostSwitchRect];
     [hostSwitch addTarget:self action:@selector(hostSwitch) forControlEvents:UIControlEventValueChanged];
     [shareScreen addSubview:hostSwitch];
     [hostSwitch setOn:host animated:YES];
     
+    // Labels the Visible Switch
     CGRect visibleSwitchLblRect = CGRectMake(275, 45, 50, 15);
     visibleSwitchLbl = [[UILabel alloc] initWithFrame:visibleSwitchLblRect];
     visibleSwitchLbl.text = @"Visible";
@@ -509,12 +649,14 @@ UIAlertView *overWriteAlert;
     visibleSwitchLbl.font = [UIFont systemFontOfSize:12];
     [shareScreen addSubview:visibleSwitchLbl];
     
+    // Initiates the Advertiser role of Multipeer Connectivity
     CGRect visibleSwitchRect = CGRectMake(275, 60, 50, 30);
     visibleSwitch = [[UISwitch alloc] initWithFrame:visibleSwitchRect];
     [visibleSwitch addTarget:self action:@selector(visibleSwitch) forControlEvents:UIControlEventValueChanged];
     [shareScreen addSubview:visibleSwitch];
     [visibleSwitch setOn:visible animated:YES];
     
+    // Labels the "Who's Visible" table
     CGRect visibleTableLblRect = CGRectMake(100, 110, 200, 15);
     visibleTableLbl = [[UILabel alloc] initWithFrame:visibleTableLblRect];
     visibleTableLbl.text = @"Who's in Range to Invite";
@@ -523,6 +665,7 @@ UIAlertView *overWriteAlert;
     [shareScreen addSubview:visibleTableLbl];
     visibleTableLbl.enabled = visible;
     
+    // Displays all advertisers in range of the browser (host)
     CGRect visibleTableRect = CGRectMake(10, 130, 380, 300);
     visibleTable = [[UITableView alloc] initWithFrame:visibleTableRect style:UITableViewStylePlain];
     visibleTable.layer.cornerRadius = 5;
@@ -545,7 +688,7 @@ UIAlertView *overWriteAlert;
         visibleTable.alpha = 0.5;
     }
     
-    
+    // Finish process (only enabled after a connection is established)
     CGRect doneButtonRect = CGRectMake(170, 445, 60, 40);
     doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
     doneButton.frame = doneButtonRect;
@@ -555,7 +698,7 @@ UIAlertView *overWriteAlert;
     doneButton.layer.cornerRadius = 5;
     [shareScreen addSubview:doneButton];
     
-    
+    // Hides and disables subviews of the ShareScreen so it doesn't look weird on the animation
     instaShareTitle.hidden = true;
     closeButton.hidden = true;
     closeButton.enabled = false;
@@ -569,6 +712,8 @@ UIAlertView *overWriteAlert;
     visibleTable.hidden = true;
     doneButton.hidden = true;
     doneButton.enabled = false;
+    
+    // Animates the ShareScreen to zoom in from the top left corner (where the button is)
     shareScreen.frame = CGRectMake(0, 0, 1, 1);
     [greyOut addSubview:shareScreen];
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
@@ -576,6 +721,7 @@ UIAlertView *overWriteAlert;
                          shareScreen.frame = CGRectMake(183, 264, 400, 500);
                      }
                      completion:^(BOOL finished){
+                         // Shows and enables subviews of ShareScreen after animation is done
                          instaShareTitle.hidden = false;
                          closeButton.hidden = false;
                          closeButton.enabled = true;
@@ -592,6 +738,218 @@ UIAlertView *overWriteAlert;
                      }];
     
 }
+// Takes away the ShareView with animation
+-(void)closeShareView{
+    instaShareTitle.hidden = true;
+    closeButton.hidden = true;
+    closeButton.enabled = false;
+    hostSwitchLbl.hidden = true;
+    hostSwitch.hidden = true;
+    hostSwitch.enabled = false;
+    visibleSwitchLbl.hidden = true;
+    visibleSwitch.hidden = true;
+    visibleSwitch.enabled = false;
+    visibleTableLbl.hidden = true;
+    visibleTable.hidden = true;
+    doneButton.hidden = true;
+    doneButton.enabled = false;
+    
+    // Zooms the ShareScreen small and back up to the top left corner
+    [greyOut addSubview:shareScreen];
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         shareScreen.frame = CGRectMake(0, 0, 1, 1);
+                     }
+                     completion:^(BOOL finished){
+                         [shareScreen removeFromSuperview];
+                         [greyOut removeFromSuperview];
+                         }];
+}
+
+
+/**********************************
+ ********** SetUpScreen ***********
+ **********************************/
+
+// Called by the red1Selector UISegmentedControl in the SetUpView so that the scout's position is changed precisely when user changes it
+-(void)red1Changed{
+    red1SelectedPos = red1Selector.selectedSegmentIndex;
+    pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
+    NSLog(@"%@", pos);
+}
+// Called by the matchTypeSelector UISegmentedControl
+-(void)changeMatchType{
+    if (matchTypeSelector.selectedSegmentIndex == 0) {
+        currentMatchType = @"Q";
+    }
+    else{
+        currentMatchType = @"E";
+    }
+}
+// Called by the weekSelector UISegmentedControl
+-(void)changeWeek{
+    if ([[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]containsObject:[[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]]]) {
+        NSString *regional = [[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
+        [regionalPicker reloadAllComponents];
+        [regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]indexOfObject:regional] inComponent:0 animated:YES];
+    }
+    else{
+       [regionalPicker reloadAllComponents];
+       [regionalPicker selectRow:0 inComponent:0 animated:YES];
+    }
+    
+    weekSelected = weekSelector.selectedSegmentIndex;
+}
+
+// Limits the three UITextFields in the SetUpView to only allow inputs that they are meant to have
+-(void)checkNumber{
+    // Makes sure only numbers are entered in these two fields
+    if (scoutTeamNumField.isEditing) {
+        NSMutableString *txt1 = [[NSMutableString alloc] initWithString:scoutTeamNumField.text];
+        for (unsigned int i = 0; i < [txt1 length]; i++) {
+            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt1 characterAtIndex:i]];
+            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
+                                                               message: @"Please only enter numbers in the \"Your Team Number\" text field"
+                                                              delegate: nil
+                                                     cancelButtonTitle:@"Sorry..."
+                                                     otherButtonTitles:nil];
+                [alert show];
+                [txt1 deleteCharactersInRange:NSMakeRange(i, 1)];
+                scoutTeamNumField.text = [[NSString alloc] initWithString:txt1];
+            }
+        }
+    }
+    if (currentMatchNumField.isEditing) {
+        NSMutableString *txt2 = [[NSMutableString alloc] initWithString:currentMatchNumField.text];
+        for (unsigned int i = 0; i < [txt2 length]; i++) {
+            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt2 characterAtIndex:i]];
+            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
+                                                               message: @"Please only enter numbers in the \"Current Match Number\" text field"
+                                                              delegate: nil
+                                                     cancelButtonTitle:@"Sorry..."
+                                                     otherButtonTitles:nil];
+                [alert show];
+                [txt2 deleteCharactersInRange:NSMakeRange(i, 1)];
+                currentMatchNumField.text = [[NSString alloc] initWithString:txt2];
+            }
+        }
+    }
+    // Limits the initialsField to 3 characters
+    if (initialsField.isEditing) {
+        NSMutableString *txt3 = [[NSMutableString alloc] initWithString:initialsField.text];
+        for (unsigned int i = 0; i < [txt3 length]; i++) {
+            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt3 characterAtIndex:i]];
+            if ([character isEqualToString:@" "]) {
+                [txt3 deleteCharactersInRange:NSMakeRange(i, 1)];
+                initialsField.text = [[NSString alloc] initWithString:txt3];
+            }
+        }
+        if ([txt3 length] > 3) {
+            [txt3 deleteCharactersInRange:NSMakeRange(3, 1)];
+            initialsField.text = [[NSString alloc] initWithString:txt3];
+        }
+    }
+}
+// Removes textfield if the return key is pressed
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
+}
+
+/*---------------------------------
+ --------- UIPicker code ----------
+ ---------------------------------*/
+
+// Tell the picker how many rows are available for a given component based on WeekSelector selection
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
+    NSInteger numRows;
+    if (weekSelector.selectedSegmentIndex == 0) {
+        numRows = regionalNames.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 1){
+        numRows = week1Regionals.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 2){
+        numRows = week2Regionals.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 3){
+        numRows = week3Regionals.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 4){
+        numRows = week4Regionals.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 5){
+        numRows = week5Regionals.count;
+    }
+    else if (weekSelector.selectedSegmentIndex == 6){
+        numRows = week6Regionals.count;
+    }
+    else{
+        numRows = week7Regionals.count;
+    }
+    
+    return numRows;
+}
+
+// Tell the picker how many components it will have (1)
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
+    return 1;
+}
+
+// Give the picker its source of list items based on WeekSelector's selection
+-(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
+    UILabel* tView = (UILabel *)view;
+    if (!tView) {
+        tView = [[UILabel alloc] init];
+        
+        if (weekSelector.selectedSegmentIndex == 0) {
+            tView.text = [regionalNames objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 1){
+            tView.text = [week1Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 2){
+            tView.text = [week2Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 3){
+            tView.text = [week3Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 4){
+            tView.text = [week4Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 5){
+            tView.text = [week5Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 6){
+            tView.text = [week6Regionals objectAtIndex:row];
+        }
+        else if (weekSelector.selectedSegmentIndex == 7){
+            tView.text = [week7Regionals objectAtIndex:row];
+        }
+        
+        tView.textAlignment = NSTextAlignmentCenter;
+        tView.font = [UIFont systemFontOfSize:20];
+        tView.minimumScaleFactor = 0.2;
+        tView.adjustsFontSizeToFitWidth = YES;
+    }
+    return tView;
+}
+
+// Tell the picker the width of each row for a given component (420)
+-(CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
+    int sectionWidth = 420;
+    
+    return sectionWidth;
+}
+
+/***********************************
+ *********** ShareScreen ***********
+ ***********************************/
+
+
+// Initiates the Browser (host) role in Multipeer
 -(void)hostSwitch{
     if (hostSwitch.on) {
         host = true;
@@ -631,6 +989,7 @@ UIAlertView *overWriteAlert;
         }
     }
 }
+// Initiates the Advertiser (visible) role in Multipeer
 -(void)visibleSwitch{
     if (visibleSwitch.on) {
         visible = true;
@@ -655,223 +1014,39 @@ UIAlertView *overWriteAlert;
         }
     }
 }
--(void)closeShareView{
-    instaShareTitle.hidden = true;
-    closeButton.hidden = true;
-    closeButton.enabled = false;
-    hostSwitchLbl.hidden = true;
-    hostSwitch.hidden = true;
-    hostSwitch.enabled = false;
-    visibleSwitchLbl.hidden = true;
-    visibleSwitch.hidden = true;
-    visibleSwitch.enabled = false;
-    visibleTableLbl.hidden = true;
-    visibleTable.hidden = true;
-    doneButton.hidden = true;
-    doneButton.enabled = false;
-    [greyOut addSubview:shareScreen];
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         shareScreen.frame = CGRectMake(0, 0, 1, 1);
-                     }
-                     completion:^(BOOL finished){
-                         [shareScreen removeFromSuperview];
-                         [greyOut removeFromSuperview];
-                         }];
-}
 
--(void)red1Changed{
-    red1SelectedPos = red1Selector.selectedSegmentIndex;
-    pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
-    NSLog(@"%@", pos);
-}
 
--(void)checkNumber{
-    if (scoutTeamNumField.isEditing) {
-        NSMutableString *txt1 = [[NSMutableString alloc] initWithString:scoutTeamNumField.text];
-        for (unsigned int i = 0; i < [txt1 length]; i++) {
-            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt1 characterAtIndex:i]];
-            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
-                                                               message: @"Please only enter numbers in the \"Your Team Number\" text field"
-                                                              delegate: nil
-                                                     cancelButtonTitle:@"Sorry..."
-                                                     otherButtonTitles:nil];
-                [alert show];
-                [txt1 deleteCharactersInRange:NSMakeRange(i, 1)];
-                scoutTeamNumField.text = [[NSString alloc] initWithString:txt1];
-            }
-        }
-    }
-    if (currentMatchNumField.isEditing) {
-        NSMutableString *txt2 = [[NSMutableString alloc] initWithString:currentMatchNumField.text];
-        for (unsigned int i = 0; i < [txt2 length]; i++) {
-            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt2 characterAtIndex:i]];
-            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
-                                                               message: @"Please only enter numbers in the \"Current Match Number\" text field"
-                                                              delegate: nil
-                                                     cancelButtonTitle:@"Sorry..."
-                                                     otherButtonTitles:nil];
-                [alert show];
-                [txt2 deleteCharactersInRange:NSMakeRange(i, 1)];
-                currentMatchNumField.text = [[NSString alloc] initWithString:txt2];
-            }
-        }
-    }
-    if (initialsField.isEditing) {
-        NSMutableString *txt3 = [[NSMutableString alloc] initWithString:initialsField.text];
-        for (unsigned int i = 0; i < [txt3 length]; i++) {
-            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt3 characterAtIndex:i]];
-            if ([character isEqualToString:@" "]) {
-                [txt3 deleteCharactersInRange:NSMakeRange(i, 1)];
-                initialsField.text = [[NSString alloc] initWithString:txt3];
-            }
-        }
-        if ([txt3 length] > 3) {
-            [txt3 deleteCharactersInRange:NSMakeRange(3, 1)];
-            initialsField.text = [[NSString alloc] initWithString:txt3];
-        }
-    }
-}
+/*-----------------------------------
+ ------- Visible Table Code ---------
+ -----------------------------------*/
 
--(void)eraseSetUpScreen{
-    initials = nil;
-    scoutTeamNum = nil;
-    currentMatchNum = nil;
-    currentRegional = nil;
-    
-    initials = initialsField.text;
-    scoutTeamNum = scoutTeamNumField.text;
-    NSInteger randomTeamNum = arc4random() % 4000;
-    currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
-    currentMatchNum = currentMatchNumField.text;
-    currentRegional = [[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
-    
-    if (!initials || initials.length != 3) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You didn't enter 3 initials!"
-                                                       message: @"Please enter your three initials to show that you are scouting these matches"
-                                                      delegate: nil
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
-    else if (scoutTeamNumField.text.length == 0){
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Enter your team number!"
-                                                       message: @"Enter the team number of the team that you are on"
-                                                      delegate: nil
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
-    else if (!currentMatchNum || currentMatchNumField.text.length == 0){
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No match number!!"
-                                                       message: @"What you tryin' to get away with?!? Please enter the match number you're about to scout"
-                                                      delegate: nil
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
-    else if(!pos){
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You did not select which position you're scouting!"
-                                                       message: @"Sorry to ruin your day, but in order to make this work out best for the both of us, you gotta select which position you are scouting (Red 1, Red 2, etc.)"
-                                                      delegate: nil
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
-    else{
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                         animations:^{
-                             setUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
-                         }
-                         completion:^(BOOL finished){
-                             
-                             [setUpView removeFromSuperview];
-                             [greyOut removeFromSuperview];
-                             
-                             currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
-                             [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
-                             _matchNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
-                             
-                             
-                             currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
-                             [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
-                             _teamNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
-                             
-                             _initialsLbl.text = [[NSString alloc] initWithFormat:@"Your Initials: %@", initials];
-                             
-                             _regionalNameLbl.text = currentRegional;
-                             _regionalNameLbl.numberOfLines = 0;
-                             [_regionalNameLbl sizeToFit];
-                             _regionalNameLbl.adjustsFontSizeToFitWidth = YES;
-                             _regionalNameLbl.textAlignment = NSTextAlignmentCenter;
-                             _regionalNameLbl.textColor = [UIColor colorWithWhite:0.2 alpha:0.8];
-                             _regionalNameLbl.layer.borderColor = [UIColor colorWithWhite:0.5 alpha:0.5].CGColor;
-                             _regionalNameLbl.layer.borderWidth = 1.0;
-                             
-                             twoFingerDown.enabled = true;
-                             
-                             CGRect red1Rect = CGRectMake(282, 150, 200, 60);
-                             UILabel *red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
-                             red1Lbl.text = pos;
-                             red1Lbl.font = [UIFont boldSystemFontOfSize:25];
-                             red1Lbl.textColor = [UIColor whiteColor];
-                             red1Lbl.textAlignment = NSTextAlignmentCenter;
-                             red1Lbl.layer.cornerRadius = 5;
-                             if (red1Selector.selectedSegmentIndex < 3) {
-                                 red1Lbl.backgroundColor = [UIColor redColor];
-                             }
-                             else{
-                                 red1Lbl.backgroundColor = [UIColor blueColor];
-                             }
-                             [self.view addSubview:red1Lbl];
-                             
-                             red1Pos = red1Selector.selectedSegmentIndex;
-                             
-                             
-                         }];
-        NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
-    }
-}
-
--(IBAction)reSignIn:(id)sender {
-    initials = nil;
-    _matchNumField.enabled = false;
-    _matchNumField.hidden = true;
-    _matchNumEdit.enabled = true;
-    _matchNumEdit.hidden = false;
-    
-    _teamNumField.enabled = false;
-    _teamNumField.hidden = true;
-    _teamNumEdit.enabled = true;
-    _teamNumEdit.hidden = false;
-    [self setUpScreen];
-}
-
-/*****************************************
- ********** UITableView code *************
- *****************************************/
+// Returns 1. No other sections needed for the Advertising peers
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;    //count of section
+    return 1;
 }
 
+// Returns the number of peers that the Browser detects
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [peersArray count];
 }
 
+// Creates the cells for the table
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *cellIdentifier = @"peerCellID";
     
     PeerCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
+    // Create the cell if it doesn't exist
     if (cell == nil)
     {
         cell = [[PeerCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:cellIdentifier];
-        cell.uniqueID = [[NSString alloc] initWithString:lastSelectedName];
+        // Stores the Advertiser's uniqueID in the cell's property
+        cell.uniqueID = [[NSString alloc] initWithString:peerFoundID];
         NSLog(@"Unique ID: %@", cell.uniqueID);
     }
+    
+    // Converts the shortened discovery string into a string that matches the pos variable
     NSString *smallString;
     if ([myPeerID.displayName isEqualToString:@"Red 1"]) {smallString = @"0";}
     else if ([myPeerID.displayName isEqualToString:@"Red 2"]){smallString = @"1";}
@@ -880,22 +1055,29 @@ UIAlertView *overWriteAlert;
     else if ([myPeerID.displayName isEqualToString:@"Blue 2"]){smallString = @"4";}
     else if ([myPeerID.displayName isEqualToString:@"Blue 3"]){smallString = @"5";}
     
+    // Displays the discovered scout's postition name
     cell.peerLbl.text = [[peersArray objectAtIndex:indexPath.row] displayName];
+    
+    // Hides the labels for connecting info
     cell.connectedLbl.alpha = 0;
     cell.userInteractionEnabled = true;
     doneButton.enabled = false;
     cell.alreadyConnectedLbl.alpha = 0;
     cell.userInteractionEnabled = true;
+    
+    // If the cell represents the last selected peer, then make the connected label visible
     if ([lastSelectedCell.uniqueID isEqualToString:cell.uniqueID]) {
         NSLog(@"UniqueID of last selected cell: %@", lastSelectedCell.uniqueID);
         cell.connectedLbl.alpha = 1;
         cell.userInteractionEnabled = false;
         doneButton.enabled = true;
     }
+    
     NSMutableArray *peerNamesArray = [[NSMutableArray alloc] init];
     for (MCPeerID *i in peersArray) {
         [peerNamesArray addObject:i.displayName];
     }
+    // If there is already a scout for that position in the group, this disallows user interaction and shows the alreadyConnected label
     if ([peerNamesArray containsObject:smallString] || [smallString isEqualToString:pos]) {
         cell.alreadyConnectedLbl.text = [[NSString alloc] initWithFormat:@"Already has a %@", myPeerID.displayName];
         cell.alreadyConnectedLbl.alpha = 1;
@@ -906,16 +1088,18 @@ UIAlertView *overWriteAlert;
     return cell;
 }
 
+// Returns the height of the cell (80)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     return 80;
     
 }
 
+// Invites the peer associated with the cell selected
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    // Disables the exit button so the user doesn't stop the process short of completion
     closeButton.enabled = false;
-    
     
     [visibleTable deselectRowAtIndexPath:indexPath animated:YES];
     PeerCell *selectedCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:indexPath];
@@ -926,9 +1110,11 @@ UIAlertView *overWriteAlert;
 }
 
 
-/*****************************************
- *********** Multipeer Code **************
- *****************************************/
+/*-----------------------------------
+ --------- Multipeer Code -----------
+ -----------------------------------*/
+
+// Adds the peer to the table if the peer doesn't already exist there
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info{
     NSLog(@"Found peer %@", peerID.displayName);
     NSString *uniqueIDString = [[NSString alloc] initWithString:[info objectForKey:@"DiscoveryString"]];
@@ -952,13 +1138,14 @@ UIAlertView *overWriteAlert;
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [peersArray addObject:peerID];
             NSIndexPath *myIndex = [NSIndexPath indexPathForRow:[peersArray count]-1 inSection:0];
-            lastSelectedName = uniqueIDString;
+            peerFoundID = uniqueIDString;
             [visibleTable insertRowsAtIndexPaths:@[myIndex] withRowAnimation:UITableViewRowAnimationRight];
             safe = false;
         });
     }
 }
 
+// Removes the peer from the list if the Browser no longer sees them
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID{
     for (long i = [visibleTable numberOfRowsInSection:0]-1; i > -1; i--) {
         PeerCell *checkCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
@@ -977,6 +1164,7 @@ UIAlertView *overWriteAlert;
     
 }
 
+// Handles when the Advertiser gets an invite
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL accept, MCSession *session))invitationHandler{
     NSLog(@"Received invite from %@", peerID.displayName);
     
@@ -986,17 +1174,24 @@ UIAlertView *overWriteAlert;
     }];
 }
 
+// I don't use these five, but I included them to avoid a yellow warning
 -(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
     NSLog(@"BrowserViewControllerDidFinish");
 }
 -(void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
     NSLog(@"BrowserViewControllerWasCancelled");
 }
-
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
     
 }
+-(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
+    
+}
+-(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
+    
+}
 
+// Takes data received and creates matches with that data
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
     NSLog(@"Received Data with length of: %ld", (long)[data length]);
     NSDictionary *receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -1033,14 +1228,7 @@ UIAlertView *overWriteAlert;
     }];
 }
 
--(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
-    
-}
-
--(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
-    
-}
-
+// Alerts user about the change in connection whether it's successful or broken
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
     if (state == MCSessionStateConnected) {
         NSLog(@"Woohooo!!! It worked!!!");
@@ -1072,6 +1260,7 @@ UIAlertView *overWriteAlert;
     }
 }
 
+// Sets up the match data to be sent
 -(void)setUpData{
     dictToSend = nil;
     dictToSend = [[NSMutableDictionary alloc] init];
@@ -1094,104 +1283,10 @@ UIAlertView *overWriteAlert;
                                                                                         [NSNumber numberWithInteger:secs], @"uniqueID", nil] forKey:currentMatchNum];
 }
 
-/*****************************************
- ************ UIPicker code **************
- *****************************************/
-
--(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-    //handle selection
-}
-
-// tell the picker how many rows are available for a given component
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
-    NSInteger numRows;
-    if (weekSelector.selectedSegmentIndex == 0) {
-        numRows = regionalNames.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 1){
-        numRows = week1Regionals.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 2){
-        numRows = week2Regionals.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 3){
-        numRows = week3Regionals.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 4){
-        numRows = week4Regionals.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 5){
-        numRows = week5Regionals.count;
-    }
-    else if (weekSelector.selectedSegmentIndex == 6){
-        numRows = week6Regionals.count;
-    }
-    else{
-        numRows = week7Regionals.count;
-    }
-    
-    return numRows;
-}
-
-// tell the picker how many components it will have
--(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
-    return 1;
-}
-
-// give the picker its source of list items
--(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
-    UILabel* tView = (UILabel *)view;
-    if (!tView) {
-        tView = [[UILabel alloc] init];
-        
-        if (weekSelector.selectedSegmentIndex == 0) {
-            tView.text = [regionalNames objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 1){
-            tView.text = [week1Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 2){
-            tView.text = [week2Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 3){
-            tView.text = [week3Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 4){
-            tView.text = [week4Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 5){
-            tView.text = [week5Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 6){
-            tView.text = [week6Regionals objectAtIndex:row];
-        }
-        else if (weekSelector.selectedSegmentIndex == 7){
-            tView.text = [week7Regionals objectAtIndex:row];
-        }
-        
-        tView.textAlignment = NSTextAlignmentCenter;
-        tView.font = [UIFont systemFontOfSize:20];
-        tView.minimumScaleFactor = 0.2;
-        tView.adjustsFontSizeToFitWidth = YES;
-    }
-    return tView;
-}
-
-// tell the picker the width of each row for a given component
--(CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
-    int sectionWidth = 420;
-    
-    return sectionWidth;
-}
-
 
 /*****************************************
  ********* Other code resume *************
  *****************************************/
-
-- (IBAction)instashare:(id)sender {
-    [self shareScreen];
-}
 
 -(void)autoOn{
     autoYN = true;
@@ -1305,29 +1400,6 @@ UIAlertView *overWriteAlert;
     }];
     
     NSLog(@"AUTO OFF");
-}
-
--(void)changeMatchType{
-    if (matchTypeSelector.selectedSegmentIndex == 0) {
-        currentMatchType = @"Q";
-    }
-    else{
-        currentMatchType = @"E";
-    }
-}
-
--(void)changeWeek{
-    if ([[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]containsObject:[[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]]]) {
-        NSString *regional = [[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
-        [regionalPicker reloadAllComponents];
-        [regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]indexOfObject:regional] inComponent:0 animated:YES];
-    }
-    else{
-       [regionalPicker reloadAllComponents];
-       [regionalPicker selectRow:0 inComponent:0 animated:YES];
-    }
-    
-    weekSelected = weekSelector.selectedSegmentIndex;
 }
 
 -(void)didReceiveMemoryWarning{
