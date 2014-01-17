@@ -127,6 +127,12 @@ Match *duplicateMatch;
 NSDictionary *duplicateMatchDict;
 UIAlertView *overWriteAlert;
 
+
+/***********************************
+ *********** Set Up Code ***********
+ ***********************************/
+
+// Sets up variables and things at beginning
 -(void)viewDidLoad{
     
     [super viewDidLoad];
@@ -262,12 +268,6 @@ UIAlertView *overWriteAlert;
     }
     [self setUpScreen];
     [self autoOn];
-}
-
-// Removes textfield if the return key is pressed
--(BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    return NO;
 }
 
 // Creates the initial UIView that the user interacts with
@@ -464,6 +464,131 @@ UIAlertView *overWriteAlert;
 
         }
 }
+// Checks values and closes SetUpScreen after the "Save Settings" button is pressed
+-(void)eraseSetUpScreen{
+    initials = nil;
+    scoutTeamNum = nil;
+    currentMatchNum = nil;
+    currentRegional = nil;
+    
+    initials = initialsField.text;
+    scoutTeamNum = scoutTeamNumField.text;
+    
+    // Creates a random team number for the scout to watch to simulate a loaded match schedule
+    NSInteger randomTeamNum = arc4random() % 4000;
+    
+    currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
+    currentMatchNum = currentMatchNumField.text;
+    currentRegional = [[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
+    
+    // Checks for the correct number of initials
+    if (!initials || initials.length != 3) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You didn't enter 3 initials!"
+                                                       message: @"Please enter your three initials to show that you are scouting these matches"
+                                                      delegate: nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    // Checks for something to be entered in the scout's team number field
+    else if (scoutTeamNumField.text.length == 0){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Enter your team number!"
+                                                       message: @"Enter the team number of the team that you are on"
+                                                      delegate: nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    // Checks for the current match number to have something entered in it
+    else if (!currentMatchNum || currentMatchNumField.text.length == 0){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No match number!!"
+                                                       message: @"What you tryin' to get away with?!? Please enter the match number you're about to scout"
+                                                      delegate: nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    // Checks to make sure that the user selected a scouting position
+    else if(!pos){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You did not select which position you're scouting!"
+                                                       message: @"Sorry to ruin your day, but in order to make this work out best for the both of us, you gotta select which position you are scouting (Red 1, Red 2, etc.)"
+                                                      delegate: nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    // If all tests pass, then the screen closes with a zoom small animation
+    else{
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             setUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
+                         }
+                         completion:^(BOOL finished){
+                             
+                             [setUpView removeFromSuperview];
+                             [greyOut removeFromSuperview];
+                             
+                             // Updates editable values for the scout UI
+                             currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
+                             [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
+                             _matchNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
+                             
+                             currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
+                             [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
+                             _teamNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
+                             
+                             // Shows the initials of the scout
+                             _initialsLbl.text = [[NSString alloc] initWithFormat:@"Your Initials: %@", initials];
+                             
+                             // Displays the regional name in the top left corner in a box
+                             _regionalNameLbl.text = currentRegional;
+                             _regionalNameLbl.numberOfLines = 0;
+                             [_regionalNameLbl sizeToFit];
+                             _regionalNameLbl.adjustsFontSizeToFitWidth = YES;
+                             _regionalNameLbl.textAlignment = NSTextAlignmentCenter;
+                             _regionalNameLbl.textColor = [UIColor colorWithWhite:0.2 alpha:0.8];
+                             _regionalNameLbl.layer.borderColor = [UIColor colorWithWhite:0.5 alpha:0.5].CGColor;
+                             _regionalNameLbl.layer.borderWidth = 1.0;
+                             
+                             twoFingerDown.enabled = true;
+                             
+                             // Shows the scouts position nice and large-like in the top center of the screen
+                             CGRect red1Rect = CGRectMake(282, 150, 200, 60);
+                             UILabel *red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
+                             red1Lbl.text = pos;
+                             red1Lbl.font = [UIFont boldSystemFontOfSize:25];
+                             red1Lbl.textColor = [UIColor whiteColor];
+                             red1Lbl.textAlignment = NSTextAlignmentCenter;
+                             red1Lbl.layer.cornerRadius = 5;
+                             if (red1Selector.selectedSegmentIndex < 3) {
+                                 red1Lbl.backgroundColor = [UIColor redColor];
+                             }
+                             else{
+                                 red1Lbl.backgroundColor = [UIColor blueColor];
+                             }
+                             [self.view addSubview:red1Lbl];
+                             
+                             red1Pos = red1Selector.selectedSegmentIndex;
+                             
+                             
+                         }];
+        NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
+    }
+}
+// Opens up the SetUpScreen once more after it has been closed once already (if users rotate)
+-(IBAction)reSignIn:(id)sender {
+    initials = nil;
+    _matchNumField.enabled = false;
+    _matchNumField.hidden = true;
+    _matchNumEdit.enabled = true;
+    _matchNumEdit.hidden = false;
+    
+    _teamNumField.enabled = false;
+    _teamNumField.hidden = true;
+    _teamNumEdit.enabled = true;
+    _teamNumEdit.hidden = false;
+    [self setUpScreen];
+}
 
 // Creates custom screen for Multipeer Connectivity
 -(void)shareScreen{
@@ -610,6 +735,107 @@ UIAlertView *overWriteAlert;
                      }];
     
 }
+// Takes away the ShareView with animation
+-(void)closeShareView{
+    instaShareTitle.hidden = true;
+    closeButton.hidden = true;
+    closeButton.enabled = false;
+    hostSwitchLbl.hidden = true;
+    hostSwitch.hidden = true;
+    hostSwitch.enabled = false;
+    visibleSwitchLbl.hidden = true;
+    visibleSwitch.hidden = true;
+    visibleSwitch.enabled = false;
+    visibleTableLbl.hidden = true;
+    visibleTable.hidden = true;
+    doneButton.hidden = true;
+    doneButton.enabled = false;
+    
+    // Zooms the ShareScreen small and back up to the top left corner
+    [greyOut addSubview:shareScreen];
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         shareScreen.frame = CGRectMake(0, 0, 1, 1);
+                     }
+                     completion:^(BOOL finished){
+                         [shareScreen removeFromSuperview];
+                         [greyOut removeFromSuperview];
+                         }];
+}
+
+
+/**********************************
+ *********** SetUpScreen **********
+ **********************************/
+
+// Called by the red1Selector UISegmentedControl in the SetUpView so that the scout's position is changed precisely when user changes it
+-(void)red1Changed{
+    red1SelectedPos = red1Selector.selectedSegmentIndex;
+    pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
+    NSLog(@"%@", pos);
+}
+
+// Limits the three UITextFields in the SetUpView to only allow inputs that they are meant to have
+-(void)checkNumber{
+    // Makes sure only numbers are entered in these two fields
+    if (scoutTeamNumField.isEditing) {
+        NSMutableString *txt1 = [[NSMutableString alloc] initWithString:scoutTeamNumField.text];
+        for (unsigned int i = 0; i < [txt1 length]; i++) {
+            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt1 characterAtIndex:i]];
+            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
+                                                               message: @"Please only enter numbers in the \"Your Team Number\" text field"
+                                                              delegate: nil
+                                                     cancelButtonTitle:@"Sorry..."
+                                                     otherButtonTitles:nil];
+                [alert show];
+                [txt1 deleteCharactersInRange:NSMakeRange(i, 1)];
+                scoutTeamNumField.text = [[NSString alloc] initWithString:txt1];
+            }
+        }
+    }
+    if (currentMatchNumField.isEditing) {
+        NSMutableString *txt2 = [[NSMutableString alloc] initWithString:currentMatchNumField.text];
+        for (unsigned int i = 0; i < [txt2 length]; i++) {
+            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt2 characterAtIndex:i]];
+            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
+                                                               message: @"Please only enter numbers in the \"Current Match Number\" text field"
+                                                              delegate: nil
+                                                     cancelButtonTitle:@"Sorry..."
+                                                     otherButtonTitles:nil];
+                [alert show];
+                [txt2 deleteCharactersInRange:NSMakeRange(i, 1)];
+                currentMatchNumField.text = [[NSString alloc] initWithString:txt2];
+            }
+        }
+    }
+    // Limits the initialsField to 3 characters
+    if (initialsField.isEditing) {
+        NSMutableString *txt3 = [[NSMutableString alloc] initWithString:initialsField.text];
+        for (unsigned int i = 0; i < [txt3 length]; i++) {
+            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt3 characterAtIndex:i]];
+            if ([character isEqualToString:@" "]) {
+                [txt3 deleteCharactersInRange:NSMakeRange(i, 1)];
+                initialsField.text = [[NSString alloc] initWithString:txt3];
+            }
+        }
+        if ([txt3 length] > 3) {
+            [txt3 deleteCharactersInRange:NSMakeRange(3, 1)];
+            initialsField.text = [[NSString alloc] initWithString:txt3];
+        }
+    }
+}
+// Removes textfield if the return key is pressed
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
+}
+
+
+/***********************************
+ *********** ShareScreen ***********
+ ***********************************/
 
 // Initiates the Browser (host) role in Multipeer
 -(void)hostSwitch{
@@ -676,219 +902,7 @@ UIAlertView *overWriteAlert;
         }
     }
 }
-// Takes away the ShareView with animation
--(void)closeShareView{
-    instaShareTitle.hidden = true;
-    closeButton.hidden = true;
-    closeButton.enabled = false;
-    hostSwitchLbl.hidden = true;
-    hostSwitch.hidden = true;
-    hostSwitch.enabled = false;
-    visibleSwitchLbl.hidden = true;
-    visibleSwitch.hidden = true;
-    visibleSwitch.enabled = false;
-    visibleTableLbl.hidden = true;
-    visibleTable.hidden = true;
-    doneButton.hidden = true;
-    doneButton.enabled = false;
-    
-    // Zooms the ShareScreen small and back up to the top left corner
-    [greyOut addSubview:shareScreen];
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         shareScreen.frame = CGRectMake(0, 0, 1, 1);
-                     }
-                     completion:^(BOOL finished){
-                         [shareScreen removeFromSuperview];
-                         [greyOut removeFromSuperview];
-                         }];
-}
 
-// Called by the red1Selector UISegmentedControl in the SetUpView so that the scout's position is changed precisely when user changes it
--(void)red1Changed{
-    red1SelectedPos = red1Selector.selectedSegmentIndex;
-    pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
-    NSLog(@"%@", pos);
-}
-
-// Limits the three UITextFields in the SetUpView to only allow inputs that they are meant to have
--(void)checkNumber{
-    // Makes sure only numbers are entered in these two fields
-    if (scoutTeamNumField.isEditing) {
-        NSMutableString *txt1 = [[NSMutableString alloc] initWithString:scoutTeamNumField.text];
-        for (unsigned int i = 0; i < [txt1 length]; i++) {
-            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt1 characterAtIndex:i]];
-            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
-                                                               message: @"Please only enter numbers in the \"Your Team Number\" text field"
-                                                              delegate: nil
-                                                     cancelButtonTitle:@"Sorry..."
-                                                     otherButtonTitles:nil];
-                [alert show];
-                [txt1 deleteCharactersInRange:NSMakeRange(i, 1)];
-                scoutTeamNumField.text = [[NSString alloc] initWithString:txt1];
-            }
-        }
-    }
-    if (currentMatchNumField.isEditing) {
-        NSMutableString *txt2 = [[NSMutableString alloc] initWithString:currentMatchNumField.text];
-        for (unsigned int i = 0; i < [txt2 length]; i++) {
-            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt2 characterAtIndex:i]];
-            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
-                                                               message: @"Please only enter numbers in the \"Current Match Number\" text field"
-                                                              delegate: nil
-                                                     cancelButtonTitle:@"Sorry..."
-                                                     otherButtonTitles:nil];
-                [alert show];
-                [txt2 deleteCharactersInRange:NSMakeRange(i, 1)];
-                currentMatchNumField.text = [[NSString alloc] initWithString:txt2];
-            }
-        }
-    }
-    // Limits the initialsField to 3 characters
-    if (initialsField.isEditing) {
-        NSMutableString *txt3 = [[NSMutableString alloc] initWithString:initialsField.text];
-        for (unsigned int i = 0; i < [txt3 length]; i++) {
-            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt3 characterAtIndex:i]];
-            if ([character isEqualToString:@" "]) {
-                [txt3 deleteCharactersInRange:NSMakeRange(i, 1)];
-                initialsField.text = [[NSString alloc] initWithString:txt3];
-            }
-        }
-        if ([txt3 length] > 3) {
-            [txt3 deleteCharactersInRange:NSMakeRange(3, 1)];
-            initialsField.text = [[NSString alloc] initWithString:txt3];
-        }
-    }
-}
-
-// Checks values and closes SetUpScreen after the "Save Settings" button is pressed
--(void)eraseSetUpScreen{
-    initials = nil;
-    scoutTeamNum = nil;
-    currentMatchNum = nil;
-    currentRegional = nil;
-    
-    initials = initialsField.text;
-    scoutTeamNum = scoutTeamNumField.text;
-    
-    // Creates a random team number for the scout to watch to simulate a loaded match schedule
-    NSInteger randomTeamNum = arc4random() % 4000;
-    
-    currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
-    currentMatchNum = currentMatchNumField.text;
-    currentRegional = [[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
-    
-    // Checks for the correct number of initials
-    if (!initials || initials.length != 3) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You didn't enter 3 initials!"
-                                                       message: @"Please enter your three initials to show that you are scouting these matches"
-                                                      delegate: nil
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
-    // Checks for something to be entered in the scout's team number field
-    else if (scoutTeamNumField.text.length == 0){
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Enter your team number!"
-                                                       message: @"Enter the team number of the team that you are on"
-                                                      delegate: nil
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
-    // Checks for the current match number to have something entered in it
-    else if (!currentMatchNum || currentMatchNumField.text.length == 0){
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No match number!!"
-                                                       message: @"What you tryin' to get away with?!? Please enter the match number you're about to scout"
-                                                      delegate: nil
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
-    // Checks to make sure that the user selected a scouting position
-    else if(!pos){
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You did not select which position you're scouting!"
-                                                       message: @"Sorry to ruin your day, but in order to make this work out best for the both of us, you gotta select which position you are scouting (Red 1, Red 2, etc.)"
-                                                      delegate: nil
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
-    // If all tests pass, then the screen closes with a zoom small animation
-    else{
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                         animations:^{
-                             setUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
-                         }
-                         completion:^(BOOL finished){
-                             
-                             [setUpView removeFromSuperview];
-                             [greyOut removeFromSuperview];
-                             
-                             // Updates editable values for the scout UI
-                             currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
-                             [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
-                             _matchNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
-                             
-                             currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
-                             [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
-                             _teamNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
-                             
-                             // Shows the initials of the scout
-                             _initialsLbl.text = [[NSString alloc] initWithFormat:@"Your Initials: %@", initials];
-                             
-                             // Displays the regional name in the top left corner in a box
-                             _regionalNameLbl.text = currentRegional;
-                             _regionalNameLbl.numberOfLines = 0;
-                             [_regionalNameLbl sizeToFit];
-                             _regionalNameLbl.adjustsFontSizeToFitWidth = YES;
-                             _regionalNameLbl.textAlignment = NSTextAlignmentCenter;
-                             _regionalNameLbl.textColor = [UIColor colorWithWhite:0.2 alpha:0.8];
-                             _regionalNameLbl.layer.borderColor = [UIColor colorWithWhite:0.5 alpha:0.5].CGColor;
-                             _regionalNameLbl.layer.borderWidth = 1.0;
-                             
-                             twoFingerDown.enabled = true;
-                             
-                             // Shows the scouts position nice and large-like in the top center of the screen
-                             CGRect red1Rect = CGRectMake(282, 150, 200, 60);
-                             UILabel *red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
-                             red1Lbl.text = pos;
-                             red1Lbl.font = [UIFont boldSystemFontOfSize:25];
-                             red1Lbl.textColor = [UIColor whiteColor];
-                             red1Lbl.textAlignment = NSTextAlignmentCenter;
-                             red1Lbl.layer.cornerRadius = 5;
-                             if (red1Selector.selectedSegmentIndex < 3) {
-                                 red1Lbl.backgroundColor = [UIColor redColor];
-                             }
-                             else{
-                                 red1Lbl.backgroundColor = [UIColor blueColor];
-                             }
-                             [self.view addSubview:red1Lbl];
-                             
-                             red1Pos = red1Selector.selectedSegmentIndex;
-                             
-                             
-                         }];
-        NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
-    }
-}
-
-// Opens up the SetUpScreen once more after it has been closed once already (if users rotate)
--(IBAction)reSignIn:(id)sender {
-    initials = nil;
-    _matchNumField.enabled = false;
-    _matchNumField.hidden = true;
-    _matchNumEdit.enabled = true;
-    _matchNumEdit.hidden = false;
-    
-    _teamNumField.enabled = false;
-    _teamNumField.hidden = true;
-    _teamNumEdit.enabled = true;
-    _teamNumEdit.hidden = false;
-    [self setUpScreen];
-}
 
 /*****************************************
  ********** UITableView code *************
