@@ -420,34 +420,6 @@
             </objects>
             <point key="canvasLocation" x="828" y="-722"/>
         </scene>
-        <!--New Page - New Page-->
-        <scene sceneID="IZv-Xg-zwb">
-            <objects>
-                <viewController id="Uco-k4-dN9" customClass="NewPage" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="jfi-RB-bbR"/>
-                        <viewControllerLayoutGuide type="bottom" id="fMG-wf-QO2"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="0U4-9h-NOL">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="BlueRobot" translatesAutoresizingMaskIntoConstraints="NO" id="7nT-cq-8Lb">
-                                <rect key="frame" x="309" y="326" width="150" height="100"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="New Page" id="2Ua-Gi-QaM"/>
-                    <connections>
-                        <outlet property="imageView" destination="7nT-cq-8Lb" id="mjZ-4y-3TI"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="JFz-Bk-ubn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="828" y="2658"/>
-        </scene>
         <!--Data - Data-->
         <scene sceneID="okI-9Q-Maz">
             <objects>
@@ -761,7 +733,6 @@
                         <segue destination="9pv-A4-QxB" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="8rJ-Kc-sve" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
                         <segue destination="skg-ol-qgb" kind="relationship" relationship="viewControllers" id="rZg-OG-heX"/>
-                        <segue destination="Uco-k4-dN9" kind="relationship" relationship="viewControllers" id="8C6-6Q-a8N"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -775,7 +746,6 @@
         <image name="AutoPlusDown" width="200" height="100"/>
         <image name="AutoPlusUp" width="200" height="100"/>
         <image name="Binoculars" width="29" height="29"/>
-        <image name="BlueRobot" width="300" height="200"/>
         <image name="DataArrows" width="30" height="30"/>
         <image name="DataStacks" width="30" height="30"/>
         <image name="TeleopMinusDown" width="200" height="100"/>
