@@ -590,6 +590,9 @@ UIAlertView *overWriteAlert;
     [self setUpScreen];
 }
 
+- (IBAction)instashare:(id)sender {
+    [self shareScreen];
+}
 // Creates custom screen for Multipeer Connectivity
 -(void)shareScreen{
     // Gray background behind the view
@@ -774,6 +777,29 @@ UIAlertView *overWriteAlert;
     pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
     NSLog(@"%@", pos);
 }
+// Called by the matchTypeSelector UISegmentedControl
+-(void)changeMatchType{
+    if (matchTypeSelector.selectedSegmentIndex == 0) {
+        currentMatchType = @"Q";
+    }
+    else{
+        currentMatchType = @"E";
+    }
+}
+// Called by the weekSelector UISegmentedControl
+-(void)changeWeek{
+    if ([[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]containsObject:[[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]]]) {
+        NSString *regional = [[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
+        [regionalPicker reloadAllComponents];
+        [regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]indexOfObject:regional] inComponent:0 animated:YES];
+    }
+    else{
+       [regionalPicker reloadAllComponents];
+       [regionalPicker selectRow:0 inComponent:0 animated:YES];
+    }
+    
+    weekSelected = weekSelector.selectedSegmentIndex;
+}
 
 // Limits the three UITextFields in the SetUpView to only allow inputs that they are meant to have
 -(void)checkNumber{
@@ -921,6 +947,7 @@ UIAlertView *overWriteAlert;
 /***********************************
  *********** ShareScreen ***********
  ***********************************/
+
 
 // Initiates the Browser (host) role in Multipeer
 -(void)hostSwitch{
@@ -1137,7 +1164,7 @@ UIAlertView *overWriteAlert;
     
 }
 
-//
+// Handles when the Advertiser gets an invite
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL accept, MCSession *session))invitationHandler{
     NSLog(@"Received invite from %@", peerID.displayName);
     
@@ -1147,17 +1174,24 @@ UIAlertView *overWriteAlert;
     }];
 }
 
+// I don't use these five, but I included them to avoid a yellow warning
 -(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
     NSLog(@"BrowserViewControllerDidFinish");
 }
 -(void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
     NSLog(@"BrowserViewControllerWasCancelled");
 }
-
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
     
 }
+-(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
+    
+}
+-(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
+    
+}
 
+// Takes data received and creates matches with that data
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
     NSLog(@"Received Data with length of: %ld", (long)[data length]);
     NSDictionary *receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -1194,14 +1228,7 @@ UIAlertView *overWriteAlert;
     }];
 }
 
--(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
-    
-}
-
--(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
-    
-}
-
+// Alerts user about the change in connection whether it's successful or broken
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
     if (state == MCSessionStateConnected) {
         NSLog(@"Woohooo!!! It worked!!!");
@@ -1233,6 +1260,7 @@ UIAlertView *overWriteAlert;
     }
 }
 
+// Sets up the match data to be sent
 -(void)setUpData{
     dictToSend = nil;
     dictToSend = [[NSMutableDictionary alloc] init];
@@ -1256,15 +1284,9 @@ UIAlertView *overWriteAlert;
 }
 
 
-
-
 /*****************************************
  ********* Other code resume *************
  *****************************************/
-
-- (IBAction)instashare:(id)sender {
-    [self shareScreen];
-}
 
 -(void)autoOn{
     autoYN = true;
@@ -1378,29 +1400,6 @@ UIAlertView *overWriteAlert;
     }];
     
     NSLog(@"AUTO OFF");
-}
-
--(void)changeMatchType{
-    if (matchTypeSelector.selectedSegmentIndex == 0) {
-        currentMatchType = @"Q";
-    }
-    else{
-        currentMatchType = @"E";
-    }
-}
-
--(void)changeWeek{
-    if ([[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]containsObject:[[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]]]) {
-        NSString *regional = [[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
-        [regionalPicker reloadAllComponents];
-        [regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]indexOfObject:regional] inComponent:0 animated:YES];
-    }
-    else{
-       [regionalPicker reloadAllComponents];
-       [regionalPicker selectRow:0 inComponent:0 animated:YES];
-    }
-    
-    weekSelected = weekSelector.selectedSegmentIndex;
 }
 
 -(void)didReceiveMemoryWarning{
