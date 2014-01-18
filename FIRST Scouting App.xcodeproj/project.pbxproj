@@ -16,7 +16,6 @@
 		285A1E1C1870E941002AA01C /* Regional+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 285A1E1B1870E941002AA01C /* Regional+Category.m */; };
 		2862D6A81854D4F900DC460F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A71854D4F900DC460F /* Images.xcassets */; };
 		2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2893226B187E637B00A225EE /* UIAlertView+Blocks.m */; };
-		28BA303B187B84F5003776F5 /* PeerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BA303A187B84F5003776F5 /* PeerCell.m */; };
 		28C8C757185BB91F000FAE10 /* MatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C8C756185BB91F000FAE10 /* MatchCell.m */; };
 		8846FED11826D7D100B37E44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED01826D7D100B37E44 /* Foundation.framework */; };
 		8846FED31826D7D100B37E44 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED21826D7D100B37E44 /* CoreGraphics.framework */; };
@@ -65,8 +64,6 @@
 		2862D6A71854D4F900DC460F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2893226A187E637B00A225EE /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		2893226B187E637B00A225EE /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
-		28BA3039187B84F5003776F5 /* PeerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerCell.h; sourceTree = "<group>"; };
-		28BA303A187B84F5003776F5 /* PeerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerCell.m; sourceTree = "<group>"; };
 		28C8C755185BB91F000FAE10 /* MatchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchCell.h; sourceTree = "<group>"; };
 		28C8C756185BB91F000FAE10 /* MatchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchCell.m; sourceTree = "<group>"; };
 		8846FECD1826D7D100B37E44 /* FIRST Scouting App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIRST Scouting App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -223,8 +220,6 @@
 			children = (
 				28C8C755185BB91F000FAE10 /* MatchCell.h */,
 				28C8C756185BB91F000FAE10 /* MatchCell.m */,
-				28BA3039187B84F5003776F5 /* PeerCell.h */,
-				28BA303A187B84F5003776F5 /* PeerCell.m */,
 				8846FEDF1826D7D200B37E44 /* LocationsAppDelegate.h */,
 				8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */,
 				8846FED81826D7D100B37E44 /* FIRST Scouting App-Info.plist */,
@@ -373,7 +368,6 @@
 				8846FEE11826D7D200B37E44 /* LocationsAppDelegate.m in Sources */,
 				888F0EF81850177F00412022 /* Globals.m in Sources */,
 				8846FEE71826D7D200B37E44 /* Scoring.m in Sources */,
-				28BA303B187B84F5003776F5 /* PeerCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

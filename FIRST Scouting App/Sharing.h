@@ -16,7 +16,6 @@
 @property (nonatomic, strong) MCBrowserViewController *browserVC;
 @property (nonatomic, strong) MCAdvertiserAssistant *advertiser;
 @property (nonatomic, strong) MCSession *mySession;
-@property (nonatomic, strong) MCSession *sessionTwo;
 @property (nonatomic, strong) MCPeerID *myPeerID;
 
 @property (weak, nonatomic) IBOutlet UISwitch *advertiseSwitcher;

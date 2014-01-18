@@ -10,9 +10,14 @@
 #import "Globals.h"
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
 
-@interface LocationsFirstViewController : UIViewController <UIGestureRecognizerDelegate, UIPickerViewDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, MCBrowserViewControllerDelegate, MCSessionDelegate, MCNearbyServiceAdvertiserDelegate, MCNearbyServiceBrowserDelegate>
+@interface LocationsFirstViewController : UIViewController <UIGestureRecognizerDelegate, UIPickerViewDelegate, UITextFieldDelegate, MCBrowserViewControllerDelegate, MCSessionDelegate>
 
-@property (strong, nonatomic) MCSession *session;
+// Multipeer Connectivity stuff
+@property (nonatomic, strong) MCBrowserViewController *browserVCS;
+@property (nonatomic, strong) MCAdvertiserAssistant *advertiserS;
+@property (nonatomic, strong) MCSession *mySessionS;
+@property (nonatomic, strong) MCSession *sessionTwoS;
+@property (nonatomic, strong) MCPeerID *myPeerIDS;
 
 // User interaction on the match recording page
 @property (weak, nonatomic) IBOutlet UITextField *matchNumField;

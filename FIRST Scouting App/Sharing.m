@@ -248,7 +248,7 @@ NSManagedObjectContext *context;
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
     if (state == MCSessionStateConnected) {
         NSLog(@"HOLY FRIGGIN CRAP YESSS!!!!");
-        self.sessionTwo = session;
+//        self.mySession = session;
     }
     else if (state == MCSessionStateNotConnected){
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -309,10 +309,10 @@ NSManagedObjectContext *context;
     NSError *error;
     NSArray *peerIDs;
     
-    peerIDs = [self.sessionTwo connectedPeers];
+    peerIDs = [self.mySession connectedPeers];
     
     
-    [self.sessionTwo sendData:dataToSend toPeers:peerIDs withMode:MCSessionSendDataReliable error:&error];
+    [self.mySession sendData:dataToSend toPeers:peerIDs withMode:MCSessionSendDataReliable error:&error];
     
     _sendMatchesBtn.enabled = false;
     _sendMatchesBtn.alpha = 0.5;
