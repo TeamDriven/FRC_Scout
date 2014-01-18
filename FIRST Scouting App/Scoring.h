@@ -15,8 +15,8 @@
 // Multipeer Connectivity stuff
 @property (nonatomic, strong) MCBrowserViewController *browserVCS;
 @property (nonatomic, strong) MCAdvertiserAssistant *advertiserS;
-@property (nonatomic, strong) MCSession *mySessionS;
-@property (nonatomic, strong) MCSession *sessionTwoS;
+@property (nonatomic, strong) MCSession *browserSession;
+@property (nonatomic, strong) MCSession *advertiserSession;
 @property (nonatomic, strong) MCPeerID *myPeerIDS;
 
 // User interaction on the match recording page
@@ -33,13 +33,32 @@
 @property (weak, nonatomic) IBOutlet UILabel *autoTitleLbl;
 @property (weak, nonatomic) IBOutlet UILabel *teleopTitleLbl;
 
-// Labels that are updated when the scout changes the values in the respective areas
-@property (weak, nonatomic) IBOutlet UILabel *teleopHighScoreLbl;
-@property (weak, nonatomic) IBOutlet UILabel *autoHighScoreLbl;
-@property (weak, nonatomic) IBOutlet UILabel *teleopMidScoreLbl;
-@property (weak, nonatomic) IBOutlet UILabel *autoMidScoreLbl;
-@property (weak, nonatomic) IBOutlet UILabel *teleopLowScoreLbl;
-@property (weak, nonatomic) IBOutlet UILabel *autoLowScoreLbl;
+// Autonomous labels that are updated when the scout changes the values in the respective areas
+@property (weak, nonatomic) IBOutlet UILabel *autoHotHighLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoNotHighLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoMissHighLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoHotLowLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoNotLowLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoMissLowLbl;
+
+// Autonomous buttons that let the user change the high/low values (orange)
+@property (weak, nonatomic) IBOutlet UIButton *autoHotHighPlus;
+@property (weak, nonatomic) IBOutlet UIButton *autoHotHighMinus;
+@property (weak, nonatomic) IBOutlet UIButton *autoNotHighPlus;
+@property (weak, nonatomic) IBOutlet UIButton *autoNotHighMinus;
+@property (weak, nonatomic) IBOutlet UIButton *autoMissHighPlus;
+@property (weak, nonatomic) IBOutlet UIButton *autoMissHighMinus;
+@property (weak, nonatomic) IBOutlet UIButton *autoHotLowPlus;
+@property (weak, nonatomic) IBOutlet UIButton *autoHotLowMinus;
+@property (weak, nonatomic) IBOutlet UIButton *autoNotLowPlus;
+@property (weak, nonatomic) IBOutlet UIButton *autoNotLowMinus;
+@property (weak, nonatomic) IBOutlet UIButton *autoMissLowPlus;
+@property (weak, nonatomic) IBOutlet UIButton *autoMissLowMinus;
+
+@property (weak, nonatomic) IBOutlet UIImageView *swipeUpArrow;
+@property (weak, nonatomic) IBOutlet UIImageView *movementRobot;
+@property (weak, nonatomic) IBOutlet UIView *movementLine;
+@property (weak, nonatomic) IBOutlet UILabel *movementBonusLbl;
 
 // Penalty items
 @property (weak, nonatomic) IBOutlet UILabel *smallPenaltyLbl;
@@ -48,22 +67,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *largePenaltyLbl;
 @property (weak, nonatomic) IBOutlet UIStepper *largePenaltyStepper;
 @property (weak, nonatomic) IBOutlet UILabel *largePenaltyTitleLbl;
-
-// Autonomous buttons that let the user change the high/mid/low values (orange)
-@property (weak, nonatomic) IBOutlet UIButton *autoHighMinusBtn;
-@property (weak, nonatomic) IBOutlet UIButton *autoHighPlusBtn;
-@property (weak, nonatomic) IBOutlet UIButton *autoMidMinusBtn;
-@property (weak, nonatomic) IBOutlet UIButton *autoMidPlusBtn;
-@property (weak, nonatomic) IBOutlet UIButton *autoLowMinusBtn;
-@property (weak, nonatomic) IBOutlet UIButton *autoLowPlusBtn;
-
 // Teleoperated buttons that let the user change the high/mid/low values (gray and black)
-@property (weak, nonatomic) IBOutlet UIButton *teleopHighMinusBtn;
-@property (weak, nonatomic) IBOutlet UIButton *teleopHighPlusBtn;
-@property (weak, nonatomic) IBOutlet UIButton *teleopMidMinusBtn;
-@property (weak, nonatomic) IBOutlet UIButton *teleopMidPlusBtn;
-@property (weak, nonatomic) IBOutlet UIButton *teleopLowMinusBtn;
-@property (weak, nonatomic) IBOutlet UIButton *teleopLowPlusBtn;
+
 
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 

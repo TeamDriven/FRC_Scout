@@ -161,22 +161,6 @@ NSManagedObjectContext *context;
                      }];
 }
 
--(void)setUpMultiPeer{
-    self.myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
-    
-    self.mySession = [[MCSession alloc] initWithPeer:self.myPeerID];
-    
-    self.browserVC = [[MCBrowserViewController alloc] initWithServiceType:@"FIRST-SCOUT" session:self.mySession];
-    
-    self.advertiser = [[MCAdvertiserAssistant alloc] initWithServiceType:@"FIRST-SCOUT" discoveryInfo:nil session:self.mySession];
-    
-    self.browserVC.delegate = self;
-    
-    self.mySession.delegate = self;
-    
-    
-}
-
 -(void)setUpData{
     
     dataDict = [[NSMutableDictionary alloc] init];
@@ -218,6 +202,22 @@ NSManagedObjectContext *context;
     
 }
 
+-(void)setUpMultiPeer{
+    self.myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
+    
+    self.mySession = [[MCSession alloc] initWithPeer:self.myPeerID];
+    
+    self.browserVC = [[MCBrowserViewController alloc] initWithServiceType:@"svctype" session:self.mySession];
+    
+    self.advertiser = [[MCAdvertiserAssistant alloc] initWithServiceType:@"svctype" discoveryInfo:nil session:self.mySession];
+    
+    self.browserVC.delegate = self;
+    
+    self.mySession.delegate = self;
+    
+    
+}
+
 -(void)dismissBrowserVC{
     [self.browserVC dismissViewControllerAnimated:YES completion:nil];
 }
@@ -242,26 +242,7 @@ NSManagedObjectContext *context;
 }
 
 -(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
-    
 }
-
--(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
-    if (state == MCSessionStateConnected) {
-        NSLog(@"HOLY FRIGGIN CRAP YESSS!!!!");
-//        self.mySession = session;
-    }
-    else if (state == MCSessionStateNotConnected){
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Somebody Left!"
-                                                           message: [[NSString alloc] initWithFormat:@"%@", [peerID displayName]]
-                                                          delegate: nil
-                                                 cancelButtonTitle:@"Got it bro"
-                                                 otherButtonTitles:nil];
-            [alert show];
-        });
-    }
-}
-
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
     NSLog(@"DATA RECEIVED: %lu bytes!", (unsigned long)data.length);
     dataReceived = data;
@@ -281,26 +262,44 @@ NSManagedObjectContext *context;
     });
 }
 
+    -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
+        if (state == MCSessionStateConnected) {
+            NSLog(@"Connected!");
+            self.mySession = session;
+        }
+        else if (state == MCSessionStateNotConnected){
+            NSLog(@"Disconnected");
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Somebody Left!"
+                                                               message: [[NSString alloc] initWithFormat:@"%@", [peerID displayName]]
+                                                              delegate: nil
+                                                     cancelButtonTitle:@"Got it bro"
+                                                     otherButtonTitles:nil];
+                [alert show];
+            });
+        }
+    }
+
 
 /************************************************************************
  ****************    Actions and Other Code    **************************
  ************************************************************************/
 
--(IBAction)browseGO:(id)sender {
-    
-    [self setUpMultiPeer];
-    [self presentViewController:self.browserVC animated:YES completion:nil];
-}
-
--(IBAction)advertiseSwitch:(id)sender {
-    if (_advertiseSwitcher.on) {
+    -(IBAction)browseGO:(id)sender {
+        
         [self setUpMultiPeer];
-        [self.advertiser start];
+        [self presentViewController:self.browserVC animated:YES completion:nil];
     }
-    else{
-        [self.advertiser stop];
+
+    -(IBAction)advertiseSwitch:(id)sender {
+        if (_advertiseSwitcher.on) {
+            [self setUpMultiPeer];
+            [self.advertiser start];
+        }
+        else{
+            [self.advertiser stop];
+        }
     }
-}
 
 -(IBAction)sendMatches:(id)sender {
     [self setUpData];

@@ -218,31 +218,31 @@ UILabel *blue3UpdaterLbl;
     visible = false;
     
     // Sets up storyboard UI
-    _teleopHighMinusBtn.alpha = 0;
-    _teleopHighMinusBtn.enabled = false;
-    _teleopHighPlusBtn.alpha = 0;
-    _teleopHighPlusBtn.enabled = false;
-    _teleopMidMinusBtn.alpha = 0;
-    _teleopMidMinusBtn.enabled = false;
-    _teleopMidPlusBtn.alpha = 0;
-    _teleopMidPlusBtn.enabled = false;
-    _teleopLowMinusBtn.alpha = 0;
-    _teleopLowMinusBtn.enabled = false;
-    _teleopLowPlusBtn.alpha = 0;
-    _teleopLowPlusBtn.enabled = false;
-    
-    _autoHighMinusBtn.alpha = 1;
-    _autoHighMinusBtn.enabled = true;
-    _autoHighPlusBtn.alpha = 1;
-    _autoHighPlusBtn.enabled = true;
-    _autoMidMinusBtn.alpha = 1;
-    _autoMidMinusBtn.enabled = true;
-    _autoMidPlusBtn.alpha = 1;
-    _autoMidPlusBtn.enabled = true;
-    _autoLowMinusBtn.alpha = 1;
-    _autoLowMinusBtn.enabled = true;
-    _autoLowPlusBtn.alpha = 1;
-    _autoLowPlusBtn.enabled = true;
+//    _teleopHighMinusBtn.alpha = 0;
+//    _teleopHighMinusBtn.enabled = false;
+//    _teleopHighPlusBtn.alpha = 0;
+//    _teleopHighPlusBtn.enabled = false;
+//    _teleopMidMinusBtn.alpha = 0;
+//    _teleopMidMinusBtn.enabled = false;
+//    _teleopMidPlusBtn.alpha = 0;
+//    _teleopMidPlusBtn.enabled = false;
+//    _teleopLowMinusBtn.alpha = 0;
+//    _teleopLowMinusBtn.enabled = false;
+//    _teleopLowPlusBtn.alpha = 0;
+//    _teleopLowPlusBtn.enabled = false;
+//    
+//    _autoHighMinusBtn.alpha = 1;
+//    _autoHighMinusBtn.enabled = true;
+//    _autoHighPlusBtn.alpha = 1;
+//    _autoHighPlusBtn.enabled = true;
+//    _autoMidMinusBtn.alpha = 1;
+//    _autoMidMinusBtn.enabled = true;
+//    _autoMidPlusBtn.alpha = 1;
+//    _autoMidPlusBtn.enabled = true;
+//    _autoLowMinusBtn.alpha = 1;
+//    _autoLowMinusBtn.enabled = true;
+//    _autoLowPlusBtn.alpha = 1;
+//    _autoLowPlusBtn.enabled = true;
 }
 
 -(void)didReceiveMemoryWarning{
@@ -632,7 +632,7 @@ UILabel *blue3UpdaterLbl;
                              twoFingerDown.enabled = true;
                              
                              // Shows the scouts position nice and large-like in the top center of the screen
-                             CGRect red1Rect = CGRectMake(282, 150, 200, 60);
+                             CGRect red1Rect = CGRectMake(282, 145, 200, 60);
                              UILabel *red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
                              red1Lbl.text = pos;
                              red1Lbl.font = [UIFont boldSystemFontOfSize:25];
@@ -655,9 +655,9 @@ UILabel *blue3UpdaterLbl;
                              if (red1Pos >= 0 && red1Pos < 3) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor redColor]];}
                              else if (red1Pos >= 3 && red1Pos < 6) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor blueColor]];}
                              
-                             self.myPeerIDS = [[MCPeerID alloc] initWithDisplayName:pos];
-//                             [self.mySessionS disconnect];
-//                             self.mySessionS = nil;
+//                             self.myPeerIDS = [[MCPeerID alloc] initWithDisplayName:pos];
+//                             [self.browserSession disconnect];
+//                             self.browserSession = nil;
 //                             if (visible) {
 //                                 visible = false;
 //                                 [self.advertiserS stop];
@@ -809,30 +809,32 @@ UILabel *blue3UpdaterLbl;
 }
 // Takes away the ShareView with animation
 -(void)closeShareView{
-    instaShareTitle.hidden = true;
-    closeButton.hidden = true;
-    closeButton.enabled = false;
-    hostSwitchLbl.hidden = true;
-    hostSwitch.hidden = true;
-    hostSwitch.enabled = false;
-    visibleSwitchLbl.hidden = true;
-    visibleSwitch.hidden = true;
-    visibleSwitch.enabled = false;
-    inviteMoreBtn.hidden = true;
-    inviteMoreBtn.enabled = false;
-    doneButton.hidden = true;
-    doneButton.enabled = false;
-    
-    // Zooms the ShareScreen small and back up to the top left corner
-    [greyOut addSubview:shareScreen];
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         shareScreen.frame = CGRectMake(0, 0, 1, 1);
-                     }
-                     completion:^(BOOL finished){
-                         [shareScreen removeFromSuperview];
-                         [greyOut removeFromSuperview];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        instaShareTitle.hidden = true;
+        closeButton.hidden = true;
+        closeButton.enabled = false;
+        hostSwitchLbl.hidden = true;
+        hostSwitch.hidden = true;
+        hostSwitch.enabled = false;
+        visibleSwitchLbl.hidden = true;
+        visibleSwitch.hidden = true;
+        visibleSwitch.enabled = false;
+        inviteMoreBtn.hidden = true;
+        inviteMoreBtn.enabled = false;
+        doneButton.hidden = true;
+        doneButton.enabled = false;
+        
+        // Zooms the ShareScreen small and back up to the top left corner
+        [greyOut addSubview:shareScreen];
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             shareScreen.frame = CGRectMake(0, 0, 1, 1);
+                         }
+                         completion:^(BOOL finished){
+                             [shareScreen removeFromSuperview];
+                             [greyOut removeFromSuperview];
                          }];
+    });
 }
 
 
@@ -1041,18 +1043,21 @@ UILabel *blue3UpdaterLbl;
  **********************************/
 
 -(void)setUpMultiPeer{
-//    self.myPeerIDS = [[MCPeerID alloc] initWithDisplayName:pos];
+    self.myPeerIDS = [[MCPeerID alloc] initWithDisplayName:pos];
     
-    self.mySessionS = [[MCSession alloc] initWithPeer:self.myPeerIDS];
-    self.mySessionS.delegate = self;
+    self.browserSession = [[MCSession alloc] initWithPeer:self.myPeerIDS];
     
-    self.browserVCS = [[MCBrowserViewController alloc] initWithServiceType:@"FIRSTSCOUT" session:self.mySessionS];
+    self.browserSession.delegate = self;
     
-    self.advertiserS = [[MCAdvertiserAssistant alloc] initWithServiceType:@"FIRSTSCOUT" discoveryInfo:nil session:self.mySessionS];
+    self.browserVCS = [[MCBrowserViewController alloc] initWithServiceType:@"firstscout" session:self.browserSession];
     
     self.browserVCS.delegate = self;
     
-    self.mySessionS.delegate = self;
+    self.advertiserSession = [[MCSession alloc] initWithPeer:self.myPeerIDS];
+    
+    self.advertiserSession.delegate = self;
+    
+    self.advertiserS = [[MCAdvertiserAssistant alloc] initWithServiceType:@"firstscout" discoveryInfo:nil session:self.advertiserSession];
 }
 
 
@@ -1062,30 +1067,30 @@ UILabel *blue3UpdaterLbl;
         if (visible) {
 //            [self.advertiserS stop];
         }
-        host = true;
-        visible = false;
+//        host = true;
+//        visible = false;
         [self setUpMultiPeer];
-        inviteMoreBtn.enabled = true;
-        inviteMoreBtn.hidden = false;
+//        inviteMoreBtn.enabled = true;
+//        inviteMoreBtn.hidden = false;
         [self presentViewController:self.browserVCS animated:YES completion:nil];
-        self.browserVCS.view.layer.cornerRadius = 5;
-        self.browserVCS.view.superview.layer.cornerRadius = 5;
+//        self.browserVCS.view.layer.cornerRadius = 5;
+//        self.browserVCS.view.superview.layer.cornerRadius = 5;
     }
     else{
         if (!visibleSwitch.on) {
             NSLog(@"Should disconnect");
-            inviteMoreBtn.enabled = false;
-            inviteMoreBtn.hidden = true;
-//            [self.mySessionS disconnect];
+//            inviteMoreBtn.enabled = false;
+//            inviteMoreBtn.hidden = true;
+//            [self.browserSession disconnect];
         }
     }
 }
 // Starts Advertiser role
 -(void)visibleSwitch{
     if (visibleSwitch.on) {
-        visible = true;
-        host = false;
-        [hostSwitch setOn:false animated:YES];
+//        visible = true;
+//        host = false;
+//        [hostSwitch setOn:false animated:YES];
         [self setUpMultiPeer];
         [self.advertiserS start];
     }
@@ -1099,13 +1104,14 @@ UILabel *blue3UpdaterLbl;
 }
 
 -(void)dismissBrowserVCS{
-    [self.browserVCS dismissViewControllerAnimated:YES completion:^(void){
-        [visibleSwitch setOn:false animated:YES];
-        [self closeShareView];
-    }];
+    [self.browserVCS dismissViewControllerAnimated:NO completion: nil];//^(void){
+//        [visibleSwitch setOn:false animated:YES];
+//        [self closeShareView];
+//    }];
 }
 
 -(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserVCS{
+    NSLog(@"Finished");
     [self dismissBrowserVCS];
 }
 
@@ -1129,25 +1135,27 @@ UILabel *blue3UpdaterLbl;
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
     if (state == MCSessionStateConnected) {
         NSLog(@"HOLY FRIGGIN CRAP YESSS!!!!");
-        self.mySessionS = session;
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            if (visible) {
-                [UIAlertView showWithTitle:@"Wahoo!" message:[[NSString alloc] initWithFormat:@"You connected with %@!", [peerID displayName]] cancelButtonTitle:@"Got it bro" otherButtonTitles:nil completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                    [self closeShareView];
-                }];
-//                [self.advertiserS stop];
-            }
-            if ([[peerID displayName] isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor redColor]];}
-            else if ([[peerID displayName] isEqualToString:@"Red 2"]) {[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor redColor]];}
-            else if ([[peerID displayName] isEqualToString:@"Red 3"]) {[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor redColor]];}
-            else if ([[peerID displayName] isEqualToString:@"Blue 1"]) {[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor blueColor]];}
-            else if ([[peerID displayName] isEqualToString:@"Blue 2"]) {[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor blueColor]];}
-            else if ([[peerID displayName] isEqualToString:@"Blue 3"]) {[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor blueColor]];}
-        });
+        self.advertiserSession = session;
+        
+//        self.browserSession = session;
+//        dispatch_async(dispatch_get_main_queue(), ^(void) {
+//            if (visible) {
+//                [UIAlertView showWithTitle:@"Wahoo!" message:[[NSString alloc] initWithFormat:@"You connected with %@!", [peerID displayName]] cancelButtonTitle:@"Got it bro" otherButtonTitles:nil completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+//                    [self closeShareView];
+//                }];
+////                [self.advertiserS stop];
+//            }
+//            if ([[peerID displayName] isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor redColor]];}
+//            else if ([[peerID displayName] isEqualToString:@"Red 2"]) {[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor redColor]];}
+//            else if ([[peerID displayName] isEqualToString:@"Red 3"]) {[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor redColor]];}
+//            else if ([[peerID displayName] isEqualToString:@"Blue 1"]) {[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor blueColor]];}
+//            else if ([[peerID displayName] isEqualToString:@"Blue 2"]) {[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor blueColor]];}
+//            else if ([[peerID displayName] isEqualToString:@"Blue 3"]) {[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor blueColor]];}
+//        });
     }
     else if (state == MCSessionStateNotConnected){
         NSLog(@"Disconnected");
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
+//        dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (host) {
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Uh Oh!"
                                                                message: [[NSString alloc] initWithFormat:@"%@ left the party!", [peerID displayName]]
@@ -1170,7 +1178,7 @@ UILabel *blue3UpdaterLbl;
             else if ([[peerID displayName] isEqualToString:@"Blue 1"]) {[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];}
             else if ([[peerID displayName] isEqualToString:@"Blue 2"]) {[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];}
             else if ([[peerID displayName] isEqualToString:@"Blue 3"]) {[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];}
-        });
+//        });
     }
 }
 
@@ -1235,51 +1243,57 @@ UILabel *blue3UpdaterLbl;
     twoFingerDown.enabled = true;
     
     [UIView animateWithDuration:0.3 animations:^{
-        _autoTitleLbl.alpha = 1;
-        _autoHighScoreLbl.alpha = 1;
-        _autoMidScoreLbl.alpha = 1;
-        _autoLowScoreLbl.alpha = 1;
+//        _autoTitleLbl.alpha = 1;
+//        _autoHighScoreLbl.alpha = 1;
+//        _autoMidScoreLbl.alpha = 1;
+//        _autoLowScoreLbl.alpha = 1;
+//        
+//        _teleopTitleLbl.alpha = 0;
+//        _teleopHighScoreLbl.alpha = 0;
+//        _teleopMidScoreLbl.alpha = 0;
+//        _teleopLowScoreLbl.alpha = 0;
+//        
+//        _smallPenaltyLbl.enabled = false;
+//        _smallPenaltyLbl.alpha = 0;
+//        _smallPenaltyStepper.enabled = false;
+//        _smallPenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+//        _smallPenaltyStepper.alpha = 0;
+//        _smallPenaltyTitleLbl.enabled = false;
+//        _smallPenaltyTitleLbl.alpha = 0;
+//        
+//        _largePenaltyLbl.enabled = false;
+//        _largePenaltyLbl.alpha = 0;
+//        _largePenaltyStepper.enabled = false;
+//        _largePenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+//        _largePenaltyStepper.alpha = 0;
+//        _largePenaltyTitleLbl.enabled = false;
+//        _largePenaltyTitleLbl.alpha = 0;
         
-        _teleopTitleLbl.alpha = 0;
-        _teleopHighScoreLbl.alpha = 0;
-        _teleopMidScoreLbl.alpha = 0;
-        _teleopLowScoreLbl.alpha = 0;
-        
-        _smallPenaltyLbl.enabled = false;
-        _smallPenaltyStepper.enabled = false;
-        _smallPenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
-        _smallPenaltyTitleLbl.enabled = false;
-        
-        _largePenaltyLbl.enabled = false;
-        _largePenaltyStepper.enabled = false;
-        _largePenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
-        _largePenaltyTitleLbl.enabled = false;
-        
-        _teleopHighMinusBtn.alpha = 0;
-        _teleopHighMinusBtn.enabled = false;
-        _teleopHighPlusBtn.alpha = 0;
-        _teleopHighPlusBtn.enabled = false;
-        _teleopMidMinusBtn.alpha = 0;
-        _teleopMidMinusBtn.enabled = false;
-        _teleopMidPlusBtn.alpha = 0;
-        _teleopMidPlusBtn.enabled = false;
-        _teleopLowMinusBtn.alpha = 0;
-        _teleopLowMinusBtn.enabled = false;
-        _teleopLowPlusBtn.alpha = 0;
-        _teleopLowPlusBtn.enabled = false;
-        
-        _autoHighMinusBtn.alpha = 1;
-        _autoHighMinusBtn.enabled = true;
-        _autoHighPlusBtn.alpha = 1;
-        _autoHighPlusBtn.enabled = true;
-        _autoMidMinusBtn.alpha = 1;
-        _autoMidMinusBtn.enabled = true;
-        _autoMidPlusBtn.alpha = 1;
-        _autoMidPlusBtn.enabled = true;
-        _autoLowMinusBtn.alpha = 1;
-        _autoLowMinusBtn.enabled = true;
-        _autoLowPlusBtn.alpha = 1;
-        _autoLowPlusBtn.enabled = true;
+//        _teleopHighMinusBtn.alpha = 0;
+//        _teleopHighMinusBtn.enabled = false;
+//        _teleopHighPlusBtn.alpha = 0;
+//        _teleopHighPlusBtn.enabled = false;
+//        _teleopMidMinusBtn.alpha = 0;
+//        _teleopMidMinusBtn.enabled = false;
+//        _teleopMidPlusBtn.alpha = 0;
+//        _teleopMidPlusBtn.enabled = false;
+//        _teleopLowMinusBtn.alpha = 0;
+//        _teleopLowMinusBtn.enabled = false;
+//        _teleopLowPlusBtn.alpha = 0;
+//        _teleopLowPlusBtn.enabled = false;
+//        
+//        _autoHighMinusBtn.alpha = 1;
+//        _autoHighMinusBtn.enabled = true;
+//        _autoHighPlusBtn.alpha = 1;
+//        _autoHighPlusBtn.enabled = true;
+//        _autoMidMinusBtn.alpha = 1;
+//        _autoMidMinusBtn.enabled = true;
+//        _autoMidPlusBtn.alpha = 1;
+//        _autoMidPlusBtn.enabled = true;
+//        _autoLowMinusBtn.alpha = 1;
+//        _autoLowMinusBtn.enabled = true;
+//        _autoLowPlusBtn.alpha = 1;
+//        _autoLowPlusBtn.enabled = true;
     }];
     
     NSLog(@"AUTO ON");
@@ -1291,125 +1305,157 @@ UILabel *blue3UpdaterLbl;
     twoFingerDown.enabled = false;
     
     [UIView animateWithDuration:0.3 animations:^{
-        _autoTitleLbl.alpha = 0;
-        _autoHighScoreLbl.alpha = 0;
-        _autoMidScoreLbl.alpha = 0;
-        _autoLowScoreLbl.alpha = 0;
-        
-        _teleopTitleLbl.alpha = 1;
-        _teleopHighScoreLbl.alpha = 1;
-        _teleopMidScoreLbl.alpha = 1;
-        _teleopLowScoreLbl.alpha = 1;
-        
-        _smallPenaltyLbl.enabled = true;
-        _smallPenaltyStepper.enabled = true;
-        _smallPenaltyStepper.tintColor = [UIColor redColor];
-        _smallPenaltyStepper.alpha = 1;
-        _smallPenaltyTitleLbl.enabled = true;
-        
-        _largePenaltyLbl.enabled = true;
-        _largePenaltyStepper.enabled = true;
-        _largePenaltyStepper.tintColor = [UIColor redColor];
-        _largePenaltyStepper.alpha = 1;
-        _largePenaltyTitleLbl.enabled = true;
-        
-        _teleopHighMinusBtn.alpha = 1;
-        _teleopHighMinusBtn.enabled = true;
-        _teleopHighPlusBtn.alpha = 1;
-        _teleopHighPlusBtn.enabled = true;
-        _teleopMidMinusBtn.alpha = 1;
-        _teleopMidMinusBtn.enabled = true;
-        _teleopMidPlusBtn.alpha = 1;
-        _teleopMidPlusBtn.enabled = true;
-        _teleopLowMinusBtn.alpha = 1;
-        _teleopLowMinusBtn.enabled = true;
-        _teleopLowPlusBtn.alpha = 1;
-        _teleopLowPlusBtn.enabled = true;
-        
-        _autoHighMinusBtn.alpha = 0;
-        _autoHighMinusBtn.enabled = false;
-        _autoHighPlusBtn.alpha = 0;
-        _autoHighPlusBtn.enabled = false;
-        _autoMidMinusBtn.alpha = 0;
-        _autoMidMinusBtn.enabled = false;
-        _autoMidPlusBtn.alpha = 0;
-        _autoMidPlusBtn.enabled = false;
-        _autoLowMinusBtn.alpha = 0;
-        _autoLowMinusBtn.enabled = false;
-        _autoLowPlusBtn.alpha = 0;
-        _autoLowPlusBtn.enabled = false;
+//        _autoTitleLbl.alpha = 0;
+//        _autoHighScoreLbl.alpha = 0;
+//        _autoMidScoreLbl.alpha = 0;
+//        _autoLowScoreLbl.alpha = 0;
+//        
+//        _teleopTitleLbl.alpha = 1;
+//        _teleopHighScoreLbl.alpha = 1;
+//        _teleopMidScoreLbl.alpha = 1;
+//        _teleopLowScoreLbl.alpha = 1;
+//        
+//        _smallPenaltyLbl.enabled = true;
+//        _smallPenaltyStepper.enabled = true;
+//        _smallPenaltyStepper.tintColor = [UIColor redColor];
+//        _smallPenaltyStepper.alpha = 1;
+//        _smallPenaltyTitleLbl.enabled = true;
+//        
+//        _largePenaltyLbl.enabled = true;
+//        _largePenaltyStepper.enabled = true;
+//        _largePenaltyStepper.tintColor = [UIColor redColor];
+//        _largePenaltyStepper.alpha = 1;
+//        _largePenaltyTitleLbl.enabled = true;
+//        
+//        _teleopHighMinusBtn.alpha = 1;
+//        _teleopHighMinusBtn.enabled = true;
+//        _teleopHighPlusBtn.alpha = 1;
+//        _teleopHighPlusBtn.enabled = true;
+//        _teleopMidMinusBtn.alpha = 1;
+//        _teleopMidMinusBtn.enabled = true;
+//        _teleopMidPlusBtn.alpha = 1;
+//        _teleopMidPlusBtn.enabled = true;
+//        _teleopLowMinusBtn.alpha = 1;
+//        _teleopLowMinusBtn.enabled = true;
+//        _teleopLowPlusBtn.alpha = 1;
+//        _teleopLowPlusBtn.enabled = true;
+//        
+//        _autoHighMinusBtn.alpha = 0;
+//        _autoHighMinusBtn.enabled = false;
+//        _autoHighPlusBtn.alpha = 0;
+//        _autoHighPlusBtn.enabled = false;
+//        _autoMidMinusBtn.alpha = 0;
+//        _autoMidMinusBtn.enabled = false;
+//        _autoMidPlusBtn.alpha = 0;
+//        _autoMidPlusBtn.enabled = false;
+//        _autoLowMinusBtn.alpha = 0;
+//        _autoLowMinusBtn.enabled = false;
+//        _autoLowPlusBtn.alpha = 0;
+//        _autoLowPlusBtn.enabled = false;
     }];
     
     NSLog(@"AUTO OFF");
 }
 
+float startX = 0;
+float startY = 0;
+float roboStartY = 0;
+-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [[event allTouches] anyObject];
+    
+    NSLog(@"Touches Began");
+    
+    if( [touch view] == _movementRobot)
+    {
+        NSLog(@"Touch inside movementBot");
+        CGPoint location = [touch locationInView:_movementRobot];
+//        startX = location.x - ViewMain.center.x;
+//        startY = ViewMain.center.y;
+        startX = _movementRobot.center.x;
+        startY = location.y - _movementRobot.center.y;
+    }
+}
+- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+    UITouch *touch = [[event allTouches] anyObject];
+    if( [touch view] == _movementRobot)
+    {
+        NSLog(@"Touch moved inside movementBot");
+        CGPoint location = [touch locationInView:_movementRobot];
+//        location.x =location.x - startX;
+//        location.y = startY;
+        location.x = startX;
+        location.y = location.y - startY;
+        _movementRobot.center = location;
+    }
+}
 
 // Adds to the respective high scores
 - (IBAction)autoHighPlus:(id)sender {
     autoHighScore++;
-    _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
+//    _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
 }
 - (IBAction)teleopHighPlus:(id)sender {
     teleopHighScore++;
-    _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
+//    _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
 }
 // Subtracts from the respective high scores
 - (IBAction)autoHighMinus:(id)sender {
     if (autoHighScore > 0) {
         autoHighScore--;
-        _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
+//        _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
     }
 }
 - (IBAction)teleopHighMinus:(id)sender {
     if (teleopHighScore > 0) {
         teleopHighScore--;
-        _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
+//        _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
     }
 }
 
 // Adds to the respective mid scores
 - (IBAction)autoMidPlus:(id)sender {
     autoMidScore++;
-    _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
+//    _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
 }
 - (IBAction)teleopMidPlus:(id)sender {
     teleopMidScore++;
-    _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
+//    _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
 }
 // Subtracts from the respective mid scores
 - (IBAction)autoMidMinus:(id)sender {
     if (autoMidScore > 0) {
         autoMidScore--;
-        _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
+//        _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
     }
 }
 - (IBAction)teleopMidMinus:(id)sender {
     if (teleopMidScore > 0) {
         teleopMidScore--;
-        _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
+//        _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
     }
 }
 
 // Adds to the respective low scores
 - (IBAction)autoLowPlus:(id)sender {
     autoLowScore++;
-    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+//    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
 }
 - (IBAction)teleopLowPlus:(id)sender {
     teleopLowScore++;
-    _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
+//    _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
 }
 // Subtracts from the respective low scores
 - (IBAction)autoLowMinus:(id)sender {
     if (autoLowScore > 0) {
         autoLowScore--;
-        _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+//        _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
     }
 }
 - (IBAction)teleopLowMinus:(id)sender {
     if (teleopLowScore > 0) {
         teleopLowScore--;
-        _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
+//        _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
     }
 }
 
@@ -1585,21 +1631,21 @@ UILabel *blue3UpdaterLbl;
     [self setUpData];
     NSData *dataToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
     NSError *error;
-    [self.mySessionS sendData:dataToSend toPeers:[self.mySessionS connectedPeers] withMode:MCSessionSendDataReliable error:&error];
+    [self.browserSession sendData:dataToSend toPeers:[self.browserSession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
     
     // Reset all the scores and labels
     teleopHighScore = 0;
-    _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
+//    _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
     autoHighScore = 0;
-    _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
+//    _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
     teleopMidScore = 0;
-    _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
+//    _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
     autoMidScore = 0;
-    _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
+//    _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
     teleopLowScore = 0;
-    _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
+//    _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
     autoLowScore = 0;
-    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+//    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
     smallPenaltyTally = 0;
     _smallPenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)smallPenaltyTally];
     largePenaltyTally = 0;
