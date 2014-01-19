@@ -1729,11 +1729,29 @@ float startY;
         _mobilityBonusLbl.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
     }];
     
+    teleopHighMake = 0;
+    _teleopMakeHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopHighMake];
+    teleopHighMiss = 0;
+    _teleopMissHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopHighMiss];
+    teleopLowMake = 0;
+    _teleopMakeLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopLowMake];
+    teleopLowMiss = 0;
+    _teleopMissLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopLowMiss];
+    teleopOver = 0;
+    _teleopOverLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopOver];
+    teleopCatch = 0;
+    _teleopCatchLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopCatch];
+    teleopPassed = 0;
+    _teleopPassedLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopPassed];
+    teleopReceived = 0;
+    _teleopReceivedLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopReceived];
     
     smallPenaltyTally = 0;
     _smallPenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)smallPenaltyTally];
+    _smallPenaltyStepper.value = 0;
     largePenaltyTally = 0;
     _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
+    _largePenaltyStepper.value = 0;
     
     // Increment match number by 1
     NSInteger matchNumTranslator = [currentMatchNum integerValue];
