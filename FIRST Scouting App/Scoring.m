@@ -25,12 +25,13 @@
 
 
 // Match Data Variables
-NSInteger teleopHighScore;
-NSInteger autoHighScore;
-NSInteger teleopMidScore;
-NSInteger autoMidScore;
-NSInteger teleopLowScore;
-NSInteger autoLowScore;
+NSInteger autoHighHotScore;
+NSInteger autoHighNotScore;
+NSInteger autoHighMissScore;
+NSInteger autoLowHotScore;
+NSInteger autoLowNotScore;
+NSInteger autoLowMissScore;
+NSInteger movementBonus;
 NSInteger smallPenaltyTally;
 NSInteger largePenaltyTally;
 
@@ -57,6 +58,7 @@ NSManagedObjectContext *context;
 // Finger Swipes
 UISwipeGestureRecognizer *twoFingerUp;
 UISwipeGestureRecognizer *twoFingerDown;
+NSArray *autoScreenObjects;
 Boolean autoYN;
 
 
@@ -75,6 +77,7 @@ UITextField *initialsField;
 UIPickerView *regionalPicker;
 UISegmentedControl *weekSelector;
 NSInteger weekSelected;
+UILabel *red1Lbl;
 
 
 // Share Screen Declarations
@@ -217,6 +220,15 @@ UILabel *blue3UpdaterLbl;
     host = false;
     visible = false;
     
+    autoScreenObjects = @[_autoTitleLbl, _autoHotHighMinus, _autoHotHighDispLbl, _autoHotHighLbl, _autoHotHighPlus, _autoNotHighMinus, _autoNotHighDispLbl, _autoNotHighLbl, _autoNotHighPlus, _autoMissHighMinus, _autoMissHighDispLbl, _autoMissHighLbl, _autoMissHighPlus, _autoHotLowMinus, _autoHotLowDispLbl, _autoHotLowLbl, _autoHotLowPlus, _autoNotLowMinus, _autoNotLowDispLbl, _autoNotLowLbl, _autoNotLowPlus, _autoMissLowMinus, _autoMissLowDispLbl, _autoMissLowLbl, _autoMissLowPlus, _movementBonusLbl, _movementLine, _movementRobot, _swipeUpArrow];
+    
+    for (UIView *v in autoScreenObjects) {
+        if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
+            v.userInteractionEnabled = NO;
+        }
+        v.alpha = 0;
+        v.hidden = true;
+    }
     // Sets up storyboard UI
 //    _teleopHighMinusBtn.alpha = 0;
 //    _teleopHighMinusBtn.enabled = false;
@@ -261,6 +273,8 @@ UILabel *blue3UpdaterLbl;
     [self setUpScreen];
     [self autoOn];
     
+    _movementRobot.userInteractionEnabled = YES;
+    
     NSInteger lastX = 55;
     
     UILabel *lastUpdatedLbl = [[UILabel alloc] initWithFrame:CGRectMake(lastX, 920, 70, 30)];
@@ -272,7 +286,7 @@ UILabel *blue3UpdaterLbl;
     
     lastX += 85;
     UIView *red1Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
-    red1Updater.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    red1Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     red1Updater.layer.cornerRadius = 5;
     [self.view addSubview:red1Updater];
     red1UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
@@ -284,7 +298,7 @@ UILabel *blue3UpdaterLbl;
     
     lastX += 95;
     UIView *red2Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
-    red2Updater.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    red2Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     red2Updater.layer.cornerRadius = 5;
     [self.view addSubview:red2Updater];
     red2UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
@@ -296,7 +310,7 @@ UILabel *blue3UpdaterLbl;
     
     lastX += 95;
     UIView *red3Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
-    red3Updater.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    red3Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     red3Updater.layer.cornerRadius = 5;
     [self.view addSubview:red3Updater];
     red3UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
@@ -308,7 +322,7 @@ UILabel *blue3UpdaterLbl;
     
     lastX += 95;
     UIView *blue1Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
-    blue1Updater.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    blue1Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     blue1Updater.layer.cornerRadius = 5;
     [self.view addSubview:blue1Updater];
     blue1UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
@@ -320,7 +334,7 @@ UILabel *blue3UpdaterLbl;
     
     lastX += 95;
     UIView *blue2Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
-    blue2Updater.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    blue2Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     blue2Updater.layer.cornerRadius = 5;
     [self.view addSubview:blue2Updater];
     blue2UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
@@ -332,7 +346,7 @@ UILabel *blue3UpdaterLbl;
     
     lastX += 95;
     UIView *blue3Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
-    blue3Updater.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    blue3Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     blue3Updater.layer.cornerRadius = 5;
     [self.view addSubview:blue3Updater];
     blue3UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
@@ -519,7 +533,7 @@ UILabel *blue3UpdaterLbl;
         regionalPicker.showsSelectionIndicator = YES;
         [setUpView addSubview:regionalPicker];
         if (currentRegional) {
-            [regionalPicker selectRow:[regionalNames indexOfObject:currentRegional] inComponent:0 animated:YES];
+            [regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelected] indexOfObject:currentRegional] inComponent:0 animated:YES];
         }
         
         // Save and exit button
@@ -538,9 +552,7 @@ UILabel *blue3UpdaterLbl;
                          animations:^{
                              setUpView.transform = CGAffineTransformIdentity;
                          }
-                         completion:^(BOOL finished){
-                         }];
-
+                         completion:^(BOOL finished){}];
         }
 }
 // Checks values and closes SetUpScreen after the "Save Settings" button is pressed
@@ -633,7 +645,7 @@ UILabel *blue3UpdaterLbl;
                              
                              // Shows the scouts position nice and large-like in the top center of the screen
                              CGRect red1Rect = CGRectMake(282, 145, 200, 60);
-                             UILabel *red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
+                             red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
                              red1Lbl.text = pos;
                              red1Lbl.font = [UIFont boldSystemFontOfSize:25];
                              red1Lbl.textColor = [UIColor whiteColor];
@@ -652,9 +664,25 @@ UILabel *blue3UpdaterLbl;
                              for (UIView *v in posUpdateArray) {
                                  v.hidden = false;
                              }
-                             if (red1Pos >= 0 && red1Pos < 3) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor redColor]];}
-                             else if (red1Pos >= 3 && red1Pos < 6) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor blueColor]];}
+                             if (red1Pos >= 0 && red1Pos < 3) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor redColor]]; [_movementRobot setImage:[UIImage imageNamed:@"RedRobot"]];}
+                             else if (red1Pos >= 3 && red1Pos < 6) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor blueColor]]; [_movementRobot setImage:[UIImage imageNamed:@"BlueRobot"]];}
                              
+                             for (UIView *v in autoScreenObjects) {
+                                 v.hidden = false;
+                             }
+                             _movementLine.alpha = 1;
+                             [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                                 for (UIView *v in autoScreenObjects) {
+                                     if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
+                                         v.userInteractionEnabled = YES;
+                                     }
+                                     v.alpha = 1;
+                                 }
+                                 _movementBonusLbl.backgroundColor = [UIColor whiteColor];
+                                 _movementBonusLbl.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
+                                 _movementBonusLbl.layer.borderWidth = 1;
+                             } completion:^(BOOL finished) {}];
+
 //                             self.myPeerIDS = [[MCPeerID alloc] initWithDisplayName:pos];
 //                             [self.browserSession disconnect];
 //                             self.browserSession = nil;
@@ -1021,21 +1049,21 @@ UILabel *blue3UpdaterLbl;
     dictToSend = [[NSMutableDictionary alloc] init];
     [dictToSend setObject:[[NSMutableDictionary alloc] init] forKey:currentRegional];
     [[dictToSend objectForKey:currentRegional] setObject:[[NSMutableDictionary alloc] init] forKey:currentTeamNum];
-    [[[dictToSend objectForKey:currentRegional] objectForKey:currentTeamNum] setObject:[[NSDictionary alloc] initWithObjectsAndKeys:
-                                                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleHighScore",
-                                                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-                                                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleMidScore",
-                                                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-                                                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleLowScore",
-                                                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                                                        //[NSNumber numberWithInteger:[m.endGame integerValue]], @"endGame",
-                                                                                        [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
-                                                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
-                                                                                        [NSString stringWithString:pos], @"red1Pos",
-                                                                                        [NSString stringWithString:scoutTeamNum], @"recordingTeam",
-                                                                                        [NSString stringWithString:currentMatchType], @"matchType",
-                                                                                        [NSString stringWithString:currentMatchNum], @"matchNum",
-                                                                                        [NSNumber numberWithInteger:secs], @"uniqueID", nil] forKey:currentMatchNum];
+//    [[[dictToSend objectForKey:currentRegional] objectForKey:currentTeamNum] setObject:[[NSDictionary alloc] initWithObjectsAndKeys:
+//                                                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleHighScore",
+//                                                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+//                                                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleMidScore",
+//                                                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+//                                                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleLowScore",
+//                                                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+//                                                                                        //[NSNumber numberWithInteger:[m.endGame integerValue]], @"endGame",
+//                                                                                        [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
+//                                                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
+//                                                                                        [NSString stringWithString:pos], @"red1Pos",
+//                                                                                        [NSString stringWithString:scoutTeamNum], @"recordingTeam",
+//                                                                                        [NSString stringWithString:currentMatchType], @"matchType",
+//                                                                                        [NSString stringWithString:currentMatchNum], @"matchNum",
+//                                                                                        [NSNumber numberWithInteger:secs], @"uniqueID", nil] forKey:currentMatchNum];
 }
 
 /**********************************
@@ -1357,107 +1385,122 @@ UILabel *blue3UpdaterLbl;
     NSLog(@"AUTO OFF");
 }
 
-float startX = 0;
-float startY = 0;
-float roboStartY = 0;
--(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [[event allTouches] anyObject];
+float startY;
+- (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        startY = recognizer.view.center.y;
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^(void){
+            _swipeUpArrow.alpha = 0;
+        }completion:^(BOOL finished) {}];
+    }
     
-    NSLog(@"Touches Began");
+    CGPoint translation = [recognizer translationInView:self.view];
+    recognizer.view.center = CGPointMake(recognizer.view.center.x,
+                                         recognizer.view.center.y + translation.y);
+    if (recognizer.view.center.y < _movementLine.center.y - 50) {
+        recognizer.view.center = CGPointMake(recognizer.view.center.x, _movementLine.center.y - 50);
+    }
+    else if (recognizer.view.center.y > _movementLine.center.y + 50){
+        recognizer.view.center = CGPointMake(recognizer.view.center.x, _movementLine.center.y + 50);
+    }
+    [recognizer setTranslation:CGPointMake(0, 0) inView:self.view];
     
-    if( [touch view] == _movementRobot)
-    {
-        NSLog(@"Touch inside movementBot");
-        CGPoint location = [touch locationInView:_movementRobot];
-//        startX = location.x - ViewMain.center.x;
-//        startY = ViewMain.center.y;
-        startX = _movementRobot.center.x;
-        startY = location.y - _movementRobot.center.y;
-    }
-}
-- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    UITouch *touch = [[event allTouches] anyObject];
-    if( [touch view] == _movementRobot)
-    {
-        NSLog(@"Touch moved inside movementBot");
-        CGPoint location = [touch locationInView:_movementRobot];
-//        location.x =location.x - startX;
-//        location.y = startY;
-        location.x = startX;
-        location.y = location.y - startY;
-        _movementRobot.center = location;
-    }
-}
-
-// Adds to the respective high scores
-- (IBAction)autoHighPlus:(id)sender {
-    autoHighScore++;
-//    _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
-}
-- (IBAction)teleopHighPlus:(id)sender {
-    teleopHighScore++;
-//    _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
-}
-// Subtracts from the respective high scores
-- (IBAction)autoHighMinus:(id)sender {
-    if (autoHighScore > 0) {
-        autoHighScore--;
-//        _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
-    }
-}
-- (IBAction)teleopHighMinus:(id)sender {
-    if (teleopHighScore > 0) {
-        teleopHighScore--;
-//        _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        if (_movementRobot.center.y < _movementLine.center.y - 10) {
+            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                recognizer.view.center = CGPointMake(recognizer.view.center.x, _movementLine.center.y - 50);
+            } completion:^(BOOL finished) {}];
+        }
+        else if (_movementRobot.center.y > _movementLine.center.y + 10){
+            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                recognizer.view.center = CGPointMake(recognizer.view.center.x, _movementLine.center.y + 50);
+            } completion:^(BOOL finished) {}];
+        }
+        else{
+            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                recognizer.view.center = CGPointMake(recognizer.view.center.x, startY);
+            } completion:^(BOOL finished) {}];
+        }
+        
+        if (_movementRobot.center.y == _movementLine.center.y - 50) {
+            [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                _movementBonusLbl.backgroundColor = [UIColor greenColor];
+                _movementBonusLbl.layer.borderColor = [[UIColor whiteColor] CGColor];
+            } completion:^(BOOL finished) {}];
+            movementBonus = 1;
+        }
+        else{
+            [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                _movementBonusLbl.backgroundColor = [UIColor whiteColor];
+                _movementBonusLbl.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
+            } completion:^(BOOL finished) {}];
+            movementBonus = 0;
+        }
     }
 }
 
-// Adds to the respective mid scores
-- (IBAction)autoMidPlus:(id)sender {
-    autoMidScore++;
-//    _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
+- (IBAction)autoHotHighPlus:(id)sender {
+    autoHighHotScore++;
+    _autoHotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighHotScore];
 }
-- (IBAction)teleopMidPlus:(id)sender {
-    teleopMidScore++;
-//    _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
-}
-// Subtracts from the respective mid scores
-- (IBAction)autoMidMinus:(id)sender {
-    if (autoMidScore > 0) {
-        autoMidScore--;
-//        _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
+- (IBAction)autoHotHighMinus:(id)sender {
+    if (autoHighHotScore > 0) {
+        autoHighHotScore--;
+        _autoHotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighHotScore];
     }
 }
-- (IBAction)teleopMidMinus:(id)sender {
-    if (teleopMidScore > 0) {
-        teleopMidScore--;
-//        _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
+- (IBAction)autoNotHighPlus:(id)sender {
+    autoHighNotScore++;
+    _autoNotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighNotScore];
+}
+- (IBAction)autoNotHighMinus:(id)sender {
+    if (autoHighNotScore > 0) {
+        autoHighNotScore--;
+        _autoNotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighNotScore];
+    }
+}
+- (IBAction)autoMissHighPlus:(id)sender {
+    autoHighMissScore++;
+    _autoMissHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighMissScore];
+}
+- (IBAction)autoMissHighMinus:(id)sender {
+    if (autoHighMissScore > 0) {
+        autoHighMissScore--;
+        _autoMissHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighMissScore];
     }
 }
 
-// Adds to the respective low scores
-- (IBAction)autoLowPlus:(id)sender {
-    autoLowScore++;
-//    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+- (IBAction)autoHotLowPlus:(id)sender {
+    autoLowHotScore++;
+    _autoHotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowHotScore];
 }
-- (IBAction)teleopLowPlus:(id)sender {
-    teleopLowScore++;
-//    _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
-}
-// Subtracts from the respective low scores
-- (IBAction)autoLowMinus:(id)sender {
-    if (autoLowScore > 0) {
-        autoLowScore--;
-//        _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+- (IBAction)autoHotLowMinus:(id)sender {
+    if (autoLowHotScore > 0) {
+        autoLowHotScore--;
+        _autoHotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowHotScore];
     }
 }
-- (IBAction)teleopLowMinus:(id)sender {
-    if (teleopLowScore > 0) {
-        teleopLowScore--;
-//        _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
+- (IBAction)autoNotLowPlus:(id)sender {
+    autoLowNotScore++;
+    _autoNotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowNotScore];
+}
+- (IBAction)autoNotLowMinus:(id)sender {
+    if (autoLowNotScore > 0) {
+        autoLowNotScore--;
+        _autoNotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowNotScore];
     }
 }
+- (IBAction)autoMissLowPlus:(id)sender {
+    autoLowMissScore++;
+    _autoMissLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowMissScore];
+}
+- (IBAction)autoMissLowMinus:(id)sender {
+    if (autoLowMissScore > 0) {
+        autoLowMissScore--;
+        _autoMissLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowMissScore];
+    }
+}
+
 
 
 // Makes the match number editable
@@ -1494,91 +1537,91 @@ float roboStartY = 0;
 
 // Saves data that the user recorded on their screen
 -(IBAction)saveMatch:(id)sender {
-    
-    // If the match number was edited by the user during that match
-    if (_matchNumEdit.isHidden) {
-        currentMatchNum = _matchNumField.text;
-    }
-    else{
-        currentMatchNum = _matchNumEdit.titleLabel.text;
-    }
-    // If the team number was edited by the user during the match
-    if (_teamNumEdit.isHidden) {
-        currentTeamNum = _teamNumField.text;
-    }
-    else{
-        currentTeamNum = _teamNumEdit.titleLabel.text;
-    }
-    
-    // If for some reason there was no match number (Shouldn't occur, but just in case)
-    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""]) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO MATCH NUMBER"
-                                                       message: @"Please enter a match number for this match."
-                                                      delegate: nil
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
-    // Another unlikely case: No team number. Also shouldn't happen, but a good safety net
-    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""]) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO TEAM NUMBER"
-                                                       message: @"Please enter a team number for this match."
-                                                      delegate: nil
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
-    // If everything checks out, save the match locally
-    else{
-        [context performBlock:^{
-            Regional *rgnl = [Regional createRegionalWithName:currentRegional inManagedObjectContext:context];
-            
-            Team *tm = [Team createTeamWithName:currentTeamNum inRegional:rgnl withManagedObjectContext:context];
-            
-            // Create a uniqueID for this match
-            NSDate *now = [NSDate date];
-            secs = [now timeIntervalSince1970];
-            
-            NSDictionary *matchDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       [NSNumber numberWithInteger:teleopHighScore], @"teleHighScore",
-                                       [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-                                       [NSNumber numberWithInteger:teleopMidScore], @"teleMidScore",
-                                       [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-                                       [NSNumber numberWithInteger:teleopLowScore], @"teleLowScore",
-                                       [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                       //[NSNumber numberWithInteger:endGame], @"endGame",
-                                       [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
-                                       [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
-                                       [NSString stringWithString:pos], @"red1Pos",
-                                       [NSString stringWithString:scoutTeamNum], @"recordingTeam",
-                                       [NSString stringWithString:initials], @"scoutInitials",
-                                       [NSString stringWithString:currentMatchType], @"matchType",
-                                       [NSString stringWithString:currentMatchNum], @"matchNum",
-                                       [NSNumber numberWithInteger:secs], @"uniqueID", nil];
-            
-            Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
-            
-            // If the match doesn't exist
-            if ([match.uniqeID integerValue] == secs) {
-                [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
-                    if (success) {
-                        [self saveSuccess];
-                    }
-                    else{
-                        NSLog(@"Didn't save correctly");
-                    }
-                }];
-            }
-            else{
-                // Temporarily store the match and team that there was a duplicate of and call the AlertView
-                duplicateMatch = match;
-                teamWithDuplicate = tm;
-                duplicateMatchDict = matchDict;
-                [self overWriteAlert];
-            }
-        }];
-        
-    }
+//    
+//    // If the match number was edited by the user during that match
+//    if (_matchNumEdit.isHidden) {
+//        currentMatchNum = _matchNumField.text;
+//    }
+//    else{
+//        currentMatchNum = _matchNumEdit.titleLabel.text;
+//    }
+//    // If the team number was edited by the user during the match
+//    if (_teamNumEdit.isHidden) {
+//        currentTeamNum = _teamNumField.text;
+//    }
+//    else{
+//        currentTeamNum = _teamNumEdit.titleLabel.text;
+//    }
+//    
+//    // If for some reason there was no match number (Shouldn't occur, but just in case)
+//    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""]) {
+//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO MATCH NUMBER"
+//                                                       message: @"Please enter a match number for this match."
+//                                                      delegate: nil
+//                                             cancelButtonTitle:@"OK"
+//                                             otherButtonTitles:nil];
+//        [alert show];
+//    }
+//    // Another unlikely case: No team number. Also shouldn't happen, but a good safety net
+//    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""]) {
+//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO TEAM NUMBER"
+//                                                       message: @"Please enter a team number for this match."
+//                                                      delegate: nil
+//                                             cancelButtonTitle:@"OK"
+//                                             otherButtonTitles:nil];
+//        [alert show];
+//    }
+//    // If everything checks out, save the match locally
+//    else{
+//        [context performBlock:^{
+//            Regional *rgnl = [Regional createRegionalWithName:currentRegional inManagedObjectContext:context];
+//            
+//            Team *tm = [Team createTeamWithName:currentTeamNum inRegional:rgnl withManagedObjectContext:context];
+//            
+//            // Create a uniqueID for this match
+//            NSDate *now = [NSDate date];
+//            secs = [now timeIntervalSince1970];
+//            
+//            NSDictionary *matchDict = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                       [NSNumber numberWithInteger:teleopHighScore], @"teleHighScore",
+//                                       [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
+//                                       [NSNumber numberWithInteger:teleopMidScore], @"teleMidScore",
+//                                       [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
+//                                       [NSNumber numberWithInteger:teleopLowScore], @"teleLowScore",
+//                                       [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
+//                                       //[NSNumber numberWithInteger:endGame], @"endGame",
+//                                       [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
+//                                       [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
+//                                       [NSString stringWithString:pos], @"red1Pos",
+//                                       [NSString stringWithString:scoutTeamNum], @"recordingTeam",
+//                                       [NSString stringWithString:initials], @"scoutInitials",
+//                                       [NSString stringWithString:currentMatchType], @"matchType",
+//                                       [NSString stringWithString:currentMatchNum], @"matchNum",
+//                                       [NSNumber numberWithInteger:secs], @"uniqueID", nil];
+//            
+//            Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+//            
+//            // If the match doesn't exist
+//            if ([match.uniqeID integerValue] == secs) {
+//                [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+//                    if (success) {
+//                        [self saveSuccess];
+//                    }
+//                    else{
+//                        NSLog(@"Didn't save correctly");
+//                    }
+//                }];
+//            }
+//            else{
+//                // Temporarily store the match and team that there was a duplicate of and call the AlertView
+//                duplicateMatch = match;
+//                teamWithDuplicate = tm;
+//                duplicateMatchDict = matchDict;
+//                [self overWriteAlert];
+//            }
+//        }];
+//        
+//    }
 
 
 }
@@ -1634,17 +1677,17 @@ float roboStartY = 0;
     [self.browserSession sendData:dataToSend toPeers:[self.browserSession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
     
     // Reset all the scores and labels
-    teleopHighScore = 0;
+//    teleopHighScore = 0;
 //    _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
-    autoHighScore = 0;
+//    autoHighScore = 0;
 //    _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
-    teleopMidScore = 0;
+//    teleopMidScore = 0;
 //    _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
-    autoMidScore = 0;
+//    autoMidScore = 0;
 //    _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
-    teleopLowScore = 0;
+//    teleopLowScore = 0;
 //    _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
-    autoLowScore = 0;
+//    autoLowScore = 0;
 //    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
     smallPenaltyTally = 0;
     _smallPenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)smallPenaltyTally];
@@ -1677,6 +1720,11 @@ float roboStartY = 0;
         _teamNumEdit.enabled = true;
         _teamNumEdit.hidden = false;
     }
+    
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^(void){
+        _movementRobot.center = CGPointMake(_movementRobot.center.x, _movementLine.center.y + 50);
+        _swipeUpArrow.alpha = 1;
+    }completion:^(BOOL finished) {}];
     
     // Turns autonomous mode on
     [self autoOn];

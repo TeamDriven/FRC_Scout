@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *teamNumField;
 @property (weak, nonatomic) IBOutlet UIButton *matchNumEdit;
 @property (weak, nonatomic) IBOutlet UIButton *teamNumEdit;
+- (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer;
 
 // Labels for the selected name of the regional and initials of the scouter (updates after setUpView closes)
 @property (weak, nonatomic) IBOutlet UILabel *regionalNameLbl;
@@ -35,13 +36,20 @@
 
 // Autonomous labels that are updated when the scout changes the values in the respective areas
 @property (weak, nonatomic) IBOutlet UILabel *autoHotHighLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoHotHighDispLbl;
 @property (weak, nonatomic) IBOutlet UILabel *autoNotHighLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoNotHighDispLbl;
 @property (weak, nonatomic) IBOutlet UILabel *autoMissHighLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoMissHighDispLbl;
 @property (weak, nonatomic) IBOutlet UILabel *autoHotLowLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoHotLowDispLbl;
 @property (weak, nonatomic) IBOutlet UILabel *autoNotLowLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoNotLowDispLbl;
 @property (weak, nonatomic) IBOutlet UILabel *autoMissLowLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoMissLowDispLbl;
 
 // Autonomous buttons that let the user change the high/low values (orange)
+
 @property (weak, nonatomic) IBOutlet UIButton *autoHotHighPlus;
 @property (weak, nonatomic) IBOutlet UIButton *autoHotHighMinus;
 @property (weak, nonatomic) IBOutlet UIButton *autoNotHighPlus;
