@@ -33,6 +33,8 @@
 // Labels that switch on two finger swipe to indicate the two modes of the game
 @property (weak, nonatomic) IBOutlet UILabel *autoTitleLbl;
 @property (weak, nonatomic) IBOutlet UILabel *teleopTitleLbl;
+@property (weak, nonatomic) IBOutlet UILabel *teleopTrussLbl;
+@property (weak, nonatomic) IBOutlet UILabel *teleopAssistsLbl;
 
 
 
@@ -67,7 +69,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *swipeUpArrow;
 @property (weak, nonatomic) IBOutlet UIImageView *movementRobot;
 @property (weak, nonatomic) IBOutlet UIView *movementLine;
-@property (weak, nonatomic) IBOutlet UILabel *movementBonusLbl;
+@property (weak, nonatomic) IBOutlet UILabel *mobilityBonusLbl;
 
 
 
