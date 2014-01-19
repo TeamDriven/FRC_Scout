@@ -32,6 +32,15 @@ NSInteger autoLowHotScore;
 NSInteger autoLowNotScore;
 NSInteger autoLowMissScore;
 NSInteger movementBonus;
+
+NSInteger teleopHighMake;
+NSInteger teleopHighMiss;
+NSInteger teleopLowMake;
+NSInteger teleopLowMiss;
+NSInteger teleopOver;
+NSInteger teleopCatch;
+NSInteger teleopPassed;
+NSInteger teleopReceived;
 NSInteger smallPenaltyTally;
 NSInteger largePenaltyTally;
 
@@ -59,6 +68,7 @@ NSManagedObjectContext *context;
 UISwipeGestureRecognizer *twoFingerUp;
 UISwipeGestureRecognizer *twoFingerDown;
 NSArray *autoScreenObjects;
+NSArray *teleopScreenObjects;
 Boolean autoYN;
 
 
@@ -221,6 +231,8 @@ UILabel *blue3UpdaterLbl;
     visible = false;
     
     autoScreenObjects = @[_autoTitleLbl, _autoHotHighMinus, _autoHotHighDispLbl, _autoHotHighLbl, _autoHotHighPlus, _autoNotHighMinus, _autoNotHighDispLbl, _autoNotHighLbl, _autoNotHighPlus, _autoMissHighMinus, _autoMissHighDispLbl, _autoMissHighLbl, _autoMissHighPlus, _autoHotLowMinus, _autoHotLowDispLbl, _autoHotLowLbl, _autoHotLowPlus, _autoNotLowMinus, _autoNotLowDispLbl, _autoNotLowLbl, _autoNotLowPlus, _autoMissLowMinus, _autoMissLowDispLbl, _autoMissLowLbl, _autoMissLowPlus, _movementBonusLbl, _movementLine, _movementRobot, _swipeUpArrow];
+    
+    teleopScreenObjects = @[_teleopTitleLbl];
     
     for (UIView *v in autoScreenObjects) {
         if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
@@ -1499,6 +1511,50 @@ float startY;
         autoLowMissScore--;
         _autoMissLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowMissScore];
     }
+}
+
+
+
+- (IBAction)teleopMakeHighPlus:(id)sender {
+    teleopHighMake++;
+    _teleopMakeHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopHighMake];
+}
+- (IBAction)teleopMakeHighMinus:(id)sender {
+    if (teleopHighMake > 0) {
+        teleopHighMake--;
+        _teleopMakeHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopHighMake];
+    }
+}
+- (IBAction)teleopMissHighPlus:(id)sender {
+}
+- (IBAction)teleopMissHighMinus:(id)sender {
+}
+
+- (IBAction)teleopMakeLowPlus:(id)sender {
+}
+- (IBAction)teleopMakeLowMinus:(id)sender {
+}
+- (IBAction)teleopMissLowPlus:(id)sender {
+}
+- (IBAction)teleopMissLowMinus:(id)sender {
+}
+
+- (IBAction)teleopOverPlus:(id)sender {
+}
+- (IBAction)teleopOverMinus:(id)sender {
+}
+- (IBAction)teleopCatchPlus:(id)sender {
+}
+- (IBAction)teleopCatchMinus:(id)sender {
+}
+
+- (IBAction)teleopPassedPlus:(id)sender {
+}
+- (IBAction)teleopPassedMinus:(id)sender {
+}
+- (IBAction)teleopReceivedPlus:(id)sender {
+}
+- (IBAction)teleopReceivedMinus:(id)sender {
 }
 
 
