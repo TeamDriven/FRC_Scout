@@ -37,15 +37,24 @@
     }
     else{
         match = [NSEntityDescription insertNewObjectForEntityForName:@"Match" inManagedObjectContext:context];
-        match.teleHighScore = [dict objectForKey:@"teleHighScore"];
-        match.autoHighScore = [dict objectForKey:@"autoHighScore"];
-        match.teleMidScore = [dict objectForKey:@"teleMidScore"];
-        match.autoMidScore = [dict objectForKey:@"autoMidScore"];
-        match.teleLowScore = [dict objectForKey:@"teleLowScore"];
-        match.autoLowScore = [dict objectForKey:@"autoLowScore"];
-        //match.endGame = [dict objectForKey:@"endGame"];
+        match.autoHighHotScore = [dict objectForKey:@"autoHighHotScore"];
+        match.autoHighNotScore = [dict objectForKey:@"autoHighNotScore"];
+        match.autoHighMissScore = [dict objectForKey:@"autoHighMissScore"];
+        match.autoLowHotScore = [dict objectForKey:@"autoLowHotScore"];
+        match.autoLowNotScore = [dict objectForKey:@"autoLowNotScore"];
+        match.autoLowMissScore = [dict objectForKey:@"autoLowMissScore"];
+        match.mobilityBonus = [dict objectForKey:@"mobilityBonus"];
+        match.teleopHighMake = [dict objectForKey:@"teleopHighMake"];
+        match.teleopHighMiss = [dict objectForKey:@"teleopHighMiss"];
+        match.teleopLowMake = [dict objectForKey:@"teleopLowMake"];
+        match.teleopLowMiss = [dict objectForKey:@"teleopLowMiss"];
+        match.teleopOver = [dict objectForKey:@"teleopOver"];
+        match.teleopCatch = [dict objectForKey:@"teleopCatch"];
+        match.teleopPassed = [dict objectForKey:@"teleopPassed"];
+        match.teleopReceived = [dict objectForKey:@"teleopReceived"];
         match.penaltyLarge = [dict objectForKey:@"penaltyLarge"];
         match.penaltySmall = [dict objectForKey:@"penaltySmall"];
+        match.notes = [dict objectForKey:@"notes"];
         match.red1Pos = [dict objectForKey:@"red1Pos"];
         match.recordingTeam = [dict objectForKey:@"recordingTeam"];
         match.scoutInitials = [dict objectForKey:@"scoutInitials"];

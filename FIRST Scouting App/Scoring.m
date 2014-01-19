@@ -44,6 +44,8 @@ NSInteger teleopReceived;
 NSInteger smallPenaltyTally;
 NSInteger largePenaltyTally;
 
+NSString *notes;
+
 
 // Match Defining Variables
 NSString *initials;
@@ -250,6 +252,8 @@ UILabel *blue3UpdaterLbl;
         v.alpha = 0;
         v.hidden = true;
     }
+    
+    notes = @"";
 }
 
 -(void)didReceiveMemoryWarning{
@@ -661,6 +665,7 @@ UILabel *blue3UpdaterLbl;
                              }
                              if (red1Pos >= 0 && red1Pos < 3) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor redColor]]; [_movementRobot setImage:[UIImage imageNamed:@"RedRobot"]];}
                              else if (red1Pos >= 3 && red1Pos < 6) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor blueColor]]; [_movementRobot setImage:[UIImage imageNamed:@"BlueRobot"]];}
+                             [self.view bringSubviewToFront:_movementRobot];
                              
                              for (UIView *v in autoScreenObjects) {
                                  v.hidden = false;
@@ -1568,93 +1573,100 @@ float startY;
 
 // Saves data that the user recorded on their screen
 -(IBAction)saveMatch:(id)sender {
-//    
-//    // If the match number was edited by the user during that match
-//    if (_matchNumEdit.isHidden) {
-//        currentMatchNum = _matchNumField.text;
-//    }
-//    else{
-//        currentMatchNum = _matchNumEdit.titleLabel.text;
-//    }
-//    // If the team number was edited by the user during the match
-//    if (_teamNumEdit.isHidden) {
-//        currentTeamNum = _teamNumField.text;
-//    }
-//    else{
-//        currentTeamNum = _teamNumEdit.titleLabel.text;
-//    }
-//    
-//    // If for some reason there was no match number (Shouldn't occur, but just in case)
-//    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""]) {
-//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO MATCH NUMBER"
-//                                                       message: @"Please enter a match number for this match."
-//                                                      delegate: nil
-//                                             cancelButtonTitle:@"OK"
-//                                             otherButtonTitles:nil];
-//        [alert show];
-//    }
-//    // Another unlikely case: No team number. Also shouldn't happen, but a good safety net
-//    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""]) {
-//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO TEAM NUMBER"
-//                                                       message: @"Please enter a team number for this match."
-//                                                      delegate: nil
-//                                             cancelButtonTitle:@"OK"
-//                                             otherButtonTitles:nil];
-//        [alert show];
-//    }
-//    // If everything checks out, save the match locally
-//    else{
-//        [context performBlock:^{
-//            Regional *rgnl = [Regional createRegionalWithName:currentRegional inManagedObjectContext:context];
-//            
-//            Team *tm = [Team createTeamWithName:currentTeamNum inRegional:rgnl withManagedObjectContext:context];
-//            
-//            // Create a uniqueID for this match
-//            NSDate *now = [NSDate date];
-//            secs = [now timeIntervalSince1970];
-//            
-//            NSDictionary *matchDict = [NSDictionary dictionaryWithObjectsAndKeys:
-//                                       [NSNumber numberWithInteger:teleopHighScore], @"teleHighScore",
-//                                       [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                       [NSNumber numberWithInteger:teleopMidScore], @"teleMidScore",
-//                                       [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                       [NSNumber numberWithInteger:teleopLowScore], @"teleLowScore",
-//                                       [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                       //[NSNumber numberWithInteger:endGame], @"endGame",
-//                                       [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
-//                                       [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
-//                                       [NSString stringWithString:pos], @"red1Pos",
-//                                       [NSString stringWithString:scoutTeamNum], @"recordingTeam",
-//                                       [NSString stringWithString:initials], @"scoutInitials",
-//                                       [NSString stringWithString:currentMatchType], @"matchType",
-//                                       [NSString stringWithString:currentMatchNum], @"matchNum",
-//                                       [NSNumber numberWithInteger:secs], @"uniqueID", nil];
-//            
-//            Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
-//            
-//            // If the match doesn't exist
-//            if ([match.uniqeID integerValue] == secs) {
-//                [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
-//                    if (success) {
-//                        [self saveSuccess];
-//                    }
-//                    else{
-//                        NSLog(@"Didn't save correctly");
-//                    }
-//                }];
-//            }
-//            else{
-//                // Temporarily store the match and team that there was a duplicate of and call the AlertView
-//                duplicateMatch = match;
-//                teamWithDuplicate = tm;
-//                duplicateMatchDict = matchDict;
-//                [self overWriteAlert];
-//            }
-//        }];
-//        
-//    }
     
-    [self saveSuccess];
+    // If the match number was edited by the user during that match
+    if (_matchNumEdit.isHidden) {
+        currentMatchNum = _matchNumField.text;
+    }
+    else{
+        currentMatchNum = _matchNumEdit.titleLabel.text;
+    }
+    // If the team number was edited by the user during the match
+    if (_teamNumEdit.isHidden) {
+        currentTeamNum = _teamNumField.text;
+    }
+    else{
+        currentTeamNum = _teamNumEdit.titleLabel.text;
+    }
+    
+    // If for some reason there was no match number (Shouldn't occur, but just in case)
+    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""]) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO MATCH NUMBER"
+                                                       message: @"Please enter a match number for this match."
+                                                      delegate: nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    // Another unlikely case: No team number. Also shouldn't happen, but a good safety net
+    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""]) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO TEAM NUMBER"
+                                                       message: @"Please enter a team number for this match."
+                                                      delegate: nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    // If everything checks out, save the match locally
+    else{
+        [context performBlock:^{
+            Regional *rgnl = [Regional createRegionalWithName:currentRegional inManagedObjectContext:context];
+            
+            Team *tm = [Team createTeamWithName:currentTeamNum inRegional:rgnl withManagedObjectContext:context];
+            
+            // Create a uniqueID for this match
+            NSDate *now = [NSDate date];
+            secs = [now timeIntervalSince1970];
+            
+            NSDictionary *matchDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithInteger:autoHighHotScore], @"autoHighHotScore",
+                                       [NSNumber numberWithInteger:autoHighNotScore], @"autoHighNotScore",
+                                       [NSNumber numberWithInteger:autoHighMissScore], @"autoHighMissScore",
+                                       [NSNumber numberWithInteger:autoLowHotScore], @"autoLowHotScore",
+                                       [NSNumber numberWithInteger:autoLowNotScore], @"autoLowNotScore",
+                                       [NSNumber numberWithInteger:autoLowMissScore], @"autoLowMissScore",
+                                       [NSNumber numberWithInteger:mobilityBonus], @"mobilityBonus",
+                                       [NSNumber numberWithInteger:teleopHighMake], @"teleopHighMake",
+                                       [NSNumber numberWithInteger:teleopHighMiss], @"teleopHighMiss",
+                                       [NSNumber numberWithInteger:teleopLowMake], @"teleopLowMake",
+                                       [NSNumber numberWithInteger:teleopLowMiss], @"teleopLowMiss",
+                                       [NSNumber numberWithInteger:teleopOver], @"teleopOver",
+                                       [NSNumber numberWithInteger:teleopCatch], @"teleopCatch",
+                                       [NSNumber numberWithInteger:teleopPassed], @"teleopPassed",
+                                       [NSNumber numberWithInteger:teleopReceived], @"teleopReceived",
+                                       [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
+                                       [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
+                                       [NSString stringWithString:notes], @"notes",
+                                       [NSString stringWithString:pos], @"red1Pos",
+                                       [NSString stringWithString:scoutTeamNum], @"recordingTeam",
+                                       [NSString stringWithString:initials], @"scoutInitials",
+                                       [NSString stringWithString:currentMatchType], @"matchType",
+                                       [NSString stringWithString:currentMatchNum], @"matchNum",
+                                       [NSNumber numberWithInteger:secs], @"uniqueID", nil];
+            
+            Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+            
+            // If the match doesn't exist
+            if ([match.uniqeID integerValue] == secs) {
+                [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+                    if (success) {
+                        [self saveSuccess];
+                    }
+                    else{
+                        NSLog(@"Didn't save correctly");
+                    }
+                }];
+            }
+            else{
+                // Temporarily store the match and team that there was a duplicate of and call the AlertView
+                duplicateMatch = match;
+                teamWithDuplicate = tm;
+                duplicateMatchDict = matchDict;
+                [self overWriteAlert];
+            }
+        }];
+        
+    }
 
 }
 

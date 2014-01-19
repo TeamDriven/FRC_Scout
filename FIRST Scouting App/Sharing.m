@@ -180,20 +180,31 @@ NSManagedObjectContext *context;
             for (Match *m in matches) {
                 NSString *matchNum = [[NSString alloc] initWithFormat:@"%@", m.matchNum];
                 NSDictionary *matchDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                           [NSNumber numberWithInteger:[m.teleHighScore integerValue]], @"teleHighScore",
-                                           [NSNumber numberWithInteger:[m.autoHighScore integerValue]], @"autoHighScore",
-                                           [NSNumber numberWithInteger:[m.teleMidScore integerValue]], @"teleMidScore",
-                                           [NSNumber numberWithInteger:[m.autoMidScore integerValue]], @"autoMidScore",
-                                           [NSNumber numberWithInteger:[m.teleLowScore integerValue]], @"teleLowScore",
-                                           [NSNumber numberWithInteger:[m.autoLowScore integerValue]], @"autoLowScore",
-                                           //[NSNumber numberWithInteger:[m.endGame integerValue]], @"endGame",
+                                           [NSNumber numberWithInteger:[m.autoHighHotScore integerValue]], @"autoHighHotScore",
+                                           [NSNumber numberWithInteger:[m.autoHighNotScore integerValue]], @"autoHighNotScore",
+                                           [NSNumber numberWithInteger:[m.autoHighMissScore integerValue]], @"autoHighMissScore",
+                                           [NSNumber numberWithInteger:[m.autoLowHotScore integerValue]], @"autoLowHotScore",
+                                           [NSNumber numberWithInteger:[m.autoLowNotScore integerValue]], @"autoLowNotScore",
+                                           [NSNumber numberWithInteger:[m.autoLowMissScore integerValue]], @"autoLowMissScore",
+                                           [NSNumber numberWithInteger:[m.mobilityBonus integerValue]], @"mobilityBonus",
+                                           [NSNumber numberWithInteger:[m.teleopHighMake integerValue]], @"teleopHighMake",
+                                           [NSNumber numberWithInteger:[m.teleopHighMiss integerValue]], @"teleopHighMiss",
+                                           [NSNumber numberWithInteger:[m.teleopLowMake integerValue]], @"teleopLowMake",
+                                           [NSNumber numberWithInteger:[m.teleopLowMiss integerValue]], @"teleopLowMiss",
+                                           [NSNumber numberWithInteger:[m.teleopOver integerValue]], @"teleopOver",
+                                           [NSNumber numberWithInteger:[m.teleopCatch integerValue]], @"teleopCatch",
+                                           [NSNumber numberWithInteger:[m.teleopPassed integerValue]], @"teleopPassed",
+                                           [NSNumber numberWithInteger:[m.teleopReceived integerValue]], @"teleopReceived",
                                            [NSNumber numberWithInteger:[m.penaltyLarge integerValue]], @"penaltyLarge",
                                            [NSNumber numberWithInteger:[m.penaltySmall integerValue]], @"penaltySmall",
+                                           [NSString stringWithString:m.notes], @"notes",
                                            [NSString stringWithString:m.red1Pos], @"red1Pos",
                                            [NSString stringWithString:m.recordingTeam], @"recordingTeam",
+                                           [NSString stringWithString:m.scoutInitials], @"scoutInitials",
                                            [NSString stringWithString:m.matchType], @"matchType",
                                            [NSString stringWithString:m.matchNum], @"matchNum",
                                            [NSNumber numberWithInteger:[m.uniqeID integerValue]], @"uniqueID", nil];
+
                 [[[dataDict objectForKey:regionalTitle] objectForKey:teamTitle] setObject:matchDict forKey:matchNum];
             }
         }

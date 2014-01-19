@@ -10,13 +10,13 @@
 		2821DE39186E0B000059CDF6 /* FSA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2821DE37186E0B000059CDF6 /* FSA.xcdatamodeld */; };
 		28270E101871199100809047 /* Team+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E0F1871199100809047 /* Team+Category.m */; };
 		28270E141871247D00809047 /* Match+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E131871247D00809047 /* Match+Category.m */; };
-		28270E2018713B0600809047 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E1F18713B0600809047 /* Team.m */; };
-		28270E2318713B0700809047 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E2218713B0700809047 /* Match.m */; };
-		28270E2618713B0700809047 /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E2518713B0700809047 /* Regional.m */; };
 		285A1E1C1870E941002AA01C /* Regional+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 285A1E1B1870E941002AA01C /* Regional+Category.m */; };
 		2862D6A81854D4F900DC460F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A71854D4F900DC460F /* Images.xcassets */; };
 		2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2893226B187E637B00A225EE /* UIAlertView+Blocks.m */; };
 		28C8C757185BB91F000FAE10 /* MatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C8C756185BB91F000FAE10 /* MatchCell.m */; };
+		86CDCD1D188C5E80002B6522 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD1C188C5E80002B6522 /* Team.m */; };
+		86CDCD20188C5E81002B6522 /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD1F188C5E81002B6522 /* Regional.m */; };
+		86CDCD23188C5E81002B6522 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD22188C5E81002B6522 /* Match.m */; };
 		8846FED11826D7D100B37E44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED01826D7D100B37E44 /* Foundation.framework */; };
 		8846FED31826D7D100B37E44 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED21826D7D100B37E44 /* CoreGraphics.framework */; };
 		8846FED51826D7D100B37E44 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED41826D7D100B37E44 /* UIKit.framework */; };
@@ -53,12 +53,6 @@
 		28270E0F1871199100809047 /* Team+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+Category.m"; sourceTree = "<group>"; };
 		28270E121871247D00809047 /* Match+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Match+Category.h"; sourceTree = "<group>"; };
 		28270E131871247D00809047 /* Match+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Match+Category.m"; sourceTree = "<group>"; };
-		28270E1E18713B0600809047 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
-		28270E1F18713B0600809047 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
-		28270E2118713B0700809047 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
-		28270E2218713B0700809047 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
-		28270E2418713B0700809047 /* Regional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regional.h; sourceTree = "<group>"; };
-		28270E2518713B0700809047 /* Regional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Regional.m; sourceTree = "<group>"; };
 		285A1E1A1870E941002AA01C /* Regional+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Regional+Category.h"; sourceTree = "<group>"; };
 		285A1E1B1870E941002AA01C /* Regional+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Regional+Category.m"; sourceTree = "<group>"; };
 		2862D6A71854D4F900DC460F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -66,6 +60,12 @@
 		2893226B187E637B00A225EE /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		28C8C755185BB91F000FAE10 /* MatchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchCell.h; sourceTree = "<group>"; };
 		28C8C756185BB91F000FAE10 /* MatchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchCell.m; sourceTree = "<group>"; };
+		86CDCD1B188C5E80002B6522 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
+		86CDCD1C188C5E80002B6522 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
+		86CDCD1E188C5E81002B6522 /* Regional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regional.h; sourceTree = "<group>"; };
+		86CDCD1F188C5E81002B6522 /* Regional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Regional.m; sourceTree = "<group>"; };
+		86CDCD21188C5E81002B6522 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
+		86CDCD22188C5E81002B6522 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
 		8846FECD1826D7D100B37E44 /* FIRST Scouting App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIRST Scouting App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8846FED01826D7D100B37E44 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8846FED21826D7D100B37E44 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -134,8 +134,8 @@
 		28270E0D1871197600809047 /* Team */ = {
 			isa = PBXGroup;
 			children = (
-				28270E1E18713B0600809047 /* Team.h */,
-				28270E1F18713B0600809047 /* Team.m */,
+				86CDCD1B188C5E80002B6522 /* Team.h */,
+				86CDCD1C188C5E80002B6522 /* Team.m */,
 				28270E0E1871199100809047 /* Team+Category.h */,
 				28270E0F1871199100809047 /* Team+Category.m */,
 			);
@@ -145,8 +145,8 @@
 		28270E111871246D00809047 /* Match */ = {
 			isa = PBXGroup;
 			children = (
-				28270E2118713B0700809047 /* Match.h */,
-				28270E2218713B0700809047 /* Match.m */,
+				86CDCD21188C5E81002B6522 /* Match.h */,
+				86CDCD22188C5E81002B6522 /* Match.m */,
 				28270E121871247D00809047 /* Match+Category.h */,
 				28270E131871247D00809047 /* Match+Category.m */,
 			);
@@ -156,8 +156,8 @@
 		285A1E1D1870E9B1002AA01C /* Regional */ = {
 			isa = PBXGroup;
 			children = (
-				28270E2418713B0700809047 /* Regional.h */,
-				28270E2518713B0700809047 /* Regional.m */,
+				86CDCD1E188C5E81002B6522 /* Regional.h */,
+				86CDCD1F188C5E81002B6522 /* Regional.m */,
 				285A1E1A1870E941002AA01C /* Regional+Category.h */,
 				285A1E1B1870E941002AA01C /* Regional+Category.m */,
 			);
@@ -353,19 +353,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28270E2618713B0700809047 /* Regional.m in Sources */,
+				86CDCD20188C5E81002B6522 /* Regional.m in Sources */,
 				88ED27F81829FE58008F3FDF /* Data.m in Sources */,
-				28270E2318713B0700809047 /* Match.m in Sources */,
 				8846FEDD1826D7D200B37E44 /* main.m in Sources */,
 				2821DE39186E0B000059CDF6 /* FSA.xcdatamodeld in Sources */,
 				285A1E1C1870E941002AA01C /* Regional+Category.m in Sources */,
-				28270E2018713B0600809047 /* Team.m in Sources */,
 				28C8C757185BB91F000FAE10 /* MatchCell.m in Sources */,
+				86CDCD1D188C5E80002B6522 /* Team.m in Sources */,
 				8846FEEA1826D7D200B37E44 /* Sharing.m in Sources */,
 				2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */,
 				28270E141871247D00809047 /* Match+Category.m in Sources */,
 				28270E101871199100809047 /* Team+Category.m in Sources */,
 				8846FEE11826D7D200B37E44 /* LocationsAppDelegate.m in Sources */,
+				86CDCD23188C5E81002B6522 /* Match.m in Sources */,
 				888F0EF81850177F00412022 /* Globals.m in Sources */,
 				8846FEE71826D7D200B37E44 /* Scoring.m in Sources */,
 			);
