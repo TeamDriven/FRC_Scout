@@ -108,6 +108,20 @@ UIAlertView *inviteAlert;
 NSMutableDictionary *dictToSend;
 NSMutableDictionary *receivedDataDict;
 
+// Notes Screen Declarations
+UIControl *notesScreen;
+UITextView *notesTextField;
+UIControl *redZone;
+BOOL inRedZone;
+UIControl *whiteZone;
+BOOL inWhiteZone;
+UIControl *blueZone;
+BOOL inBlueZone;
+UIControl *goodDefense;
+BOOL didGoodDefense;
+UIControl *didntMove;
+BOOL didDidntMove;
+
 
 // Regional Arrays
 NSArray *regionalNames;
@@ -135,6 +149,7 @@ UILabel *red3UpdaterLbl;
 UILabel *blue1UpdaterLbl;
 UILabel *blue2UpdaterLbl;
 UILabel *blue3UpdaterLbl;
+
 
 
 /***********************************
@@ -1609,65 +1624,336 @@ float startY;
     }
     // If everything checks out, save the match locally
     else{
-        [context performBlock:^{
-            Regional *rgnl = [Regional createRegionalWithName:currentRegional inManagedObjectContext:context];
-            
-            Team *tm = [Team createTeamWithName:currentTeamNum inRegional:rgnl withManagedObjectContext:context];
-            
-            // Create a uniqueID for this match
-            NSDate *now = [NSDate date];
-            secs = [now timeIntervalSince1970];
-            
-            NSDictionary *matchDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       [NSNumber numberWithInteger:autoHighHotScore], @"autoHighHotScore",
-                                       [NSNumber numberWithInteger:autoHighNotScore], @"autoHighNotScore",
-                                       [NSNumber numberWithInteger:autoHighMissScore], @"autoHighMissScore",
-                                       [NSNumber numberWithInteger:autoLowHotScore], @"autoLowHotScore",
-                                       [NSNumber numberWithInteger:autoLowNotScore], @"autoLowNotScore",
-                                       [NSNumber numberWithInteger:autoLowMissScore], @"autoLowMissScore",
-                                       [NSNumber numberWithInteger:mobilityBonus], @"mobilityBonus",
-                                       [NSNumber numberWithInteger:teleopHighMake], @"teleopHighMake",
-                                       [NSNumber numberWithInteger:teleopHighMiss], @"teleopHighMiss",
-                                       [NSNumber numberWithInteger:teleopLowMake], @"teleopLowMake",
-                                       [NSNumber numberWithInteger:teleopLowMiss], @"teleopLowMiss",
-                                       [NSNumber numberWithInteger:teleopOver], @"teleopOver",
-                                       [NSNumber numberWithInteger:teleopCatch], @"teleopCatch",
-                                       [NSNumber numberWithInteger:teleopPassed], @"teleopPassed",
-                                       [NSNumber numberWithInteger:teleopReceived], @"teleopReceived",
-                                       [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
-                                       [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
-                                       [NSString stringWithString:notes], @"notes",
-                                       [NSString stringWithString:pos], @"red1Pos",
-                                       [NSString stringWithString:scoutTeamNum], @"recordingTeam",
-                                       [NSString stringWithString:initials], @"scoutInitials",
-                                       [NSString stringWithString:currentMatchType], @"matchType",
-                                       [NSString stringWithString:currentMatchNum], @"matchNum",
-                                       [NSNumber numberWithInteger:secs], @"uniqueID", nil];
-            
-            Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
-            
-            // If the match doesn't exist
-            if ([match.uniqeID integerValue] == secs) {
-                [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
-                    if (success) {
-                        [self saveSuccess];
-                    }
-                    else{
-                        NSLog(@"Didn't save correctly");
-                    }
-                }];
-            }
-            else{
-                // Temporarily store the match and team that there was a duplicate of and call the AlertView
-                duplicateMatch = match;
-                teamWithDuplicate = tm;
-                duplicateMatchDict = matchDict;
-                [self overWriteAlert];
-            }
-        }];
-        
+        [self createNotesScreen];
     }
 
+}
+
+-(void)createNotesScreen{
+    greyOut = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+    [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+    greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
+    [self.view addSubview:greyOut];
+    
+    notesScreen = [[UIControl alloc] initWithFrame:CGRectMake(159, 200, 450, 500)];
+    [notesScreen addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+    notesScreen.backgroundColor = [UIColor whiteColor];
+    notesScreen.layer.cornerRadius = 10;
+    
+    UILabel *notesScreenLbl = [[UILabel alloc] initWithFrame:CGRectMake(125, 15, 200, 20)];
+    notesScreenLbl.text = @"Add Some Notes!";
+    notesScreenLbl.font = [UIFont systemFontOfSize:20];
+    notesScreenLbl.textAlignment = NSTextAlignmentCenter;
+    [notesScreen addSubview:notesScreenLbl];
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    cancelButton.frame = CGRectMake(375, 10, 70, 15);
+    [cancelButton setTitle:@"Cancel X" forState:UIControlStateNormal];
+    [cancelButton addTarget:self action:@selector(cancelNotesScreen) forControlEvents:UIControlEventTouchUpInside];
+    [notesScreen addSubview:cancelButton];
+    
+    UILabel *zoneSelectorLbl = [[UILabel alloc] initWithFrame:CGRectMake(100, 58, 250, 12)];
+    zoneSelectorLbl.text = @"Select the Zones they tended to hang out in";
+    zoneSelectorLbl.font = [UIFont systemFontOfSize:10];
+    zoneSelectorLbl.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+    zoneSelectorLbl.textAlignment = NSTextAlignmentCenter;
+    [notesScreen addSubview:zoneSelectorLbl];
+    
+    NSInteger redZoneX = 105;
+    
+    redZone = [[UIControl alloc] initWithFrame:CGRectMake(redZoneX, 75, 80, 30)];
+    redZone.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
+    [redZone addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    UILabel *redZoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    redZoneLabel.textAlignment = NSTextAlignmentCenter;
+    redZoneLabel.textColor = [UIColor whiteColor];
+    redZoneLabel.font = [UIFont boldSystemFontOfSize:16];
+    redZoneLabel.text = @"Red";
+    [redZone addSubview:redZoneLabel];
+    [notesScreen addSubview:redZone];
+    
+    redZoneX+=80;
+    whiteZone = [[UIControl alloc] initWithFrame:CGRectMake(redZoneX, 75, 80, 30)];
+    whiteZone.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.8];
+    [whiteZone addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    UILabel *whiteZoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    whiteZoneLabel.textAlignment = NSTextAlignmentCenter;
+    whiteZoneLabel.textColor = [UIColor whiteColor];
+    whiteZoneLabel.font = [UIFont boldSystemFontOfSize:16];
+    whiteZoneLabel.text = @"White";
+    [whiteZone addSubview:whiteZoneLabel];
+    [notesScreen addSubview:whiteZone];
+    
+    redZoneX+=80;
+    blueZone = [[UIControl alloc] initWithFrame:CGRectMake(redZoneX, 75, 80, 30)];
+    blueZone.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.3];
+    [blueZone addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    UILabel *blueZoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    blueZoneLabel.textAlignment = NSTextAlignmentCenter;
+    blueZoneLabel.textColor = [UIColor whiteColor];
+    blueZoneLabel.font = [UIFont boldSystemFontOfSize:16];
+    blueZoneLabel.text = @"Blue";
+    [blueZone addSubview:blueZoneLabel];
+    [notesScreen addSubview:blueZone];
+    
+    if (red1Pos < 3) {
+        UIBezierPath *leftMaskPath;
+        leftMaskPath = [UIBezierPath bezierPathWithRoundedRect:redZone.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerTopLeft) cornerRadii:CGSizeMake(3.0, 3.0)];
+        CAShapeLayer *leftMaskLayer = [[CAShapeLayer alloc] init];
+        leftMaskLayer.frame = redZone.bounds;
+        leftMaskLayer.path = leftMaskPath.CGPath;
+        redZone.layer.mask = leftMaskLayer;
+        
+        UIBezierPath *rightMaskPath;
+        rightMaskPath = [UIBezierPath bezierPathWithRoundedRect:blueZone.bounds byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerTopRight) cornerRadii:CGSizeMake(3.0, 3.0)];
+        CAShapeLayer *rightMaskLayer = [[CAShapeLayer alloc] init];
+        rightMaskLayer.frame = blueZone.bounds;
+        rightMaskLayer.path = rightMaskPath.CGPath;
+        blueZone.layer.mask = rightMaskLayer;
+    }
+    else {
+        redZone.center = CGPointMake(redZone.center.x + 160, redZone.center.y);
+        blueZone.center = CGPointMake(blueZone.center.x - 160, blueZone.center.y);
+        
+        UIBezierPath *leftMaskPath;
+        leftMaskPath = [UIBezierPath bezierPathWithRoundedRect:redZone.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerTopLeft) cornerRadii:CGSizeMake(3.0, 3.0)];
+        CAShapeLayer *leftMaskLayer = [[CAShapeLayer alloc] init];
+        leftMaskLayer.frame = blueZone.bounds;
+        leftMaskLayer.path = leftMaskPath.CGPath;
+        blueZone.layer.mask = leftMaskLayer;
+        
+        UIBezierPath *rightMaskPath;
+        rightMaskPath = [UIBezierPath bezierPathWithRoundedRect:blueZone.bounds byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerTopRight) cornerRadii:CGSizeMake(3.0, 3.0)];
+        CAShapeLayer *rightMaskLayer = [[CAShapeLayer alloc] init];
+        rightMaskLayer.frame = redZone.bounds;
+        rightMaskLayer.path = rightMaskPath.CGPath;
+        redZone.layer.mask = rightMaskLayer;
+    }
+    
+    UILabel *quickNotesLbl = [[UILabel alloc] initWithFrame:CGRectMake(175, 130, 100, 13)];
+    quickNotesLbl.text = @"Quick Notes (tap)";
+    quickNotesLbl.textAlignment = NSTextAlignmentCenter;
+    quickNotesLbl.font = [UIFont systemFontOfSize:10];
+    quickNotesLbl.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+    [notesScreen addSubview:quickNotesLbl];
+    
+    goodDefense = [[UIControl alloc] initWithFrame:CGRectMake(40, 150, 130, 30)];
+    goodDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [goodDefense addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    goodDefense.layer.cornerRadius = 5;
+    UILabel *goodDefenseLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 125, 30)];
+    goodDefenseLbl.text = @"Good Defense";
+    goodDefenseLbl.textAlignment = NSTextAlignmentCenter;
+    goodDefenseLbl.textColor = [UIColor whiteColor];
+    goodDefenseLbl.font = [UIFont systemFontOfSize:15];
+    [goodDefense addSubview:goodDefenseLbl];
+    [notesScreen addSubview:goodDefense];
+    
+    didntMove = [[UIControl alloc] initWithFrame:CGRectMake(180, 150, 110, 30)];
+    didntMove.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [didntMove addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    didntMove.layer.cornerRadius = 5;
+    UILabel *didntMoveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 110, 30)];
+    didntMoveLbl.text = @"Didn't Move";
+    didntMoveLbl.textAlignment = NSTextAlignmentCenter;
+    didntMoveLbl.textColor = [UIColor whiteColor];
+    didntMoveLbl.font = [UIFont systemFontOfSize:15];
+    [didntMove addSubview:didntMoveLbl];
+    [notesScreen addSubview:didntMove];
+    
+    
+    notesTextField = [[UITextView alloc] initWithFrame:CGRectMake(75, 350, 300, 100)];
+    notesTextField.textAlignment = NSTextAlignmentCenter;
+    notesTextField.layer.borderColor = [[UIColor colorWithWhite:0.8 alpha:1.0] CGColor];
+    notesTextField.layer.borderWidth = 1;
+    notesTextField.layer.cornerRadius = 10;
+    notesTextField.font = [UIFont systemFontOfSize:14];
+    notesTextField.text = @"Custom Notes";
+    notesTextField.textColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    notesTextField.delegate = self;
+    [notesScreen addSubview:notesTextField];
+    
+    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    saveButton.frame = CGRectMake(190, 460, 70, 30);
+    saveButton.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+    [saveButton setTitle:@"Save" forState:UIControlStateNormal];
+    [saveButton addTarget:self action:@selector(coreDataSave) forControlEvents:UIControlEventTouchUpInside];
+    saveButton.layer.cornerRadius = 5;
+    [notesScreen addSubview:saveButton];
+    
+    [greyOut addSubview:notesScreen];
+    notesScreen.center = CGPointMake(notesScreen.center.x, 1524);
+    [UIView animateWithDuration:0.3 animations:^{
+        notesScreen.center = CGPointMake(notesScreen.center.x, 450);
+    }];
+}
+
+-(void)cancelNotesScreen{
+    [UIView animateWithDuration:0.3 animations:^{
+        notesScreen.center = CGPointMake(notesScreen.center.x, 1524);
+    } completion:^(BOOL finished) {
+        [notesScreen removeFromSuperview];
+        [greyOut removeFromSuperview];
+    }];
+}
+
+-(void)notesControllerTapped:(UIControl *)controlView{
+    if ([controlView isEqual:redZone]) {
+        if (inRedZone) {
+            [UIView animateWithDuration:0.1 animations:^{
+                redZone.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
+            }];
+            inRedZone = false;
+        }
+        else{
+            [UIView animateWithDuration:0.1 animations:^{
+                redZone.backgroundColor = [UIColor redColor];
+            }];
+            inRedZone = true;
+        }
+    }
+    else if ([controlView isEqual:whiteZone]) {
+        if (inWhiteZone) {
+            [UIView animateWithDuration:0.2 animations:^{
+                whiteZone.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.8];
+            }];
+            inWhiteZone = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                whiteZone.backgroundColor = [UIColor colorWithWhite:0.4 alpha:1.0];
+            }];
+            inWhiteZone = true;
+        }
+    }
+    else if ([controlView isEqual:blueZone]) {
+        if (inBlueZone) {
+            [UIView animateWithDuration:0.2 animations:^{
+                blueZone.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.3];
+            }];
+            inBlueZone = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                blueZone.backgroundColor = [UIColor blueColor];
+            }];
+            inBlueZone = true;
+        }
+    }
+    else if ([controlView isEqual:goodDefense]){
+        if (didGoodDefense) {
+            [UIView animateWithDuration:0.2 animations:^{
+                goodDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGoodDefense = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                goodDefense.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+            }];
+            didGoodDefense = true;
+        }
+    }
+    else if ([controlView isEqual:didntMove]){
+        if (didDidntMove) {
+            [UIView animateWithDuration:0.2 animations:^{
+                didntMove.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didDidntMove = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                didntMove.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+            }];
+            didDidntMove = true;
+        }
+    }
+}
+
+-(void)textViewDidBeginEditing:(UITextView *)textField{
+    if ([textField isEqual:notesTextField]) {
+        if ([textField.text isEqualToString:@"Custom Notes"]) {
+            textField.text = @"";
+            textField.textColor = [UIColor blackColor];
+        }
+    }
+    [textField becomeFirstResponder];
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textField{
+    if ([textField isEqual:notesTextField]) {
+        if ([textField.text isEqualToString:@""]) {
+            textField.text = @"Custom Notes";
+            textField.textColor = [UIColor lightGrayColor];
+        }
+    }
+    [textField resignFirstResponder];
+}
+
+-(void)coreDataSave{
+    notes = notesTextField.text;
+    [UIView animateWithDuration:0.3 animations:^{
+        notesScreen.center = CGPointMake(notesScreen.center.x, 1524);
+    } completion:^(BOOL finished) {
+        [notesScreen removeFromSuperview];
+        [greyOut removeFromSuperview];
+    }];
+    [context performBlock:^{
+        Regional *rgnl = [Regional createRegionalWithName:currentRegional inManagedObjectContext:context];
+        
+        Team *tm = [Team createTeamWithName:currentTeamNum inRegional:rgnl withManagedObjectContext:context];
+        
+        // Create a uniqueID for this match
+        NSDate *now = [NSDate date];
+        secs = [now timeIntervalSince1970];
+        
+        NSDictionary *matchDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithInteger:autoHighHotScore], @"autoHighHotScore",
+                                   [NSNumber numberWithInteger:autoHighNotScore], @"autoHighNotScore",
+                                   [NSNumber numberWithInteger:autoHighMissScore], @"autoHighMissScore",
+                                   [NSNumber numberWithInteger:autoLowHotScore], @"autoLowHotScore",
+                                   [NSNumber numberWithInteger:autoLowNotScore], @"autoLowNotScore",
+                                   [NSNumber numberWithInteger:autoLowMissScore], @"autoLowMissScore",
+                                   [NSNumber numberWithInteger:mobilityBonus], @"mobilityBonus",
+                                   [NSNumber numberWithInteger:teleopHighMake], @"teleopHighMake",
+                                   [NSNumber numberWithInteger:teleopHighMiss], @"teleopHighMiss",
+                                   [NSNumber numberWithInteger:teleopLowMake], @"teleopLowMake",
+                                   [NSNumber numberWithInteger:teleopLowMiss], @"teleopLowMiss",
+                                   [NSNumber numberWithInteger:teleopOver], @"teleopOver",
+                                   [NSNumber numberWithInteger:teleopCatch], @"teleopCatch",
+                                   [NSNumber numberWithInteger:teleopPassed], @"teleopPassed",
+                                   [NSNumber numberWithInteger:teleopReceived], @"teleopReceived",
+                                   [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
+                                   [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
+                                   [NSString stringWithString:notes], @"notes",
+                                   [NSString stringWithString:pos], @"red1Pos",
+                                   [NSString stringWithString:scoutTeamNum], @"recordingTeam",
+                                   [NSString stringWithString:initials], @"scoutInitials",
+                                   [NSString stringWithString:currentMatchType], @"matchType",
+                                   [NSString stringWithString:currentMatchNum], @"matchNum",
+                                   [NSNumber numberWithInteger:secs], @"uniqueID", nil];
+        
+        Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+        
+        // If the match doesn't exist
+        if ([match.uniqeID integerValue] == secs) {
+            [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+                if (success) {
+                    [self saveSuccess];
+                }
+                else{
+                    NSLog(@"Didn't save correctly");
+                }
+            }];
+        }
+        else{
+            // Temporarily store the match and team that there was a duplicate of and call the AlertView
+            duplicateMatch = match;
+            teamWithDuplicate = tm;
+            duplicateMatchDict = matchDict;
+            [self overWriteAlert];
+        }
+    }];
 }
 
 // Handles UIAlertViews that appear for the user
@@ -1809,6 +2095,7 @@ float startY;
     [scoutTeamNumField resignFirstResponder];
     [currentMatchNumField resignFirstResponder];
     [initialsField resignFirstResponder];
+    [notesTextField resignFirstResponder];
 }
 
 

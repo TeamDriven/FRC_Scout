@@ -10,7 +10,7 @@
 #import "Globals.h"
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
 
-@interface LocationsFirstViewController : UIViewController <UIGestureRecognizerDelegate, UIPickerViewDelegate, UITextFieldDelegate, MCBrowserViewControllerDelegate, MCSessionDelegate>
+@interface LocationsFirstViewController : UIViewController <UIGestureRecognizerDelegate, UIPickerViewDelegate, UITextFieldDelegate, MCBrowserViewControllerDelegate, MCSessionDelegate, UITextViewDelegate>
 
 // Multipeer Connectivity stuff
 @property (nonatomic, strong) MCBrowserViewController *browserVCS;
