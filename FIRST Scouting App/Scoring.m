@@ -1891,6 +1891,7 @@ float startY;
 }
 
 -(void)coreDataSave{
+    if ([notesTextField.text isEqualToString:@"Custom Notes"]) {notesTextField.text = @"";}
     notes = notesTextField.text;
     [UIView animateWithDuration:0.3 animations:^{
         notesScreen.center = CGPointMake(notesScreen.center.x, 1524);
