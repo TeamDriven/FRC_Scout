@@ -14,4 +14,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *recordTeamBtn;
 
+@property (weak, nonatomic) IBOutlet UIButton *viewTeamsBtn;
+
 @end

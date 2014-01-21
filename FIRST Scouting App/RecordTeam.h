@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RecordTeam : UIViewController
+@interface RecordTeam : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @end

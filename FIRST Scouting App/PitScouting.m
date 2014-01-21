@@ -30,7 +30,8 @@
     _pitMapBtn.layer.cornerRadius = 10;
     
     _recordTeamBtn.layer.cornerRadius = 10;
-	// Do any additional setup after loading the view.
+    
+    _viewTeamsBtn.layer.cornerRadius = 10;
 }
 
 - (void)didReceiveMemoryWarning

@@ -952,16 +952,17 @@
                     <connections>
                         <outlet property="pitMapBtn" destination="lYZ-GO-lGn" id="ubu-n4-Ydb"/>
                         <outlet property="recordTeamBtn" destination="4Vo-T6-ZpG" id="qCP-Te-vA4"/>
+                        <outlet property="viewTeamsBtn" destination="lJX-xo-lSb" id="0RB-f8-NcH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cAj-fJ-oLI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="828" y="2660"/>
         </scene>
-        <!--View Controller - Team Sheet-->
+        <!--Record Team - Record a Team-->
         <scene sceneID="tgT-fF-QNn">
             <objects>
-                <viewController id="WMq-dh-m9h" sceneMemberID="viewController">
+                <viewController id="WMq-dh-m9h" customClass="RecordTeam" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="pVC-lP-wPg"/>
                         <viewControllerLayoutGuide type="bottom" id="apI-9w-fd5"/>
@@ -969,18 +970,26 @@
                     <view key="view" contentMode="scaleToFill" id="jVv-I0-KWI">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Team Number" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xQd-nW-8rE">
+                                <rect key="frame" x="329" y="104" width="110" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Team Sheet" id="hAq-UW-4u5"/>
+                    <navigationItem key="navigationItem" title="Record a Team" id="hAq-UW-4u5"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="so7-eG-pug" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1813" y="2660"/>
         </scene>
-        <!--View Controller - View Teams-->
+        <!--View Teams - View Teams-->
         <scene sceneID="BM4-8j-w3J">
             <objects>
-                <viewController id="a6y-Ut-amC" sceneMemberID="viewController">
+                <viewController id="a6y-Ut-amC" customClass="ViewTeams" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CfC-S9-5nz"/>
                         <viewControllerLayoutGuide type="bottom" id="6Fv-iO-058"/>
@@ -996,10 +1005,10 @@
             </objects>
             <point key="canvasLocation" x="1813" y="3779"/>
         </scene>
-        <!--View Controller - Pit Map-->
+        <!--Pit Map - Pit Map-->
         <scene sceneID="tEj-LY-tqI">
             <objects>
-                <viewController id="aei-jC-X54" sceneMemberID="viewController">
+                <viewController id="aei-jC-X54" customClass="PitMap" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Weh-uI-obK"/>
                         <viewControllerLayoutGuide type="bottom" id="GuU-tI-vwk"/>
