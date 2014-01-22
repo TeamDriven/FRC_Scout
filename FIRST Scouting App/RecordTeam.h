@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RecordTeam : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface RecordTeam : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *teamNumberField;
 
-@property (weak, nonatomic) IBOutlet UITextView *customNotes;
+@property (weak, nonatomic) IBOutlet UITextView *additionalNotesTxtField;
 
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 
