@@ -16,6 +16,8 @@
 
 UIControl *robotImageControl;
 UIImageView *robotImage;
+UIView *cameraPopup;
+UIView *grayLayer;
 
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -29,6 +31,12 @@ UIImageView *robotImage;
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UILabel *robotImageLbl = [[UILabel alloc] initWithFrame:CGRectMake(40, 75, 125, 15)];
+    robotImageLbl.text = @"Tap to Change";
+    robotImageLbl.textAlignment = NSTextAlignmentCenter;
+    robotImageLbl.font = [UIFont systemFontOfSize:12];
+    [self.view addSubview:robotImageLbl];
     
     robotImageControl = [[UIControl alloc] initWithFrame:CGRectMake(40, 90, 125, 125)];
     [robotImageControl addTarget:self action:@selector(getAnImage) forControlEvents:UIControlEventTouchUpInside];
@@ -54,28 +62,68 @@ UIImageView *robotImage;
 }
 
 -(void)getAnImage{
-    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-    imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    imagePicker.delegate = self;
-//    CGRect f = imagePicker.view.bounds;
-//    f.size.height -= imagePicker.navigationBar.bounds.size.height;
-//    UIGraphicsBeginImageContext(f.size);
-//    [[UIColor colorWithWhite:1.0 alpha:1.0] set];
-//    UIRectFillUsingBlendMode(CGRectMake(0, 125, f.size.width, 3), kCGBlendModeNormal);
-//    UIRectFillUsingBlendMode(CGRectMake(0, 893, f.size.width, 3), kCGBlendModeNormal);
-//    UIRectFillUsingBlendMode(CGRectMake(0, 128, 3, 766), kCGBlendModeNormal);
-//    UIRectFillUsingBlendMode(CGRectMake(765, 128, 3, 766), kCGBlendModeNormal);
-//    UIImage *overlayImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
+    grayLayer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+    grayLayer.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+    [self.view addSubview:grayLayer];
+    
+    cameraPopup = [[UIView alloc] initWithFrame:CGRectMake(209, 824, 350, 280)];
+    cameraPopup.backgroundColor = [UIColor whiteColor];
+    cameraPopup.layer.cornerRadius = 15;
+    
+    UIButton *useCameraBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    useCameraBtn.frame = CGRectMake(30, 15, 290, 40);
+    [useCameraBtn setTitle:@"Use Camera" forState:UIControlStateNormal];
+    [useCameraBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [useCameraBtn setBackgroundColor:[UIColor ]];
+    useCameraBtn.layer.cornerRadius = 10;
+    [cameraPopup addSubview:useCameraBtn];
+    
+    UIButton *cameraCancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    cameraCancelButton.frame = CGRectMake(30, 125, 290, 40);
+    [cameraCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cameraCancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [cameraCancelButton setBackgroundColor:[UIColor redColor]];
+    cameraCancelButton.layer.cornerRadius = 10;
+    [cameraPopup addSubview:cameraCancelButton];
+    
+    UIButton *cameraCancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    cameraCancelButton.frame = CGRectMake(30, 125, 290, 40);
+    [cameraCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cameraCancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [cameraCancelButton setBackgroundColor:[UIColor redColor]];
+    cameraCancelButton.layer.cornerRadius = 10;
+    [cameraPopup addSubview:cameraCancelButton];
+    
+    [grayLayer addSubview:cameraPopup];
+    
+    cameraPopup.center = CGPointMake(384, 1164);
+    [UIView animateWithDuration:0.2 animations:^{
+        cameraPopup.center = CGPointMake(384, 904);
+    }];
+    
+//    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+//    imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+//    imagePicker.delegate = self;
 //    
-//    UIImageView *overlayIV = [[UIImageView alloc] initWithFrame:f];
-//    overlayIV.image = overlayImage;
-//    overlayIV.alpha = 0.7f;
-//    [imagePicker setCameraOverlayView:overlayIV];
-    
-    [imagePicker setAllowsEditing:YES];
-    
-    [self presentViewController:imagePicker animated:YES completion:^{}];
+////    CGRect f = imagePicker.view.bounds;
+////    f.size.height -= imagePicker.navigationBar.bounds.size.height;
+////    UIGraphicsBeginImageContext(f.size);
+////    [[UIColor colorWithWhite:1.0 alpha:1.0] set];
+////    UIRectFillUsingBlendMode(CGRectMake(0, 125, f.size.width, 3), kCGBlendModeNormal);
+////    UIRectFillUsingBlendMode(CGRectMake(0, 893, f.size.width, 3), kCGBlendModeNormal);
+////    UIRectFillUsingBlendMode(CGRectMake(0, 128, 3, 766), kCGBlendModeNormal);
+////    UIRectFillUsingBlendMode(CGRectMake(765, 128, 3, 766), kCGBlendModeNormal);
+////    UIImage *overlayImage = UIGraphicsGetImageFromCurrentImageContext();
+////    UIGraphicsEndImageContext();
+////    
+////    UIImageView *overlayIV = [[UIImageView alloc] initWithFrame:f];
+////    overlayIV.image = overlayImage;
+////    overlayIV.alpha = 0.7f;
+////    [imagePicker setCameraOverlayView:overlayIV];
+//    
+//    [imagePicker setAllowsEditing:YES];
+//    
+//    [self presentViewController:imagePicker animated:YES completion:^{}];
 }
 
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -105,7 +153,13 @@ UIImageView *robotImage;
     robotImage.contentMode = UIViewContentModeScaleAspectFit;
     [UIView animateWithDuration:0.4 delay:0.2 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         robotImage.frame = CGRectMake(0, 0, 125, 125);
-    } completion:^(BOOL finished) {}];
+    } completion:^(BOOL finished) {
+//        UIGraphicsBeginImageContext(CGSizeMake(320, 320));
+//        [image drawInRect:CGRectMake(0,0,320,320)];
+//        UIImage* saveImage = UIGraphicsGetImageFromCurrentImageContext();
+//        UIGraphicsEndImageContext();
+//        robotImage.image = saveImage;
+    }];
     
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
