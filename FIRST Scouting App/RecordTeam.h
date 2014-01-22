@@ -10,4 +10,10 @@
 
 @interface RecordTeam : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet UITextField *teamNumberField;
+
+@property (weak, nonatomic) IBOutlet UITextView *customNotes;
+
+@property (weak, nonatomic) IBOutlet UIButton *saveBtn;
+
 @end

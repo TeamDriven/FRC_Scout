@@ -19,6 +19,51 @@ UIImageView *robotImage;
 UIView *cameraPopup;
 UIView *grayLayer;
 
+// Drive Train
+UIControl *sixEightWheelDrop;
+UIControl *fourWheelDrive;
+UIControl *mechanum;
+UIControl *swerveCrab;
+
+// Shooter
+UIControl *shooterYes;
+UIControl *shooterNo;
+
+// Preferred Goal
+UIControl *preferredHigh;
+UIControl *preferredLow;
+
+// Goalie Arm
+UIControl *goalieArmYes;
+UIControl *goalieArmNo;
+
+// Floor Collector
+UIControl *floorCollectorYes;
+UIControl *floorCollectorNo;
+
+// Autonomous
+UIControl *autonomousYes;
+UIControl *autonomousNo;
+
+// Auto Starting Position
+UIControl *startLeft;
+UIControl *startMiddle;
+UIControl *startRight;
+UIControl *startGoalie;
+
+// Hot Goal Tracking
+UIControl *hotGoalYes;
+UIControl *hotGoalNo;
+
+// Catching Mechanism
+UIControl *catchingYes;
+UIControl *catchingNo;
+
+// Bumper Quality
+UIControl *bumperOne;
+UIControl *bumperThree;
+UIControl *bumperFive;
+
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -52,6 +97,18 @@ UIView *grayLayer;
     [robotImageControl addSubview:robotImage];
     
     [self.view addSubview:robotImageControl];
+    
+    
+    
+    
+    _customNotes.backgroundColor = [UIColor whiteColor];
+    _customNotes.layer.cornerRadius = 10;
+    _customNotes.layer.borderColor = [[UIColor colorWithWhite:0.8 alpha:1.0] CGColor];
+    _customNotes.layer.borderWidth = 1;
+    _customNotes.text = @"Custom Notes";
+    _customNotes.textColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    
+    _saveBtn.layer.cornerRadius = 10;
     
 }
 
