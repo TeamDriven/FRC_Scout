@@ -71,23 +71,26 @@ UIView *grayLayer;
     cameraPopup.layer.cornerRadius = 15;
     
     UIButton *useCameraBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    useCameraBtn.frame = CGRectMake(30, 15, 290, 40);
+    useCameraBtn.frame = CGRectMake(30, 20, 290, 40);
+    [useCameraBtn addTarget:self action:@selector(useCamera) forControlEvents:UIControlEventTouchUpInside];
     [useCameraBtn setTitle:@"Use Camera" forState:UIControlStateNormal];
     [useCameraBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [useCameraBtn setBackgroundColor:[UIColor ]];
+    [useCameraBtn setBackgroundColor:[UIColor colorWithRed:30.0/255.0 green:144.0/255.0 blue:255.0/255.0 alpha:1]];
     useCameraBtn.layer.cornerRadius = 10;
     [cameraPopup addSubview:useCameraBtn];
     
-    UIButton *cameraCancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    cameraCancelButton.frame = CGRectMake(30, 125, 290, 40);
-    [cameraCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    [cameraCancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [cameraCancelButton setBackgroundColor:[UIColor redColor]];
-    cameraCancelButton.layer.cornerRadius = 10;
-    [cameraPopup addSubview:cameraCancelButton];
+    UIButton *usePhotoReelBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    usePhotoReelBtn.frame = CGRectMake(30, 80, 290, 40);
+    [usePhotoReelBtn addTarget:self action:@selector(usePhotoReel) forControlEvents:UIControlEventTouchUpInside];
+    [usePhotoReelBtn setTitle:@"Use Photo Reel" forState:UIControlStateNormal];
+    [usePhotoReelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [usePhotoReelBtn setBackgroundColor:[UIColor colorWithRed:30.0/255.0 green:144.0/255.0 blue:255.0/255.0 alpha:1]];
+    usePhotoReelBtn.layer.cornerRadius = 10;
+    [cameraPopup addSubview:usePhotoReelBtn];
     
     UIButton *cameraCancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    cameraCancelButton.frame = CGRectMake(30, 125, 290, 40);
+    cameraCancelButton.frame = CGRectMake(30, 140, 290, 40);
+    [cameraCancelButton addTarget:self action:@selector(cancelCameraPopUp) forControlEvents:UIControlEventTouchUpInside];
     [cameraCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [cameraCancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [cameraCancelButton setBackgroundColor:[UIColor redColor]];
@@ -101,29 +104,68 @@ UIView *grayLayer;
         cameraPopup.center = CGPointMake(384, 904);
     }];
     
-//    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-//    imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-//    imagePicker.delegate = self;
-//    
-////    CGRect f = imagePicker.view.bounds;
-////    f.size.height -= imagePicker.navigationBar.bounds.size.height;
-////    UIGraphicsBeginImageContext(f.size);
-////    [[UIColor colorWithWhite:1.0 alpha:1.0] set];
-////    UIRectFillUsingBlendMode(CGRectMake(0, 125, f.size.width, 3), kCGBlendModeNormal);
-////    UIRectFillUsingBlendMode(CGRectMake(0, 893, f.size.width, 3), kCGBlendModeNormal);
-////    UIRectFillUsingBlendMode(CGRectMake(0, 128, 3, 766), kCGBlendModeNormal);
-////    UIRectFillUsingBlendMode(CGRectMake(765, 128, 3, 766), kCGBlendModeNormal);
-////    UIImage *overlayImage = UIGraphicsGetImageFromCurrentImageContext();
-////    UIGraphicsEndImageContext();
-////    
-////    UIImageView *overlayIV = [[UIImageView alloc] initWithFrame:f];
-////    overlayIV.image = overlayImage;
-////    overlayIV.alpha = 0.7f;
-////    [imagePicker setCameraOverlayView:overlayIV];
-//    
-//    [imagePicker setAllowsEditing:YES];
-//    
-//    [self presentViewController:imagePicker animated:YES completion:^{}];
+}
+
+-(void)useCamera{
+    [UIView animateWithDuration:0.1 animations:^{
+        cameraPopup.center = CGPointMake(cameraPopup.center.x, 1164);
+    } completion:^(BOOL finished) {
+        [cameraPopup removeFromSuperview];
+        [grayLayer removeFromSuperview];
+        
+        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        imagePicker.delegate = self;
+        
+        [imagePicker setAllowsEditing:YES];
+        
+        [self presentViewController:imagePicker animated:YES completion:^{}];
+    }];
+    
+    
+    
+//    CGRect f = imagePicker.view.bounds;
+//    f.size.height -= imagePicker.navigationBar.bounds.size.height;
+//    UIGraphicsBeginImageContext(f.size);
+//    [[UIColor colorWithWhite:1.0 alpha:1.0] set];
+//    UIRectFillUsingBlendMode(CGRectMake(0, 125, f.size.width, 3), kCGBlendModeNormal);
+//    UIRectFillUsingBlendMode(CGRectMake(0, 893, f.size.width, 3), kCGBlendModeNormal);
+//    UIRectFillUsingBlendMode(CGRectMake(0, 128, 3, 766), kCGBlendModeNormal);
+//    UIRectFillUsingBlendMode(CGRectMake(765, 128, 3, 766), kCGBlendModeNormal);
+//    UIImage *overlayImage = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//
+//    UIImageView *overlayIV = [[UIImageView alloc] initWithFrame:f];
+//    overlayIV.image = overlayImage;
+//    overlayIV.alpha = 0.7f;
+//    [imagePicker setCameraOverlayView:overlayIV];
+    
+    
+}
+-(void)usePhotoReel{
+    [UIView animateWithDuration:0.1 animations:^{
+        cameraPopup.center = CGPointMake(cameraPopup.center.x, 1164);
+    } completion:^(BOOL finished) {
+        [cameraPopup removeFromSuperview];
+        [grayLayer removeFromSuperview];
+        
+        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        imagePicker.delegate = self;
+        
+        [imagePicker setAllowsEditing:YES];
+        
+        [self presentViewController:imagePicker animated:YES completion:^{}];
+    }];
+    
+}
+-(void)cancelCameraPopUp{
+    [UIView animateWithDuration:0.2 animations:^{
+        cameraPopup.center = CGPointMake(cameraPopup.center.x, 1164);
+    } completion:^(BOOL finished) {
+        [cameraPopup removeFromSuperview];
+        [grayLayer removeFromSuperview];
+    }];
 }
 
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
