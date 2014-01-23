@@ -41,6 +41,7 @@ UIControl *swerveCrab;
 BOOL isSwerveCrab;
 UITextField *otherDriveTrain;
 BOOL isOtherDriveTrain;
+NSString *driveTrainString;
 
 // Shooter
 UIControl *shooterNone;
@@ -51,6 +52,7 @@ UIControl *shooterPuncher;
 BOOL isShooterPuncher;
 UITextField *otherShooter;
 BOOL isOtherShooter;
+NSString *shooterString;
 
 
 // Preferred Goal
@@ -58,24 +60,29 @@ UIControl *preferredHigh;
 BOOL isPreferredHigh;
 UIControl *preferredLow;
 BOOL isPreferredLow;
+NSString *preferredGoalString;
 
 // Goalie Arm
 UIControl *goalieArmYes;
 BOOL isGoalieArmYes;
 UIControl *goalieArmNo;
 BOOL isGoalieArmNo;
+NSString *goalieArmString;
+
 
 // Floor Collector
 UIControl *floorCollectorYes;
 BOOL isFloorCollectorYes;
 UIControl *floorCollectorNo;
 BOOL isFloorCollectorNo;
+NSString *floorCollectorString;
 
 // Autonomous
 UIControl *autonomousYes;
 BOOL isAutonomousYes;
 UIControl *autonomousNo;
 BOOL isAutonomousNo;
+NSString *autonomousString;
 
 // Auto Starting Position
 UIControl *startLeft;
@@ -86,18 +93,21 @@ UIControl *startRight;
 BOOL isStartRight;
 UIControl *startGoalie;
 BOOL isStartGoalie;
+NSString *autoStartingPositionString;
 
 // Hot Goal Tracking
 UIControl *hotGoalYes;
 BOOL isHotGoalYes;
 UIControl *hotGoalNo;
 BOOL isHotGoalNo;
+NSString *hotGoalTrackingString;
 
 // Catching Mechanism
 UIControl *catchingYes;
 BOOL isCatchingYes;
 UIControl *catchingNo;
 BOOL isCatchingNo;
+NSString *catchingMechanismString;
 
 // Bumper Quality
 UIControl *bumperOne;
@@ -106,8 +116,15 @@ UIControl *bumperThree;
 BOOL isBumperThree;
 UIControl *bumperFive;
 BOOL isBumperFive;
+NSString *bumperQualityString;
 
+// Core Data Helpers
+NSArray *stringsArray;
 BOOL isSomethingSelectedInEveryRow;
+NSInteger secs;
+PitTeam *duplicatePitTeam;
+NSDictionary *duplicatePitTeamDict;
+UIAlertView *overWriteAlert;
 
 
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
@@ -196,6 +213,17 @@ BOOL isSomethingSelectedInEveryRow;
     
     [self.view bringSubviewToFront:_additionalNotesTxtField];
     [self.view bringSubviewToFront:robotImageControl];
+    
+    driveTrainString = @"";
+    shooterString = @"";
+    preferredGoalString = @"";
+    goalieArmString = @"";
+    floorCollectorString = @"";
+    autonomousString = @"";
+    autoStartingPositionString = @"";
+    hotGoalTrackingString = @"";
+    catchingMechanismString = @"";
+    bumperQualityString = @"";
 }
 
 -(void)driveTrainRowSetUp{
@@ -746,13 +774,7 @@ BOOL isSomethingSelectedInEveryRow;
     robotImage.contentMode = UIViewContentModeScaleAspectFit;
     [UIView animateWithDuration:0.4 delay:0.2 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         robotImage.frame = CGRectMake(0, 0, 125, 125);
-    } completion:^(BOOL finished) {
-//        UIGraphicsBeginImageContext(CGSizeMake(320, 320));
-//        [image drawInRect:CGRectMake(0,0,320,320)];
-//        UIImage* saveImage = UIGraphicsGetImageFromCurrentImageContext();
-//        UIGraphicsEndImageContext();
-//        robotImage.image = saveImage;
-    }];
+    } completion:^(BOOL finished) {}];
     
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
@@ -764,6 +786,7 @@ BOOL isSomethingSelectedInEveryRow;
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isSixEightWheelDrop = false;
+            driveTrainString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -779,6 +802,7 @@ BOOL isSomethingSelectedInEveryRow;
             isOtherDriveTrain = false;
             otherDriveTrain.text = @"";
             if (otherDriveTrain.isFirstResponder) {[otherDriveTrain resignFirstResponder];}
+            driveTrainString = @"6 or 8 Wheel Drop";
         }
     }
     else if ([controller isEqual:fourWheelDrive]){
@@ -787,6 +811,7 @@ BOOL isSomethingSelectedInEveryRow;
                 fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isFourWheelDrive = false;
+            driveTrainString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -802,6 +827,7 @@ BOOL isSomethingSelectedInEveryRow;
             isOtherDriveTrain = false;
             otherDriveTrain.text = @"";
             if (otherDriveTrain.isFirstResponder) {[otherDriveTrain resignFirstResponder];}
+            driveTrainString = @"Four Wheel Drive";
         }
     }
     else if ([controller isEqual:mechanum]){
@@ -810,6 +836,7 @@ BOOL isSomethingSelectedInEveryRow;
                 mechanum.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isMechanum = false;
+            driveTrainString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -825,6 +852,7 @@ BOOL isSomethingSelectedInEveryRow;
             isOtherDriveTrain = false;
             otherDriveTrain.text = @"";
             if (otherDriveTrain.isFirstResponder) {[otherDriveTrain resignFirstResponder];}
+            driveTrainString = @"Mechanum";
         }
     }
     else if ([controller isEqual:swerveCrab]){
@@ -833,6 +861,7 @@ BOOL isSomethingSelectedInEveryRow;
                 swerveCrab.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isSwerveCrab = false;
+            driveTrainString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -848,8 +877,10 @@ BOOL isSomethingSelectedInEveryRow;
             isOtherDriveTrain = false;
             otherDriveTrain.text = @"";
             if (otherDriveTrain.isFirstResponder) {[otherDriveTrain resignFirstResponder];}
+            driveTrainString = @"Swerve/Crab";
         }
     }
+    NSLog(@"DriveTrain : %@", driveTrainString);
 }
 -(void)shooterSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:shooterNone]){
@@ -858,6 +889,7 @@ BOOL isSomethingSelectedInEveryRow;
                 shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isShooterNone = false;
+            shooterString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -871,6 +903,7 @@ BOOL isSomethingSelectedInEveryRow;
             isOtherShooter = false;
             otherShooter.text = @"";
             if (otherShooter.isFirstResponder) {[otherShooter resignFirstResponder];}
+            shooterString = @"None";
         }
     }
     else if ([controller isEqual:shooterCatapult]) {
@@ -879,6 +912,7 @@ BOOL isSomethingSelectedInEveryRow;
                 shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isShooterCatapult = false;
+            shooterString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -892,6 +926,7 @@ BOOL isSomethingSelectedInEveryRow;
             isOtherShooter = false;
             otherShooter.text = @"";
             if (otherShooter.isFirstResponder) {[otherShooter resignFirstResponder];}
+            shooterString = @"Catapult";
         }
     }
     else if ([controller isEqual:shooterPuncher]) {
@@ -900,6 +935,7 @@ BOOL isSomethingSelectedInEveryRow;
                 shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isShooterPuncher = false;
+            shooterString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -913,6 +949,7 @@ BOOL isSomethingSelectedInEveryRow;
             isOtherShooter = false;
             otherShooter.text = @"";
             if (otherShooter.isFirstResponder) {[otherShooter resignFirstResponder];}
+            shooterString = @"Puncher";
         }
     }
 }
@@ -923,6 +960,7 @@ BOOL isSomethingSelectedInEveryRow;
                 preferredHigh.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isPreferredHigh = false;
+            preferredGoalString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -931,6 +969,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isPreferredHigh = true;
             isPreferredLow = false;
+            preferredGoalString = @"High";
         }
     }
     else if ([controller isEqual:preferredLow]){
@@ -939,6 +978,7 @@ BOOL isSomethingSelectedInEveryRow;
                 preferredLow.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isPreferredLow = false;
+            preferredGoalString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -947,6 +987,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isPreferredHigh = false;
             isPreferredLow = true;
+            preferredGoalString = @"Low";
         }
     }
 }
@@ -957,6 +998,7 @@ BOOL isSomethingSelectedInEveryRow;
                 goalieArmYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isGoalieArmYes = false;
+            goalieArmString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -965,6 +1007,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isGoalieArmYes = true;
             isGoalieArmNo = false;
+            goalieArmString = @"Yes";
         }
     }
     else if ([controller isEqual:goalieArmNo]){
@@ -973,6 +1016,7 @@ BOOL isSomethingSelectedInEveryRow;
                 goalieArmNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isGoalieArmNo = false;
+            goalieArmString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -981,6 +1025,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isGoalieArmYes = false;
             isGoalieArmNo = true;
+            goalieArmString = @"No";
         }
     }
 }
@@ -991,6 +1036,7 @@ BOOL isSomethingSelectedInEveryRow;
                 floorCollectorYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isFloorCollectorYes = false;
+            floorCollectorString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -999,6 +1045,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isFloorCollectorYes = true;
             isFloorCollectorNo = false;
+            floorCollectorString = @"Yes";
         }
     }
     else if ([controller isEqual:floorCollectorNo]){
@@ -1007,6 +1054,7 @@ BOOL isSomethingSelectedInEveryRow;
                 floorCollectorNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isFloorCollectorNo = false;
+            floorCollectorString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1015,6 +1063,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isFloorCollectorYes = false;
             isFloorCollectorNo = true;
+            floorCollectorString = @"No";
         }
     }
 }
@@ -1025,6 +1074,7 @@ BOOL isSomethingSelectedInEveryRow;
                 autonomousYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isAutonomousYes= false;
+            autonomousString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1033,6 +1083,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isAutonomousYes = true;
             isAutonomousNo = false;
+            autonomousString = @"Yes";
         }
     }
     else if ([controller isEqual:autonomousNo]){
@@ -1041,6 +1092,7 @@ BOOL isSomethingSelectedInEveryRow;
                 autonomousNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isAutonomousNo = false;
+            autonomousString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1049,6 +1101,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isAutonomousYes = false;
             isAutonomousNo = true;
+            autonomousString = @"No";
         }
     }
 }
@@ -1059,6 +1112,7 @@ BOOL isSomethingSelectedInEveryRow;
                 startLeft.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isStartLeft = false;
+            autoStartingPositionString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1071,6 +1125,7 @@ BOOL isSomethingSelectedInEveryRow;
             isStartMiddle = false;
             isStartRight = false;
             isStartGoalie = false;
+            autoStartingPositionString = @"Left";
         }
     }
     else if ([controller isEqual:startMiddle]) {
@@ -1079,6 +1134,7 @@ BOOL isSomethingSelectedInEveryRow;
                 startMiddle.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isStartMiddle = false;
+            autoStartingPositionString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1091,6 +1147,7 @@ BOOL isSomethingSelectedInEveryRow;
             isStartMiddle = true;
             isStartRight = false;
             isStartGoalie = false;
+            autoStartingPositionString = @"Middle";
         }
     }
     else if ([controller isEqual:startRight]) {
@@ -1099,6 +1156,7 @@ BOOL isSomethingSelectedInEveryRow;
                 startRight.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isStartRight = false;
+            autoStartingPositionString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1111,6 +1169,7 @@ BOOL isSomethingSelectedInEveryRow;
             isStartMiddle = false;
             isStartRight = true;
             isStartGoalie = false;
+            autoStartingPositionString = @"Right";
         }
     }
     else if ([controller isEqual:startGoalie]) {
@@ -1119,6 +1178,7 @@ BOOL isSomethingSelectedInEveryRow;
                 startGoalie.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isStartGoalie = false;
+            autoStartingPositionString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1131,6 +1191,7 @@ BOOL isSomethingSelectedInEveryRow;
             isStartMiddle = false;
             isStartRight = false;
             isStartGoalie = true;
+            autoStartingPositionString = @"Goalie";
         }
     }
 }
@@ -1141,6 +1202,7 @@ BOOL isSomethingSelectedInEveryRow;
                 hotGoalYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isHotGoalYes = false;
+            hotGoalTrackingString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1149,6 +1211,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isHotGoalYes = true;
             isHotGoalNo = false;
+            hotGoalTrackingString = @"Yes";
         }
     }
     else if ([controller isEqual:hotGoalNo]){
@@ -1157,6 +1220,7 @@ BOOL isSomethingSelectedInEveryRow;
                 hotGoalNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isHotGoalNo = false;
+            hotGoalTrackingString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1165,6 +1229,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isHotGoalYes = false;
             isHotGoalNo = true;
+            hotGoalTrackingString = @"No";
         }
     }
 }
@@ -1175,6 +1240,7 @@ BOOL isSomethingSelectedInEveryRow;
                 catchingYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isCatchingYes = false;
+            catchingMechanismString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1183,6 +1249,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isCatchingYes = true;
             isCatchingNo = false;
+            catchingMechanismString = @"Yes";
         }
     }
     else if ([controller isEqual:catchingNo]){
@@ -1191,6 +1258,7 @@ BOOL isSomethingSelectedInEveryRow;
                 catchingNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isCatchingNo = false;
+            catchingMechanismString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1199,6 +1267,7 @@ BOOL isSomethingSelectedInEveryRow;
             }];
             isCatchingYes = false;
             isCatchingNo = true;
+            catchingMechanismString = @"No";
         }
     }
 }
@@ -1209,6 +1278,7 @@ BOOL isSomethingSelectedInEveryRow;
                 bumperOne.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isBumperOne = false;
+            bumperQualityString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1219,6 +1289,7 @@ BOOL isSomethingSelectedInEveryRow;
             isBumperOne = true;
             isBumperThree = false;
             isBumperFive = false;
+            bumperQualityString = @"One";
         }
     }
     else if ([controller isEqual:bumperThree]){
@@ -1227,6 +1298,7 @@ BOOL isSomethingSelectedInEveryRow;
                 bumperThree.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isBumperThree = false;
+            bumperQualityString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1237,6 +1309,7 @@ BOOL isSomethingSelectedInEveryRow;
             isBumperOne = false;
             isBumperThree = true;
             isBumperFive = false;
+            bumperQualityString = @"Three";
         }
     }
     else if ([controller isEqual:bumperFive]){
@@ -1245,6 +1318,7 @@ BOOL isSomethingSelectedInEveryRow;
                 bumperFive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
             isBumperFive = false;
+            bumperQualityString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
@@ -1255,6 +1329,7 @@ BOOL isSomethingSelectedInEveryRow;
             isBumperOne = false;
             isBumperThree = false;
             isBumperFive = true;
+            bumperQualityString = @"Five";
         }
     }
 }
@@ -1275,9 +1350,11 @@ BOOL isSomethingSelectedInEveryRow;
             isMechanum = false;
             isSwerveCrab = false;
             isOtherDriveTrain = true;
+            driveTrainString = otherDriveTrain.text;
         }
         else{
             isOtherDriveTrain = false;
+            driveTrainString = @"";
         }
     }
     else if ([textField isEqual:otherShooter]){
@@ -1290,9 +1367,11 @@ BOOL isSomethingSelectedInEveryRow;
             isShooterNone = false;
             isShooterCatapult = false;
             isShooterPuncher = false;
+            shooterString = otherShooter.text;
         }
         else{
             isOtherShooter = false;
+            shooterString = @"";
         }
     }
 }
@@ -1349,97 +1428,98 @@ BOOL isSomethingSelectedInEveryRow;
         [noTeamNumAlert show];
     }
     else{
+        NSData *imageData;
         if ([_additionalNotesTxtField.text isEqualToString: @"Additional Notes"] && _additionalNotesTxtField.backgroundColor == [UIColor colorWithWhite:0.9 alpha:1.0]) {
             _additionalNotesTxtField.text = @"";
         }
+        if (robotImage.image) {
+            UIGraphicsBeginImageContext(CGSizeMake(320, 320));
+            [robotImage.image drawInRect:CGRectMake(0,0,320,320)];
+            UIImage* saveImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            robotImage.image = saveImage;
+            
+            imageData = UIImagePNGRepresentation(robotImage.image);
+        }
         
+        [context performBlock:^{
+            NSDate *now = [NSDate date];
+            secs = [now timeIntervalSince1970];
+            
+            NSDictionary *pitTeamDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         [NSString stringWithString:driveTrainString], @"driveTrain",
+                                         [NSString stringWithString:shooterString], @"shooter",
+                                         [NSString stringWithString:preferredGoalString], @"preferredGoal",
+                                         [NSString stringWithString:goalieArmString], @"goalieArm",
+                                         [NSString stringWithString:floorCollectorString], @"floorCollector",
+                                         [NSString stringWithString:autonomousString], @"autonomous",
+                                         [NSString stringWithString:autoStartingPositionString], @"autoStartingPosition",
+                                         [NSString stringWithString:hotGoalTrackingString], @"hotGoalTracking",
+                                         [NSString stringWithString:catchingMechanismString], @"catchingMechanism",
+                                         [NSString stringWithString:bumperQualityString], @"bumperQuality",
+                                         [NSData dataWithData:imageData], @"image",
+                                         [NSString stringWithString:_teamNumberField.text], @"teamNumber",
+                                         [NSString stringWithString:_teamNameField.text], @"teamName",
+                                         [NSString stringWithString:_additionalNotesTxtField.text], @"notes",
+                                         [NSNumber numberWithInteger:secs], @"uniqueID", nil];
+            
+            PitTeam *pt = [PitTeam createPitTeamWithDictionary:pitTeamDict inManagedObjectContext:context];
+            
+            // If the match doesn't exist
+            if ([pt.uniqueID integerValue] == secs) {
+                [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+                    if (success) {
+                        [self saveSuccess];
+                    }
+                    else{
+                        NSLog(@"Didn't save correctly");
+                    }
+                }];
+            }
+            else{
+                // Temporarily store the match and team that there was a duplicate of and call the AlertView
+                duplicatePitTeam = pt;
+                duplicatePitTeamDict = pitTeamDict;
+                [self overWriteAlert];
+            }
+        }];
     }
-    
-    
+}
+
+-(void)overWriteAlert{
+    overWriteAlert = [[UIAlertView alloc] initWithTitle:@"There's a Conflict!" message:@"There is already a team saved for that team number. Do you want to overwrite it?" delegate:self cancelButtonTitle:@"Yes" otherButtonTitles:@"No", nil];
+    [overWriteAlert show];
+}
+
+-(void)overWritePitTeam{
+    [context performBlock:^{
+        [FSAdocument.managedObjectContext deleteObject:duplicatePitTeam];
+        [PitTeam createPitTeamWithDictionary:duplicatePitTeamDict inManagedObjectContext:context];
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+            if (success) {
+                [self saveSuccess];
+            }
+            else{
+                NSLog(@"Didn't overwrite correctly");
+            }
+        }];
+    }];
 }
 
 -(void)somethingSelectedInEveryRowValidator{
-    BOOL isDriveTrainSelected;
-    BOOL isShooterSelected;
-    BOOL isPreferredGoalSelected;
-    BOOL isGoalieArmSelected;
-    BOOL isFloorCollectorSelected;
-    BOOL isAutonomousSelected;
-    BOOL isAutoStartingPositionSelected;
-    BOOL isHotGoalTrackingSelected;
-    BOOL isCatchingMechanismSelected;
-    BOOL isBumperQualitySelected;
-    
-    if (isSixEightWheelDrop || isFourWheelDrive || isMechanum || isSwerveCrab || isOtherDriveTrain) {
-        isDriveTrainSelected = true;
-    }
-    else{
-        isDriveTrainSelected = false;
-    }
-    if (isShooterNone || isShooterCatapult || isShooterPuncher || isOtherShooter) {
-        isShooterSelected = true;
-    }
-    else{
-        isShooterSelected = false;
-    }
-    if (isPreferredHigh || isPreferredLow) {
-        isPreferredGoalSelected = true;
-    }
-    else{
-        isPreferredGoalSelected = false;
-    }
-    if (isGoalieArmYes || isGoalieArmNo) {
-        isGoalieArmSelected = true;
-    }
-    else{
-        isGoalieArmSelected = false;
-    }
-    if (isFloorCollectorYes || isFloorCollectorNo) {
-        isFloorCollectorSelected = true;
-    }
-    else{
-        isFloorCollectorSelected = false;
-    }
-    if (isAutonomousYes || isAutonomousNo) {
-        isAutonomousSelected = true;
-    }
-    else{
-        isAutonomousSelected = false;
-    }
-    if (isStartLeft || isStartMiddle || isStartRight || isStartGoalie) {
-        isAutoStartingPositionSelected = true;
-    }
-    else{
-        isAutoStartingPositionSelected = false;
-    }
-    if (isHotGoalYes || isHotGoalNo) {
-        isHotGoalTrackingSelected = true;
-    }
-    else{
-        isHotGoalTrackingSelected = false;
-    }
-    if (isCatchingYes || isCatchingNo) {
-        isCatchingMechanismSelected = true;
-    }
-    else{
-        isCatchingMechanismSelected = false;
-    }
-    if (isBumperOne || isBumperThree || isBumperFive) {
-        isBumperQualitySelected = true;
-    }
-    else{
-        isBumperQualitySelected = false;
-    }
-    
-    if (isDriveTrainSelected && isShooterSelected && isPreferredGoalSelected && isGoalieArmSelected && isFloorCollectorSelected && isAutonomousSelected && isAutoStartingPositionSelected && isHotGoalTrackingSelected && isCatchingMechanismSelected && isBumperQualitySelected) {
-        isSomethingSelectedInEveryRow = true;
-    }
-    else{
-        isSomethingSelectedInEveryRow = false;
+    stringsArray = @[driveTrainString, shooterString, preferredGoalString, goalieArmString, floorCollectorString, autonomousString, autoStartingPositionString, hotGoalTrackingString, catchingMechanismString, bumperQualityString];
+    isSomethingSelectedInEveryRow = true;
+    for (NSString *s in stringsArray) {
+        if ([s isEqualToString:@""]) {
+            isSomethingSelectedInEveryRow = false;
+            break;
+        }
     }
 }
 
 -(void)saveSuccess{
+    UIAlertView *saveSuccessAlert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"You saved the team into storage!" delegate:nil cancelButtonTitle:@"Fantastic" otherButtonTitles: nil];
+    [saveSuccessAlert show];
     [UIView animateWithDuration:0.2 animations:^{
         for (UIControl *c in [self.view subviews]) {
             if ([c.backgroundColor isEqual:[UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0]]) {
@@ -1498,6 +1578,13 @@ BOOL isSomethingSelectedInEveryRow;
     isBumperOne = false;
     isBumperThree = false;
     isBumperFive = false;
+    
+    for (__strong NSString *s in stringsArray) {
+        s = @"";
+    }
+    
+    duplicatePitTeam = nil;
+    duplicatePitTeamDict = nil;
 }
 
 
