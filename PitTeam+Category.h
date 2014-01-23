@@ -10,4 +10,6 @@
 
 @interface PitTeam (Category)
 
++(PitTeam *)createPitTeamWithDictionary:(NSDictionary *)pitDict inManagedObjectContext:(NSManagedObjectContext *)context;
+
 @end
