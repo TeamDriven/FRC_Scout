@@ -28,14 +28,19 @@ UIControl *mechanum;
 BOOL isMechanum;
 UIControl *swerveCrab;
 BOOL isSwerveCrab;
-UITextField *customDriveTrain;
-BOOL isCustomDriveTrain;
+UITextField *otherDriveTrain;
+BOOL isOtherDriveTrain;
 
 // Shooter
-UIControl *shooterYes;
-BOOL isShooterYes;
-UIControl *shooterNo;
-BOOL isShooterNo;
+UIControl *shooterNone;
+BOOL isShooterNone;
+UIControl *shooterCatapult;
+BOOL isShooterCatapult;
+UIControl *shooterPuncher;
+BOOL isShooterPuncher;
+UITextField *otherShooter;
+BOOL isOtherShooter;
+
 
 // Preferred Goal
 UIControl *preferredHigh;
@@ -129,6 +134,7 @@ BOOL isBumperFive;
     [sixEightWheelDrop addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
     sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
     sixEightWheelDrop.layer.cornerRadius = 5;
+    sixEightWheelDrop.center = CGPointMake(sixEightWheelDrop.center.x, _driveTrainLbl.center.y);
     UILabel *sixEightWheelDropLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 110, 30)];
     sixEightWheelDropLbl.text = @"6 or 8 Wheel Drop";
     sixEightWheelDropLbl.textColor = [UIColor whiteColor];
@@ -142,6 +148,7 @@ BOOL isBumperFive;
     [fourWheelDrive addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
     fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
     fourWheelDrive.layer.cornerRadius = 5;
+    fourWheelDrive.center = CGPointMake(fourWheelDrive.center.x, _driveTrainLbl.center.y);
     UILabel *fourWheelDriveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 85, 30)];
     fourWheelDriveLbl.text = @"4 Wheel Drive";
     fourWheelDriveLbl.textColor = [UIColor whiteColor];
@@ -155,6 +162,7 @@ BOOL isBumperFive;
     [mechanum addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
     mechanum.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
     mechanum.layer.cornerRadius = 5;
+    mechanum.center = CGPointMake(mechanum.center.x, _driveTrainLbl.center.y);
     UILabel *mechanumLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
     mechanumLbl.text = @"Mechanum";
     mechanumLbl.textColor = [UIColor whiteColor];
@@ -168,6 +176,7 @@ BOOL isBumperFive;
     [swerveCrab addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
     swerveCrab.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
     swerveCrab.layer.cornerRadius = 5;
+    swerveCrab.center = CGPointMake(swerveCrab.center.x, _driveTrainLbl.center.y);
     UILabel *swerveCrabLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     swerveCrabLbl.text = @"Swerve/Crab";
     swerveCrabLbl.textColor = [UIColor whiteColor];
@@ -177,41 +186,238 @@ BOOL isBumperFive;
     [swerveCrab addSubview:swerveCrabLbl];
     [self.view addSubview:swerveCrab];
     
-    customDriveTrain = [[UITextField alloc] initWithFrame:CGRectMake(615, 245, 110, 30)];
-    customDriveTrain.borderStyle = UITextBorderStyleRoundedRect;
-    customDriveTrain.placeholder = @"Other Drive Train";
-    customDriveTrain.font = [UIFont systemFontOfSize:12];
-    customDriveTrain.textAlignment = NSTextAlignmentCenter;
-    customDriveTrain.returnKeyType = UIReturnKeyDone;
-    customDriveTrain.delegate = self;
-    [customDriveTrain addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    [self.view addSubview:customDriveTrain];
+    otherDriveTrain = [[UITextField alloc] initWithFrame:CGRectMake(615, 245, 110, 30)];
+    otherDriveTrain.center = CGPointMake(otherDriveTrain.center.x, _driveTrainLbl.center.y);
+    otherDriveTrain.borderStyle = UITextBorderStyleRoundedRect;
+    otherDriveTrain.placeholder = @"Other Drive Train";
+    otherDriveTrain.font = [UIFont systemFontOfSize:12];
+    otherDriveTrain.textAlignment = NSTextAlignmentCenter;
+    otherDriveTrain.returnKeyType = UIReturnKeyDone;
+    otherDriveTrain.delegate = self;
+    [otherDriveTrain addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.view addSubview:otherDriveTrain];
     
-    shooterYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 295, 80, 30)];
-    [shooterYes addTarget:self action:@selector(shooterSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    shooterYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-    shooterYes.layer.cornerRadius = 5;
-    UILabel *shooterYesLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
-    shooterYesLbl.text = @"Yes";
-    shooterYesLbl.textColor = [UIColor whiteColor];
-    shooterYesLbl.textAlignment = NSTextAlignmentCenter;
-    shooterYesLbl.font = [UIFont systemFontOfSize:12];
-    shooterYesLbl.backgroundColor = [UIColor clearColor];
-    [shooterYes addSubview:shooterYesLbl];
-    [self.view addSubview:shooterYes];
+    shooterNone = [[UIControl alloc] initWithFrame:CGRectMake(230, 295, 50, 30)];
+    shooterNone.center = CGPointMake(shooterNone.center.x, _shooterLbl.center.y);
+    [shooterNone addTarget:self action:@selector(shooterSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    shooterNone.layer.cornerRadius = 5;
+    UILabel *shooterNoneLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];
+    shooterNoneLbl.text = @"None";
+    shooterNoneLbl.textColor = [UIColor whiteColor];
+    shooterNoneLbl.textAlignment = NSTextAlignmentCenter;
+    shooterNoneLbl.font = [UIFont systemFontOfSize:12];
+    shooterNoneLbl.backgroundColor = [UIColor clearColor];
+    [shooterNone addSubview:shooterNoneLbl];
+    [self.view addSubview:shooterNone];
     
-    shooterNo = [[UIControl alloc] initWithFrame:CGRectMake(320, 295, 80, 30)];
-    [shooterNo addTarget:self action:@selector(shooterSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    shooterNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-    shooterNo.layer.cornerRadius = 5;
-    UILabel *shooterNoLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
-    shooterNoLbl.text = @"No";
-    shooterNoLbl.textColor = [UIColor whiteColor];
-    shooterNoLbl.textAlignment = NSTextAlignmentCenter;
-    shooterNoLbl.font = [UIFont systemFontOfSize:12];
-    shooterNoLbl.backgroundColor = [UIColor clearColor];
-    [shooterNo addSubview:shooterNoLbl];
-    [self.view addSubview:shooterNo];
+    shooterCatapult = [[UIControl alloc] initWithFrame:CGRectMake(290, 295, 80, 30)];
+    shooterCatapult.center = CGPointMake(shooterCatapult.center.x, _shooterLbl.center.y);
+    [shooterCatapult addTarget:self action:@selector(shooterSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    shooterCatapult.layer.cornerRadius = 5;
+    UILabel *shooterCatapultLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    shooterCatapultLbl.text = @"Catapult";
+    shooterCatapultLbl.textColor = [UIColor whiteColor];
+    shooterCatapultLbl.textAlignment = NSTextAlignmentCenter;
+    shooterCatapultLbl.font = [UIFont systemFontOfSize:12];
+    shooterCatapultLbl.backgroundColor = [UIColor clearColor];
+    [shooterCatapult addSubview:shooterCatapultLbl];
+    [self.view addSubview:shooterCatapult];
+    
+    shooterPuncher = [[UIControl alloc] initWithFrame:CGRectMake(380, 295, 80, 30)];
+    shooterPuncher.center = CGPointMake(shooterPuncher.center.x, _shooterLbl.center.y);
+    [shooterPuncher addTarget:self action:@selector(shooterSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    shooterPuncher.layer.cornerRadius = 5;
+    UILabel *shooterPuncherLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    shooterPuncherLbl.text = @"Puncher";
+    shooterPuncherLbl.textColor = [UIColor whiteColor];
+    shooterPuncherLbl.textAlignment = NSTextAlignmentCenter;
+    shooterPuncherLbl.font = [UIFont systemFontOfSize:12];
+    shooterPuncherLbl.backgroundColor = [UIColor clearColor];
+    [shooterPuncher addSubview:shooterPuncherLbl];
+    [self.view addSubview:shooterPuncher];
+    
+    otherShooter = [[UITextField alloc] initWithFrame:CGRectMake(470, 295, 100, 30)];
+    otherShooter.center = CGPointMake(otherShooter.center.x, _shooterLbl.center.y);
+    otherShooter.borderStyle = UITextBorderStyleRoundedRect;
+    otherShooter.placeholder = @"Other Shooter";
+    otherShooter.font = [UIFont systemFontOfSize:12];
+    otherShooter.textAlignment = NSTextAlignmentCenter;
+    otherShooter.returnKeyType = UIReturnKeyDone;
+    otherShooter.delegate = self;
+    [otherShooter addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.view addSubview:otherShooter];
+    
+    preferredHigh = [[UIControl alloc] initWithFrame:CGRectMake(230, 345, 80, 30)];
+    preferredHigh.center = CGPointMake(preferredHigh.center.x, _preferredGoalLbl.center.y);
+    [preferredHigh addTarget:self action:@selector(preferredGoalSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    preferredHigh.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    preferredHigh.layer.cornerRadius = 5;
+    UILabel *preferredHighLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    preferredHighLbl.text = @"High";
+    preferredHighLbl.textColor = [UIColor whiteColor];
+    preferredHighLbl.textAlignment = NSTextAlignmentCenter;
+    preferredHighLbl.font = [UIFont systemFontOfSize:12];
+    preferredHighLbl.backgroundColor = [UIColor clearColor];
+    [preferredHigh addSubview:preferredHighLbl];
+    [self.view addSubview:preferredHigh];
+    
+    preferredLow = [[UIControl alloc] initWithFrame:CGRectMake(320, 345, 80, 30)];
+    preferredLow.center = CGPointMake(preferredLow.center.x, _preferredGoalLbl.center.y);
+    [preferredLow addTarget:self action:@selector(preferredGoalSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    preferredLow.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    preferredLow.layer.cornerRadius = 5;
+    UILabel *preferredLowLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    preferredLowLbl.text = @"Low";
+    preferredLowLbl.textColor = [UIColor whiteColor];
+    preferredLowLbl.textAlignment = NSTextAlignmentCenter;
+    preferredLowLbl.font = [UIFont systemFontOfSize:12];
+    preferredLowLbl.backgroundColor = [UIColor clearColor];
+    [preferredLow addSubview:preferredLowLbl];
+    [self.view addSubview:preferredLow];
+    
+    goalieArmYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 395, 80, 30)];
+    goalieArmYes.center = CGPointMake(goalieArmYes.center.x, _goalieArmLbl.center.y);
+    [goalieArmYes addTarget:self action:@selector(goalieArmSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    goalieArmYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    goalieArmYes.layer.cornerRadius = 5;
+    UILabel *goalieArmYesLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    goalieArmYesLbl.text = @"Yes";
+    goalieArmYesLbl.textColor = [UIColor whiteColor];
+    goalieArmYesLbl.textAlignment = NSTextAlignmentCenter;
+    goalieArmYesLbl.font = [UIFont systemFontOfSize:12];
+    goalieArmYesLbl.backgroundColor = [UIColor clearColor];
+    [goalieArmYes addSubview:goalieArmYesLbl];
+    [self.view addSubview:goalieArmYes];
+    
+    goalieArmNo = [[UIControl alloc] initWithFrame:CGRectMake(320, 395, 80, 30)];
+    goalieArmNo.center = CGPointMake(goalieArmNo.center.x, _goalieArmLbl.center.y);
+    [goalieArmNo addTarget:self action:@selector(goalieArmSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    goalieArmNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    goalieArmNo.layer.cornerRadius = 5;
+    UILabel *goalieArmNoLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    goalieArmNoLbl.text = @"No";
+    goalieArmNoLbl.textColor = [UIColor whiteColor];
+    goalieArmNoLbl.textAlignment = NSTextAlignmentCenter;
+    goalieArmNoLbl.font = [UIFont systemFontOfSize:12];
+    goalieArmNoLbl.backgroundColor = [UIColor clearColor];
+    [goalieArmNo addSubview:goalieArmNoLbl];
+    [self.view addSubview:goalieArmNo];
+    
+    floorCollectorYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 446, 80, 30)];
+    floorCollectorYes.center = CGPointMake(floorCollectorYes.center.x, _floorCollectorLbl.center.y);
+    [floorCollectorYes addTarget:self action:@selector(floorCollectorSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    floorCollectorYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    floorCollectorYes.layer.cornerRadius = 5;
+    UILabel *floorCollectorYesLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    floorCollectorYesLbl.text = @"Yes";
+    floorCollectorYesLbl.textColor = [UIColor whiteColor];
+    floorCollectorYesLbl.textAlignment = NSTextAlignmentCenter;
+    floorCollectorYesLbl.font = [UIFont systemFontOfSize:12];
+    floorCollectorYesLbl.backgroundColor = [UIColor clearColor];
+    [floorCollectorYes addSubview:floorCollectorYesLbl];
+    [self.view addSubview:floorCollectorYes];
+    
+    floorCollectorNo = [[UIControl alloc] initWithFrame:CGRectMake(320, 446, 80, 30)];
+    floorCollectorNo.center = CGPointMake(floorCollectorNo.center.x, _floorCollectorLbl.center.y);
+    [floorCollectorNo addTarget:self action:@selector(floorCollectorSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    floorCollectorNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    floorCollectorNo.layer.cornerRadius = 5;
+    UILabel *floorCollectorNoLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    floorCollectorNoLbl.text = @"No";
+    floorCollectorNoLbl.textColor = [UIColor whiteColor];
+    floorCollectorNoLbl.textAlignment = NSTextAlignmentCenter;
+    floorCollectorNoLbl.font = [UIFont systemFontOfSize:12];
+    floorCollectorNoLbl.backgroundColor = [UIColor clearColor];
+    [floorCollectorNo addSubview:floorCollectorNoLbl];
+    [self.view addSubview:floorCollectorNo];
+    
+    autonomousYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 80, 30)];
+    autonomousYes.center = CGPointMake(autonomousYes.center.x, _autonomousLbl.center.y);
+    [autonomousYes addTarget:self action:@selector(autonomousSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    autonomousYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    autonomousYes.layer.cornerRadius = 5;
+    UILabel *autonomousYesLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    autonomousYesLbl.text = @"Yes";
+    autonomousYesLbl.textColor = [UIColor whiteColor];
+    autonomousYesLbl.textAlignment = NSTextAlignmentCenter;
+    autonomousYesLbl.font = [UIFont systemFontOfSize:12];
+    autonomousYesLbl.backgroundColor = [UIColor clearColor];
+    [autonomousYes addSubview:autonomousYesLbl];
+    [self.view addSubview:autonomousYes];
+    
+    autonomousNo = [[UIControl alloc] initWithFrame:CGRectMake(320, 496, 80, 30)];
+    autonomousNo.center = CGPointMake(autonomousNo.center.x, _autonomousLbl.center.y);
+    [autonomousNo addTarget:self action:@selector(autonomousSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    autonomousNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    autonomousNo.layer.cornerRadius = 5;
+    UILabel *autonomousNoLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    autonomousNoLbl.text = @"No";
+    autonomousNoLbl.textColor = [UIColor whiteColor];
+    autonomousNoLbl.textAlignment = NSTextAlignmentCenter;
+    autonomousNoLbl.font = [UIFont systemFontOfSize:12];
+    autonomousNoLbl.backgroundColor = [UIColor clearColor];
+    [autonomousNo addSubview:autonomousNoLbl];
+    [self.view addSubview:autonomousNo];
+    
+    startLeft = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 70, 30)];
+    startLeft.center = CGPointMake(startLeft.center.x, _autoStartingPositionLbl.center.y);
+    [startLeft addTarget:self action:@selector(autoStartingPositionSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    startLeft.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    startLeft.layer.cornerRadius = 5;
+    UILabel *startLeftLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+    startLeftLbl.text = @"Left";
+    startLeftLbl.textColor = [UIColor whiteColor];
+    startLeftLbl.textAlignment = NSTextAlignmentCenter;
+    startLeftLbl.font = [UIFont systemFontOfSize:12];
+    startLeftLbl.backgroundColor = [UIColor clearColor];
+    [startLeft addSubview:startLeftLbl];
+    [self.view addSubview:startLeft];
+    
+    startMiddle = [[UIControl alloc] initWithFrame:CGRectMake(310, 496, 70, 30)];
+    startMiddle.center = CGPointMake(startMiddle.center.x, _autoStartingPositionLbl.center.y);
+    [startMiddle addTarget:self action:@selector(autoStartingPositionSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    startMiddle.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    startMiddle.layer.cornerRadius = 5;
+    UILabel *startMiddleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+    startMiddleLbl.text = @"Middle";
+    startMiddleLbl.textColor = [UIColor whiteColor];
+    startMiddleLbl.textAlignment = NSTextAlignmentCenter;
+    startMiddleLbl.font = [UIFont systemFontOfSize:12];
+    startMiddleLbl.backgroundColor = [UIColor clearColor];
+    [startMiddle addSubview:startMiddleLbl];
+    [self.view addSubview:startMiddle];
+    
+    startRight = [[UIControl alloc] initWithFrame:CGRectMake(390, 496, 70, 30)];
+    startRight.center = CGPointMake(startRight.center.x, _autoStartingPositionLbl.center.y);
+    [startRight addTarget:self action:@selector(autoStartingPositionSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    startRight.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    startRight.layer.cornerRadius = 5;
+    UILabel *startRightLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+    startRightLbl.text = @"Right";
+    startRightLbl.textColor = [UIColor whiteColor];
+    startRightLbl.textAlignment = NSTextAlignmentCenter;
+    startRightLbl.font = [UIFont systemFontOfSize:12];
+    startRightLbl.backgroundColor = [UIColor clearColor];
+    [startRight addSubview:startRightLbl];
+    [self.view addSubview:startRight];
+    
+    startGoalie = [[UIControl alloc] initWithFrame:CGRectMake(470, 496, 70, 30)];
+    startGoalie.center = CGPointMake(startGoalie.center.x, _autoStartingPositionLbl.center.y);
+    [startGoalie addTarget:self action:@selector(autoStartingPositionSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    startGoalie.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    startGoalie.layer.cornerRadius = 5;
+    UILabel *startGoalieLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+    startGoalieLbl.text = @"Goalie";
+    startGoalieLbl.textColor = [UIColor whiteColor];
+    startGoalieLbl.textAlignment = NSTextAlignmentCenter;
+    startGoalieLbl.font = [UIFont systemFontOfSize:12];
+    startGoalieLbl.backgroundColor = [UIColor clearColor];
+    [startGoalie addSubview:startGoalieLbl];
+    [self.view addSubview:startGoalie];
+    
     
     _additionalNotesTxtField.layer.cornerRadius = 10;
     _additionalNotesTxtField.layer.borderColor = [[UIColor colorWithWhite:0.7 alpha:1.0] CGColor];
@@ -224,10 +430,10 @@ BOOL isBumperFive;
     _saveBtn.layer.cornerRadius = 10;
     
     [self.view bringSubviewToFront:_additionalNotesTxtField];
+    [self.view bringSubviewToFront:robotImageControl];
 }
 
--(void)didReceiveMemoryWarning
-{
+-(void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -393,7 +599,7 @@ BOOL isBumperFive;
             isFourWheelDrive = false;
             isMechanum = false;
             isSwerveCrab = false;
-            isCustomDriveTrain = false;
+            isOtherDriveTrain = false;
         }
     }
     else if ([controller isEqual:fourWheelDrive]){
@@ -414,7 +620,7 @@ BOOL isBumperFive;
             isFourWheelDrive = true;
             isMechanum = false;
             isSwerveCrab = false;
-            isCustomDriveTrain = false;
+            isOtherDriveTrain = false;
         }
     }
     else if ([controller isEqual:mechanum]){
@@ -435,7 +641,7 @@ BOOL isBumperFive;
             isFourWheelDrive = false;
             isMechanum = true;
             isSwerveCrab = false;
-            isCustomDriveTrain = false;
+            isOtherDriveTrain = false;
         }
     }
     else if ([controller isEqual:swerveCrab]){
@@ -456,42 +662,290 @@ BOOL isBumperFive;
             isFourWheelDrive = false;
             isMechanum = false;
             isSwerveCrab = true;
-            isCustomDriveTrain = false;
+            isOtherDriveTrain = false;
         }
     }
 }
 
 -(void)shooterSelectionTapped:(UIControl *)controller{
-    if ([controller isEqual:shooterYes]) {
-        if (isShooterYes) {
+    if ([controller isEqual:shooterNone]){
+        if (isShooterNone) {
             [UIView animateWithDuration:0.2 animations:^{
-                shooterYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
-            isShooterYes = false;
+            isShooterNone = false;
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                shooterNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                shooterYes.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                shooterNone.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
-            isShooterYes = true;
-            isShooterNo = false;
+            isShooterNone = true;
+            isShooterCatapult = false;
+            isShooterPuncher = false;
+            isOtherShooter = false;
         }
     }
-    else if ([controller isEqual:shooterNo]){
-        if (isShooterNo) {
+    else if ([controller isEqual:shooterCatapult]) {
+        if (isShooterCatapult) {
             [UIView animateWithDuration:0.2 animations:^{
-                shooterNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
-            isShooterNo = false;
+            isShooterCatapult = false;
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                shooterYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                shooterNo.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterCatapult.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
-            isShooterYes = false;
-            isShooterNo = true;
+            isShooterNone = false;
+            isShooterCatapult = true;
+            isShooterPuncher = false;
+            isOtherShooter = false;
+        }
+    }
+    else if ([controller isEqual:shooterPuncher]) {
+        if (isShooterPuncher) {
+            [UIView animateWithDuration:0.2 animations:^{
+                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isShooterPuncher = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterPuncher.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+            }];
+            isShooterNone = false;
+            isShooterCatapult = false;
+            isShooterPuncher = true;
+            isOtherShooter = false;
+        }
+    }
+}
+
+-(void)preferredGoalSelectionTapped:(UIControl *)controller{
+    if ([controller isEqual:preferredHigh]){
+        if (isPreferredHigh) {
+            [UIView animateWithDuration:0.2 animations:^{
+                preferredHigh.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isPreferredHigh = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                preferredHigh.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                preferredLow.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isPreferredHigh = true;
+            isPreferredLow = false;
+        }
+    }
+    else if ([controller isEqual:preferredLow]){
+        if (isPreferredLow) {
+            [UIView animateWithDuration:0.2 animations:^{
+                preferredLow.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isPreferredLow = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                preferredHigh.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                preferredLow.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+            }];
+            isPreferredHigh = false;
+            isPreferredLow = true;
+        }
+    }
+}
+
+-(void)goalieArmSelectionTapped:(UIControl *)controller{
+    if ([controller isEqual:goalieArmYes]){
+        if (isGoalieArmYes) {
+            [UIView animateWithDuration:0.2 animations:^{
+                goalieArmYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isGoalieArmYes = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                goalieArmYes.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                goalieArmNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isGoalieArmYes = true;
+            isGoalieArmNo = false;
+        }
+    }
+    else if ([controller isEqual:goalieArmNo]){
+        if (isGoalieArmNo) {
+            [UIView animateWithDuration:0.2 animations:^{
+                goalieArmNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isGoalieArmNo = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                goalieArmYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                goalieArmNo.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+            }];
+            isGoalieArmYes = false;
+            isGoalieArmNo = true;
+        }
+    }
+}
+
+-(void)floorCollectorSelectionTapped:(UIControl *)controller{
+    if ([controller isEqual:floorCollectorYes]){
+        if (isFloorCollectorYes) {
+            [UIView animateWithDuration:0.2 animations:^{
+                floorCollectorYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isFloorCollectorYes = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                floorCollectorYes.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                floorCollectorNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isFloorCollectorYes = true;
+            isFloorCollectorNo = false;
+        }
+    }
+    else if ([controller isEqual:floorCollectorNo]){
+        if (isFloorCollectorNo) {
+            [UIView animateWithDuration:0.2 animations:^{
+                floorCollectorNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isFloorCollectorNo = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                floorCollectorYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                floorCollectorNo.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+            }];
+            isFloorCollectorYes = false;
+            isFloorCollectorNo = true;
+        }
+    }
+}
+
+-(void)autonomousSelectionTapped:(UIControl *)controller{
+    if ([controller isEqual:autonomousYes]){
+        if (isAutonomousYes) {
+            [UIView animateWithDuration:0.2 animations:^{
+                autonomousYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isAutonomousYes= false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                autonomousYes.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                autonomousNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isAutonomousYes = true;
+            isAutonomousNo = false;
+        }
+    }
+    else if ([controller isEqual:autonomousNo]){
+        if (isAutonomousNo) {
+            [UIView animateWithDuration:0.2 animations:^{
+                autonomousNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isAutonomousNo = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                autonomousYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                autonomousNo.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+            }];
+            isAutonomousYes = false;
+            isAutonomousNo = true;
+        }
+    }
+}
+
+-(void)autoStartingPositionSelectionTapped:(UIControl *)controller{
+    if ([controller isEqual:startLeft]){
+        if (isStartLeft) {
+            [UIView animateWithDuration:0.2 animations:^{
+                startLeft.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isStartLeft = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                startLeft.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                startMiddle.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startRight.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startGoalie.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isStartLeft = true;
+            isStartMiddle = false;
+            isStartRight = false;
+            isStartGoalie = false;
+        }
+    }
+    else if ([controller isEqual:startMiddle]) {
+        if (isStartMiddle) {
+            [UIView animateWithDuration:0.2 animations:^{
+                startMiddle.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isStartMiddle = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                startLeft.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startMiddle.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                startRight.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startGoalie.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isStartLeft = false;
+            isStartMiddle = true;
+            isStartRight = false;
+            isStartGoalie = false;
+        }
+    }
+    else if ([controller isEqual:startRight]) {
+        if (isStartRight) {
+            [UIView animateWithDuration:0.2 animations:^{
+                startRight.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isStartRight = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                startLeft.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startMiddle.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startRight.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                startGoalie.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isStartLeft = false;
+            isStartMiddle = false;
+            isStartRight = true;
+            isStartGoalie = false;
+        }
+    }
+    else if ([controller isEqual:startGoalie]) {
+        if (isStartGoalie) {
+            [UIView animateWithDuration:0.2 animations:^{
+                startGoalie.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isStartGoalie = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                startLeft.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startMiddle.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startRight.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startGoalie.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+            }];
+            isStartLeft = false;
+            isStartMiddle = false;
+            isStartRight = false;
+            isStartGoalie = true;
         }
     }
 }
@@ -499,8 +953,8 @@ BOOL isBumperFive;
 
 
 -(void)textFieldDidChange:(UITextField *)textField{
-    if ([textField isEqual:customDriveTrain]) {
-        if (customDriveTrain.text.length > 0) {
+    if ([textField isEqual:otherDriveTrain]) {
+        if (otherDriveTrain.text.length > 0) {
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
                 fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
@@ -511,10 +965,25 @@ BOOL isBumperFive;
             isFourWheelDrive = false;
             isMechanum = false;
             isSwerveCrab = false;
-            isCustomDriveTrain = true;
+            isOtherDriveTrain = true;
         }
         else{
-            isCustomDriveTrain = false;
+            isOtherDriveTrain = false;
+        }
+    }
+    else if ([textField isEqual:otherShooter]){
+        if (otherShooter.text.length > 0) {
+            [UIView animateWithDuration:0.2 animations:^{
+                shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isShooterNone = false;
+            isShooterCatapult = false;
+            isShooterPuncher = false;
+        }
+        else{
+            isOtherShooter = false;
         }
     }
 }
@@ -529,8 +998,6 @@ BOOL isBumperFive;
         [UIView animateWithDuration:0.2 animations:^{
             _additionalNotesTxtField.center = CGPointMake(_additionalNotesTxtField.center.x, 700);
         } completion:^(BOOL finished) {}];
-        
-        
     }
 }
 -(void)textViewDidEndEditing:(UITextView *)textView{
@@ -547,7 +1014,8 @@ BOOL isBumperFive;
 - (IBAction)screenTapped:(id)sender {
     [_teamNumberField resignFirstResponder];
     [_additionalNotesTxtField resignFirstResponder];
-    [customDriveTrain resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{

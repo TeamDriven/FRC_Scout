@@ -975,7 +975,7 @@
                                 <rect key="frame" x="329" y="134" width="110" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                             </textField>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Drive Train:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kh3-WI-6R5">
                                 <rect key="frame" x="134" y="250" width="86" height="21"/>
@@ -1078,7 +1078,17 @@
                     <navigationItem key="navigationItem" title="Record a Team" id="hAq-UW-4u5"/>
                     <connections>
                         <outlet property="additionalNotesTxtField" destination="efN-gG-lep" id="6ag-xb-4ER"/>
+                        <outlet property="autoStartingPositionLbl" destination="gGl-89-h4e" id="KNF-SP-HGl"/>
+                        <outlet property="autonomousLbl" destination="bbw-aE-Tjs" id="nLp-Qz-RKU"/>
+                        <outlet property="bumperQualityLbl" destination="iYg-bO-MQB" id="Rgi-2s-Dv3"/>
+                        <outlet property="catchingMechanismLbl" destination="dSC-dN-KvF" id="Kbf-8Z-MbX"/>
+                        <outlet property="driveTrainLbl" destination="kh3-WI-6R5" id="cor-2m-ZuF"/>
+                        <outlet property="floorCollectorLbl" destination="nNJ-M5-pju" id="y5g-lQ-yT0"/>
+                        <outlet property="goalieArmLbl" destination="wYF-RR-EBt" id="bSr-01-Q4A"/>
+                        <outlet property="hotGoalTrackingLbl" destination="nyY-dz-hdn" id="H0S-aW-IPi"/>
+                        <outlet property="preferredGoalLbl" destination="mWX-Vf-6y0" id="nXy-qs-3XY"/>
                         <outlet property="saveBtn" destination="Za5-YP-F86" id="Gm2-gV-Tlv"/>
+                        <outlet property="shooterLbl" destination="yKs-Ph-7DF" id="fHu-xa-Qua"/>
                         <outlet property="teamNumberField" destination="xQd-nW-8rE" id="TXk-6K-tHJ"/>
                     </connections>
                 </viewController>

@@ -14,6 +14,17 @@
 
 @property (weak, nonatomic) IBOutlet UITextView *additionalNotesTxtField;
 
+@property (weak, nonatomic) IBOutlet UILabel *driveTrainLbl;
+@property (weak, nonatomic) IBOutlet UILabel *shooterLbl;
+@property (weak, nonatomic) IBOutlet UILabel *preferredGoalLbl;
+@property (weak, nonatomic) IBOutlet UILabel *goalieArmLbl;
+@property (weak, nonatomic) IBOutlet UILabel *floorCollectorLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autonomousLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoStartingPositionLbl;
+@property (weak, nonatomic) IBOutlet UILabel *hotGoalTrackingLbl;
+@property (weak, nonatomic) IBOutlet UILabel *catchingMechanismLbl;
+@property (weak, nonatomic) IBOutlet UILabel *bumperQualityLbl;
+
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 
 @end
