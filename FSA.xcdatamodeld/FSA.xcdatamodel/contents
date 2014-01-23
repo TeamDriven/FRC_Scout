@@ -27,6 +27,22 @@
         <attribute name="uniqeID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="teamNum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matches" inverseEntity="Team" syncable="YES"/>
     </entity>
+    <entity name="PitTeam" representedClassName="PitTeam" syncable="YES">
+        <attribute name="autonomous" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="autoStartingPosition" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bumperQuality" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="catchingMechanism" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="driveTrain" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="floorCollector" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="goalieArm" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hotGoalTracking" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="preferredGoal" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="shooter" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="teamName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="teamNumber" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Regional" representedClassName="Regional" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="regionalIn" inverseEntity="Team" syncable="YES"/>
@@ -37,8 +53,9 @@
         <relationship name="regionalIn" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Regional" inverseName="teams" inverseEntity="Regional" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Match" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Regional" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Team" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Match" positionX="0" positionY="0" width="128" height="420"/>
+        <element name="Regional" positionX="0" positionY="0" width="128" height="75"/>
+        <element name="Team" positionX="0" positionY="0" width="128" height="90"/>
+        <element name="PitTeam" positionX="396" positionY="-18" width="128" height="255"/>
     </elements>
 </model>

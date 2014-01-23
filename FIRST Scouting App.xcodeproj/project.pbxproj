@@ -14,6 +14,8 @@
 		2862D6A81854D4F900DC460F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A71854D4F900DC460F /* Images.xcassets */; };
 		2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2893226B187E637B00A225EE /* UIAlertView+Blocks.m */; };
 		28C8C757185BB91F000FAE10 /* MatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C8C756185BB91F000FAE10 /* MatchCell.m */; };
+		863B35271890E4F300D5D528 /* PitTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 863B35261890E4F300D5D528 /* PitTeam.m */; };
+		863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 863B352A1890E53400D5D528 /* PitTeam+Category.m */; };
 		86CDCD1D188C5E80002B6522 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD1C188C5E80002B6522 /* Team.m */; };
 		86CDCD20188C5E81002B6522 /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD1F188C5E81002B6522 /* Regional.m */; };
 		86CDCD23188C5E81002B6522 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD22188C5E81002B6522 /* Match.m */; };
@@ -64,6 +66,10 @@
 		2893226B187E637B00A225EE /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		28C8C755185BB91F000FAE10 /* MatchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchCell.h; sourceTree = "<group>"; };
 		28C8C756185BB91F000FAE10 /* MatchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchCell.m; sourceTree = "<group>"; };
+		863B35251890E4F300D5D528 /* PitTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitTeam.h; sourceTree = "<group>"; };
+		863B35261890E4F300D5D528 /* PitTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitTeam.m; sourceTree = "<group>"; };
+		863B35291890E53400D5D528 /* PitTeam+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PitTeam+Category.h"; sourceTree = "<group>"; };
+		863B352A1890E53400D5D528 /* PitTeam+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PitTeam+Category.m"; sourceTree = "<group>"; };
 		86CDCD1B188C5E80002B6522 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
 		86CDCD1C188C5E80002B6522 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		86CDCD1E188C5E81002B6522 /* Regional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regional.h; sourceTree = "<group>"; };
@@ -139,6 +145,7 @@
 				285A1E1D1870E9B1002AA01C /* Regional */,
 				28270E0D1871197600809047 /* Team */,
 				28270E111871246D00809047 /* Match */,
+				863B35281890E50200D5D528 /* PitTeam */,
 			);
 			name = DataModel;
 			sourceTree = "<group>";
@@ -174,6 +181,17 @@
 				285A1E1B1870E941002AA01C /* Regional+Category.m */,
 			);
 			name = Regional;
+			sourceTree = "<group>";
+		};
+		863B35281890E50200D5D528 /* PitTeam */ = {
+			isa = PBXGroup;
+			children = (
+				863B35251890E4F300D5D528 /* PitTeam.h */,
+				863B35261890E4F300D5D528 /* PitTeam.m */,
+				863B35291890E53400D5D528 /* PitTeam+Category.h */,
+				863B352A1890E53400D5D528 /* PitTeam+Category.m */,
+			);
+			name = PitTeam;
 			sourceTree = "<group>";
 		};
 		86CDCD2A188DBFE5002B6522 /* Pit Scouting */ = {
@@ -397,7 +415,9 @@
 				28270E101871199100809047 /* Team+Category.m in Sources */,
 				8846FEE11826D7D200B37E44 /* LocationsAppDelegate.m in Sources */,
 				86CDCD23188C5E81002B6522 /* Match.m in Sources */,
+				863B35271890E4F300D5D528 /* PitTeam.m in Sources */,
 				86CDCD30188DC016002B6522 /* ViewTeams.m in Sources */,
+				863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */,
 				888F0EF81850177F00412022 /* Globals.m in Sources */,
 				8846FEE71826D7D200B37E44 /* Scoring.m in Sources */,
 			);
