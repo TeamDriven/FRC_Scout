@@ -418,6 +418,104 @@ BOOL isBumperFive;
     [startGoalie addSubview:startGoalieLbl];
     [self.view addSubview:startGoalie];
     
+    hotGoalYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 80, 30)];
+    hotGoalYes.center = CGPointMake(hotGoalYes.center.x, _hotGoalTrackingLbl.center.y);
+    [hotGoalYes addTarget:self action:@selector(hotGoalTrackingSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    hotGoalYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    hotGoalYes.layer.cornerRadius = 5;
+    UILabel *hotGoalYesLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    hotGoalYesLbl.text = @"Yes";
+    hotGoalYesLbl.textColor = [UIColor whiteColor];
+    hotGoalYesLbl.textAlignment = NSTextAlignmentCenter;
+    hotGoalYesLbl.font = [UIFont systemFontOfSize:12];
+    hotGoalYesLbl.backgroundColor = [UIColor clearColor];
+    [hotGoalYes addSubview:hotGoalYesLbl];
+    [self.view addSubview:hotGoalYes];
+    
+    hotGoalNo = [[UIControl alloc] initWithFrame:CGRectMake(320, 496, 80, 30)];
+    hotGoalNo.center = CGPointMake(hotGoalNo.center.x, _hotGoalTrackingLbl.center.y);
+    [hotGoalNo addTarget:self action:@selector(hotGoalTrackingSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    hotGoalNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    hotGoalNo.layer.cornerRadius = 5;
+    UILabel *hotGoalNoLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    hotGoalNoLbl.text = @"No";
+    hotGoalNoLbl.textColor = [UIColor whiteColor];
+    hotGoalNoLbl.textAlignment = NSTextAlignmentCenter;
+    hotGoalNoLbl.font = [UIFont systemFontOfSize:12];
+    hotGoalNoLbl.backgroundColor = [UIColor clearColor];
+    [hotGoalNo addSubview:hotGoalNoLbl];
+    [self.view addSubview:hotGoalNo];
+    
+    catchingYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 80, 30)];
+    catchingYes.center = CGPointMake(catchingYes.center.x, _catchingMechanismLbl.center.y);
+    [catchingYes addTarget:self action:@selector(catchingMechanismSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    catchingYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    catchingYes.layer.cornerRadius = 5;
+    UILabel *catchingYesLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    catchingYesLbl.text = @"Yes";
+    catchingYesLbl.textColor = [UIColor whiteColor];
+    catchingYesLbl.textAlignment = NSTextAlignmentCenter;
+    catchingYesLbl.font = [UIFont systemFontOfSize:12];
+    catchingYesLbl.backgroundColor = [UIColor clearColor];
+    [catchingYes addSubview:catchingYesLbl];
+    [self.view addSubview:catchingYes];
+    
+    catchingNo = [[UIControl alloc] initWithFrame:CGRectMake(320, 496, 80, 30)];
+    catchingNo.center = CGPointMake(catchingNo.center.x, _catchingMechanismLbl.center.y);
+    [catchingNo addTarget:self action:@selector(catchingMechanismSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    catchingNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    catchingNo.layer.cornerRadius = 5;
+    UILabel *catchingNoLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    catchingNoLbl.text = @"No";
+    catchingNoLbl.textColor = [UIColor whiteColor];
+    catchingNoLbl.textAlignment = NSTextAlignmentCenter;
+    catchingNoLbl.font = [UIFont systemFontOfSize:12];
+    catchingNoLbl.backgroundColor = [UIColor clearColor];
+    [catchingNo addSubview:catchingNoLbl];
+    [self.view addSubview:catchingNo];
+    
+    bumperOne = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 70, 30)];
+    bumperOne.center = CGPointMake(bumperOne.center.x, _bumperQualityLbl.center.y);
+    [bumperOne addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    bumperOne.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    bumperOne.layer.cornerRadius = 5;
+    UILabel *bumperOneLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+    bumperOneLbl.text = @"One";
+    bumperOneLbl.textColor = [UIColor whiteColor];
+    bumperOneLbl.textAlignment = NSTextAlignmentCenter;
+    bumperOneLbl.font = [UIFont systemFontOfSize:12];
+    bumperOneLbl.backgroundColor = [UIColor clearColor];
+    [bumperOne addSubview:bumperOneLbl];
+    [self.view addSubview:bumperOne];
+    
+    bumperThree = [[UIControl alloc] initWithFrame:CGRectMake(310, 496, 70, 30)];
+    bumperThree.center = CGPointMake(bumperThree.center.x, _bumperQualityLbl.center.y);
+    [bumperThree addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    bumperThree.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    bumperThree.layer.cornerRadius = 5;
+    UILabel *bumperThreeLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+    bumperThreeLbl.text = @"Three";
+    bumperThreeLbl.textColor = [UIColor whiteColor];
+    bumperThreeLbl.textAlignment = NSTextAlignmentCenter;
+    bumperThreeLbl.font = [UIFont systemFontOfSize:12];
+    bumperThreeLbl.backgroundColor = [UIColor clearColor];
+    [bumperThree addSubview:bumperThreeLbl];
+    [self.view addSubview:bumperThree];
+    
+    bumperFive = [[UIControl alloc] initWithFrame:CGRectMake(390, 496, 70, 30)];
+    bumperFive.center = CGPointMake(bumperFive.center.x, _bumperQualityLbl.center.y);
+    [bumperFive addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    bumperFive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    bumperFive.layer.cornerRadius = 5;
+    UILabel *bumperFiveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+    bumperFiveLbl.text = @"Five";
+    bumperFiveLbl.textColor = [UIColor whiteColor];
+    bumperFiveLbl.textAlignment = NSTextAlignmentCenter;
+    bumperFiveLbl.font = [UIFont systemFontOfSize:12];
+    bumperFiveLbl.backgroundColor = [UIColor clearColor];
+    [bumperFive addSubview:bumperFiveLbl];
+    [self.view addSubview:bumperFive];
+    
     
     _additionalNotesTxtField.layer.cornerRadius = 10;
     _additionalNotesTxtField.layer.borderColor = [[UIColor colorWithWhite:0.7 alpha:1.0] CGColor];
@@ -600,6 +698,8 @@ BOOL isBumperFive;
             isMechanum = false;
             isSwerveCrab = false;
             isOtherDriveTrain = false;
+            otherDriveTrain.text = @"";
+            if (otherDriveTrain.isFirstResponder) {[otherDriveTrain resignFirstResponder];}
         }
     }
     else if ([controller isEqual:fourWheelDrive]){
@@ -621,6 +721,8 @@ BOOL isBumperFive;
             isMechanum = false;
             isSwerveCrab = false;
             isOtherDriveTrain = false;
+            otherDriveTrain.text = @"";
+            if (otherDriveTrain.isFirstResponder) {[otherDriveTrain resignFirstResponder];}
         }
     }
     else if ([controller isEqual:mechanum]){
@@ -642,6 +744,8 @@ BOOL isBumperFive;
             isMechanum = true;
             isSwerveCrab = false;
             isOtherDriveTrain = false;
+            otherDriveTrain.text = @"";
+            if (otherDriveTrain.isFirstResponder) {[otherDriveTrain resignFirstResponder];}
         }
     }
     else if ([controller isEqual:swerveCrab]){
@@ -663,6 +767,8 @@ BOOL isBumperFive;
             isMechanum = false;
             isSwerveCrab = true;
             isOtherDriveTrain = false;
+            otherDriveTrain.text = @"";
+            if (otherDriveTrain.isFirstResponder) {[otherDriveTrain resignFirstResponder];}
         }
     }
 }
@@ -685,6 +791,8 @@ BOOL isBumperFive;
             isShooterCatapult = false;
             isShooterPuncher = false;
             isOtherShooter = false;
+            otherShooter.text = @"";
+            if (otherShooter.isFirstResponder) {[otherShooter resignFirstResponder];}
         }
     }
     else if ([controller isEqual:shooterCatapult]) {
@@ -704,6 +812,8 @@ BOOL isBumperFive;
             isShooterCatapult = true;
             isShooterPuncher = false;
             isOtherShooter = false;
+            otherShooter.text = @"";
+            if (otherShooter.isFirstResponder) {[otherShooter resignFirstResponder];}
         }
     }
     else if ([controller isEqual:shooterPuncher]) {
@@ -723,6 +833,8 @@ BOOL isBumperFive;
             isShooterCatapult = false;
             isShooterPuncher = true;
             isOtherShooter = false;
+            otherShooter.text = @"";
+            if (otherShooter.isFirstResponder) {[otherShooter resignFirstResponder];}
         }
     }
 }
@@ -946,6 +1058,133 @@ BOOL isBumperFive;
             isStartMiddle = false;
             isStartRight = false;
             isStartGoalie = true;
+        }
+    }
+}
+
+-(void)hotGoalTrackingSelectionTapped:(UIControl *)controller{
+    if ([controller isEqual:hotGoalYes]){
+        if (isHotGoalYes) {
+            [UIView animateWithDuration:0.2 animations:^{
+                hotGoalYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isHotGoalYes = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                hotGoalYes.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                hotGoalNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isHotGoalYes = true;
+            isHotGoalNo = false;
+        }
+    }
+    else if ([controller isEqual:hotGoalNo]){
+        if (isHotGoalNo) {
+            [UIView animateWithDuration:0.2 animations:^{
+                hotGoalNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isHotGoalNo = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                hotGoalYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                hotGoalNo.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+            }];
+            isHotGoalYes = false;
+            isHotGoalNo = true;
+        }
+    }
+}
+
+-(void)catchingMechanismSelectionTapped:(UIControl *)controller{
+    if ([controller isEqual:catchingYes]){
+        if (isCatchingYes) {
+            [UIView animateWithDuration:0.2 animations:^{
+                catchingYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isCatchingYes = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                catchingYes.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                catchingNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isCatchingYes = true;
+            isCatchingNo = false;
+        }
+    }
+    else if ([controller isEqual:catchingNo]){
+        if (isCatchingNo) {
+            [UIView animateWithDuration:0.2 animations:^{
+                catchingNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isCatchingNo = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                catchingYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                catchingNo.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+            }];
+            isCatchingYes = false;
+            isCatchingNo = true;
+        }
+    }
+}
+
+-(void)bumperQualitySelectionTapped:(UIControl *)controller{
+    if ([controller isEqual:bumperOne]){
+        if (isBumperOne) {
+            [UIView animateWithDuration:0.2 animations:^{
+                bumperOne.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isBumperOne = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                bumperOne.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                bumperThree.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                bumperFive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isBumperOne = true;
+            isBumperThree = false;
+            isBumperFive = false;
+        }
+    }
+    else if ([controller isEqual:bumperThree]){
+        if (isBumperThree) {
+            [UIView animateWithDuration:0.2 animations:^{
+                bumperThree.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isBumperThree = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                bumperOne.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                bumperThree.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                bumperFive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isBumperOne = false;
+            isBumperThree = true;
+            isBumperFive = false;
+        }
+    }
+    else if ([controller isEqual:bumperFive]){
+        if (isBumperFive) {
+            [UIView animateWithDuration:0.2 animations:^{
+                bumperFive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            isBumperFive = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                bumperOne.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                bumperThree.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                bumperFive.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+            }];
+            isBumperOne = false;
+            isBumperThree = false;
+            isBumperFive = true;
         }
     }
 }
