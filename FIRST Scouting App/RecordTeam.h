@@ -11,6 +11,7 @@
 @interface RecordTeam : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *teamNumberField;
+@property (weak, nonatomic) IBOutlet UITextField *teamNameField;
 
 @property (weak, nonatomic) IBOutlet UITextView *additionalNotesTxtField;
 

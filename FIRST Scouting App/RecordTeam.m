@@ -96,6 +96,7 @@ BOOL isBumperThree;
 UIControl *bumperFive;
 BOOL isBumperFive;
 
+
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -129,7 +130,37 @@ BOOL isBumperFive;
     
     [self.view addSubview:robotImageControl];
     
+    _teamNumberField.delegate = self;
+    _teamNameField.delegate = self;
     
+    shooterNone = [[UIControl alloc] initWithFrame:CGRectMake(230, 295, 50, 30)];
+    
+    [self driveTrainRowSetUp];
+    [self shooterRowSetUp];
+    [self preferredGoalRowSetUp];
+    [self goalieArmRowSetUp];
+    [self floorCollectorRowSetUp];
+    [self autonomousRowSetUp];
+    [self autoStartingPositionRowSetUp];
+    [self hotGoalTrackingRowSetUp];
+    [self catchingMechanismRowSetUp];
+    [self bumperQualityRowSetUp];
+    
+    _additionalNotesTxtField.layer.cornerRadius = 10;
+    _additionalNotesTxtField.layer.borderColor = [[UIColor colorWithWhite:0.7 alpha:1.0] CGColor];
+    _additionalNotesTxtField.layer.borderWidth = 1;
+    _additionalNotesTxtField.font = [UIFont systemFontOfSize:14];
+    _additionalNotesTxtField.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    _additionalNotesTxtField.text = @"Additional Notes";
+    _additionalNotesTxtField.delegate = self;
+    
+    _saveBtn.layer.cornerRadius = 10;
+    
+    [self.view bringSubviewToFront:_additionalNotesTxtField];
+    [self.view bringSubviewToFront:robotImageControl];
+}
+
+-(void)driveTrainRowSetUp{
     sixEightWheelDrop = [[UIControl alloc] initWithFrame:CGRectMake(230, 245, 110, 30)];
     [sixEightWheelDrop addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
     sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
@@ -196,8 +227,8 @@ BOOL isBumperFive;
     otherDriveTrain.delegate = self;
     [otherDriveTrain addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [self.view addSubview:otherDriveTrain];
-    
-    shooterNone = [[UIControl alloc] initWithFrame:CGRectMake(230, 295, 50, 30)];
+}
+-(void)shooterRowSetUp{
     shooterNone.center = CGPointMake(shooterNone.center.x, _shooterLbl.center.y);
     [shooterNone addTarget:self action:@selector(shooterSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
     shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
@@ -249,7 +280,8 @@ BOOL isBumperFive;
     otherShooter.delegate = self;
     [otherShooter addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [self.view addSubview:otherShooter];
-    
+}
+-(void)preferredGoalRowSetUp{
     preferredHigh = [[UIControl alloc] initWithFrame:CGRectMake(230, 345, 80, 30)];
     preferredHigh.center = CGPointMake(preferredHigh.center.x, _preferredGoalLbl.center.y);
     [preferredHigh addTarget:self action:@selector(preferredGoalSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -277,7 +309,8 @@ BOOL isBumperFive;
     preferredLowLbl.backgroundColor = [UIColor clearColor];
     [preferredLow addSubview:preferredLowLbl];
     [self.view addSubview:preferredLow];
-    
+}
+-(void)goalieArmRowSetUp{
     goalieArmYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 395, 80, 30)];
     goalieArmYes.center = CGPointMake(goalieArmYes.center.x, _goalieArmLbl.center.y);
     [goalieArmYes addTarget:self action:@selector(goalieArmSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -305,7 +338,8 @@ BOOL isBumperFive;
     goalieArmNoLbl.backgroundColor = [UIColor clearColor];
     [goalieArmNo addSubview:goalieArmNoLbl];
     [self.view addSubview:goalieArmNo];
-    
+}
+-(void)floorCollectorRowSetUp{
     floorCollectorYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 446, 80, 30)];
     floorCollectorYes.center = CGPointMake(floorCollectorYes.center.x, _floorCollectorLbl.center.y);
     [floorCollectorYes addTarget:self action:@selector(floorCollectorSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -333,7 +367,8 @@ BOOL isBumperFive;
     floorCollectorNoLbl.backgroundColor = [UIColor clearColor];
     [floorCollectorNo addSubview:floorCollectorNoLbl];
     [self.view addSubview:floorCollectorNo];
-    
+}
+-(void)autonomousRowSetUp{
     autonomousYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 80, 30)];
     autonomousYes.center = CGPointMake(autonomousYes.center.x, _autonomousLbl.center.y);
     [autonomousYes addTarget:self action:@selector(autonomousSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -361,7 +396,8 @@ BOOL isBumperFive;
     autonomousNoLbl.backgroundColor = [UIColor clearColor];
     [autonomousNo addSubview:autonomousNoLbl];
     [self.view addSubview:autonomousNo];
-    
+}
+-(void)autoStartingPositionRowSetUp{
     startLeft = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 70, 30)];
     startLeft.center = CGPointMake(startLeft.center.x, _autoStartingPositionLbl.center.y);
     [startLeft addTarget:self action:@selector(autoStartingPositionSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -417,7 +453,8 @@ BOOL isBumperFive;
     startGoalieLbl.backgroundColor = [UIColor clearColor];
     [startGoalie addSubview:startGoalieLbl];
     [self.view addSubview:startGoalie];
-    
+}
+-(void)hotGoalTrackingRowSetUp{
     hotGoalYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 80, 30)];
     hotGoalYes.center = CGPointMake(hotGoalYes.center.x, _hotGoalTrackingLbl.center.y);
     [hotGoalYes addTarget:self action:@selector(hotGoalTrackingSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -445,7 +482,8 @@ BOOL isBumperFive;
     hotGoalNoLbl.backgroundColor = [UIColor clearColor];
     [hotGoalNo addSubview:hotGoalNoLbl];
     [self.view addSubview:hotGoalNo];
-    
+}
+-(void)catchingMechanismRowSetUp{
     catchingYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 80, 30)];
     catchingYes.center = CGPointMake(catchingYes.center.x, _catchingMechanismLbl.center.y);
     [catchingYes addTarget:self action:@selector(catchingMechanismSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -473,7 +511,8 @@ BOOL isBumperFive;
     catchingNoLbl.backgroundColor = [UIColor clearColor];
     [catchingNo addSubview:catchingNoLbl];
     [self.view addSubview:catchingNo];
-    
+}
+-(void)bumperQualityRowSetUp{
     bumperOne = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 70, 30)];
     bumperOne.center = CGPointMake(bumperOne.center.x, _bumperQualityLbl.center.y);
     [bumperOne addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -515,25 +554,32 @@ BOOL isBumperFive;
     bumperFiveLbl.backgroundColor = [UIColor clearColor];
     [bumperFive addSubview:bumperFiveLbl];
     [self.view addSubview:bumperFive];
-    
-    
-    _additionalNotesTxtField.layer.cornerRadius = 10;
-    _additionalNotesTxtField.layer.borderColor = [[UIColor colorWithWhite:0.7 alpha:1.0] CGColor];
-    _additionalNotesTxtField.layer.borderWidth = 1;
-    _additionalNotesTxtField.font = [UIFont systemFontOfSize:14];
-    _additionalNotesTxtField.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
-    _additionalNotesTxtField.text = @"Additional Notes";
-    _additionalNotesTxtField.delegate = self;
-    
-    _saveBtn.layer.cornerRadius = 10;
-    
-    [self.view bringSubviewToFront:_additionalNotesTxtField];
-    [self.view bringSubviewToFront:robotImageControl];
 }
 
 -(void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)numberValidator:(id)sender {
+    NSMutableString *txt1 = [[NSMutableString alloc] initWithString:_teamNumberField.text];
+    for (unsigned int i = 0; i < [txt1 length]; i++) {
+        NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt1 characterAtIndex:i]];
+        if ([character isEqualToString:@" "]){
+            [txt1 deleteCharactersInRange:NSMakeRange(i, 1)];
+            _teamNumberField.text = [[NSString alloc] initWithString:txt1];
+        }
+        else if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
+                                                           message: @"Please only enter numbers in the \"Team Number\" text field"
+                                                          delegate: nil
+                                                 cancelButtonTitle:@"Sorry..."
+                                                 otherButtonTitles:nil];
+            [alert show];
+            [txt1 deleteCharactersInRange:NSMakeRange(i, 1)];
+            _teamNumberField.text = [[NSString alloc] initWithString:txt1];
+        }
+    }
 }
 
 -(void)getAnImage{
@@ -1250,8 +1296,10 @@ BOOL isBumperFive;
         } completion:^(BOOL finished) {}];
     }
 }
+
 - (IBAction)screenTapped:(id)sender {
     [_teamNumberField resignFirstResponder];
+    [_teamNameField resignFirstResponder];
     [_additionalNotesTxtField resignFirstResponder];
     [otherDriveTrain resignFirstResponder];
     [otherShooter resignFirstResponder];
@@ -1261,6 +1309,68 @@ BOOL isBumperFive;
     [textField resignFirstResponder];
     
     return YES;
+}
+
+
+- (IBAction)saveSheetBtn:(id)sender {
+    [UIView animateWithDuration:0.2 animations:^{
+        for (UIControl *c in [self.view subviews]) {
+            if ([c.backgroundColor isEqual:[UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0]]) {
+                c.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }
+        }
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.2 animations:^{
+            robotImage.alpha = 0;
+        } completion:^(BOOL finished) {
+            robotImage.image = nil;
+            robotImage.alpha = 1;
+        }];
+    }];
+    _teamNumberField.text = @"";
+    _teamNameField.text = @"";
+    otherDriveTrain.text = @"";
+    otherShooter.text = @"";
+    _additionalNotesTxtField.text = @"Additional Notes";
+    _additionalNotesTxtField.textColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    
+    isSixEightWheelDrop = false;
+    isFourWheelDrive = false;
+    isMechanum = false;
+    isSwerveCrab = false;
+    isOtherDriveTrain = false;
+    
+    isShooterNone = false;
+    isShooterCatapult = false;
+    isShooterPuncher = false;
+    isOtherShooter = false;
+    
+    isPreferredHigh = false;
+    isPreferredLow = false;
+    
+    isGoalieArmYes = false;
+    isGoalieArmNo = false;
+    
+    isFloorCollectorYes = false;
+    isFloorCollectorNo = false;
+    
+    isAutonomousYes = false;
+    isAutonomousNo = false;
+    
+    isStartLeft = false;
+    isStartMiddle = false;
+    isStartRight = false;
+    isStartGoalie = false;
+    
+    isHotGoalYes = false;
+    isHotGoalNo = false;
+    
+    isCatchingYes = false;
+    isCatchingNo = false;
+    
+    isBumperOne = false;
+    isBumperThree = false;
+    isBumperFive = false;
 }
 
 
