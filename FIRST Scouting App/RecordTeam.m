@@ -7,6 +7,8 @@
 //
 
 #import "RecordTeam.h"
+#import "PitTeam.h"
+#import "PitTeam+Category.h"
 
 @interface RecordTeam ()
 
@@ -14,6 +16,15 @@
 
 @implementation RecordTeam
 
+// Core Data Filepath
+NSFileManager *FSAfileManager;
+NSURL *FSAdocumentsDirectory;
+NSString *FSAdocumentName;
+NSURL *FSApathurl;
+UIManagedDocument *FSAdocument;
+NSManagedObjectContext *context;
+
+// Robot Picture Stuff
 UIControl *robotImageControl;
 UIImageView *robotImage;
 UIView *cameraPopup;
@@ -96,18 +107,45 @@ BOOL isBumperThree;
 UIControl *bumperFive;
 BOOL isBumperFive;
 
+BOOL isSomethingSelectedInEveryRow;
 
--(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
     }
     return self;
 }
+-(void)didReceiveMemoryWarning{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
 -(void)viewDidLoad{
     [super viewDidLoad];
+    
+    // *** Map to Core Data ***
+    FSAfileManager = [NSFileManager defaultManager];
+    FSAdocumentsDirectory = [[FSAfileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+    FSAdocumentName = @"FSA";
+    FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
+    FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
+    context = FSAdocument.managedObjectContext;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
+        [FSAdocument openWithCompletionHandler:^(BOOL success){
+            if (success) NSLog(@"Found the document!");
+            if (!success) NSLog(@"Couldn't find the document at path: %@", FSApathurl);
+        }];
+    }
+    else{
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
+            if (success) NSLog(@"Created the document!");
+            if (!success) NSLog(@"Couldn't create the document at path: %@", FSApathurl);
+        }];
+    }
+    // *** Done Mapping to Core Data **
     
     UILabel *robotImageLbl = [[UILabel alloc] initWithFrame:CGRectMake(40, 75, 125, 15)];
     robotImageLbl.text = @"Tap to Change";
@@ -556,11 +594,6 @@ BOOL isBumperFive;
     [self.view addSubview:bumperFive];
 }
 
--(void)didReceiveMemoryWarning{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (IBAction)numberValidator:(id)sender {
     NSMutableString *txt1 = [[NSMutableString alloc] initWithString:_teamNumberField.text];
     for (unsigned int i = 0; i < [txt1 length]; i++) {
@@ -818,7 +851,6 @@ BOOL isBumperFive;
         }
     }
 }
-
 -(void)shooterSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:shooterNone]){
         if (isShooterNone) {
@@ -884,7 +916,6 @@ BOOL isBumperFive;
         }
     }
 }
-
 -(void)preferredGoalSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:preferredHigh]){
         if (isPreferredHigh) {
@@ -919,7 +950,6 @@ BOOL isBumperFive;
         }
     }
 }
-
 -(void)goalieArmSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:goalieArmYes]){
         if (isGoalieArmYes) {
@@ -954,7 +984,6 @@ BOOL isBumperFive;
         }
     }
 }
-
 -(void)floorCollectorSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:floorCollectorYes]){
         if (isFloorCollectorYes) {
@@ -989,7 +1018,6 @@ BOOL isBumperFive;
         }
     }
 }
-
 -(void)autonomousSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:autonomousYes]){
         if (isAutonomousYes) {
@@ -1024,7 +1052,6 @@ BOOL isBumperFive;
         }
     }
 }
-
 -(void)autoStartingPositionSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:startLeft]){
         if (isStartLeft) {
@@ -1107,7 +1134,6 @@ BOOL isBumperFive;
         }
     }
 }
-
 -(void)hotGoalTrackingSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:hotGoalYes]){
         if (isHotGoalYes) {
@@ -1142,7 +1168,6 @@ BOOL isBumperFive;
         }
     }
 }
-
 -(void)catchingMechanismSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:catchingYes]){
         if (isCatchingYes) {
@@ -1177,7 +1202,6 @@ BOOL isBumperFive;
         }
     }
 }
-
 -(void)bumperQualitySelectionTapped:(UIControl *)controller{
     if ([controller isEqual:bumperOne]){
         if (isBumperOne) {
@@ -1313,6 +1337,109 @@ BOOL isBumperFive;
 
 
 - (IBAction)saveSheetBtn:(id)sender {
+    
+    [self somethingSelectedInEveryRowValidator];
+    
+    if (!isSomethingSelectedInEveryRow) {
+        UIAlertView *somethingNotSelectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!" message:@"Not every row has something selected in it! Please fix this!" delegate:nil cancelButtonTitle:@"Will do" otherButtonTitles:nil];
+        [somethingNotSelectedAlert show];
+    }
+    else if (_teamNumberField.text.length == 0) {
+        UIAlertView *noTeamNumAlert = [[UIAlertView alloc] initWithTitle:@"Bad Scout! No!" message:@"Please enter a team number in the top center text field. Thanks! (You're really not a bad scout, I just needed to get your attention)" delegate:nil cancelButtonTitle:@"Whoops!" otherButtonTitles:nil];
+        [noTeamNumAlert show];
+    }
+    else{
+        if ([_additionalNotesTxtField.text isEqualToString: @"Additional Notes"] && _additionalNotesTxtField.backgroundColor == [UIColor colorWithWhite:0.9 alpha:1.0]) {
+            _additionalNotesTxtField.text = @"";
+        }
+        
+    }
+    
+    
+}
+
+-(void)somethingSelectedInEveryRowValidator{
+    BOOL isDriveTrainSelected;
+    BOOL isShooterSelected;
+    BOOL isPreferredGoalSelected;
+    BOOL isGoalieArmSelected;
+    BOOL isFloorCollectorSelected;
+    BOOL isAutonomousSelected;
+    BOOL isAutoStartingPositionSelected;
+    BOOL isHotGoalTrackingSelected;
+    BOOL isCatchingMechanismSelected;
+    BOOL isBumperQualitySelected;
+    
+    if (isSixEightWheelDrop || isFourWheelDrive || isMechanum || isSwerveCrab || isOtherDriveTrain) {
+        isDriveTrainSelected = true;
+    }
+    else{
+        isDriveTrainSelected = false;
+    }
+    if (isShooterNone || isShooterCatapult || isShooterPuncher || isOtherShooter) {
+        isShooterSelected = true;
+    }
+    else{
+        isShooterSelected = false;
+    }
+    if (isPreferredHigh || isPreferredLow) {
+        isPreferredGoalSelected = true;
+    }
+    else{
+        isPreferredGoalSelected = false;
+    }
+    if (isGoalieArmYes || isGoalieArmNo) {
+        isGoalieArmSelected = true;
+    }
+    else{
+        isGoalieArmSelected = false;
+    }
+    if (isFloorCollectorYes || isFloorCollectorNo) {
+        isFloorCollectorSelected = true;
+    }
+    else{
+        isFloorCollectorSelected = false;
+    }
+    if (isAutonomousYes || isAutonomousNo) {
+        isAutonomousSelected = true;
+    }
+    else{
+        isAutonomousSelected = false;
+    }
+    if (isStartLeft || isStartMiddle || isStartRight || isStartGoalie) {
+        isAutoStartingPositionSelected = true;
+    }
+    else{
+        isAutoStartingPositionSelected = false;
+    }
+    if (isHotGoalYes || isHotGoalNo) {
+        isHotGoalTrackingSelected = true;
+    }
+    else{
+        isHotGoalTrackingSelected = false;
+    }
+    if (isCatchingYes || isCatchingNo) {
+        isCatchingMechanismSelected = true;
+    }
+    else{
+        isCatchingMechanismSelected = false;
+    }
+    if (isBumperOne || isBumperThree || isBumperFive) {
+        isBumperQualitySelected = true;
+    }
+    else{
+        isBumperQualitySelected = false;
+    }
+    
+    if (isDriveTrainSelected && isShooterSelected && isPreferredGoalSelected && isGoalieArmSelected && isFloorCollectorSelected && isAutonomousSelected && isAutoStartingPositionSelected && isHotGoalTrackingSelected && isCatchingMechanismSelected && isBumperQualitySelected) {
+        isSomethingSelectedInEveryRow = true;
+    }
+    else{
+        isSomethingSelectedInEveryRow = false;
+    }
+}
+
+-(void)saveSuccess{
     [UIView animateWithDuration:0.2 animations:^{
         for (UIControl *c in [self.view subviews]) {
             if ([c.backgroundColor isEqual:[UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0]]) {
@@ -1375,6 +1502,21 @@ BOOL isBumperFive;
 
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

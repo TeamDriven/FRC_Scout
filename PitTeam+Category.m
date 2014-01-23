@@ -48,6 +48,7 @@
         pitTm.teamNumber = [pitDict objectForKey:@"teamNumber"];
         pitTm.teamName = [pitDict objectForKey:@"teamName"];
         pitTm.notes = [pitDict objectForKey:@"notes"];
+        pitTm.uniqueID = [pitDict objectForKey:@"uniqueID"];
         
         
         NSLog(@"Created a new Pit Team with team number %@ and team name %@", pitTm.teamNumber, pitTm.teamName);

@@ -2,7 +2,7 @@
 //  PitTeam.m
 //  FIRST Scouting App
 //
-//  Created by Bertoncin,Louie on 1/22/14.
+//  Created by Bertoncin,Louie on 1/23/14.
 //  Copyright (c) 2014 teamDriven. All rights reserved.
 //
 
@@ -11,19 +11,20 @@
 
 @implementation PitTeam
 
-@dynamic driveTrain;
-@dynamic shooter;
-@dynamic preferredGoal;
-@dynamic goalieArm;
-@dynamic floorCollector;
 @dynamic autonomous;
 @dynamic autoStartingPosition;
-@dynamic hotGoalTracking;
-@dynamic catchingMechanism;
 @dynamic bumperQuality;
+@dynamic catchingMechanism;
+@dynamic driveTrain;
+@dynamic floorCollector;
+@dynamic goalieArm;
+@dynamic hotGoalTracking;
 @dynamic image;
-@dynamic teamNumber;
-@dynamic teamName;
 @dynamic notes;
+@dynamic preferredGoal;
+@dynamic shooter;
+@dynamic teamName;
+@dynamic teamNumber;
+@dynamic uniqueID;
 
 @end

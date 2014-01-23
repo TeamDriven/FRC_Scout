@@ -42,6 +42,7 @@
         <attribute name="shooter" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="teamName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="teamNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="Regional" representedClassName="Regional" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -53,9 +54,9 @@
         <relationship name="regionalIn" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Regional" inverseName="teams" inverseEntity="Regional" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Match" positionX="0" positionY="0" width="128" height="420"/>
-        <element name="Regional" positionX="0" positionY="0" width="128" height="75"/>
-        <element name="Team" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="PitTeam" positionX="396" positionY="-18" width="128" height="255"/>
+        <element name="Match" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="PitTeam" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Regional" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Team" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>
