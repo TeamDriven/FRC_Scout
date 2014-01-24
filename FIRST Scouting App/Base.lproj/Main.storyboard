@@ -1153,6 +1153,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="View Teams" id="4eP-pC-2F3"/>
+                    <connections>
+                        <outlet property="tableView" destination="ad0-Vt-uM3" id="Jrq-C2-fIS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pVY-br-9ic" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
