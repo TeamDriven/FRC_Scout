@@ -1433,7 +1433,7 @@ UIAlertView *overWriteAlert;
 }
 
 
-- (IBAction)saveSheetBtn:(id)sender {
+-(IBAction)saveSheetBtn:(id)sender {
     
     [self somethingSelectedInEveryRowValidator];
     
@@ -1507,6 +1507,14 @@ UIAlertView *overWriteAlert;
 -(void)overWriteAlert{
     overWriteAlert = [[UIAlertView alloc] initWithTitle:@"There's a Conflict!" message:@"There is already a team saved for that team number. Do you want to overwrite it?" delegate:self cancelButtonTitle:@"Yes" otherButtonTitles:@"No", nil];
     [overWriteAlert show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if ([alertView isEqual:overWriteAlert]) {
+        if (buttonIndex == 1) {
+            [self overWritePitTeam];
+        }
+    }
 }
 
 -(void)overWritePitTeam{
