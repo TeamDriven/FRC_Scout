@@ -165,7 +165,7 @@ UIAlertView *overWriteAlert;
     // *** Done Mapping to Core Data **
     
     UILabel *robotImageLbl = [[UILabel alloc] initWithFrame:CGRectMake(40, 75, 125, 15)];
-    robotImageLbl.text = @"Tap to Change";
+    robotImageLbl.text = @"Tap to Change Image";
     robotImageLbl.textAlignment = NSTextAlignmentCenter;
     robotImageLbl.font = [UIFont systemFontOfSize:12];
     [self.view addSubview:robotImageLbl];
