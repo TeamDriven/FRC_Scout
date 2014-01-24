@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewTeams : UIViewController
+@interface ViewTeams : UIViewController<UITableViewDataSource, UITableViewDelegate>
 
 @end

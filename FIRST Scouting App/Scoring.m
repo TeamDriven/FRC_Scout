@@ -419,7 +419,7 @@ UILabel *blue3UpdaterLbl;
         CGRect initialsFieldLblRect = CGRectMake(129, 190, 100, 15);
         UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
         initialsFieldLbl.textAlignment = NSTextAlignmentCenter;
-        initialsFieldLbl.text = @"Enter YOUR three initials";
+        initialsFieldLbl.text = @"YOUR 3 initials";
         initialsFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:initialsFieldLbl];
         
@@ -444,7 +444,7 @@ UILabel *blue3UpdaterLbl;
         CGRect scoutTeamNumFieldLblRect = CGRectMake(264, 190, 100, 15);
         UILabel *scoutTeamNumFieldLbl = [[UILabel alloc] initWithFrame:scoutTeamNumFieldLblRect];
         scoutTeamNumFieldLbl.textAlignment = NSTextAlignmentCenter;
-        scoutTeamNumFieldLbl.text = @"Enter YOUR team number";
+        scoutTeamNumFieldLbl.text = @"YOUR team #";
         scoutTeamNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:scoutTeamNumFieldLbl];
         
@@ -471,7 +471,7 @@ UILabel *blue3UpdaterLbl;
         CGRect currentMatchNumFieldLblRect = CGRectMake(384, 190, 130, 15);
         UILabel *currentMatchNumFieldLbl = [[UILabel alloc] initWithFrame:currentMatchNumFieldLblRect];
         currentMatchNumFieldLbl.textAlignment = NSTextAlignmentCenter;
-        currentMatchNumFieldLbl.text = @"Enter the current match number";
+        currentMatchNumFieldLbl.text = @"Current Match Number";
         currentMatchNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:currentMatchNumFieldLbl];
         

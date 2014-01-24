@@ -172,13 +172,13 @@ UIAlertView *overWriteAlert;
     
     robotImageControl = [[UIControl alloc] initWithFrame:CGRectMake(40, 90, 125, 125)];
     [robotImageControl addTarget:self action:@selector(getAnImage) forControlEvents:UIControlEventTouchUpInside];
-    UILabel *addPicLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 125, 125)];
-    addPicLbl.text = @"Add Image";
+    robotImageControl.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
+    robotImageControl.layer.borderWidth = 1;
+    UILabel *addPicLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 125, 105)];
+    addPicLbl.text = @"+";
     addPicLbl.textColor = [UIColor colorWithWhite:0.5 alpha:0.5];
     addPicLbl.textAlignment = NSTextAlignmentCenter;
-    addPicLbl.font = [UIFont systemFontOfSize:13];
-    addPicLbl.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
-    addPicLbl.layer.borderWidth = 1;
+    addPicLbl.font = [UIFont boldSystemFontOfSize:100];
     [robotImageControl addSubview:addPicLbl];
     robotImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 125, 125)];
     [robotImageControl addSubview:robotImage];
@@ -187,8 +187,6 @@ UIAlertView *overWriteAlert;
     
     _teamNumberField.delegate = self;
     _teamNameField.delegate = self;
-    
-    shooterNone = [[UIControl alloc] initWithFrame:CGRectMake(230, 295, 50, 30)];
     
     [self driveTrainRowSetUp];
     [self shooterRowSetUp];
@@ -227,58 +225,58 @@ UIAlertView *overWriteAlert;
 }
 
 -(void)driveTrainRowSetUp{
-    sixEightWheelDrop = [[UIControl alloc] initWithFrame:CGRectMake(230, 245, 110, 30)];
+    sixEightWheelDrop = [[UIControl alloc] initWithFrame:CGRectMake(210, 245, 115, 30)];
     [sixEightWheelDrop addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     sixEightWheelDrop.layer.cornerRadius = 5;
     sixEightWheelDrop.center = CGPointMake(sixEightWheelDrop.center.x, _driveTrainLbl.center.y);
-    UILabel *sixEightWheelDropLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 110, 30)];
+    UILabel *sixEightWheelDropLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 115, 30)];
     sixEightWheelDropLbl.text = @"6 or 8 Wheel Drop";
     sixEightWheelDropLbl.textColor = [UIColor whiteColor];
     sixEightWheelDropLbl.textAlignment = NSTextAlignmentCenter;
-    sixEightWheelDropLbl.font = [UIFont systemFontOfSize:12];
+    sixEightWheelDropLbl.font = [UIFont boldSystemFontOfSize:12];
     sixEightWheelDropLbl.backgroundColor = [UIColor clearColor];
     [sixEightWheelDrop addSubview:sixEightWheelDropLbl];
     [self.view addSubview:sixEightWheelDrop];
     
-    fourWheelDrive = [[UIControl alloc] initWithFrame:CGRectMake(350, 245, 85, 30)];
+    fourWheelDrive = [[UIControl alloc] initWithFrame:CGRectMake(335, 245, 90, 30)];
     [fourWheelDrive addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     fourWheelDrive.layer.cornerRadius = 5;
     fourWheelDrive.center = CGPointMake(fourWheelDrive.center.x, _driveTrainLbl.center.y);
-    UILabel *fourWheelDriveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 85, 30)];
+    UILabel *fourWheelDriveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 90, 30)];
     fourWheelDriveLbl.text = @"4 Wheel Drive";
     fourWheelDriveLbl.textColor = [UIColor whiteColor];
     fourWheelDriveLbl.textAlignment = NSTextAlignmentCenter;
-    fourWheelDriveLbl.font = [UIFont systemFontOfSize:12];
+    fourWheelDriveLbl.font = [UIFont boldSystemFontOfSize:12];
     fourWheelDriveLbl.backgroundColor = [UIColor clearColor];
     [fourWheelDrive addSubview:fourWheelDriveLbl];
     [self.view addSubview:fourWheelDrive];
     
-    mechanum = [[UIControl alloc] initWithFrame:CGRectMake(445, 245, 70, 30)];
+    mechanum = [[UIControl alloc] initWithFrame:CGRectMake(435, 245, 75, 30)];
     [mechanum addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    mechanum.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     mechanum.layer.cornerRadius = 5;
     mechanum.center = CGPointMake(mechanum.center.x, _driveTrainLbl.center.y);
-    UILabel *mechanumLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+    UILabel *mechanumLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
     mechanumLbl.text = @"Mechanum";
     mechanumLbl.textColor = [UIColor whiteColor];
     mechanumLbl.textAlignment = NSTextAlignmentCenter;
-    mechanumLbl.font = [UIFont systemFontOfSize:12];
+    mechanumLbl.font = [UIFont boldSystemFontOfSize:12];
     mechanumLbl.backgroundColor = [UIColor clearColor];
     [mechanum addSubview:mechanumLbl];
     [self.view addSubview:mechanum];
     
-    swerveCrab = [[UIControl alloc] initWithFrame:CGRectMake(525, 245, 80, 30)];
+    swerveCrab = [[UIControl alloc] initWithFrame:CGRectMake(520, 245, 85, 30)];
     [swerveCrab addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    swerveCrab.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     swerveCrab.layer.cornerRadius = 5;
     swerveCrab.center = CGPointMake(swerveCrab.center.x, _driveTrainLbl.center.y);
-    UILabel *swerveCrabLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    UILabel *swerveCrabLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 85, 30)];
     swerveCrabLbl.text = @"Swerve/Crab";
     swerveCrabLbl.textColor = [UIColor whiteColor];
     swerveCrabLbl.textAlignment = NSTextAlignmentCenter;
-    swerveCrabLbl.font = [UIFont systemFontOfSize:12];
+    swerveCrabLbl.font = [UIFont boldSystemFontOfSize:12];
     swerveCrabLbl.backgroundColor = [UIColor clearColor];
     [swerveCrab addSubview:swerveCrabLbl];
     [self.view addSubview:swerveCrab];
@@ -295,48 +293,49 @@ UIAlertView *overWriteAlert;
     [self.view addSubview:otherDriveTrain];
 }
 -(void)shooterRowSetUp{
+    shooterNone = [[UIControl alloc] initWithFrame:CGRectMake(210, 295, 55, 30)];
     shooterNone.center = CGPointMake(shooterNone.center.x, _shooterLbl.center.y);
     [shooterNone addTarget:self action:@selector(shooterSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    shooterNone.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     shooterNone.layer.cornerRadius = 5;
-    UILabel *shooterNoneLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];
+    UILabel *shooterNoneLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 55, 30)];
     shooterNoneLbl.text = @"None";
     shooterNoneLbl.textColor = [UIColor whiteColor];
     shooterNoneLbl.textAlignment = NSTextAlignmentCenter;
-    shooterNoneLbl.font = [UIFont systemFontOfSize:12];
+    shooterNoneLbl.font = [UIFont boldSystemFontOfSize:12];
     shooterNoneLbl.backgroundColor = [UIColor clearColor];
     [shooterNone addSubview:shooterNoneLbl];
     [self.view addSubview:shooterNone];
     
-    shooterCatapult = [[UIControl alloc] initWithFrame:CGRectMake(290, 295, 80, 30)];
+    shooterCatapult = [[UIControl alloc] initWithFrame:CGRectMake(275, 295, 80, 30)];
     shooterCatapult.center = CGPointMake(shooterCatapult.center.x, _shooterLbl.center.y);
     [shooterCatapult addTarget:self action:@selector(shooterSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     shooterCatapult.layer.cornerRadius = 5;
     UILabel *shooterCatapultLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     shooterCatapultLbl.text = @"Catapult";
     shooterCatapultLbl.textColor = [UIColor whiteColor];
     shooterCatapultLbl.textAlignment = NSTextAlignmentCenter;
-    shooterCatapultLbl.font = [UIFont systemFontOfSize:12];
+    shooterCatapultLbl.font = [UIFont boldSystemFontOfSize:12];
     shooterCatapultLbl.backgroundColor = [UIColor clearColor];
     [shooterCatapult addSubview:shooterCatapultLbl];
     [self.view addSubview:shooterCatapult];
     
-    shooterPuncher = [[UIControl alloc] initWithFrame:CGRectMake(380, 295, 80, 30)];
+    shooterPuncher = [[UIControl alloc] initWithFrame:CGRectMake(365, 295, 80, 30)];
     shooterPuncher.center = CGPointMake(shooterPuncher.center.x, _shooterLbl.center.y);
     [shooterPuncher addTarget:self action:@selector(shooterSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     shooterPuncher.layer.cornerRadius = 5;
     UILabel *shooterPuncherLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     shooterPuncherLbl.text = @"Puncher";
     shooterPuncherLbl.textColor = [UIColor whiteColor];
     shooterPuncherLbl.textAlignment = NSTextAlignmentCenter;
-    shooterPuncherLbl.font = [UIFont systemFontOfSize:12];
+    shooterPuncherLbl.font = [UIFont boldSystemFontOfSize:12];
     shooterPuncherLbl.backgroundColor = [UIColor clearColor];
     [shooterPuncher addSubview:shooterPuncherLbl];
     [self.view addSubview:shooterPuncher];
     
-    otherShooter = [[UITextField alloc] initWithFrame:CGRectMake(470, 295, 100, 30)];
+    otherShooter = [[UITextField alloc] initWithFrame:CGRectMake(455, 295, 100, 30)];
     otherShooter.center = CGPointMake(otherShooter.center.x, _shooterLbl.center.y);
     otherShooter.borderStyle = UITextBorderStyleRoundedRect;
     otherShooter.placeholder = @"Other Shooter";
@@ -348,275 +347,275 @@ UIAlertView *overWriteAlert;
     [self.view addSubview:otherShooter];
 }
 -(void)preferredGoalRowSetUp{
-    preferredHigh = [[UIControl alloc] initWithFrame:CGRectMake(230, 345, 80, 30)];
+    preferredHigh = [[UIControl alloc] initWithFrame:CGRectMake(210, 345, 80, 30)];
     preferredHigh.center = CGPointMake(preferredHigh.center.x, _preferredGoalLbl.center.y);
     [preferredHigh addTarget:self action:@selector(preferredGoalSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    preferredHigh.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    preferredHigh.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     preferredHigh.layer.cornerRadius = 5;
     UILabel *preferredHighLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     preferredHighLbl.text = @"High";
     preferredHighLbl.textColor = [UIColor whiteColor];
     preferredHighLbl.textAlignment = NSTextAlignmentCenter;
-    preferredHighLbl.font = [UIFont systemFontOfSize:12];
+    preferredHighLbl.font = [UIFont boldSystemFontOfSize:12];
     preferredHighLbl.backgroundColor = [UIColor clearColor];
     [preferredHigh addSubview:preferredHighLbl];
     [self.view addSubview:preferredHigh];
     
-    preferredLow = [[UIControl alloc] initWithFrame:CGRectMake(320, 345, 80, 30)];
+    preferredLow = [[UIControl alloc] initWithFrame:CGRectMake(300, 345, 80, 30)];
     preferredLow.center = CGPointMake(preferredLow.center.x, _preferredGoalLbl.center.y);
     [preferredLow addTarget:self action:@selector(preferredGoalSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    preferredLow.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    preferredLow.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     preferredLow.layer.cornerRadius = 5;
     UILabel *preferredLowLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     preferredLowLbl.text = @"Low";
     preferredLowLbl.textColor = [UIColor whiteColor];
     preferredLowLbl.textAlignment = NSTextAlignmentCenter;
-    preferredLowLbl.font = [UIFont systemFontOfSize:12];
+    preferredLowLbl.font = [UIFont boldSystemFontOfSize:12];
     preferredLowLbl.backgroundColor = [UIColor clearColor];
     [preferredLow addSubview:preferredLowLbl];
     [self.view addSubview:preferredLow];
 }
 -(void)goalieArmRowSetUp{
-    goalieArmYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 395, 80, 30)];
+    goalieArmYes = [[UIControl alloc] initWithFrame:CGRectMake(210, 395, 80, 30)];
     goalieArmYes.center = CGPointMake(goalieArmYes.center.x, _goalieArmLbl.center.y);
     [goalieArmYes addTarget:self action:@selector(goalieArmSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    goalieArmYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    goalieArmYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     goalieArmYes.layer.cornerRadius = 5;
     UILabel *goalieArmYesLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     goalieArmYesLbl.text = @"Yes";
     goalieArmYesLbl.textColor = [UIColor whiteColor];
     goalieArmYesLbl.textAlignment = NSTextAlignmentCenter;
-    goalieArmYesLbl.font = [UIFont systemFontOfSize:12];
+    goalieArmYesLbl.font = [UIFont boldSystemFontOfSize:12];
     goalieArmYesLbl.backgroundColor = [UIColor clearColor];
     [goalieArmYes addSubview:goalieArmYesLbl];
     [self.view addSubview:goalieArmYes];
     
-    goalieArmNo = [[UIControl alloc] initWithFrame:CGRectMake(320, 395, 80, 30)];
+    goalieArmNo = [[UIControl alloc] initWithFrame:CGRectMake(300, 395, 80, 30)];
     goalieArmNo.center = CGPointMake(goalieArmNo.center.x, _goalieArmLbl.center.y);
     [goalieArmNo addTarget:self action:@selector(goalieArmSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    goalieArmNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    goalieArmNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     goalieArmNo.layer.cornerRadius = 5;
     UILabel *goalieArmNoLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     goalieArmNoLbl.text = @"No";
     goalieArmNoLbl.textColor = [UIColor whiteColor];
     goalieArmNoLbl.textAlignment = NSTextAlignmentCenter;
-    goalieArmNoLbl.font = [UIFont systemFontOfSize:12];
+    goalieArmNoLbl.font = [UIFont boldSystemFontOfSize:12];
     goalieArmNoLbl.backgroundColor = [UIColor clearColor];
     [goalieArmNo addSubview:goalieArmNoLbl];
     [self.view addSubview:goalieArmNo];
 }
 -(void)floorCollectorRowSetUp{
-    floorCollectorYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 446, 80, 30)];
+    floorCollectorYes = [[UIControl alloc] initWithFrame:CGRectMake(210, 446, 80, 30)];
     floorCollectorYes.center = CGPointMake(floorCollectorYes.center.x, _floorCollectorLbl.center.y);
     [floorCollectorYes addTarget:self action:@selector(floorCollectorSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    floorCollectorYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    floorCollectorYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     floorCollectorYes.layer.cornerRadius = 5;
     UILabel *floorCollectorYesLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     floorCollectorYesLbl.text = @"Yes";
     floorCollectorYesLbl.textColor = [UIColor whiteColor];
     floorCollectorYesLbl.textAlignment = NSTextAlignmentCenter;
-    floorCollectorYesLbl.font = [UIFont systemFontOfSize:12];
+    floorCollectorYesLbl.font = [UIFont boldSystemFontOfSize:12];
     floorCollectorYesLbl.backgroundColor = [UIColor clearColor];
     [floorCollectorYes addSubview:floorCollectorYesLbl];
     [self.view addSubview:floorCollectorYes];
     
-    floorCollectorNo = [[UIControl alloc] initWithFrame:CGRectMake(320, 446, 80, 30)];
+    floorCollectorNo = [[UIControl alloc] initWithFrame:CGRectMake(300, 446, 80, 30)];
     floorCollectorNo.center = CGPointMake(floorCollectorNo.center.x, _floorCollectorLbl.center.y);
     [floorCollectorNo addTarget:self action:@selector(floorCollectorSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    floorCollectorNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    floorCollectorNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     floorCollectorNo.layer.cornerRadius = 5;
     UILabel *floorCollectorNoLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     floorCollectorNoLbl.text = @"No";
     floorCollectorNoLbl.textColor = [UIColor whiteColor];
     floorCollectorNoLbl.textAlignment = NSTextAlignmentCenter;
-    floorCollectorNoLbl.font = [UIFont systemFontOfSize:12];
+    floorCollectorNoLbl.font = [UIFont boldSystemFontOfSize:12];
     floorCollectorNoLbl.backgroundColor = [UIColor clearColor];
     [floorCollectorNo addSubview:floorCollectorNoLbl];
     [self.view addSubview:floorCollectorNo];
 }
 -(void)autonomousRowSetUp{
-    autonomousYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 80, 30)];
+    autonomousYes = [[UIControl alloc] initWithFrame:CGRectMake(210, 496, 80, 30)];
     autonomousYes.center = CGPointMake(autonomousYes.center.x, _autonomousLbl.center.y);
     [autonomousYes addTarget:self action:@selector(autonomousSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    autonomousYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    autonomousYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     autonomousYes.layer.cornerRadius = 5;
     UILabel *autonomousYesLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     autonomousYesLbl.text = @"Yes";
     autonomousYesLbl.textColor = [UIColor whiteColor];
     autonomousYesLbl.textAlignment = NSTextAlignmentCenter;
-    autonomousYesLbl.font = [UIFont systemFontOfSize:12];
+    autonomousYesLbl.font = [UIFont boldSystemFontOfSize:12];
     autonomousYesLbl.backgroundColor = [UIColor clearColor];
     [autonomousYes addSubview:autonomousYesLbl];
     [self.view addSubview:autonomousYes];
     
-    autonomousNo = [[UIControl alloc] initWithFrame:CGRectMake(320, 496, 80, 30)];
+    autonomousNo = [[UIControl alloc] initWithFrame:CGRectMake(300, 496, 80, 30)];
     autonomousNo.center = CGPointMake(autonomousNo.center.x, _autonomousLbl.center.y);
     [autonomousNo addTarget:self action:@selector(autonomousSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    autonomousNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    autonomousNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     autonomousNo.layer.cornerRadius = 5;
     UILabel *autonomousNoLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     autonomousNoLbl.text = @"No";
     autonomousNoLbl.textColor = [UIColor whiteColor];
     autonomousNoLbl.textAlignment = NSTextAlignmentCenter;
-    autonomousNoLbl.font = [UIFont systemFontOfSize:12];
+    autonomousNoLbl.font = [UIFont boldSystemFontOfSize:12];
     autonomousNoLbl.backgroundColor = [UIColor clearColor];
     [autonomousNo addSubview:autonomousNoLbl];
     [self.view addSubview:autonomousNo];
 }
 -(void)autoStartingPositionRowSetUp{
-    startLeft = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 70, 30)];
+    startLeft = [[UIControl alloc] initWithFrame:CGRectMake(210, 496, 70, 30)];
     startLeft.center = CGPointMake(startLeft.center.x, _autoStartingPositionLbl.center.y);
     [startLeft addTarget:self action:@selector(autoStartingPositionSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    startLeft.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    startLeft.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     startLeft.layer.cornerRadius = 5;
     UILabel *startLeftLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
     startLeftLbl.text = @"Left";
     startLeftLbl.textColor = [UIColor whiteColor];
     startLeftLbl.textAlignment = NSTextAlignmentCenter;
-    startLeftLbl.font = [UIFont systemFontOfSize:12];
+    startLeftLbl.font = [UIFont boldSystemFontOfSize:12];
     startLeftLbl.backgroundColor = [UIColor clearColor];
     [startLeft addSubview:startLeftLbl];
     [self.view addSubview:startLeft];
     
-    startMiddle = [[UIControl alloc] initWithFrame:CGRectMake(310, 496, 70, 30)];
+    startMiddle = [[UIControl alloc] initWithFrame:CGRectMake(290, 496, 70, 30)];
     startMiddle.center = CGPointMake(startMiddle.center.x, _autoStartingPositionLbl.center.y);
     [startMiddle addTarget:self action:@selector(autoStartingPositionSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    startMiddle.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    startMiddle.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     startMiddle.layer.cornerRadius = 5;
     UILabel *startMiddleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
     startMiddleLbl.text = @"Middle";
     startMiddleLbl.textColor = [UIColor whiteColor];
     startMiddleLbl.textAlignment = NSTextAlignmentCenter;
-    startMiddleLbl.font = [UIFont systemFontOfSize:12];
+    startMiddleLbl.font = [UIFont boldSystemFontOfSize:12];
     startMiddleLbl.backgroundColor = [UIColor clearColor];
     [startMiddle addSubview:startMiddleLbl];
     [self.view addSubview:startMiddle];
     
-    startRight = [[UIControl alloc] initWithFrame:CGRectMake(390, 496, 70, 30)];
+    startRight = [[UIControl alloc] initWithFrame:CGRectMake(370, 496, 70, 30)];
     startRight.center = CGPointMake(startRight.center.x, _autoStartingPositionLbl.center.y);
     [startRight addTarget:self action:@selector(autoStartingPositionSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    startRight.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    startRight.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     startRight.layer.cornerRadius = 5;
     UILabel *startRightLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
     startRightLbl.text = @"Right";
     startRightLbl.textColor = [UIColor whiteColor];
     startRightLbl.textAlignment = NSTextAlignmentCenter;
-    startRightLbl.font = [UIFont systemFontOfSize:12];
+    startRightLbl.font = [UIFont boldSystemFontOfSize:12];
     startRightLbl.backgroundColor = [UIColor clearColor];
     [startRight addSubview:startRightLbl];
     [self.view addSubview:startRight];
     
-    startGoalie = [[UIControl alloc] initWithFrame:CGRectMake(470, 496, 70, 30)];
+    startGoalie = [[UIControl alloc] initWithFrame:CGRectMake(450, 496, 70, 30)];
     startGoalie.center = CGPointMake(startGoalie.center.x, _autoStartingPositionLbl.center.y);
     [startGoalie addTarget:self action:@selector(autoStartingPositionSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    startGoalie.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    startGoalie.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     startGoalie.layer.cornerRadius = 5;
     UILabel *startGoalieLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
     startGoalieLbl.text = @"Goalie";
     startGoalieLbl.textColor = [UIColor whiteColor];
     startGoalieLbl.textAlignment = NSTextAlignmentCenter;
-    startGoalieLbl.font = [UIFont systemFontOfSize:12];
+    startGoalieLbl.font = [UIFont boldSystemFontOfSize:12];
     startGoalieLbl.backgroundColor = [UIColor clearColor];
     [startGoalie addSubview:startGoalieLbl];
     [self.view addSubview:startGoalie];
 }
 -(void)hotGoalTrackingRowSetUp{
-    hotGoalYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 80, 30)];
+    hotGoalYes = [[UIControl alloc] initWithFrame:CGRectMake(210, 496, 80, 30)];
     hotGoalYes.center = CGPointMake(hotGoalYes.center.x, _hotGoalTrackingLbl.center.y);
     [hotGoalYes addTarget:self action:@selector(hotGoalTrackingSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    hotGoalYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    hotGoalYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     hotGoalYes.layer.cornerRadius = 5;
     UILabel *hotGoalYesLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     hotGoalYesLbl.text = @"Yes";
     hotGoalYesLbl.textColor = [UIColor whiteColor];
     hotGoalYesLbl.textAlignment = NSTextAlignmentCenter;
-    hotGoalYesLbl.font = [UIFont systemFontOfSize:12];
+    hotGoalYesLbl.font = [UIFont boldSystemFontOfSize:12];
     hotGoalYesLbl.backgroundColor = [UIColor clearColor];
     [hotGoalYes addSubview:hotGoalYesLbl];
     [self.view addSubview:hotGoalYes];
     
-    hotGoalNo = [[UIControl alloc] initWithFrame:CGRectMake(320, 496, 80, 30)];
+    hotGoalNo = [[UIControl alloc] initWithFrame:CGRectMake(300, 496, 80, 30)];
     hotGoalNo.center = CGPointMake(hotGoalNo.center.x, _hotGoalTrackingLbl.center.y);
     [hotGoalNo addTarget:self action:@selector(hotGoalTrackingSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    hotGoalNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    hotGoalNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     hotGoalNo.layer.cornerRadius = 5;
     UILabel *hotGoalNoLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     hotGoalNoLbl.text = @"No";
     hotGoalNoLbl.textColor = [UIColor whiteColor];
     hotGoalNoLbl.textAlignment = NSTextAlignmentCenter;
-    hotGoalNoLbl.font = [UIFont systemFontOfSize:12];
+    hotGoalNoLbl.font = [UIFont boldSystemFontOfSize:12];
     hotGoalNoLbl.backgroundColor = [UIColor clearColor];
     [hotGoalNo addSubview:hotGoalNoLbl];
     [self.view addSubview:hotGoalNo];
 }
 -(void)catchingMechanismRowSetUp{
-    catchingYes = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 80, 30)];
+    catchingYes = [[UIControl alloc] initWithFrame:CGRectMake(210, 496, 80, 30)];
     catchingYes.center = CGPointMake(catchingYes.center.x, _catchingMechanismLbl.center.y);
     [catchingYes addTarget:self action:@selector(catchingMechanismSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    catchingYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    catchingYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     catchingYes.layer.cornerRadius = 5;
     UILabel *catchingYesLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     catchingYesLbl.text = @"Yes";
     catchingYesLbl.textColor = [UIColor whiteColor];
     catchingYesLbl.textAlignment = NSTextAlignmentCenter;
-    catchingYesLbl.font = [UIFont systemFontOfSize:12];
+    catchingYesLbl.font = [UIFont boldSystemFontOfSize:12];
     catchingYesLbl.backgroundColor = [UIColor clearColor];
     [catchingYes addSubview:catchingYesLbl];
     [self.view addSubview:catchingYes];
     
-    catchingNo = [[UIControl alloc] initWithFrame:CGRectMake(320, 496, 80, 30)];
+    catchingNo = [[UIControl alloc] initWithFrame:CGRectMake(300, 496, 80, 30)];
     catchingNo.center = CGPointMake(catchingNo.center.x, _catchingMechanismLbl.center.y);
     [catchingNo addTarget:self action:@selector(catchingMechanismSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    catchingNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    catchingNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     catchingNo.layer.cornerRadius = 5;
     UILabel *catchingNoLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     catchingNoLbl.text = @"No";
     catchingNoLbl.textColor = [UIColor whiteColor];
     catchingNoLbl.textAlignment = NSTextAlignmentCenter;
-    catchingNoLbl.font = [UIFont systemFontOfSize:12];
+    catchingNoLbl.font = [UIFont boldSystemFontOfSize:12];
     catchingNoLbl.backgroundColor = [UIColor clearColor];
     [catchingNo addSubview:catchingNoLbl];
     [self.view addSubview:catchingNo];
 }
 -(void)bumperQualityRowSetUp{
-    bumperOne = [[UIControl alloc] initWithFrame:CGRectMake(230, 496, 70, 30)];
+    bumperOne = [[UIControl alloc] initWithFrame:CGRectMake(210, 496, 70, 30)];
     bumperOne.center = CGPointMake(bumperOne.center.x, _bumperQualityLbl.center.y);
     [bumperOne addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    bumperOne.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    bumperOne.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     bumperOne.layer.cornerRadius = 5;
     UILabel *bumperOneLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
     bumperOneLbl.text = @"One";
     bumperOneLbl.textColor = [UIColor whiteColor];
     bumperOneLbl.textAlignment = NSTextAlignmentCenter;
-    bumperOneLbl.font = [UIFont systemFontOfSize:12];
+    bumperOneLbl.font = [UIFont boldSystemFontOfSize:12];
     bumperOneLbl.backgroundColor = [UIColor clearColor];
     [bumperOne addSubview:bumperOneLbl];
     [self.view addSubview:bumperOne];
     
-    bumperThree = [[UIControl alloc] initWithFrame:CGRectMake(310, 496, 70, 30)];
+    bumperThree = [[UIControl alloc] initWithFrame:CGRectMake(290, 496, 70, 30)];
     bumperThree.center = CGPointMake(bumperThree.center.x, _bumperQualityLbl.center.y);
     [bumperThree addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    bumperThree.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    bumperThree.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     bumperThree.layer.cornerRadius = 5;
     UILabel *bumperThreeLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
     bumperThreeLbl.text = @"Three";
     bumperThreeLbl.textColor = [UIColor whiteColor];
     bumperThreeLbl.textAlignment = NSTextAlignmentCenter;
-    bumperThreeLbl.font = [UIFont systemFontOfSize:12];
+    bumperThreeLbl.font = [UIFont boldSystemFontOfSize:12];
     bumperThreeLbl.backgroundColor = [UIColor clearColor];
     [bumperThree addSubview:bumperThreeLbl];
     [self.view addSubview:bumperThree];
     
-    bumperFive = [[UIControl alloc] initWithFrame:CGRectMake(390, 496, 70, 30)];
+    bumperFive = [[UIControl alloc] initWithFrame:CGRectMake(370, 496, 70, 30)];
     bumperFive.center = CGPointMake(bumperFive.center.x, _bumperQualityLbl.center.y);
     [bumperFive addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    bumperFive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    bumperFive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
     bumperFive.layer.cornerRadius = 5;
     UILabel *bumperFiveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
     bumperFiveLbl.text = @"Five";
     bumperFiveLbl.textColor = [UIColor whiteColor];
     bumperFiveLbl.textAlignment = NSTextAlignmentCenter;
-    bumperFiveLbl.font = [UIFont systemFontOfSize:12];
+    bumperFiveLbl.font = [UIFont boldSystemFontOfSize:12];
     bumperFiveLbl.backgroundColor = [UIColor clearColor];
     [bumperFive addSubview:bumperFiveLbl];
     [self.view addSubview:bumperFive];
@@ -648,7 +647,7 @@ UIAlertView *overWriteAlert;
     grayLayer.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
     [self.view addSubview:grayLayer];
     
-    cameraPopup = [[UIView alloc] initWithFrame:CGRectMake(209, 824, 350, 280)];
+    cameraPopup = [[UIView alloc] initWithFrame:CGRectMake(209, 824, 350, 330)];
     cameraPopup.backgroundColor = [UIColor whiteColor];
     cameraPopup.layer.cornerRadius = 15;
     
@@ -670,8 +669,17 @@ UIAlertView *overWriteAlert;
     usePhotoReelBtn.layer.cornerRadius = 10;
     [cameraPopup addSubview:usePhotoReelBtn];
     
+    UIButton *deletePhotoBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    deletePhotoBtn.frame = CGRectMake(30, 140, 290, 40);
+    [deletePhotoBtn addTarget:self action:@selector(deletePhoto) forControlEvents:UIControlEventTouchUpInside];
+    [deletePhotoBtn setTitle:@"Delete Photo" forState:UIControlStateNormal];
+    [deletePhotoBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [deletePhotoBtn setBackgroundColor:[UIColor redColor]];
+    deletePhotoBtn.layer.cornerRadius = 10;
+    [cameraPopup addSubview:deletePhotoBtn];
+    
     UIButton *cameraCancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    cameraCancelButton.frame = CGRectMake(30, 140, 290, 40);
+    cameraCancelButton.frame = CGRectMake(30, 200, 290, 40);
     [cameraCancelButton addTarget:self action:@selector(cancelCameraPopUp) forControlEvents:UIControlEventTouchUpInside];
     [cameraCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [cameraCancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -683,7 +691,7 @@ UIAlertView *overWriteAlert;
     
     cameraPopup.center = CGPointMake(384, 1164);
     [UIView animateWithDuration:0.2 animations:^{
-        cameraPopup.center = CGPointMake(384, 904);
+        cameraPopup.center = CGPointMake(384, 860);
     }];
     
 }
@@ -740,6 +748,16 @@ UIAlertView *overWriteAlert;
     }];
     
 }
+-(void)deletePhoto{
+    [UIView animateWithDuration:0.3 animations:^{
+        robotImage.alpha = 0;
+        robotImageControl.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
+    } completion:^(BOOL finished) {
+        robotImage.image = nil;
+        robotImage.alpha = 1;
+        [self cancelCameraPopUp];
+    }];
+}
 -(void)cancelCameraPopUp{
     [UIView animateWithDuration:0.2 animations:^{
         cameraPopup.center = CGPointMake(cameraPopup.center.x, 1164);
@@ -752,6 +770,8 @@ UIAlertView *overWriteAlert;
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    robotImageControl.layer.borderColor = [[UIColor clearColor] CGColor];
+    
     UIImage * image = [info objectForKey:UIImagePickerControllerEditedImage];
     
     CGSize imageSize = image.size;
@@ -783,7 +803,7 @@ UIAlertView *overWriteAlert;
     if ([controller isEqual:sixEightWheelDrop]) {
         if (isSixEightWheelDrop) {
             [UIView animateWithDuration:0.2 animations:^{
-                sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = false;
             driveTrainString = @"";
@@ -791,9 +811,9 @@ UIAlertView *overWriteAlert;
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                mechanum.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                swerveCrab.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = true;
             isFourWheelDrive = false;
@@ -808,17 +828,17 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:fourWheelDrive]){
         if (isFourWheelDrive) {
             [UIView animateWithDuration:0.2 animations:^{
-                fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isFourWheelDrive = false;
             driveTrainString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 fourWheelDrive.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                mechanum.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                swerveCrab.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = false;
             isFourWheelDrive = true;
@@ -833,17 +853,17 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:mechanum]){
         if (isMechanum) {
             [UIView animateWithDuration:0.2 animations:^{
-                mechanum.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isMechanum = false;
             driveTrainString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 mechanum.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                swerveCrab.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = false;
             isFourWheelDrive = false;
@@ -858,16 +878,16 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:swerveCrab]){
         if (isSwerveCrab) {
             [UIView animateWithDuration:0.2 animations:^{
-                swerveCrab.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSwerveCrab = false;
             driveTrainString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                mechanum.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 swerveCrab.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isSixEightWheelDrop = false;
@@ -880,13 +900,12 @@ UIAlertView *overWriteAlert;
             driveTrainString = @"Swerve/Crab";
         }
     }
-    NSLog(@"DriveTrain : %@", driveTrainString);
 }
 -(void)shooterSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:shooterNone]){
         if (isShooterNone) {
             [UIView animateWithDuration:0.2 animations:^{
-                shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterNone.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isShooterNone = false;
             shooterString = @"";
@@ -894,8 +913,8 @@ UIAlertView *overWriteAlert;
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 shooterNone.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isShooterNone = true;
             isShooterCatapult = false;
@@ -909,16 +928,16 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:shooterCatapult]) {
         if (isShooterCatapult) {
             [UIView animateWithDuration:0.2 animations:^{
-                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isShooterCatapult = false;
             shooterString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterNone.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 shooterCatapult.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isShooterNone = false;
             isShooterCatapult = true;
@@ -932,15 +951,15 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:shooterPuncher]) {
         if (isShooterPuncher) {
             [UIView animateWithDuration:0.2 animations:^{
-                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isShooterPuncher = false;
             shooterString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterNone.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 shooterPuncher.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isShooterNone = false;
@@ -957,7 +976,7 @@ UIAlertView *overWriteAlert;
     if ([controller isEqual:preferredHigh]){
         if (isPreferredHigh) {
             [UIView animateWithDuration:0.2 animations:^{
-                preferredHigh.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                preferredHigh.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isPreferredHigh = false;
             preferredGoalString = @"";
@@ -965,7 +984,7 @@ UIAlertView *overWriteAlert;
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 preferredHigh.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                preferredLow.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                preferredLow.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isPreferredHigh = true;
             isPreferredLow = false;
@@ -975,14 +994,14 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:preferredLow]){
         if (isPreferredLow) {
             [UIView animateWithDuration:0.2 animations:^{
-                preferredLow.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                preferredLow.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isPreferredLow = false;
             preferredGoalString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                preferredHigh.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                preferredHigh.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 preferredLow.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isPreferredHigh = false;
@@ -995,7 +1014,7 @@ UIAlertView *overWriteAlert;
     if ([controller isEqual:goalieArmYes]){
         if (isGoalieArmYes) {
             [UIView animateWithDuration:0.2 animations:^{
-                goalieArmYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                goalieArmYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isGoalieArmYes = false;
             goalieArmString = @"";
@@ -1003,7 +1022,7 @@ UIAlertView *overWriteAlert;
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 goalieArmYes.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                goalieArmNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                goalieArmNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isGoalieArmYes = true;
             isGoalieArmNo = false;
@@ -1013,14 +1032,14 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:goalieArmNo]){
         if (isGoalieArmNo) {
             [UIView animateWithDuration:0.2 animations:^{
-                goalieArmNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                goalieArmNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isGoalieArmNo = false;
             goalieArmString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                goalieArmYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                goalieArmYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 goalieArmNo.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isGoalieArmYes = false;
@@ -1033,7 +1052,7 @@ UIAlertView *overWriteAlert;
     if ([controller isEqual:floorCollectorYes]){
         if (isFloorCollectorYes) {
             [UIView animateWithDuration:0.2 animations:^{
-                floorCollectorYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                floorCollectorYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isFloorCollectorYes = false;
             floorCollectorString = @"";
@@ -1041,7 +1060,7 @@ UIAlertView *overWriteAlert;
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 floorCollectorYes.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                floorCollectorNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                floorCollectorNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isFloorCollectorYes = true;
             isFloorCollectorNo = false;
@@ -1051,14 +1070,14 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:floorCollectorNo]){
         if (isFloorCollectorNo) {
             [UIView animateWithDuration:0.2 animations:^{
-                floorCollectorNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                floorCollectorNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isFloorCollectorNo = false;
             floorCollectorString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                floorCollectorYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                floorCollectorYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 floorCollectorNo.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isFloorCollectorYes = false;
@@ -1071,7 +1090,7 @@ UIAlertView *overWriteAlert;
     if ([controller isEqual:autonomousYes]){
         if (isAutonomousYes) {
             [UIView animateWithDuration:0.2 animations:^{
-                autonomousYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                autonomousYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isAutonomousYes= false;
             autonomousString = @"";
@@ -1079,7 +1098,7 @@ UIAlertView *overWriteAlert;
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 autonomousYes.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                autonomousNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                autonomousNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isAutonomousYes = true;
             isAutonomousNo = false;
@@ -1089,14 +1108,14 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:autonomousNo]){
         if (isAutonomousNo) {
             [UIView animateWithDuration:0.2 animations:^{
-                autonomousNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                autonomousNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isAutonomousNo = false;
             autonomousString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                autonomousYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                autonomousYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 autonomousNo.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isAutonomousYes = false;
@@ -1109,7 +1128,7 @@ UIAlertView *overWriteAlert;
     if ([controller isEqual:startLeft]){
         if (isStartLeft) {
             [UIView animateWithDuration:0.2 animations:^{
-                startLeft.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startLeft.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartLeft = false;
             autoStartingPositionString = @"";
@@ -1117,9 +1136,9 @@ UIAlertView *overWriteAlert;
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 startLeft.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                startMiddle.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                startRight.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                startGoalie.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startMiddle.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                startRight.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                startGoalie.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartLeft = true;
             isStartMiddle = false;
@@ -1131,17 +1150,17 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:startMiddle]) {
         if (isStartMiddle) {
             [UIView animateWithDuration:0.2 animations:^{
-                startMiddle.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startMiddle.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartMiddle = false;
             autoStartingPositionString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                startLeft.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startLeft.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 startMiddle.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                startRight.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                startGoalie.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startRight.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                startGoalie.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartLeft = false;
             isStartMiddle = true;
@@ -1153,17 +1172,17 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:startRight]) {
         if (isStartRight) {
             [UIView animateWithDuration:0.2 animations:^{
-                startRight.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startRight.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartRight = false;
             autoStartingPositionString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                startLeft.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                startMiddle.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startLeft.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                startMiddle.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 startRight.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                startGoalie.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startGoalie.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartLeft = false;
             isStartMiddle = false;
@@ -1175,16 +1194,16 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:startGoalie]) {
         if (isStartGoalie) {
             [UIView animateWithDuration:0.2 animations:^{
-                startGoalie.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startGoalie.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartGoalie = false;
             autoStartingPositionString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                startLeft.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                startMiddle.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                startRight.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                startLeft.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                startMiddle.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                startRight.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 startGoalie.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isStartLeft = false;
@@ -1199,7 +1218,7 @@ UIAlertView *overWriteAlert;
     if ([controller isEqual:hotGoalYes]){
         if (isHotGoalYes) {
             [UIView animateWithDuration:0.2 animations:^{
-                hotGoalYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                hotGoalYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isHotGoalYes = false;
             hotGoalTrackingString = @"";
@@ -1207,7 +1226,7 @@ UIAlertView *overWriteAlert;
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 hotGoalYes.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                hotGoalNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                hotGoalNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isHotGoalYes = true;
             isHotGoalNo = false;
@@ -1217,14 +1236,14 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:hotGoalNo]){
         if (isHotGoalNo) {
             [UIView animateWithDuration:0.2 animations:^{
-                hotGoalNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                hotGoalNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isHotGoalNo = false;
             hotGoalTrackingString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                hotGoalYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                hotGoalYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 hotGoalNo.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isHotGoalYes = false;
@@ -1237,7 +1256,7 @@ UIAlertView *overWriteAlert;
     if ([controller isEqual:catchingYes]){
         if (isCatchingYes) {
             [UIView animateWithDuration:0.2 animations:^{
-                catchingYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                catchingYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isCatchingYes = false;
             catchingMechanismString = @"";
@@ -1245,7 +1264,7 @@ UIAlertView *overWriteAlert;
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 catchingYes.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                catchingNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                catchingNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isCatchingYes = true;
             isCatchingNo = false;
@@ -1255,14 +1274,14 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:catchingNo]){
         if (isCatchingNo) {
             [UIView animateWithDuration:0.2 animations:^{
-                catchingNo.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                catchingNo.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isCatchingNo = false;
             catchingMechanismString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                catchingYes.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                catchingYes.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 catchingNo.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isCatchingYes = false;
@@ -1275,7 +1294,7 @@ UIAlertView *overWriteAlert;
     if ([controller isEqual:bumperOne]){
         if (isBumperOne) {
             [UIView animateWithDuration:0.2 animations:^{
-                bumperOne.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                bumperOne.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isBumperOne = false;
             bumperQualityString = @"";
@@ -1283,8 +1302,8 @@ UIAlertView *overWriteAlert;
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 bumperOne.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                bumperThree.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                bumperFive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                bumperThree.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                bumperFive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isBumperOne = true;
             isBumperThree = false;
@@ -1295,16 +1314,16 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:bumperThree]){
         if (isBumperThree) {
             [UIView animateWithDuration:0.2 animations:^{
-                bumperThree.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                bumperThree.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isBumperThree = false;
             bumperQualityString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                bumperOne.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                bumperOne.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 bumperThree.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                bumperFive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                bumperFive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isBumperOne = false;
             isBumperThree = true;
@@ -1315,15 +1334,15 @@ UIAlertView *overWriteAlert;
     else if ([controller isEqual:bumperFive]){
         if (isBumperFive) {
             [UIView animateWithDuration:0.2 animations:^{
-                bumperFive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                bumperFive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isBumperFive = false;
             bumperQualityString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                bumperOne.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                bumperThree.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                bumperOne.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                bumperThree.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 bumperFive.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isBumperOne = false;
@@ -1335,15 +1354,14 @@ UIAlertView *overWriteAlert;
 }
 
 
-
 -(void)textFieldDidChange:(UITextField *)textField{
     if ([textField isEqual:otherDriveTrain]) {
         if (otherDriveTrain.text.length > 0) {
             [UIView animateWithDuration:0.2 animations:^{
-                sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                mechanum.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                swerveCrab.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = false;
             isFourWheelDrive = false;
@@ -1360,9 +1378,9 @@ UIAlertView *overWriteAlert;
     else if ([textField isEqual:otherShooter]){
         if (otherShooter.text.length > 0) {
             [UIView animateWithDuration:0.2 animations:^{
-                shooterNone.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                shooterNone.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                shooterCatapult.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                shooterPuncher.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isShooterNone = false;
             isShooterCatapult = false;
@@ -1395,7 +1413,7 @@ UIAlertView *overWriteAlert;
             _additionalNotesTxtField.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
         }
         [UIView animateWithDuration:0.2 animations:^{
-            _additionalNotesTxtField.center = CGPointMake(_additionalNotesTxtField.center.x, 800);
+            _additionalNotesTxtField.center = CGPointMake(_additionalNotesTxtField.center.x, 810);
         } completion:^(BOOL finished) {}];
     }
 }
@@ -1523,12 +1541,13 @@ UIAlertView *overWriteAlert;
     [UIView animateWithDuration:0.2 animations:^{
         for (UIControl *c in [self.view subviews]) {
             if ([c.backgroundColor isEqual:[UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0]]) {
-                c.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                c.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }
         }
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.2 animations:^{
             robotImage.alpha = 0;
+            robotImageControl.layer.borderColor = [[UIColor clearColor] CGColor];
         } completion:^(BOOL finished) {
             robotImage.image = nil;
             robotImage.alpha = 1;
@@ -1589,22 +1608,6 @@ UIAlertView *overWriteAlert;
 
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
