@@ -75,7 +75,6 @@
 		86AB8DA5189342D200D411C9 /* PitCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitCell.m; sourceTree = "<group>"; };
 		86AB8DA71893575600D411C9 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoreDataTableViewController.h; path = ../../../Downloads/CoreDataTableViewController/CoreDataTableViewController.h; sourceTree = "<group>"; };
 		86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoreDataTableViewController.m; path = ../../../Downloads/CoreDataTableViewController/CoreDataTableViewController.m; sourceTree = "<group>"; };
-		86AB8DAA189374C300D411C9 /* CODE Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CODE Bold.otf"; path = "../../../Downloads/code 2/CODE Bold.otf"; sourceTree = "<group>"; };
 		86CDCD1B188C5E80002B6522 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
 		86CDCD1C188C5E80002B6522 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		86CDCD1E188C5E81002B6522 /* Regional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regional.h; sourceTree = "<group>"; };
@@ -269,7 +268,6 @@
 		8846FED71826D7D100B37E44 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				86AB8DAA189374C300D411C9 /* CODE Bold.otf */,
 				86AB8DA71893575600D411C9 /* CoreDataTableViewController.h */,
 				86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */,
 				28C8C755185BB91F000FAE10 /* MatchCell.h */,

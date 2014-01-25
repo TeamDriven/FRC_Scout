@@ -100,6 +100,13 @@ NSFetchedResultsController *frc;
     // but don’t worry, we’re going to make it easy on you ...
 }
 
+-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+    PitTeam *ptSelected = [frc objectAtIndexPath:indexPath];
+    UIAlertView *teamSelectedAlert = [[UIAlertView alloc] initWithTitle:[[NSString alloc] initWithFormat:@"You Selected %@", ptSelected.teamName] message:[[NSString alloc] initWithFormat:@"They have a %@ drivetrain!", ptSelected.driveTrain] delegate:nil cancelButtonTitle:@"Awesome! You Work!" otherButtonTitles: nil];
+    [teamSelectedAlert show];
+//    [_tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 - (IBAction)searching:(id)sender {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PitTeam"];
     NSNumberFormatter *checker = [[NSNumberFormatter alloc] init];
