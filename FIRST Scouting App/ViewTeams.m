@@ -34,6 +34,8 @@ NSFetchedResultsController *frc;
 - (void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    _teamSearch.delegate = self;
+    
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
@@ -119,6 +121,17 @@ NSFetchedResultsController *frc;
     cdtvc = [[CoreDataTableViewController alloc] init];
     cdtvc.fetchedResultsController = frc;
     [_tableView reloadData];
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    
+    return YES;
+}
+
+
+- (IBAction)screenTapped:(id)sender {
+    [_teamSearch resignFirstResponder];
 }
 
 @end

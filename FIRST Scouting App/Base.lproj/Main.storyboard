@@ -1124,7 +1124,7 @@
                         <viewControllerLayoutGuide type="top" id="CfC-S9-5nz"/>
                         <viewControllerLayoutGuide type="bottom" id="6Fv-iO-058"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="fcc-29-CIe">
+                    <view key="view" contentMode="scaleToFill" id="fcc-29-CIe" customClass="UIControl">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -1132,7 +1132,7 @@
                                 <rect key="frame" x="326" y="100" width="116" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="alphabet" returnKeyType="done"/>
                                 <connections>
                                     <action selector="searching:" destination="a6y-Ut-amC" eventType="editingChanged" id="mn4-oX-GMG"/>
                                 </connections>
@@ -1184,6 +1184,9 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <connections>
+                            <action selector="screenTapped:" destination="a6y-Ut-amC" eventType="touchUpInside" id="N1a-u3-Gla"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="View Teams" id="4eP-pC-2F3"/>
                     <connections>
