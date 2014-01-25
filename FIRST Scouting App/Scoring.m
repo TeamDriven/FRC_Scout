@@ -686,17 +686,21 @@ UILabel *blue3UpdaterLbl;
                                  v.hidden = false;
                              }
                              _movementLine.alpha = 1;
-                             [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-                                 for (UIView *v in autoScreenObjects) {
-                                     if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
-                                         v.userInteractionEnabled = YES;
-                                     }
-                                     v.alpha = 1;
-                                 }
-                                 _mobilityBonusLbl.backgroundColor = [UIColor whiteColor];
-                                 _mobilityBonusLbl.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
-                                 _mobilityBonusLbl.layer.borderWidth = 1;
-                             } completion:^(BOOL finished) {}];
+                             [self autoOn];
+//                             [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+//                                 for (UIView *v in autoScreenObjects) {
+//                                     if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
+//                                         v.userInteractionEnabled = YES;
+//                                     }
+//                                     v.alpha = 1;
+//                                 }
+//                                 for (UIView *v in teleopScreenObjects) {
+//                                     v.alpha = 0;
+//                                 }
+//                                 _mobilityBonusLbl.backgroundColor = [UIColor whiteColor];
+//                                 _mobilityBonusLbl.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
+//                                 _mobilityBonusLbl.layer.borderWidth = 1;
+//                             } completion:^(BOOL finished) {}];
 
 //                             self.myPeerIDS = [[MCPeerID alloc] initWithDisplayName:pos];
 //                             [self.browserSession disconnect];

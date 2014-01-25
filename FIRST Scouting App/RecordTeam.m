@@ -684,6 +684,8 @@ UIAlertView *overWriteAlert;
 }
 
 -(void)getAnImage{
+    [_teamNameField resignFirstResponder];
+    [_teamNumberField resignFirstResponder];
     NSInteger cancelButtonY;
     NSInteger popUpViewY;
     
@@ -958,6 +960,8 @@ UIAlertView *overWriteAlert;
             driveTrainString = @"Swerve/Crab";
         }
     }
+    [_teamNameField resignFirstResponder];
+    [_teamNumberField resignFirstResponder];
 }
 -(void)shooterSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:shooterNone]){
@@ -1029,6 +1033,8 @@ UIAlertView *overWriteAlert;
             shooterString = @"Puncher";
         }
     }
+    [_teamNameField resignFirstResponder];
+    [_teamNumberField resignFirstResponder];
 }
 -(void)preferredGoalSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:preferredHigh]){
@@ -1067,6 +1073,8 @@ UIAlertView *overWriteAlert;
             preferredGoalString = @"Low";
         }
     }
+    [_teamNameField resignFirstResponder];
+    [_teamNumberField resignFirstResponder];
 }
 -(void)goalieArmSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:goalieArmYes]){
@@ -1105,6 +1113,8 @@ UIAlertView *overWriteAlert;
             goalieArmString = @"No";
         }
     }
+    [_teamNameField resignFirstResponder];
+    [_teamNumberField resignFirstResponder];
 }
 -(void)floorCollectorSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:floorCollectorYes]){
@@ -1143,6 +1153,8 @@ UIAlertView *overWriteAlert;
             floorCollectorString = @"No";
         }
     }
+    [_teamNameField resignFirstResponder];
+    [_teamNumberField resignFirstResponder];
 }
 -(void)autonomousSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:autonomousYes]){
@@ -1181,6 +1193,8 @@ UIAlertView *overWriteAlert;
             autonomousString = @"No";
         }
     }
+    [_teamNameField resignFirstResponder];
+    [_teamNumberField resignFirstResponder];
 }
 -(void)autoStartingPositionSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:startLeft]){
@@ -1271,6 +1285,8 @@ UIAlertView *overWriteAlert;
             autoStartingPositionString = @"Goalie";
         }
     }
+    [_teamNameField resignFirstResponder];
+    [_teamNumberField resignFirstResponder];
 }
 -(void)hotGoalTrackingSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:hotGoalYes]){
@@ -1309,6 +1325,8 @@ UIAlertView *overWriteAlert;
             hotGoalTrackingString = @"No";
         }
     }
+    [_teamNameField resignFirstResponder];
+    [_teamNumberField resignFirstResponder];
 }
 -(void)catchingMechanismSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:catchingYes]){
@@ -1347,6 +1365,8 @@ UIAlertView *overWriteAlert;
             catchingMechanismString = @"No";
         }
     }
+    [_teamNameField resignFirstResponder];
+    [_teamNumberField resignFirstResponder];
 }
 -(void)bumperQualitySelectionTapped:(UIControl *)controller{
     if ([controller isEqual:bumperOne]){
@@ -1409,6 +1429,8 @@ UIAlertView *overWriteAlert;
             bumperQualityString = @"Five";
         }
     }
+    [_teamNameField resignFirstResponder];
+    [_teamNumberField resignFirstResponder];
 }
 
 
@@ -1505,7 +1527,7 @@ UIAlertView *overWriteAlert;
     }
     else{
         NSData *imageData;
-        if ([_additionalNotesTxtField.text isEqualToString: @"Additional Notes"] && _additionalNotesTxtField.backgroundColor == [UIColor colorWithWhite:0.9 alpha:1.0]) {
+        if ([_additionalNotesTxtField.text isEqualToString: @"Additional Notes"]) {
             _additionalNotesTxtField.text = @"";
         }
         if (robotImage.image) {
