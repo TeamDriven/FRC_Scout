@@ -25,6 +25,7 @@ UIManagedDocument *FSAdocument;
 NSManagedObjectContext *context;
 
 // Robot Picture Stuff
+UILabel *robotImageLbl;
 UIControl *robotImageControl;
 UIImageView *robotImage;
 UIView *cameraPopup;
@@ -165,8 +166,8 @@ UIAlertView *overWriteAlert;
     }
     // *** Done Mapping to Core Data **
     
-    UILabel *robotImageLbl = [[UILabel alloc] initWithFrame:CGRectMake(40, 75, 125, 15)];
-    robotImageLbl.text = @"Tap to Change Image";
+    robotImageLbl = [[UILabel alloc] initWithFrame:CGRectMake(40, 75, 125, 15)];
+    robotImageLbl.text = @"Tap to Capture Image";
     robotImageLbl.textAlignment = NSTextAlignmentCenter;
     robotImageLbl.font = [UIFont systemFontOfSize:12];
     [self.view addSubview:robotImageLbl];
@@ -813,6 +814,7 @@ UIAlertView *overWriteAlert;
         robotImage.image = nil;
         robotImage.alpha = 1;
         isImageExisting = false;
+        robotImageLbl.text = @"Tap to Capture Image";
         [self cancelCameraPopUp];
     }];
 }
@@ -852,7 +854,9 @@ UIAlertView *overWriteAlert;
     robotImage.contentMode = UIViewContentModeScaleAspectFit;
     [UIView animateWithDuration:0.4 delay:0.2 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         robotImage.frame = CGRectMake(0, 0, 125, 125);
-    } completion:^(BOOL finished) {}];
+    } completion:^(BOOL finished) {
+        robotImageLbl.text = @"Tap to Change Image";
+    }];
     
     isImageExisting = true;
     
@@ -1641,6 +1645,7 @@ UIAlertView *overWriteAlert;
             robotImage.image = nil;
             robotImage.alpha = 1;
             isImageExisting = false;
+            robotImageLbl.text = @"Tap to Capture Image";
         }];
     }];
     _teamNumberField.text = @"";
