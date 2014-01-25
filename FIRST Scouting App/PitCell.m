@@ -7,6 +7,7 @@
 //
 
 #import "PitCell.h"
+#import "Globals.h"
 
 @implementation PitCell
 

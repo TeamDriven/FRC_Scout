@@ -39,7 +39,6 @@
 		8846FEF51826D7D200B37E44 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED41826D7D100B37E44 /* UIKit.framework */; };
 		8846FEFD1826D7D200B37E44 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8846FEFB1826D7D200B37E44 /* InfoPlist.strings */; };
 		8846FEFF1826D7D200B37E44 /* FIRST_Scouting_AppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEFE1826D7D200B37E44 /* FIRST_Scouting_AppTests.m */; };
-		8846FF131826DEB900B37E44 /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8846FF121826DEB900B37E44 /* data.plist */; };
 		8846FF151826FC6200B37E44 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FF141826FC6200B37E44 /* MultipeerConnectivity.framework */; };
 		888F0EF81850177F00412022 /* Globals.m in Sources */ = {isa = PBXBuildFile; fileRef = 888F0EF71850177F00412022 /* Globals.m */; };
 		88ED27F81829FE58008F3FDF /* Data.m in Sources */ = {isa = PBXBuildFile; fileRef = 88ED27F71829FE58008F3FDF /* Data.m */; };
@@ -76,6 +75,7 @@
 		86AB8DA5189342D200D411C9 /* PitCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitCell.m; sourceTree = "<group>"; };
 		86AB8DA71893575600D411C9 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoreDataTableViewController.h; path = ../../../Downloads/CoreDataTableViewController/CoreDataTableViewController.h; sourceTree = "<group>"; };
 		86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoreDataTableViewController.m; path = ../../../Downloads/CoreDataTableViewController/CoreDataTableViewController.m; sourceTree = "<group>"; };
+		86AB8DAA189374C300D411C9 /* CODE Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CODE Bold.otf"; path = "../../../Downloads/code 2/CODE Bold.otf"; sourceTree = "<group>"; };
 		86CDCD1B188C5E80002B6522 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
 		86CDCD1C188C5E80002B6522 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		86CDCD1E188C5E81002B6522 /* Regional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regional.h; sourceTree = "<group>"; };
@@ -111,7 +111,6 @@
 		8846FEFC1826D7D200B37E44 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8846FEFE1826D7D200B37E44 /* FIRST_Scouting_AppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FIRST_Scouting_AppTests.m; sourceTree = "<group>"; };
 		8846FF081826D80F00B37E44 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
-		8846FF121826DEB900B37E44 /* data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = data.plist; sourceTree = "<group>"; };
 		8846FF141826FC6200B37E44 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		888F0EF61850177F00412022 /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
 		888F0EF71850177F00412022 /* Globals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Globals.m; sourceTree = "<group>"; };
@@ -270,6 +269,7 @@
 		8846FED71826D7D100B37E44 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				86AB8DAA189374C300D411C9 /* CODE Bold.otf */,
 				86AB8DA71893575600D411C9 /* CoreDataTableViewController.h */,
 				86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */,
 				28C8C755185BB91F000FAE10 /* MatchCell.h */,
@@ -282,7 +282,6 @@
 				8846FED91826D7D100B37E44 /* InfoPlist.strings */,
 				8846FEDC1826D7D200B37E44 /* main.m */,
 				8846FEDE1826D7D200B37E44 /* FIRST Scouting App-Prefix.pch */,
-				8846FF121826DEB900B37E44 /* data.plist */,
 				2893226A187E637B00A225EE /* UIAlertView+Blocks.h */,
 				2893226B187E637B00A225EE /* UIAlertView+Blocks.m */,
 			);
@@ -389,7 +388,6 @@
 			files = (
 				2862D6A81854D4F900DC460F /* Images.xcassets in Resources */,
 				8846FEDB1826D7D100B37E44 /* InfoPlist.strings in Resources */,
-				8846FF131826DEB900B37E44 /* data.plist in Resources */,
 				8846FEE41826D7D200B37E44 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

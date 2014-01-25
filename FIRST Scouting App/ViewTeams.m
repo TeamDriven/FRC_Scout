@@ -7,6 +7,7 @@
 //
 
 #import "ViewTeams.h"
+#import "Globals.h"
 
 @interface ViewTeams ()
 
