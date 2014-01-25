@@ -100,8 +100,6 @@ NSFetchedResultsController *frc;
 }
 
 - (IBAction)searching:(id)sender {
-    NSString *textString = _teamSearch.text;
-    _teamSearch.text = [textString stringByTrimmingCharactersInSet:[NSCharacterSet punctuationCharacterSet]];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PitTeam"];
     NSNumberFormatter *checker = [[NSNumberFormatter alloc] init];
     if ([checker numberFromString:_teamSearch.text]) {
