@@ -14,7 +14,7 @@
     PitTeam *pitTm = nil;
     
     NSFetchRequest *pitTeamRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
-    NSPredicate *pitTeamPredicate = [NSPredicate predicateWithFormat:@"(teamNumber contains %@)", [pitDict objectForKey:@"teamNumber"]];
+    NSPredicate *pitTeamPredicate = [NSPredicate predicateWithFormat:@"(teamNumber = %@)", [pitDict objectForKey:@"teamNumber"]];
     pitTeamRequest.predicate = pitTeamPredicate;
     
     NSError *pitTeamError;

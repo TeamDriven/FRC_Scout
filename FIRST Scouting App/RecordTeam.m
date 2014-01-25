@@ -29,6 +29,7 @@ UIControl *robotImageControl;
 UIImageView *robotImage;
 UIView *cameraPopup;
 UIView *grayLayer;
+BOOL isImageExisting;
 
 // Drive Train
 UIControl *sixEightWheelDrop;
@@ -211,6 +212,46 @@ UIAlertView *overWriteAlert;
     
     [self.view bringSubviewToFront:_additionalNotesTxtField];
     [self.view bringSubviewToFront:robotImageControl];
+    
+    isImageExisting = false;
+    
+    isSixEightWheelDrop = false;
+    isFourWheelDrive = false;
+    isMechanum = false;
+    isSwerveCrab = false;
+    isOtherDriveTrain = false;
+    
+    isShooterNone = false;
+    isShooterCatapult = false;
+    isShooterPuncher = false;
+    isOtherShooter = false;
+    
+    isPreferredHigh = false;
+    isPreferredLow = false;
+    
+    isGoalieArmYes = false;
+    isGoalieArmNo = false;
+    
+    isFloorCollectorYes = false;
+    isFloorCollectorNo = false;
+    
+    isAutonomousYes = false;
+    isAutonomousNo = false;
+    
+    isStartLeft = false;
+    isStartMiddle = false;
+    isStartRight = false;
+    isStartGoalie = false;
+    
+    isHotGoalYes = false;
+    isHotGoalNo = false;
+    
+    isCatchingYes = false;
+    isCatchingNo = false;
+    
+    isBumperOne = false;
+    isBumperThree = false;
+    isBumperFive = false;
     
     driveTrainString = @"";
     shooterString = @"";
@@ -643,6 +684,18 @@ UIAlertView *overWriteAlert;
 }
 
 -(void)getAnImage{
+    NSInteger cancelButtonY;
+    NSInteger popUpViewY;
+    
+    if (isImageExisting) {
+        cancelButtonY = 200;
+        popUpViewY = 860;
+    }
+    else{
+        cancelButtonY = 140;
+        popUpViewY = 920;
+    }
+    
     grayLayer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
     grayLayer.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
     [self.view addSubview:grayLayer];
@@ -669,17 +722,19 @@ UIAlertView *overWriteAlert;
     usePhotoReelBtn.layer.cornerRadius = 10;
     [cameraPopup addSubview:usePhotoReelBtn];
     
-    UIButton *deletePhotoBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    deletePhotoBtn.frame = CGRectMake(30, 140, 290, 40);
-    [deletePhotoBtn addTarget:self action:@selector(deletePhoto) forControlEvents:UIControlEventTouchUpInside];
-    [deletePhotoBtn setTitle:@"Delete Photo" forState:UIControlStateNormal];
-    [deletePhotoBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [deletePhotoBtn setBackgroundColor:[UIColor redColor]];
-    deletePhotoBtn.layer.cornerRadius = 10;
-    [cameraPopup addSubview:deletePhotoBtn];
+    if (isImageExisting) {
+        UIButton *deletePhotoBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        deletePhotoBtn.frame = CGRectMake(30, 140, 290, 40);
+        [deletePhotoBtn addTarget:self action:@selector(deletePhoto) forControlEvents:UIControlEventTouchUpInside];
+        [deletePhotoBtn setTitle:@"Delete Photo" forState:UIControlStateNormal];
+        [deletePhotoBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [deletePhotoBtn setBackgroundColor:[UIColor redColor]];
+        deletePhotoBtn.layer.cornerRadius = 10;
+        [cameraPopup addSubview:deletePhotoBtn];
+    }
     
     UIButton *cameraCancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    cameraCancelButton.frame = CGRectMake(30, 200, 290, 40);
+    cameraCancelButton.frame = CGRectMake(30, cancelButtonY, 290, 40);
     [cameraCancelButton addTarget:self action:@selector(cancelCameraPopUp) forControlEvents:UIControlEventTouchUpInside];
     [cameraCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [cameraCancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -691,7 +746,7 @@ UIAlertView *overWriteAlert;
     
     cameraPopup.center = CGPointMake(384, 1164);
     [UIView animateWithDuration:0.2 animations:^{
-        cameraPopup.center = CGPointMake(384, 860);
+        cameraPopup.center = CGPointMake(384, popUpViewY);
     }];
     
 }
@@ -755,6 +810,7 @@ UIAlertView *overWriteAlert;
     } completion:^(BOOL finished) {
         robotImage.image = nil;
         robotImage.alpha = 1;
+        isImageExisting = false;
         [self cancelCameraPopUp];
     }];
 }
@@ -795,6 +851,8 @@ UIAlertView *overWriteAlert;
     [UIView animateWithDuration:0.4 delay:0.2 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         robotImage.frame = CGRectMake(0, 0, 125, 125);
     } completion:^(BOOL finished) {}];
+    
+    isImageExisting = true;
     
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
@@ -1511,7 +1569,7 @@ UIAlertView *overWriteAlert;
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if ([alertView isEqual:overWriteAlert]) {
-        if (buttonIndex == 1) {
+        if (buttonIndex == 0) {
             [self overWritePitTeam];
         }
     }
@@ -1520,6 +1578,7 @@ UIAlertView *overWriteAlert;
 -(void)overWritePitTeam{
     [context performBlock:^{
         [FSAdocument.managedObjectContext deleteObject:duplicatePitTeam];
+        NSLog(@"Deleted duplicate");
         [PitTeam createPitTeamWithDictionary:duplicatePitTeamDict inManagedObjectContext:context];
         [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
             if (success) {
@@ -1555,10 +1614,11 @@ UIAlertView *overWriteAlert;
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.2 animations:^{
             robotImage.alpha = 0;
-            robotImageControl.layer.borderColor = [[UIColor clearColor] CGColor];
+            robotImageControl.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
         } completion:^(BOOL finished) {
             robotImage.image = nil;
             robotImage.alpha = 1;
+            isImageExisting = false;
         }];
     }];
     _teamNumberField.text = @"";
