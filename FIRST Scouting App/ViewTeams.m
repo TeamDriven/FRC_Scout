@@ -24,8 +24,11 @@ NSManagedObjectContext *context;
 CoreDataTableViewController *cdtvc;
 NSFetchedResultsController *frc;
 
-UIView *grayOutview;
+UIControl *grayOutview;
 UIView *pitDetailView;
+UIControl *imageControl;
+UIImageView *robotImage;
+BOOL isImageLarge;
 CGRect selectedCellRect;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
@@ -109,7 +112,8 @@ CGRect selectedCellRect;
     PitTeam *ptSelected = [frc objectAtIndexPath:indexPath];
     selectedCellRect = [tableView convertRect:[tableView rectForRowAtIndexPath:indexPath] toView:[tableView superview]];
     
-    grayOutview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+    grayOutview = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+    [grayOutview addTarget:self action:@selector(grayOutShrinkPic) forControlEvents:UIControlEventTouchUpInside];
     grayOutview.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
     [self.view addSubview:grayOutview];
     
@@ -136,9 +140,13 @@ CGRect selectedCellRect;
     teamNameLbl.adjustsFontSizeToFitWidth = true;
     teamNameLbl.textAlignment = NSTextAlignmentCenter;
     
+    imageControl = [[UIControl alloc] initWithFrame:CGRectMake(10, 10, 200, 200)];
+    [imageControl addTarget:self action:@selector(enlargePicture) forControlEvents:UIControlEventTouchUpInside];
+    
     UIImage *image = [UIImage imageWithData:[ptSelected valueForKey:@"image"]];
-    UIImageView *robotImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 200, 200)];
+    robotImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
     robotImage.image = image;
+    [imageControl addSubview:robotImage];
     
     UILabel *driveTrainHeader = [[UILabel alloc] initWithFrame:CGRectMake(65, 225, 120, 25)];
     driveTrainHeader.text = @"Drive Train";
@@ -297,7 +305,7 @@ CGRect selectedCellRect;
         [pitDetailView addSubview:closeButton];
         [pitDetailView addSubview:teamNumberLbl];
         [pitDetailView addSubview:teamNameLbl];
-        [pitDetailView addSubview:robotImage];
+        [pitDetailView addSubview:imageControl];
         [pitDetailView addSubview:driveTrainHeader];
         [pitDetailView addSubview:driveTrainLbl];
         [pitDetailView addSubview:shooterHeader];
@@ -320,9 +328,38 @@ CGRect selectedCellRect;
         [pitDetailView addSubview:bumperQualityLbl];
         [pitDetailView addSubview:notesHeader];
         [pitDetailView addSubview:notesView];
+        [pitDetailView bringSubviewToFront:imageControl];
     }];
     
     [_tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+-(void)enlargePicture{
+    if (!isImageLarge) {
+        if (robotImage.image) {
+            [UIView animateWithDuration:0.3 animations:^{
+                imageControl.frame = CGRectMake(-25, 0, 600, 600);
+                robotImage.frame = CGRectMake(0, 0, 600, 600);
+            }];
+            isImageLarge = true;
+        }
+    }
+    else{
+        [UIView animateWithDuration:0.3 animations:^{
+            imageControl.frame = CGRectMake(10, 10, 200, 200);
+            robotImage.frame = CGRectMake(0, 0, 200, 200);
+        }];
+        isImageLarge = false;
+    }
+}
+-(void)grayOutShrinkPic{
+    if (isImageLarge) {
+        [UIView animateWithDuration:0.3 animations:^{
+            imageControl.frame = CGRectMake(10, 10, 200, 200);
+            robotImage.frame = CGRectMake(0, 0, 200, 200);
+            isImageLarge = false;
+        }];
+    }
 }
 
 -(void)closeDetailView{
