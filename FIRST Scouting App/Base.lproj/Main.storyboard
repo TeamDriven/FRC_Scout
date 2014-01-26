@@ -112,6 +112,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                <connections>
+                                    <action selector="teamNumberEditFinished:" destination="9pv-A4-QxB" eventType="editingDidEnd" id="GuE-df-3f5"/>
+                                </connections>
                             </textField>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Match Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zgu-8k-EGu">
                                 <rect key="frame" x="242" y="234" width="103" height="18"/>
@@ -785,6 +788,10 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k5f-jh-JSy">
+                                <rect key="frame" x="586" y="157" width="120" height="120"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <connections>
@@ -828,6 +835,7 @@
                         <outlet property="movementLine" destination="EfI-l6-BHF" id="U7E-5l-Id5"/>
                         <outlet property="movementRobot" destination="QbV-Ce-oRe" id="u4Y-7I-GYF"/>
                         <outlet property="regionalNameLbl" destination="14x-I5-vam" id="1Sw-a6-sVK"/>
+                        <outlet property="robotPic" destination="k5f-jh-JSy" id="JHV-OD-nxa"/>
                         <outlet property="saveBtn" destination="KHg-J8-aA8" id="7oP-Eg-BQd"/>
                         <outlet property="smallPenaltyLbl" destination="v1t-Wp-jgq" id="zzZ-0R-aq3"/>
                         <outlet property="smallPenaltyStepper" destination="Rao-87-LJV" id="TWx-wi-TIX"/>

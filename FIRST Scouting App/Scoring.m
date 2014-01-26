@@ -15,6 +15,8 @@
 #import "Team+Category.h"
 #import "Match.h"
 #import "Match+Category.h"
+#import "PitTeam.h"
+#import "PitTeam+Category.h"
 #import "UIAlertView+Blocks.h"
 
 @interface LocationsFirstViewController ()
@@ -212,28 +214,28 @@ UILabel *blue3UpdaterLbl;
     _saveBtn.layer.cornerRadius = 5;
     
     // All Regionals in 2014
-    regionalNames = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line District Competition",@"Southfield District Competition",@"Granite State District Event",@"PNW Auburn Mountainview District Event",@"MAR Mt. Olive District Competition",@"MAR Hatboro-Horsham District Comp.",@"Israel Regional",@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University District Competition",@"Gull Lake District Competition",@"PNW Oregon City District Event",@"PNW Glacier Peak District Event",@"Groton District Event",@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba District Competition",@"Howell District Competition",@"MAR Springside Chestnut Hill District Comp.",@"PNW Eastern Wash. University District Event",@"PNW Mt. Vernon District Event",@"MAR Clifton District Competition",@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan District Competition",@"Great Lakes Bay Region District Competition",@"Traverse City District Competition",@"PNW Wilsonville District Event",@"Rhode Island District Event",@"PNW Shorewood District Event",@"Southington District Event",@"MAR Lenape-Seneca District Competition",@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia District Competition",@"St. Joseph District Competition",@"Waterford District Competition",@"PNW Auburn District Event",@"PNW Central Wash. University District Event",@"Hartford District Event",@"MAR Bridgewater-Raritan District Competition",@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford District Competition",@"Troy District Competition",@"PNW Oregon State University District Event",@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
+    regionalNames = @[@"Central Illinois Regional", @"Palmetto Regional", @"Alamo Regional sponsored by Rackspace Hosting", @"Greater Toronto West Regional", @"Inland Empire Regional", @"Center Line FIRST Robotics District Competition", @"Southfield FIRST Robotics District Competition", @"Granite State District Event", @"PNW FIRST Robotics Auburn Mountainview District Event", @"MAR FIRST Robotics Mt. Olive District Competition", @"MAR FIRST Robotics Hatboro-Horsham District Competition", @"Israel Regional", @"Greater Toronto East Regional", @"Arkansas Regional", @"San Diego Regional", @"Crossroads Regional", @"Lake Superior Regional", @"Northern Lights Regional", @"Hub City Regional", @"UNH District Event", @"Central Valley Regional", @"Kettering University FIRST Robotics District Competition", @"Gull Lake FIRST Robotics District Competition", @"PNW FIRST Robotics Oregon City District Event", @"PNW FIRST Robotics Glacier Peak District Event", @"Groton District Event", @"Mexico City Regional", @"Sacramento Regional", @"Orlando Regional", @"Greater Kansas City Regional", @"St. Louis Regional", @"North Carolina Regional", @"New York Tech Valley Regional", @"Dallas Regional", @"Utah Regional", @"WPI District Event", @"Escanaba FIRST Robotics District Competition", @"Howell FIRST Robotics District Competition", @"MAR FIRST Robotics Springside Chestnut Hill District Competition", @"PNW FIRST Robotics Eastern Washington University District Event", @"PNW FIRST Robotics Mt. Vernon District Event", @"MAR FIRST Robotics Clifton District Competition", @"Waterloo Regional", @"Festival de Robotique FRC a Montreal Regional", @"Arizona Regional", @"Los Angeles Regional sponsored by The Roddenberry Foundation", @"Boilermaker Regional", @"Buckeye Regional", @"Virginia Regional", @"Wisconsin Regional", @"West Michigan FIRST Robotics District Competition", @"Great Lakes Bay Region FIRST Robotics District Competition", @"Traverse City FIRST Robotics District Competition", @"PNW FIRST Robotics Wilsonville District Event", @"Rhode Island District Event", @"PNW FIRST Robotics Shorewood District Event", @"Southington District Event", @"MAR FIRST Robotics Lenape-Seneca District Competition", @"North Bay Regional", @"Peachtree Regional", @"Hawaii Regional", @"Minnesota 10000 Lakes Regional", @"Minnesota North Star Regional", @"SBPLI Long Island Regional", @"Finger Lakes Regional", @"Queen City Regional", @"Oklahoma Regional", @"Greater Pittsburgh Regional", @"Smoky Mountains Regional", @"Greater DC Regional", @"Northeastern University District Event", @"Livonia FIRST Robotics District Competition", @"St. Joseph FIRST Robotics District Competition", @"Waterford FIRST Robotics District Competition", @"PNW FIRST Robotics Auburn District Event", @"PNW FIRST Robotics Central Washington University District Event", @"Hartford District Event", @"MAR FIRST Robotics Bridgewater-Raritan District Competition", @"Western Canada Regional", @"Windsor Essex Great Lakes Regional", @"Silicon Valley Regional", @"Colorado Regional", @"South Florida Regional", @"Midwest Regional", @"Bayou Regional", @"Chesapeake Regional", @"Las Vegas Regional", @"New York City Regional", @"Lone Star Regional", @"Pine Tree District Event", @"Lansing FIRST Robotics District Competition", @"Bedford FIRST Robotics District Competition", @"Troy FIRST Robotics District Competition", @"PNW FIRST Robotics Oregon State University District Event", @"New England FRC Region Championship", @"Michigan FRC State Championship", @"Autodesk PNW FRC Championship", @"Mid-Atlantic Robotics FRC Region Championship", @"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
    
     // Week 1 Regionals of 2014
-    week1Regionals = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line District Competition",@"Southfield District Competition",@"Granite State District Event",@"PNW Auburn Mountainview District Event",@"MAR Mt. Olive District Competition",@"MAR Hatboro-Horsham District Comp.",@"Israel Regional"];
+    week1Regionals = @[@"Central Illinois Regional", @"Palmetto Regional", @"Alamo Regional sponsored by Rackspace Hosting", @"Greater Toronto West Regional", @"Inland Empire Regional", @"Center Line FIRST Robotics District Competition", @"Southfield FIRST Robotics District Competition", @"Granite State District Event", @"PNW FIRST Robotics Auburn Mountainview District Event", @"MAR FIRST Robotics Mt. Olive District Competition", @"MAR FIRST Robotics Hatboro-Horsham District Competition", @"Israel Regional"];
     
     // Week 2 Regionals of 2014
-    week2Regionals = @[@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University District Competition",@"Gull Lake District Competition",@"PNW Oregon City District Event",@"PNW Glacier Peak District Event",@"Groton District Event"];
+    week2Regionals = @[@"Greater Toronto East Regional", @"Arkansas Regional", @"San Diego Regional", @"Crossroads Regional", @"Lake Superior Regional", @"Northern Lights Regional", @"Hub City Regional", @"UNH District Event", @"Central Valley Regional", @"Kettering University FIRST Robotics District Competition", @"Gull Lake FIRST Robotics District Competition", @"PNW FIRST Robotics Oregon City District Event", @"PNW FIRST Robotics Glacier Peak District Event", @"Groton District Event"];
     
     // Week 3 Regionals of 2014
-    week3Regionals = @[@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba District Competition",@"Howell District Competition",@"MAR Springside Chestnut Hill District Comp.",@"PNW Eastern Wash. University District Event",@"PNW Mt. Vernon District Event",@"MAR Clifton District Competition"];
+    week3Regionals = @[@"Mexico City Regional", @"Sacramento Regional", @"Orlando Regional", @"Greater Kansas City Regional", @"St. Louis Regional", @"North Carolina Regional", @"New York Tech Valley Regional", @"Dallas Regional", @"Utah Regional", @"WPI District Event", @"Escanaba FIRST Robotics District Competition", @"Howell FIRST Robotics District Competition", @"MAR FIRST Robotics Springside Chestnut Hill District Competition", @"PNW FIRST Robotics Eastern Washington University District Event", @"PNW FIRST Robotics Mt. Vernon District Event", @"MAR FIRST Robotics Clifton District Competition"];
     
     // Week 4 Regionals of 2014
-    week4Regionals = @[@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan District Competition",@"Great Lakes Bay Region District Competition",@"Traverse City District Competition",@"PNW Wilsonville District Event",@"Rhode Island District Event",@"PNW Shorewood District Event",@"Southington District Event",@"MAR Lenape-Seneca District Competition"];
+    week4Regionals = @[@"Waterloo Regional", @"Festival de Robotique FRC a Montreal Regional", @"Arizona Regional", @"Los Angeles Regional sponsored by The Roddenberry Foundation", @"Boilermaker Regional", @"Buckeye Regional", @"Virginia Regional", @"Wisconsin Regional", @"West Michigan FIRST Robotics District Competition", @"Great Lakes Bay Region FIRST Robotics District Competition", @"Traverse City FIRST Robotics District Competition", @"PNW FIRST Robotics Wilsonville District Event", @"Rhode Island District Event", @"PNW FIRST Robotics Shorewood District Event", @"Southington District Event", @"MAR FIRST Robotics Lenape-Seneca District Competition"];
     
     // Week 5 Regionals of 2014
-    week5Regionals = @[@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia District Competition",@"St. Joseph District Competition",@"Waterford District Competition",@"PNW Auburn District Event",@"PNW Central Wash. University District Event",@"Hartford District Event",@"MAR Bridgewater-Raritan District Competition"];
+    week5Regionals = @[@"North Bay Regional", @"Peachtree Regional", @"Hawaii Regional", @"Minnesota 10000 Lakes Regional", @"Minnesota North Star Regional", @"SBPLI Long Island Regional", @"Finger Lakes Regional", @"Queen City Regional", @"Oklahoma Regional", @"Greater Pittsburgh Regional", @"Smoky Mountains Regional", @"Greater DC Regional", @"Northeastern University District Event", @"Livonia FIRST Robotics District Competition", @"St. Joseph FIRST Robotics District Competition", @"Waterford FIRST Robotics District Competition", @"PNW FIRST Robotics Auburn District Event", @"PNW FIRST Robotics Central Washington University District Event", @"Hartford District Event", @"MAR FIRST Robotics Bridgewater-Raritan District Competition"];
     
     // Week 6 Regionals of 2014
-    week6Regionals = @[@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford District Competition",@"Troy District Competition",@"PNW Oregon State University District Event"];
+    week6Regionals = @[@"Western Canada Regional", @"Windsor Essex Great Lakes Regional", @"Silicon Valley Regional", @"Colorado Regional", @"South Florida Regional", @"Midwest Regional", @"Bayou Regional", @"Chesapeake Regional", @"Las Vegas Regional", @"New York City Regional", @"Lone Star Regional", @"Pine Tree District Event", @"Lansing FIRST Robotics District Competition", @"Bedford FIRST Robotics District Competition", @"Troy FIRST Robotics District Competition", @"PNW FIRST Robotics Oregon State University District Event"];
     
     // Week 7+ Regionals of 2014
-    week7Regionals = @[@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
+    week7Regionals = @[@"New England FRC Region Championship", @"Michigan FRC State Championship", @"Autodesk PNW FRC Championship", @"Mid-Atlantic Robotics FRC Region Championship", @"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
     
     allWeekRegionals = @[regionalNames,week1Regionals,week2Regionals,week3Regionals,week4Regionals,week5Regionals,week6Regionals,week7Regionals];
     
@@ -501,7 +503,7 @@ UILabel *blue3UpdaterLbl;
         matchTypeSelector.transform = CGAffineTransformMakeScale(0.8, 0.8);
         
         // Title for week selector UISegmentedControl
-        CGRect weekSelectorLblRect = CGRectMake(54, 310, 30, 30);
+        CGRect weekSelectorLblRect = CGRectMake(43, 310, 30, 30);
         UILabel *weekSelectorLbl = [[UILabel alloc] initWithFrame:weekSelectorLblRect];
         weekSelectorLbl.textAlignment = NSTextAlignmentCenter;
         weekSelectorLbl.text = @"Week";
@@ -510,7 +512,7 @@ UILabel *blue3UpdaterLbl;
         [setUpView addSubview:weekSelectorLbl];
         
         // Narrows the selection list by week selected by user
-        CGRect weekSelectorRect = CGRectMake(-39, 433, 215, 30);
+        CGRect weekSelectorRect = CGRectMake(-50, 433, 215, 30);
         weekSelector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"All",@"1", @"2", @"3", @"4", @"5", @"6", @"7+",  nil]];
         [weekSelector setFrame:weekSelectorRect];
         [weekSelector addTarget:self action:@selector(changeWeek) forControlEvents:UIControlEventValueChanged];
@@ -539,7 +541,7 @@ UILabel *blue3UpdaterLbl;
         [setUpView addSubview:regionalPickerLbl];
         
         // Displays all regionals for user to select from
-        CGRect regionalPickerRect = CGRectMake(104, 340, 420, 300);
+        CGRect regionalPickerRect = CGRectMake(90, 340, 495, 300);
         regionalPicker = [[UIPickerView alloc] initWithFrame:regionalPickerRect];
         regionalPicker.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.5];
         regionalPicker.layer.cornerRadius = 5;
@@ -674,6 +676,20 @@ UILabel *blue3UpdaterLbl;
                              [self.view addSubview:red1Lbl];
                              
                              red1Pos = red1Selector.selectedSegmentIndex;
+                             
+                             NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+                             NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %ld", randomTeamNum];
+                             roboPicRequest.predicate = roboPicPredicate;
+                             NSError *roboPicError = nil;
+                             NSArray *roboPics = [context executeFetchRequest:roboPicRequest error:&roboPicError];
+                             PitTeam *pt = [roboPics firstObject];
+                             _robotPic.alpha = 0;
+                             UIImage *image = [UIImage imageWithData:[pt valueForKey:@"image"]];
+                             _robotPic.image = image;
+                             
+                             [UIView animateWithDuration:0.2 animations:^{
+                                 _robotPic.alpha = 1;
+                             }];
                              
                              for (UIView *v in posUpdateArray) {
                                  v.hidden = false;
@@ -1047,7 +1063,7 @@ UILabel *blue3UpdaterLbl;
             tView.text = [week7Regionals objectAtIndex:row];
         }
         
-        tView.textAlignment = NSTextAlignmentCenter;
+        tView.textAlignment = NSTextAlignmentLeft;
         tView.font = [UIFont systemFontOfSize:20];
         tView.minimumScaleFactor = 0.2;
         tView.adjustsFontSizeToFitWidth = YES;
@@ -1576,6 +1592,20 @@ float startY;
     _teamNumField.text = _teamNumEdit.titleLabel.text;
     _teamNumField.selected = true;
     [_teamNumField becomeFirstResponder];
+}
+- (IBAction)teamNumberEditFinished:(id)sender {
+    NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+    NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %@", _teamNumField.text];
+    roboPicRequest.predicate = roboPicPredicate;
+    NSError *roboPicError = nil;
+    NSArray *roboPics = [context executeFetchRequest:roboPicRequest error:&roboPicError];
+    _robotPic.alpha = 0;
+    PitTeam *pt = [roboPics firstObject];
+    UIImage *image = [UIImage imageWithData:[pt valueForKey:@"image"]];
+    _robotPic.image = image;
+    [UIView animateWithDuration:0.2 animations:^{
+        _robotPic.alpha = 1;
+    }];
 }
 
 // Changes the value for the number of small penalties recorded

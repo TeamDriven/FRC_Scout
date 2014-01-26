@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *teamNumField;
 @property (weak, nonatomic) IBOutlet UIButton *matchNumEdit;
 @property (weak, nonatomic) IBOutlet UIButton *teamNumEdit;
+@property (weak, nonatomic) IBOutlet UIImageView *robotPic;
 - (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer;
 
 // Labels for the selected name of the regional and initials of the scouter (updates after setUpView closes)
