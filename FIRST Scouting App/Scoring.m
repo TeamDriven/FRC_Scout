@@ -675,6 +675,10 @@ UILabel *blue3UpdaterLbl;
                              }
                              [self.view addSubview:red1Lbl];
                              
+                             if (red1Pos != red1SelectedPos && red1Pos > -1) {
+                                 [[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+                             }
+                             
                              red1Pos = red1Selector.selectedSegmentIndex;
                              
                              NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
@@ -1639,7 +1643,7 @@ float startY;
     }
     
     // If for some reason there was no match number (Shouldn't occur, but just in case)
-    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""]) {
+    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""] || [currentMatchNum integerValue] < 1) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO MATCH NUMBER"
                                                        message: @"Please enter a match number for this match."
                                                       delegate: nil
@@ -1648,7 +1652,7 @@ float startY;
         [alert show];
     }
     // Another unlikely case: No team number. Also shouldn't happen, but a good safety net
-    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""]) {
+    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""] || [currentTeamNum integerValue] < 1) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO TEAM NUMBER"
                                                        message: @"Please enter a team number for this match."
                                                       delegate: nil
@@ -2113,9 +2117,20 @@ float startY;
         _teamNumEdit.hidden = false;
     }
     
+    NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+    NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %ld", randomTeamNum];
+    roboPicRequest.predicate = roboPicPredicate;
+    NSError *roboPicError = nil;
+    NSArray *roboPics = [context executeFetchRequest:roboPicRequest error:&roboPicError];
+    PitTeam *pt = [roboPics firstObject];
+    _robotPic.alpha = 0;
+    UIImage *image = [UIImage imageWithData:[pt valueForKey:@"image"]];
+    _robotPic.image = image;
+    
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^(void){
         _movementRobot.center = CGPointMake(_movementRobot.center.x, _movementLine.center.y + 50);
         _swipeUpArrow.alpha = 1;
+        _robotPic.alpha = 1;
     }completion:^(BOOL finished) {}];
     
     // Turns autonomous mode on
