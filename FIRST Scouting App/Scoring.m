@@ -1341,7 +1341,7 @@ UILabel *blue3UpdaterLbl;
         }
     }];
     
-    NSLog(@"AUTO ON");
+//    NSLog(@"AUTO ON");
 }
 // Activated by two finger swipe down (changes to telop UI)
 -(void)autoOff{
@@ -1371,7 +1371,7 @@ UILabel *blue3UpdaterLbl;
         }
     }];
     
-    NSLog(@"AUTO OFF");
+//    NSLog(@"AUTO OFF");
 }
 
 float startY;
@@ -1597,7 +1597,7 @@ float startY;
     _teamNumField.selected = true;
     [_teamNumField becomeFirstResponder];
 }
-- (IBAction)teamNumberEditFinished:(id)sender {
+-(IBAction)teamNumberEditFinished:(id)sender {
     NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
     NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %@", _teamNumField.text];
     roboPicRequest.predicate = roboPicPredicate;

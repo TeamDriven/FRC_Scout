@@ -109,6 +109,7 @@ CGRect selectedCellRect;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     _tableView.userInteractionEnabled = false;
+    [_teamSearch resignFirstResponder];
     PitTeam *ptSelected = [frc objectAtIndexPath:indexPath];
     selectedCellRect = [tableView convertRect:[tableView rectForRowAtIndexPath:indexPath] toView:[tableView superview]];
     
