@@ -7,6 +7,7 @@
 //
 
 #import "Sharing.h"
+#import <MultipeerConnectivity/MultipeerConnectivity.h>
 #import "Foundation/Foundation.h"
 #import "CoreData/CoreData.h"
 #import "Regional.h"
@@ -16,421 +17,391 @@
 #import "Match.h"
 #import "Match+Category.h"
 
-@interface LocationsSecondViewController ()
+
+@interface LocationsSecondViewController ()<MCBrowserViewControllerDelegate, MCSessionDelegate, UITextFieldDelegate>
+
+@property (nonatomic, strong) MCBrowserViewController *browserVC;
+@property (nonatomic, strong) MCAdvertiserAssistant *advertiser;
+@property (nonatomic, strong) MCSession *mySession;
+@property (nonatomic, strong) MCPeerID *myPeerID;
+
+@property (nonatomic, strong) UIButton *browserButton;
+@property (nonatomic, strong) UIButton *sendMessageBtn;
+//@property (nonatomic, strong) UITextField *chatBox;
+//@property (nonatomic, strong) UITextView *textBox;
 
 @end
 
 @implementation LocationsSecondViewController
 
-NSArray *paths;
-NSString *scoutingDirectory;
-NSString *path;
-NSMutableDictionary *dataDict;
-NSMutableDictionary *receivedDataDict;
-NSString *senderPeer;
-MCPeerID *senderPeerID;
-
-UIView *red1View;
-UIView *greyOutView;
-UISegmentedControl *red1Selector;
-UIButton *saveBtn;
-
-NSInteger overWrite;
-NSTimer *sendMatchesDelay;
-
-NSString *pos;
-
-NSData *dataToSend;
-NSData *dataReceived;
-bool sentOnce;
-
-UIAlertView *receiveAlert;
-UIAlertView *sendBackAlert;
-
-NSFileManager *FSAfileManager;
-NSURL *FSAdocumentsDirectory;
-NSString *FSAdocumentName;
-NSURL *FSApathurl;
-UIManagedDocument *FSAdocument;
-NSManagedObjectContext *context;
-
-
--(void)viewDidLoad{
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    NSLog(@"Position: %@", pos);
-    
-    overWrite = 0;
-    
-    FSAfileManager = [NSFileManager defaultManager];
-    FSAdocumentsDirectory = [[FSAfileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
-    FSAdocumentName = @"FSA";
-    FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
-    FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
-    context = FSAdocument.managedObjectContext;
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
-        [FSAdocument openWithCompletionHandler:^(BOOL success){
-            if (success) NSLog(@"Found the document!");
-            if (!success) NSLog(@"Couldn't find the document at path: %@", FSApathurl);
-        }];
-    }
-    else{
-        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
-            if (success) NSLog(@"Created the document!");
-            if (!success) NSLog(@"Couldn't create the document at path: %@", FSApathurl);
-        }];
-    }
-    
-    [_advertiseSwitcher setOn:false animated:YES];
-    [_overWriteSwitch setOn:false animated:YES];
-    
-    sentOnce = false;
+	// Do any additional setup after loading the view, t ypically from a nib.
+    [self setUpUI];
+    [self setUpMultipeer];
 }
 
--(void)viewDidAppear:(BOOL)animated{
-    if (!pos && !red1View.superview) {
-        CGRect greyOutViewRect = CGRectMake(0, 0, 768, 1024);
-        greyOutView = [[UIControl alloc] initWithFrame:greyOutViewRect];
-        greyOutView.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
-        [self.view addSubview:greyOutView];
-        
-        CGRect red1Rect = CGRectMake(186, 450, 400, 170);
-        red1View = [[UIView alloc] initWithFrame:red1Rect];
-        red1View.layer.cornerRadius = 10;
-        red1View.backgroundColor = [UIColor whiteColor];
-        
-        CGRect warningLblRect = CGRectMake(90, 20, 220, 30);
-        UILabel *warningLbl = [[UILabel alloc] initWithFrame:warningLblRect];
-        warningLbl.text = @"You are not signed in!";
-        warningLbl.font = [UIFont systemFontOfSize:20];
-        warningLbl.textAlignment = NSTextAlignmentCenter;
-        [red1View addSubview:warningLbl];
-        
-        CGRect red1SelectorRect = CGRectMake(30, 70, 340, 30);
-        red1Selector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3", nil]];
-        [red1Selector addTarget:self action:@selector(enableSaveBtn) forControlEvents:UIControlEventValueChanged];
-        red1Selector.frame = red1SelectorRect;
-        [red1View addSubview:red1Selector];
-        
-        CGRect saveBtnRect = CGRectMake(175, 120, 50, 30);
-        saveBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-        saveBtn.frame = saveBtnRect;
-        [saveBtn addTarget:self action:@selector(makeRed1ViewDisappear) forControlEvents:UIControlEventTouchUpInside];
-        [saveBtn setTitle:@"Save" forState:UIControlStateNormal];
-        saveBtn.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
-        [red1View addSubview:saveBtn];
-        saveBtn.layer.cornerRadius = 5;
-        saveBtn.enabled = false;
-        saveBtn.alpha = 0.3;
-        
-        red1View.transform = CGAffineTransformMakeScale(0.01, 0.01);
-        [self.view addSubview:red1View];
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                         animations:^{
-                             red1View.transform = CGAffineTransformIdentity;
-                         }
-                         completion:^(BOOL finished){
-                         }];
-    }
-}
-
--(void)didReceiveMemoryWarning{
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/************************************************************************
-********************    Reusable Methods    *****************************
-************************************************************************/
-
--(void)enableSaveBtn{
-    saveBtn.enabled = true;
-    saveBtn.alpha = 1;
+- (void) setUpUI{
+    //  Setup the browse button
+    self.browserButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.browserButton setTitle:@"Browse" forState:UIControlStateNormal];
+    self.browserButton.frame = CGRectMake(330, 220, 100, 50);
+    [self.view addSubview:self.browserButton];
+    self.browserButton.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    [self.browserButton addTarget:self action:@selector(showBrowserVC) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.sendMessageBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.sendMessageBtn setTitle:@"Send" forState:UIControlStateNormal];
+    self.sendMessageBtn.frame = CGRectMake(330, 400, 100, 50);
+    [self.view addSubview:self.sendMessageBtn];
+    self.sendMessageBtn.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    [self.sendMessageBtn addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
+    
+//    //  Setup TextBox
+//    self.textBox = [[UITextView alloc] initWithFrame: CGRectMake(240, 350, 240, 270)];
+//    self.textBox.editable = NO;
+//    self.textBox.backgroundColor = [UIColor lightGrayColor];
+//    [self.view addSubview: self.textBox];
+//    
+//    //  Setup ChatBox
+//    self.chatBox = [[UITextField alloc] initWithFrame: CGRectMake(240, 260, 240, 70)];
+//    self.chatBox.backgroundColor = [UIColor lightGrayColor];
+//    self.chatBox.returnKeyType = UIReturnKeySend;
+//    self.chatBox.delegate = self;
+//    [self.view addSubview:self.chatBox];
 }
 
--(void)makeRed1ViewDisappear{
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         red1View.transform = CGAffineTransformMakeScale(0.01, 0.01);
-                     }
-                     completion:^(BOOL finished){
-                         pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
-                         [red1View removeFromSuperview];
-                         [greyOutView removeFromSuperview];
-                     }];
-}
-
--(void)setUpData{
+- (void) setUpMultipeer{
+    //  Setup peer ID
+    self.myPeerID = [[MCPeerID alloc] initWithDisplayName:[UIDevice currentDevice].name];
     
-    dataDict = [[NSMutableDictionary alloc] init];
-    
-    NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
-    NSError *regionalError = nil;
-    NSArray *regionals = [context executeFetchRequest:regionalRequest error:&regionalError];
-    
-    for (int r = 0; r < [regionals count]; r++) {
-        NSArray *teams = [NSArray arrayWithArray:[[[regionals objectAtIndex:r] teams] allObjects]];
-        NSString *regionalTitle = [[NSString alloc] initWithFormat:@"%@", [[regionals objectAtIndex:r] name]];
-        [dataDict setObject:[[NSMutableDictionary alloc] init] forKey:regionalTitle];
-        for (int t = 0; t < [teams count]; t++) {
-            NSArray *matches = [NSArray arrayWithArray:[[[teams objectAtIndex:t] matches] allObjects]];
-            NSString *teamTitle = [[NSString alloc] initWithFormat:@"%@", [[teams objectAtIndex:t] name]];
-            [[dataDict objectForKey:regionalTitle] setObject:[[NSMutableDictionary alloc] init] forKey:teamTitle];
-            for (Match *m in matches) {
-                NSString *matchNum = [[NSString alloc] initWithFormat:@"%@", m.matchNum];
-                NSDictionary *matchDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                           [NSNumber numberWithInteger:[m.autoHighHotScore integerValue]], @"autoHighHotScore",
-                                           [NSNumber numberWithInteger:[m.autoHighNotScore integerValue]], @"autoHighNotScore",
-                                           [NSNumber numberWithInteger:[m.autoHighMissScore integerValue]], @"autoHighMissScore",
-                                           [NSNumber numberWithInteger:[m.autoLowHotScore integerValue]], @"autoLowHotScore",
-                                           [NSNumber numberWithInteger:[m.autoLowNotScore integerValue]], @"autoLowNotScore",
-                                           [NSNumber numberWithInteger:[m.autoLowMissScore integerValue]], @"autoLowMissScore",
-                                           [NSNumber numberWithInteger:[m.mobilityBonus integerValue]], @"mobilityBonus",
-                                           [NSNumber numberWithInteger:[m.teleopHighMake integerValue]], @"teleopHighMake",
-                                           [NSNumber numberWithInteger:[m.teleopHighMiss integerValue]], @"teleopHighMiss",
-                                           [NSNumber numberWithInteger:[m.teleopLowMake integerValue]], @"teleopLowMake",
-                                           [NSNumber numberWithInteger:[m.teleopLowMiss integerValue]], @"teleopLowMiss",
-                                           [NSNumber numberWithInteger:[m.teleopOver integerValue]], @"teleopOver",
-                                           [NSNumber numberWithInteger:[m.teleopCatch integerValue]], @"teleopCatch",
-                                           [NSNumber numberWithInteger:[m.teleopPassed integerValue]], @"teleopPassed",
-                                           [NSNumber numberWithInteger:[m.teleopReceived integerValue]], @"teleopReceived",
-                                           [NSNumber numberWithInteger:[m.penaltyLarge integerValue]], @"penaltyLarge",
-                                           [NSNumber numberWithInteger:[m.penaltySmall integerValue]], @"penaltySmall",
-                                           [NSString stringWithString:m.notes], @"notes",
-                                           [NSString stringWithString:m.red1Pos], @"red1Pos",
-                                           [NSString stringWithString:m.recordingTeam], @"recordingTeam",
-                                           [NSString stringWithString:m.scoutInitials], @"scoutInitials",
-                                           [NSString stringWithString:m.matchType], @"matchType",
-                                           [NSString stringWithString:m.matchNum], @"matchNum",
-                                           [NSNumber numberWithInteger:[m.uniqeID integerValue]], @"uniqueID", nil];
-
-                [[[dataDict objectForKey:regionalTitle] objectForKey:teamTitle] setObject:matchDict forKey:matchNum];
-            }
-        }
-    }
-    NSLog(@"%@", dataDict);
-    
-}
-
--(void)setUpMultiPeer{
-    self.myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
-    
+    //  Setup session
     self.mySession = [[MCSession alloc] initWithPeer:self.myPeerID];
-    
-    self.browserVC = [[MCBrowserViewController alloc] initWithServiceType:@"svctype" session:self.mySession];
-    
-    self.advertiser = [[MCAdvertiserAssistant alloc] initWithServiceType:@"svctype" discoveryInfo:nil session:self.mySession];
-    
-    self.browserVC.delegate = self;
-    
     self.mySession.delegate = self;
     
+    //  Setup BrowserViewController
+    self.browserVC = [[MCBrowserViewController alloc] initWithServiceType:@"FRCSCOUT" session:self.mySession];
+    self.browserVC.delegate = self;
     
+    //  Setup Advertiser
+    self.advertiser = [[MCAdvertiserAssistant alloc] initWithServiceType:@"FRCSCOUT" discoveryInfo:nil session:self.mySession];
+    [self.advertiser start];
 }
 
--(void)dismissBrowserVC{
+- (void) showBrowserVC{
+    [self presentViewController:self.browserVC animated:YES completion:nil];
+}
+
+- (void) dismissBrowserVC{
     [self.browserVC dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserVC{
+- (void) sendText{
+    NSError *error;
+    [self.mySession sendData:[[NSData alloc] initWithData:[NSKeyedArchiver archivedDataWithRootObject:@"Please Work"]] toPeers:[self.mySession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
+//    //  Retrieve text from chat box and clear chat box
+//    NSString *message = self.chatBox.text;
+//    self.chatBox.text = @"";
+//    
+//    //  Convert text to NSData
+//    NSData *data = [message dataUsingEncoding:NSUTF8StringEncoding];
+//    
+//    //  Send data to connected peers
+//    NSError *error;
+//    [self.mySession sendData:data toPeers:[self.mySession connectedPeers] withMode:MCSessionSendDataUnreliable error:&error];
+//    
+//    //  Append your own message to text box
+//    [self receiveMessage: message fromPeer: self.myPeerID];
+}
+
+- (void) receiveMessage: (NSString *) message fromPeer: (MCPeerID *) peer{
+//    //  Create the final text to append
+//    NSString *finalText;
+//    if (peer == self.myPeerID) {
+//        finalText = [NSString stringWithFormat:@"\nme: %@ \n", message];
+//    }
+//    else{
+//        finalText = [NSString stringWithFormat:@"\n%@: %@ \n", peer.displayName, message];
+//    }
+//    
+//    //  Append text to text box
+//    self.textBox.text = [self.textBox.text stringByAppendingString:finalText];
+}
+
+#pragma marks MCBrowserViewControllerDelegate
+
+// Notifies the delegate, when the user taps the done button
+- (void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
     [self dismissBrowserVC];
 }
 
--(void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
+// Notifies delegate that the user taps the cancel button.
+- (void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
     [self dismissBrowserVC];
 }
 
+#pragma marks UITextFieldDelegate
 
-// SESSION //
-
--(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
-    
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    [self sendText];
+    return YES;
 }
 
--(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
-    
+#pragma marks MCSessionDelegate
+// Remote peer changed state
+- (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
+    if (state == MCSessionStateConnected) {
+        NSLog(@"Connected!");
+    }
+    else{
+        NSLog(@"Disconnected");
+    }
 }
 
--(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
-}
--(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
-    NSLog(@"DATA RECEIVED: %lu bytes!", (unsigned long)data.length);
-    dataReceived = data;
+// Received data from remote peer
+- (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
+    //  Decode data back to NSString
+    NSString *message = (NSString *)[NSKeyedUnarchiver unarchiveObjectWithData:data];
     
-    receivedDataDict = [[NSMutableDictionary alloc] init];
-    receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
-    
-    senderPeer = [peerID displayName];
-    
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        receiveAlert = [[UIAlertView alloc]initWithTitle: @"Hey!"
-                                                       message: [[NSString alloc] initWithFormat:@"%@ is trying to send you data! Do you accept?", senderPeer]
-                                                      delegate: self
-                                             cancelButtonTitle:@"Nuh Uh!!"
-                                             otherButtonTitles:@"Ok, I guess.",nil];
-        [receiveAlert show];
+    //  append message to text box:
+    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self receiveMessage:message fromPeer:peerID];
+        UIAlertView *messageAlert = [[UIAlertView alloc] initWithTitle:@"Hey!"
+                                                               message:message
+                                                              delegate:nil
+                                                     cancelButtonTitle:@"Cool"
+                                                     otherButtonTitles:nil];
+        [messageAlert show];
     });
 }
 
-    -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
-        if (state == MCSessionStateConnected) {
-            NSLog(@"Connected!");
-            self.mySession = session;
-        }
-        else if (state == MCSessionStateNotConnected){
-            NSLog(@"Disconnected");
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Somebody Left!"
-                                                               message: [[NSString alloc] initWithFormat:@"%@", [peerID displayName]]
-                                                              delegate: nil
-                                                     cancelButtonTitle:@"Got it bro"
-                                                     otherButtonTitles:nil];
-                [alert show];
-            });
-        }
-    }
-
-
-/************************************************************************
- ****************    Actions and Other Code    **************************
- ************************************************************************/
-
-    -(IBAction)browseGO:(id)sender {
-        
-        [self setUpMultiPeer];
-        [self presentViewController:self.browserVC animated:YES completion:nil];
-    }
-
-    -(IBAction)advertiseSwitch:(id)sender {
-        if (_advertiseSwitcher.on) {
-            [self setUpMultiPeer];
-            [self.advertiser start];
-        }
-        else{
-            [self.advertiser stop];
-        }
-    }
-
--(IBAction)sendMatches:(id)sender {
-    [self setUpData];
-    
-    dataToSend = [NSKeyedArchiver archivedDataWithRootObject:dataDict];
-    NSError *error;
-    NSArray *peerIDs;
-    
-    peerIDs = [self.mySession connectedPeers];
-    
-    
-    [self.mySession sendData:dataToSend toPeers:peerIDs withMode:MCSessionSendDataReliable error:&error];
-    
-    _sendMatchesBtn.enabled = false;
-    _sendMatchesBtn.alpha = 0.5;
-    
-    sendMatchesDelay = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(reEnableSendMatchesBtn) userInfo:nil repeats:NO];
-    
-    sentOnce = true;
-}
--(void)reEnableSendMatchesBtn{
-    _sendMatchesBtn.enabled = true;
-    _sendMatchesBtn.alpha = 1.0;
-    sentOnce = false;
-    [sendMatchesDelay invalidate];
-    sendMatchesDelay = nil;
-}
-
--(IBAction)switchOverwrite:(id)sender {
-    if (_overWriteSwitch.on) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"WARNING"
-                                                       message: @"By flipping this switch into the ON position, you are telling this app that any time someone sends you a match that you already have, their match will overwrite yours. If you DO NOT want this feature, flip the switch back off."
-                                                      delegate: nil
-                                             cancelButtonTitle:@"Aye aye, Cap'n"
-                                             otherButtonTitles:nil];
-        [alert show];
-        overWrite = 1;
-    }
-    else{
-        overWrite = 0;
-    }
-}
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if ([alertView isEqual:receiveAlert] && buttonIndex == 1) {
-        [self dataDictToCoreData];
-    }
-    else if ([alertView isEqual:sendBackAlert] && buttonIndex == 1){
-        [self sendMatches:self];
-    }
-}
-
--(void)dataDictToCoreData{
-    [context performBlock:^{
-        for (NSString *r in receivedDataDict) {
-            Regional *rgnl = [Regional createRegionalWithName:r inManagedObjectContext:context];
-            for (NSString *t in [receivedDataDict objectForKey:r]) {
-                Team *tm = [Team createTeamWithName:t inRegional:rgnl withManagedObjectContext:context];
-                for (NSString *m in [[receivedDataDict objectForKey:r] objectForKey:t]) {
-                    NSDictionary *matchDict = [[[receivedDataDict objectForKey:r] objectForKey:t] objectForKey:m];
-                    NSNumber *uniqueID = [NSNumber numberWithInteger:[[matchDict objectForKey:@"uniqueID"] integerValue]];
-                    Match *mtch = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
-                    
-                    if ([mtch.uniqeID integerValue] == [uniqueID integerValue]) {
-                        NSLog(@"No conflicts!");
-                    }
-                    else{
-                        if (overWrite == 1) {
-                            [FSAdocument.managedObjectContext deleteObject:mtch];
-                            NSLog(@"Deleted the saved match");
-                            [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
-                        }
-                    }
-                }
-            }
-        }
-        
-        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
-            if (success) {
-                NSLog(@"Saved transferred data");
-            }
-            else{
-                NSLog(@"Didn't transfer regionals correctly.");
-            }
-        }];
-        
-        receivedDataDict = nil;
-        [self sendBackDataAlert];
-    }];
-}
-
--(void)sendBackDataAlert{
-    if (!sentOnce) {
-        sendBackAlert = [[UIAlertView alloc] initWithTitle:@"Successfully Transferred!"
-                                               message:@"Would you like to send your data to connected peers?"
-                                              delegate:self
-                                     cancelButtonTitle:@"Nope!"
-                                     otherButtonTitles:@"Go for it", nil];
-        [sendBackAlert show];
-    }
-    else{
-        sendBackAlert = [[UIAlertView alloc] initWithTitle:@"Successfully Transferred!"
-                                                   message:@"Give yourself a pat on the back for both of us."
-                                                  delegate:self
-                                         cancelButtonTitle:@"K."
-                                         otherButtonTitles:nil];
-        [sendBackAlert show];
-    }
+// Received a byte stream from remote peer
+- (void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
     
 }
 
+// Start receiving a resource from remote peer
+- (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
+    
+}
 
-
-
-
-
-
-
-
-
-
-
+// Finished receiving a resource from remote peer and saved the content in a temporary location - the app is responsible for moving the file to a permanent location within its sandbox
+- (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
+    
+}
+//
+//// Core Data Filepath
+//NSFileManager *FSAfileManager;
+//NSURL *FSAdocumentsDirectory;
+//NSString *FSAdocumentName;
+//NSURL *FSApathurl;
+//UIManagedDocument *FSAdocument;
+//NSManagedObjectContext *context;
+//
+//-(void)viewDidLoad{
+//    [super viewDidLoad];
+//    
+////    // *** Map to Core Data ***
+////    FSAfileManager = [NSFileManager defaultManager];
+////    FSAdocumentsDirectory = [[FSAfileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+////    FSAdocumentName = @"FSA";
+////    FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
+////    FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
+////    context = FSAdocument.managedObjectContext;
+////    
+////    if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
+////        [FSAdocument openWithCompletionHandler:^(BOOL success){
+////            if (success) NSLog(@"Found the document!");
+////            if (!success) NSLog(@"Couldn't find the document at path: %@", FSApathurl);
+////        }];
+////    }
+////    else{
+////        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
+////            if (success) NSLog(@"Created the document!");
+////            if (!success) NSLog(@"Couldn't create the document at path: %@", FSApathurl);
+////        }];
+////    }
+////    // *** Done Mapping to Core Data **
+//    
+//    [_advertiseSwitcher setOn:false animated:YES];
+//    
+//    [self setUpMultipeer];
+//}
+//
+//- (void) setUpMultipeer{
+//    //  Setup peer ID
+//    self.myPeerID = [[MCPeerID alloc] initWithDisplayName:[UIDevice currentDevice].name];
+//    
+//    //  Setup session
+//    self.mySession = [[MCSession alloc] initWithPeer:self.myPeerID];
+//    self.mySession.delegate = self;
+//    
+//    //  Setup BrowserViewController
+//    self.browserVC = [[MCBrowserViewController alloc] initWithServiceType:@"chat" session:self.mySession];
+//    self.browserVC.delegate = self;
+//    
+//    //  Setup Advertiser
+//    self.advertiser = [[MCAdvertiserAssistant alloc] initWithServiceType:@"chat" discoveryInfo:nil session:self.mySession];
+//    
+//}
+//
+//- (void) showBrowserVC{
+//    [self presentViewController:self.browserVC animated:YES completion:nil];
+//}
+//
+//- (IBAction)hostBtn:(id)sender {
+//    [self showBrowserVC];
+//}
+//
+//
+//- (void) dismissBrowserVC{
+//    [self.browserVC dismissViewControllerAnimated:YES completion:nil];
+//}
+//
+//#pragma marks MCBrowserViewControllerDelegate
+//
+//// Notifies the delegate, when the user taps the done button
+//- (void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
+//    [self dismissBrowserVC];
+//}
+//
+//// Notifies delegate that the user taps the cancel button.
+//- (void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
+//    [self dismissBrowserVC];
+//}
+//- (IBAction)visibleSwitch:(id)sender {
+//    if (_advertiseSwitcher.on) {
+//        [self.advertiser start];
+//    }
+//}
+//- (IBAction)sendMatchesBtn:(id)sender {
+////    NSMutableDictionary *dictToSend = [[NSMutableDictionary alloc] init];
+//    NSString *message = @"Please work";
+////    NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
+////    NSError *regionalError;
+////    
+////    NSArray *regionals = [context executeFetchRequest:regionalRequest error:&regionalError];
+////    for (Regional *rgnl in regionals) {
+////        [dictToSend setObject:[[NSMutableDictionary alloc] init] forKey:rgnl.name];
+////        for (Team *tm in rgnl.teams) {
+////            [[dictToSend objectForKey:rgnl.name] setObject:[[NSMutableDictionary alloc] init] forKey:tm.name];
+////            for (Match *mtch in tm.matches) {
+////                [[[dictToSend objectForKey:rgnl.name] objectForKey:tm.name]
+////                 setObject:[[NSDictionary alloc]
+////                            initWithObjectsAndKeys:
+////                            [NSNumber numberWithInteger:[mtch.autoHighHotScore integerValue]], @"autoHighHotScore",
+////                            [NSNumber numberWithInteger:[mtch.autoHighNotScore integerValue]], @"autoHighNotScore",
+////                            [NSNumber numberWithInteger:[mtch.autoHighMissScore integerValue]], @"autoHighMissScore",
+////                            [NSNumber numberWithInteger:[mtch.autoLowHotScore integerValue]], @"autoLowHotScore",
+////                            [NSNumber numberWithInteger:[mtch.autoLowNotScore integerValue]], @"autoLowNotScore",
+////                            [NSNumber numberWithInteger:[mtch.autoLowMissScore integerValue]], @"autoLowMissScore",
+////                            [NSNumber numberWithInteger:[mtch.mobilityBonus integerValue]], @"mobilityBonus",
+////                            [NSNumber numberWithInteger:[mtch.teleopHighMake integerValue]], @"teleopHighMake",
+////                            [NSNumber numberWithInteger:[mtch.teleopHighMiss integerValue]], @"teleopHighMiss",
+////                            [NSNumber numberWithInteger:[mtch.teleopLowMake integerValue]], @"teleopLowMake",
+////                            [NSNumber numberWithInteger:[mtch.teleopLowMiss integerValue]], @"teleopLowMiss",
+////                            [NSNumber numberWithInteger:[mtch.teleopOver integerValue]], @"teleopOver",
+////                            [NSNumber numberWithInteger:[mtch.teleopPassed integerValue]], @"teleopPassed",
+////                            [NSNumber numberWithInteger:[mtch.penaltyLarge integerValue]], @"penaltyLarge",
+////                            [NSNumber numberWithInteger:[mtch.penaltySmall integerValue]], @"penaltySmall",
+////                            [NSString stringWithString:mtch.notes], @"notes",
+////                            [NSString stringWithString:mtch.red1Pos], @"red1Pos",
+////                            [NSString stringWithString:mtch.recordingTeam], @"recordingTeam",
+////                            [NSString stringWithString:mtch.scoutInitials], @"scoutInitials",
+////                            [NSString stringWithString:mtch.matchType], @"matchType",
+////                            [NSString stringWithString:mtch.matchNum], @"matchNum",
+////                            [NSNumber numberWithInteger:[mtch.uniqeID integerValue]], @"uniqueID",nil] forKey:mtch.matchNum];
+////            }
+////        }
+////    }
+//    
+//    NSData *dataToSend = [NSKeyedArchiver archivedDataWithRootObject:message];
+//    
+//    NSError *error;
+//    [self.mySession sendData:dataToSend toPeers:[self.mySession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
+//}
+//
+//#pragma marks MCSessionDelegate
+//// Remote peer changed state
+//- (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
+//    if (state == MCSessionStateConnected) {
+//        NSLog(@"Connected!");
+//    }
+//    else{
+//        NSLog(@"Disconnected");
+//    }
+//}
+//
+//// Received data from remote peer
+//- (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
+//    NSString *messageReceived = (NSString *)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+//    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        UIAlertView *messageAlert = [[UIAlertView alloc] initWithTitle:@"New Message!"
+//                                                               message: messageReceived
+//                                                              delegate:nil
+//                                                     cancelButtonTitle:@"Cool"
+//                                                     otherButtonTitles:nil];
+//        [messageAlert show];
+//    });
+//    
+//    
+////    NSDictionary *receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//    
+////    [context performBlock:^{
+////        for (NSString *rgnl in receivedDataDict) {
+////            Regional *regional = [Regional createRegionalWithName:rgnl inManagedObjectContext:context];
+////            for (NSString *tm in [receivedDataDict objectForKey:rgnl]) {
+////                Team *team = [Team createTeamWithName:tm inRegional:regional withManagedObjectContext:context];
+////                for (NSString *mtch in [[receivedDataDict objectForKey:rgnl] objectForKey:tm]) {
+////                    NSDictionary *matchDict = [[[receivedDataDict objectForKey:rgnl] objectForKey:tm] objectForKey:mtch];
+////                    int uniqueID = [[matchDict objectForKey:@"uniqueID"] intValue];
+////                    Match *match = [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
+////                    if ([match.uniqeID intValue] != uniqueID) {
+////                        [FSAdocument.managedObjectContext deleteObject:match];
+////                        [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
+////                    }
+////                    [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
+////                }
+////            }
+////        }
+////    }];
+//    
+//}
+//
+//// Received a byte stream from remote peer
+//- (void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
+//    
+//}
+//
+//// Start receiving a resource from remote peer
+//- (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
+//    
+//}
+//
+//// Finished receiving a resource from remote peer and saved the content in a temporary location - the app is responsible for moving the file to a permanent location within its sandbox
+//- (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
+//    
+//}
+//
+//
 @end
+
+
+
+
+
+
+
+
+
+
+

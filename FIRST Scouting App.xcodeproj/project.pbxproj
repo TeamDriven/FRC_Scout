@@ -14,6 +14,7 @@
 		2862D6A81854D4F900DC460F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A71854D4F900DC460F /* Images.xcassets */; };
 		2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2893226B187E637B00A225EE /* UIAlertView+Blocks.m */; };
 		28C8C757185BB91F000FAE10 /* MatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C8C756185BB91F000FAE10 /* MatchCell.m */; };
+		8605BC4F1895A54700606B1A /* Sharing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEE91826D7D200B37E44 /* Sharing.m */; };
 		863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 863B352A1890E53400D5D528 /* PitTeam+Category.m */; };
 		863E68131891979200C028B3 /* PitTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 863E68121891979200C028B3 /* PitTeam.m */; };
 		86AB8DA6189342D200D411C9 /* PitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB8DA5189342D200D411C9 /* PitCell.m */; };
@@ -33,7 +34,6 @@
 		8846FEE11826D7D200B37E44 /* LocationsAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */; };
 		8846FEE41826D7D200B37E44 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8846FEE21826D7D200B37E44 /* Main.storyboard */; };
 		8846FEE71826D7D200B37E44 /* Scoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEE61826D7D200B37E44 /* Scoring.m */; };
-		8846FEEA1826D7D200B37E44 /* Sharing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEE91826D7D200B37E44 /* Sharing.m */; };
 		8846FEF31826D7D200B37E44 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FEF21826D7D200B37E44 /* XCTest.framework */; };
 		8846FEF41826D7D200B37E44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED01826D7D100B37E44 /* Foundation.framework */; };
 		8846FEF51826D7D200B37E44 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED41826D7D100B37E44 /* UIKit.framework */; };
@@ -410,13 +410,13 @@
 				86AB8DA91893575E00D411C9 /* CoreDataTableViewController.m in Sources */,
 				88ED27F81829FE58008F3FDF /* Data.m in Sources */,
 				8846FEDD1826D7D200B37E44 /* main.m in Sources */,
+				8605BC4F1895A54700606B1A /* Sharing.m in Sources */,
 				86CDCD29188DBFD6002B6522 /* PitMap.m in Sources */,
 				86CDCD2D188DC006002B6522 /* RecordTeam.m in Sources */,
 				2821DE39186E0B000059CDF6 /* FSA.xcdatamodeld in Sources */,
 				285A1E1C1870E941002AA01C /* Regional+Category.m in Sources */,
 				28C8C757185BB91F000FAE10 /* MatchCell.m in Sources */,
 				86CDCD1D188C5E80002B6522 /* Team.m in Sources */,
-				8846FEEA1826D7D200B37E44 /* Sharing.m in Sources */,
 				2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */,
 				28270E141871247D00809047 /* Match+Category.m in Sources */,
 				28270E101871199100809047 /* Team+Category.m in Sources */,
