@@ -56,7 +56,6 @@ UITextField *otherShooter;
 BOOL isOtherShooter;
 NSString *shooterString;
 
-
 // Preferred Goal
 UIControl *preferredHigh;
 BOOL isPreferredHigh;
@@ -95,7 +94,7 @@ UIControl *startRight;
 BOOL isStartRight;
 UIControl *startGoalie;
 BOOL isStartGoalie;
-NSString *autoStartingPositionString;
+NSMutableString *autoStartingPositionString;
 
 // Hot Goal Tracking
 UIControl *hotGoalYes;
@@ -260,7 +259,7 @@ UIAlertView *overWriteAlert;
     goalieArmString = @"";
     floorCollectorString = @"";
     autonomousString = @"";
-    autoStartingPositionString = @"";
+    autoStartingPositionString = [[NSMutableString alloc] initWithString:@""];
     hotGoalTrackingString = @"";
     catchingMechanismString = @"";
     bumperQualityString = @"";
@@ -560,6 +559,14 @@ UIAlertView *overWriteAlert;
     startGoalieLbl.backgroundColor = [UIColor clearColor];
     [startGoalie addSubview:startGoalieLbl];
     [self.view addSubview:startGoalie];
+    
+    UILabel *canSelectMultipleLbl = [[UILabel alloc] initWithFrame:CGRectMake(530, 496, 110, 30)];
+    canSelectMultipleLbl.center = CGPointMake(canSelectMultipleLbl.center.x, _autoStartingPositionLbl.center.y);
+    canSelectMultipleLbl.text = @"(Can select multiple)";
+    canSelectMultipleLbl.adjustsFontSizeToFitWidth = YES;
+    canSelectMultipleLbl.textAlignment = NSTextAlignmentCenter;
+    canSelectMultipleLbl.font = [UIFont systemFontOfSize:12];
+    [self.view addSubview:canSelectMultipleLbl];
 }
 -(void)hotGoalTrackingRowSetUp{
     hotGoalYes = [[UIControl alloc] initWithFrame:CGRectMake(210, 496, 80, 30)];
@@ -1202,91 +1209,59 @@ UIAlertView *overWriteAlert;
 }
 -(void)autoStartingPositionSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:startLeft]){
-        if (isStartLeft) {
+        if (isStartLeft == true) {
             [UIView animateWithDuration:0.2 animations:^{
                 startLeft.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartLeft = false;
-            autoStartingPositionString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 startLeft.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                startMiddle.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                startRight.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                startGoalie.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartLeft = true;
-            isStartMiddle = false;
-            isStartRight = false;
-            isStartGoalie = false;
-            autoStartingPositionString = @"Left";
         }
     }
     else if ([controller isEqual:startMiddle]) {
-        if (isStartMiddle) {
+        if (isStartMiddle == true) {
             [UIView animateWithDuration:0.2 animations:^{
                 startMiddle.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartMiddle = false;
-            autoStartingPositionString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                startLeft.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 startMiddle.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                startRight.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                startGoalie.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
-            isStartLeft = false;
             isStartMiddle = true;
-            isStartRight = false;
-            isStartGoalie = false;
-            autoStartingPositionString = @"Middle";
         }
     }
     else if ([controller isEqual:startRight]) {
-        if (isStartRight) {
+        if (isStartRight == true) {
             [UIView animateWithDuration:0.2 animations:^{
                 startRight.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartRight = false;
-            autoStartingPositionString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                startLeft.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                startMiddle.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 startRight.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                startGoalie.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
-            isStartLeft = false;
-            isStartMiddle = false;
             isStartRight = true;
-            isStartGoalie = false;
-            autoStartingPositionString = @"Right";
         }
     }
     else if ([controller isEqual:startGoalie]) {
-        if (isStartGoalie) {
+        if (isStartGoalie == true) {
             [UIView animateWithDuration:0.2 animations:^{
                 startGoalie.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isStartGoalie = false;
-            autoStartingPositionString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                startLeft.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                startMiddle.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                startRight.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 startGoalie.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
-            isStartLeft = false;
-            isStartMiddle = false;
-            isStartRight = false;
             isStartGoalie = true;
-            autoStartingPositionString = @"Goalie";
         }
     }
     [_teamNameField resignFirstResponder];
@@ -1502,7 +1477,7 @@ UIAlertView *overWriteAlert;
     }
 }
 
-- (IBAction)screenTapped:(id)sender {
+-(IBAction)screenTapped:(id)sender {
     [_teamNumberField resignFirstResponder];
     [_teamNameField resignFirstResponder];
     [_additionalNotesTxtField resignFirstResponder];
@@ -1520,6 +1495,8 @@ UIAlertView *overWriteAlert;
 -(IBAction)saveSheetBtn:(id)sender {
     
     [self somethingSelectedInEveryRowValidator];
+    
+    NSLog(@"Starting Position: %@", autoStartingPositionString);
     
     if (!isSomethingSelectedInEveryRow) {
         UIAlertView *somethingNotSelectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!" message:@"Not every row has something selected in it! Please fix this!" delegate:nil cancelButtonTitle:@"Will do" otherButtonTitles:nil];
@@ -1618,6 +1595,22 @@ UIAlertView *overWriteAlert;
 }
 
 -(void)somethingSelectedInEveryRowValidator{
+    if (isStartLeft == true) {
+        [autoStartingPositionString appendString:@"Left, "];
+    }
+    if (isStartMiddle == true) {
+        [autoStartingPositionString appendString:@"Middle, "];
+    }
+    if (isStartRight == true) {
+        [autoStartingPositionString appendString:@"Right, "];
+    }
+    if (isStartGoalie == true) {
+        [autoStartingPositionString appendString:@"Goalie, "];
+    }
+    if (autoStartingPositionString.length > 2) {
+        [autoStartingPositionString deleteCharactersInRange:NSMakeRange(autoStartingPositionString.length - 2, 2)];
+    }
+    
     stringsArray = @[driveTrainString, shooterString, preferredGoalString, goalieArmString, floorCollectorString, autonomousString, autoStartingPositionString, hotGoalTrackingString, catchingMechanismString, bumperQualityString];
     isSomethingSelectedInEveryRow = true;
     for (NSString *s in stringsArray) {
@@ -1696,6 +1689,7 @@ UIAlertView *overWriteAlert;
     for (__strong NSString *s in stringsArray) {
         s = @"";
     }
+    autoStartingPositionString = [[NSMutableString alloc] initWithString:@""];
     
     duplicatePitTeam = nil;
     duplicatePitTeamDict = nil;

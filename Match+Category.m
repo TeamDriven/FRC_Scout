@@ -17,7 +17,7 @@
     Match *match = nil;
     
     NSFetchRequest *matchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Match"];
-    NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum contains %@) AND (teamNum.name contains %@)", [dict objectForKey:@"matchNum"], tm.name];
+    NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum = %@) AND (teamNum.name = %@)", [dict objectForKey:@"matchNum"], tm.name];
     matchRequest.predicate = matchPredicate;
     
     NSError *matchError;

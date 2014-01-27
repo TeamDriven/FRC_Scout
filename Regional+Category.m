@@ -15,7 +15,7 @@
     Regional *regional = nil;
     
     NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
-    NSPredicate *regionalPredicate = [NSPredicate predicateWithFormat:@"name contains %@", name];
+    NSPredicate *regionalPredicate = [NSPredicate predicateWithFormat:@"name = %@", name];
     regionalRequest.predicate = regionalPredicate;
     
     NSError *regionalError;
