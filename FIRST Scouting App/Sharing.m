@@ -30,6 +30,10 @@
 
 @property (nonatomic, strong) UIButton *browserButton;
 @property (nonatomic, strong) UIButton *sendMessageBtn;
+@property (nonatomic, strong) UISwitch *browserSwitch;
+@property (nonatomic, strong) UISwitch *visibleSwitch;
+
+@property (nonatomic,strong) UIActivityIndicatorView *loadingWheel;
 
 @end
 
@@ -51,7 +55,7 @@ UISegmentedControl *positionSelector;
 UITextField *teamNumberField;
 UIButton *doneButton;
 
-- (void)viewDidLoad{
+-(void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view, t ypically from a nib.
     
@@ -132,7 +136,7 @@ UIButton *doneButton;
     }
 }
 
-- (void)didReceiveMemoryWarning{
+-(void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -206,28 +210,44 @@ UIButton *doneButton;
     }];
 }
 
-- (void) setUpUI{
-    //  Setup the browse button
-    self.browserButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.browserButton setTitle:@"Browse" forState:UIControlStateNormal];
-    self.browserButton.frame = CGRectMake(330, 220, 100, 50);
-    self.browserButton.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
-    self.browserButton.layer.cornerRadius = 5;
-    [self.browserButton addTarget:self action:@selector(showBrowserVC) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.browserButton];
-
+-(void)setUpUI{
+    UILabel *browserSwitchLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 200, 100, 20)];
+    browserSwitchLbl.text = @"Host";
+    browserSwitchLbl.font = [UIFont systemFontOfSize:16];
+    browserSwitchLbl.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:browserSwitchLbl];
     
+    self.browserSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(259, 220, 49, 31)];
+    [self.browserSwitch addTarget:self action:@selector(showBrowserVC) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:self.browserSwitch];
+    
+    UILabel *visibleSwitchLbl = [[UILabel alloc] initWithFrame:CGRectMake(434, 200, 100, 20)];
+    visibleSwitchLbl.text = @"Visible";
+    visibleSwitchLbl.font = [UIFont systemFontOfSize:16];
+    visibleSwitchLbl.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:visibleSwitchLbl];
+    
+    self.visibleSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(459, 220, 49, 31)];
+    [self.visibleSwitch addTarget:self action:@selector(visibleSwitchChanged) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:self.visibleSwitch];
+    [self.visibleSwitch setOn:true animated:YES];
+
     self.sendMessageBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.sendMessageBtn setTitle:@"Send" forState:UIControlStateNormal];
-    self.sendMessageBtn.frame = CGRectMake(330, 400, 100, 50);
+    self.sendMessageBtn.frame = CGRectMake(330, 600, 100, 50);
     self.sendMessageBtn.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     self.sendMessageBtn.layer.cornerRadius = 5;
     [self.sendMessageBtn addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.sendMessageBtn];
+    
+    self.loadingWheel = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.loadingWheel.center = CGPointMake(self.view.center.x, 700);
+    [self.view addSubview:self.loadingWheel];
+    self.loadingWheel.alpha = 0;
 
 }
 
-- (void) setUpMultipeer{
+-(void)setUpMultipeer{
     //  Setup peer ID
     self.myPeerID = [[MCPeerID alloc] initWithDisplayName:[[NSString alloc] initWithFormat:@"%@ - %@", pos, scoutTeamNum]];
     
@@ -244,15 +264,27 @@ UIButton *doneButton;
     [self.advertiser start];
 }
 
-- (void) showBrowserVC{
-    [self presentViewController:self.browserVC animated:YES completion:nil];
+-(void)visibleSwitchChanged{
+    if (self.visibleSwitch.on) {
+        [self setUpMultipeer];
+    }
+    else{
+        [self.mySession disconnect];
+        [self.advertiser stop];
+    }
 }
 
-- (void) dismissBrowserVC{
+-(void)showBrowserVC{
+    if (self.browserSwitch.on) {
+        [self presentViewController:self.browserVC animated:YES completion:nil];
+    }
+}
+
+-(void)dismissBrowserVC{
     [self.browserVC dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void) sendText{
+-(void)sendText{
     NSMutableDictionary *dictToSend = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *regionalsDict = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *pitTeamsDict = [[NSMutableDictionary alloc] init];
@@ -329,20 +361,23 @@ UIButton *doneButton;
 #pragma marks MCBrowserViewControllerDelegate
 
 // Notifies the delegate, when the user taps the done button
-- (void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
+-(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
     [self dismissBrowserVC];
 }
 
 // Notifies delegate that the user taps the cancel button.
-- (void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
+-(void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
     [self dismissBrowserVC];
 }
 
 #pragma marks MCSessionDelegate
 // Remote peer changed state
-- (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
+-(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
     if (state == MCSessionStateConnected) {
         NSLog(@"Connected!");
+//        NSArray *separatedString = [peerID.displayName componentsSeparatedByString:@" - "];
+//        NSString *peerString = [separatedString firstObject];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Wohoo!"
                                                                      message:[[NSString alloc] initWithFormat:@"You connected with %@", peerID.displayName]
@@ -366,15 +401,15 @@ UIButton *doneButton;
 }
 
 // Received data from remote peer
-- (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
+-(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIAlertView *messageAlert = [[UIAlertView alloc] initWithTitle:@"Hey!"
-                                                               message:@"You Got Mail!"
-                                                              delegate:nil
-                                                     cancelButtonTitle:@"Cool"
-                                                     otherButtonTitles:nil];
-        [messageAlert show];
+        self.loadingWheel.alpha = 1;
+        [self.loadingWheel startAnimating];
+        self.sendMessageBtn.enabled = false;
     });
+    
+    __block NSInteger matchesReceived = 0;
+    __block NSInteger pitTeamsReceived = 0;
     
     NSDictionary *receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     [context performBlock:^{
@@ -383,13 +418,23 @@ UIButton *doneButton;
             Regional *regional = [Regional createRegionalWithName:rgnl inManagedObjectContext:context];
             for (NSString *tm in [regionalsDict objectForKey:rgnl]) {
                 Team *team = [Team createTeamWithName:tm inRegional:regional withManagedObjectContext:context];
-                for (NSString *mtch in [[receivedDataDict objectForKey:rgnl] objectForKey:tm]) {
+                for (NSString *mtch in [[regionalsDict objectForKey:rgnl] objectForKey:tm]) {
                     NSDictionary *matchDict = [[[regionalsDict objectForKey:rgnl] objectForKey:tm] objectForKey:mtch];
+                    NSFetchRequest *matchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Match"];
+                    NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum = %@) AND (teamNum.name = %@)", [matchDict objectForKey:@"matchNum"], tm];
+                    matchRequest.predicate = matchPredicate;
+                    NSError *matchError;
+                    NSArray *matches = [context executeFetchRequest:matchRequest error:&matchError];
+                    if ([matches count] == 0){
+                        matchesReceived++;
+                    }
                     int uniqueID = [[matchDict objectForKey:@"uniqueID"] intValue];
                     Match *match = [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
                     if ([match.uniqeID intValue] != uniqueID) {
                         [FSAdocument.managedObjectContext deleteObject:match];
                         [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
+                        NSLog(@"Deleted and recreated a match");
+                        matchesReceived++;
                     }
                     [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
                 }
@@ -397,31 +442,55 @@ UIButton *doneButton;
         }
         NSDictionary *pitTeamsDict = [receivedDataDict objectForKey:@"PitTeams"];
         for (NSString *pt in pitTeamsDict) {
+            NSFetchRequest *pitTeamRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+            NSPredicate *pitTeamPredicate = [NSPredicate predicateWithFormat:@"(teamNumber = %@)", pt];
+            pitTeamRequest.predicate = pitTeamPredicate;
+            NSError *pitTeamError;
+            NSArray *pitTeams = [context executeFetchRequest:pitTeamRequest error:&pitTeamError];
+            if ([pitTeams count] == 0){
+                pitTeamsReceived++;
+            }
             int uniqueID = [[[pitTeamsDict objectForKey:pt] objectForKey:@"uniqueID"] intValue];
             PitTeam *pitTeam = [PitTeam createPitTeamWithDictionary:[pitTeamsDict objectForKey:pt] inManagedObjectContext:context];
-            
             if (uniqueID != [pitTeam.uniqueID intValue]) {
                 [FSAdocument.managedObjectContext deleteObject:pitTeam];
                 [PitTeam createPitTeamWithDictionary:[pitTeamsDict objectForKey:pt] inManagedObjectContext:context];
+                NSLog(@"Deleted and recreated a pit scouted team");
+                pitTeamsReceived++;
             }
             [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
+            
         }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertView *messageAlert = [[UIAlertView alloc] initWithTitle:@"You Got Mail!"
+                                                                   message:[[NSString alloc] initWithFormat:@"%@ sent you: \n %d New Matches and \n %d New Pit Scouted Teams!", peerID.displayName, matchesReceived, pitTeamsReceived]
+                                                                  delegate:nil
+                                                         cancelButtonTitle:@"Cool"
+                                                         otherButtonTitles:nil];
+            [messageAlert show];
+            [self.loadingWheel stopAnimating];
+            self.loadingWheel.alpha = 0;
+            self.sendMessageBtn.enabled = true;
+        });
     }];
+    
+    
 
 }
 
 // Received a byte stream from remote peer
-- (void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
+-(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
     
 }
 
 // Start receiving a resource from remote peer
-- (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
+-(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
     
 }
 
 // Finished receiving a resource from remote peer and saved the content in a temporary location - the app is responsible for moving the file to a permanent location within its sandbox
-- (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
+-(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
     
 }
 
