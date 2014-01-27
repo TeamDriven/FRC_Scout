@@ -689,6 +689,11 @@ UIAlertView *overWriteAlert;
             _teamNumberField.text = [[NSString alloc] initWithString:txt1];
         }
     }
+    if (_teamNumberField.text.length > 4) {
+        NSMutableString *text = [[NSMutableString alloc] initWithString:_teamNumberField.text];
+        [text deleteCharactersInRange:NSMakeRange(text.length -1, 1)];
+        _teamNumberField.text = text;
+    }
 }
 
 -(void)getAnImage{
@@ -869,6 +874,7 @@ UIAlertView *overWriteAlert;
     
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
+
 
 -(void)driveTrainSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:sixEightWheelDrop]) {

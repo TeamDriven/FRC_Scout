@@ -21,7 +21,7 @@
 #import "PitTeam+Category.h"
 
 
-@interface LocationsSecondViewController ()<MCBrowserViewControllerDelegate, MCSessionDelegate>
+@interface LocationsSecondViewController ()<MCBrowserViewControllerDelegate, MCSessionDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) MCBrowserViewController *browserVC;
 @property (nonatomic, strong) MCAdvertiserAssistant *advertiser;
@@ -47,9 +47,11 @@ NSString *pos;
 
 UIControl *miniSignIn;
 UIControl *grayOUT;
+UISegmentedControl *positionSelector;
+UITextField *teamNumberField;
+UIButton *doneButton;
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view, t ypically from a nib.
     
@@ -76,17 +78,132 @@ UIControl *grayOUT;
     // *** Done Mapping to Core Data **
 
     [self setUpUI];
-    [self setUpMultipeer];
     
-    if (pos.length == 0 || pos == nil) {
+    if (pos.length == 0 || pos == nil || scoutTeamNum.length == 0 || scoutTeamNum == nil) {
+        grayOUT = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+        grayOUT.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+        [grayOUT addTarget:self action:@selector(dismissKeyboard) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:grayOUT];
         
+        miniSignIn = [[UIControl alloc]  initWithFrame:CGRectMake(184, 380, 400, 200)];
+        miniSignIn.backgroundColor = [UIColor whiteColor];
+        miniSignIn.layer.cornerRadius = 10;
+        [miniSignIn addTarget:self action:@selector(dismissKeyboard) forControlEvents:UIControlEventTouchUpInside];
+        
+        UILabel *whoaThereLbl = [[UILabel alloc] initWithFrame:CGRectMake(100, 10, 200, 20)];
+        whoaThereLbl.text = @"Whoa there! Please Sign in!";
+        whoaThereLbl.textAlignment = NSTextAlignmentCenter;
+        whoaThereLbl.font = [UIFont systemFontOfSize:15];
+        [miniSignIn addSubview:whoaThereLbl];
+        
+        positionSelector = [[UISegmentedControl alloc] initWithItems:@[@"Red 1", @"Red 2", @"Red 3", @"Blue 1", @"Blue 2", @"Blue 3"]];
+        positionSelector.frame = CGRectMake(30, 50, 340, 30);
+        [positionSelector addTarget:self action:@selector(positionChanged) forControlEvents:UIControlEventValueChanged];
+        [miniSignIn addSubview:positionSelector];
+        
+        teamNumberField = [[UITextField alloc] initWithFrame:CGRectMake(140, 100, 120, 30)];
+        teamNumberField.delegate = self;
+        teamNumberField.placeholder = @"YOUR Team #";
+        teamNumberField.font = [UIFont systemFontOfSize:14];
+        [teamNumberField addTarget:self action:@selector(teamNumberEndedEditing) forControlEvents:UIControlEventEditingDidEnd];
+        [teamNumberField addTarget:self action:@selector(numberChecker) forControlEvents:UIControlEventEditingChanged];
+        teamNumberField.keyboardType = UIKeyboardTypeNumberPad;
+        teamNumberField.borderStyle = UITextBorderStyleRoundedRect;
+        teamNumberField.textAlignment = NSTextAlignmentCenter;
+        [miniSignIn addSubview:teamNumberField];
+        
+        doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [doneButton addTarget:self action:@selector(closeMiniSignIn) forControlEvents:UIControlEventTouchUpInside];
+        doneButton.frame = CGRectMake(165, 150, 70, 40);
+        doneButton.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+        doneButton.layer.cornerRadius = 5;
+        [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+        doneButton.enabled = false;
+        [miniSignIn addSubview:doneButton];
+        
+        [grayOUT addSubview:miniSignIn];
+        miniSignIn.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        [UIView animateWithDuration:0.2 animations:^{
+            miniSignIn.transform = CGAffineTransformIdentity;
+        }];
+    }
+    else{
+        [self setUpMultipeer];
     }
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)dismissKeyboard{
+    [teamNumberField resignFirstResponder];
+}
+-(void)positionChanged{
+    pos = [positionSelector titleForSegmentAtIndex:positionSelector.selectedSegmentIndex];
+    NSLog(@"Position: %@", pos);
+    if (teamNumberField.text.length > 0 && pos.length > 0) {
+        doneButton.enabled = true;
+    }
+    else{
+        doneButton.enabled = false;
+    }
+}
+-(void)numberChecker{
+    NSMutableString *txt1 = [[NSMutableString alloc] initWithString:teamNumberField.text];
+    for (unsigned int i = 0; i < [txt1 length]; i++) {
+        NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt1 characterAtIndex:i]];
+        if ([character isEqualToString:@" "]){
+            [txt1 deleteCharactersInRange:NSMakeRange(i, 1)];
+            teamNumberField.text = [[NSString alloc] initWithString:txt1];
+        }
+        else if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
+                                                           message: @"Please only enter numbers in the \"Team Number\" text field"
+                                                          delegate: nil
+                                                 cancelButtonTitle:@"Sorry..."
+                                                 otherButtonTitles:nil];
+            [alert show];
+            [txt1 deleteCharactersInRange:NSMakeRange(i, 1)];
+            teamNumberField.text = [[NSString alloc] initWithString:txt1];
+        }
+    }
+    if (teamNumberField.text.length > 4) {
+        NSMutableString *text = [[NSMutableString alloc] initWithString:teamNumberField.text];
+        [text deleteCharactersInRange:NSMakeRange(text.length -1, 1)];
+        teamNumberField.text = text;
+    }
+    if (teamNumberField.text.length == 0) {
+        doneButton.enabled = false;
+    }
+    else if(teamNumberField.text.length > 0){
+        doneButton.enabled = true;
+    }
+}
+-(void)teamNumberEndedEditing{
+    scoutTeamNum = teamNumberField.text;
+    if (teamNumberField.text.length > 0 && pos.length > 0) {
+        doneButton.enabled = true;
+    }
+    else{
+        doneButton.enabled = false;
+    }
+}
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    
+    return YES;
+}
+-(void)closeMiniSignIn{
+    [teamNumberField resignFirstResponder];
+    [UIView animateWithDuration:0.2 animations:^{
+        miniSignIn.transform = CGAffineTransformMakeScale(0.01, 0.01);
+    } completion:^(BOOL finished) {
+        [miniSignIn removeFromSuperview];
+        [grayOUT removeFromSuperview];
+        [self setUpMultipeer];
+    }];
 }
 
 - (void) setUpUI{
@@ -112,7 +229,7 @@ UIControl *grayOUT;
 
 - (void) setUpMultipeer{
     //  Setup peer ID
-    self.myPeerID = [[MCPeerID alloc] initWithDisplayName:[UIDevice currentDevice].name];
+    self.myPeerID = [[MCPeerID alloc] initWithDisplayName:[[NSString alloc] initWithFormat:@"%@ - %@", pos, scoutTeamNum]];
     
     //  Setup session
     self.mySession = [[MCSession alloc] initWithPeer:self.myPeerID];
