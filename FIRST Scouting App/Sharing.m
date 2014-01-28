@@ -29,6 +29,7 @@
 @property (nonatomic, strong) MCPeerID *myPeerID;
 
 @property (nonatomic, strong) UIButton *browserButton;
+@property (nonatomic, strong) UIButton *inviteMoreBtn;
 @property (nonatomic, strong) UIButton *sendMessageBtn;
 @property (nonatomic, strong) UISwitch *browserSwitch;
 @property (nonatomic, strong) UISwitch *visibleSwitch;
@@ -221,6 +222,15 @@ UIButton *doneButton;
     [self.browserSwitch addTarget:self action:@selector(showBrowserVC) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.browserSwitch];
     
+    self.inviteMoreBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.inviteMoreBtn.frame = CGRectMake(344, 260, 80, 30);
+    [self.inviteMoreBtn addTarget:self action:@selector(showBrowserVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.inviteMoreBtn setTitle:@"Invite More" forState:UIControlStateNormal];
+    self.inviteMoreBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+    [self.view addSubview:self.inviteMoreBtn];
+    self.inviteMoreBtn.enabled = false;
+    self.inviteMoreBtn.alpha = 0;
+    
     UILabel *visibleSwitchLbl = [[UILabel alloc] initWithFrame:CGRectMake(434, 200, 100, 20)];
     visibleSwitchLbl.text = @"Visible";
     visibleSwitchLbl.font = [UIFont systemFontOfSize:16];
@@ -277,6 +287,12 @@ UIButton *doneButton;
 -(void)showBrowserVC{
     if (self.browserSwitch.on) {
         [self presentViewController:self.browserVC animated:YES completion:nil];
+        self.inviteMoreBtn.enabled = true;
+        self.inviteMoreBtn.alpha = 1;
+    }
+    else{
+        self.inviteMoreBtn.enabled = false;
+        self.inviteMoreBtn.alpha = 0;
     }
 }
 
@@ -285,6 +301,16 @@ UIButton *doneButton;
 }
 
 -(void)sendText{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *scoutingDirectory = [paths objectAtIndex:0];
+    NSString *path = [scoutingDirectory stringByAppendingPathComponent:@"TempData.plist"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:@"TempData.plist"]) {
+        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"TempData" ofType:@"plist"] toPath:path error:nil];
+    }
+    
+    NSURL *tempDataURL = [[NSURL fileURLWithPath:path];
+    
     NSMutableDictionary *dictToSend = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *regionalsDict = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *pitTeamsDict = [[NSMutableDictionary alloc] init];
@@ -352,10 +378,11 @@ UIButton *doneButton;
     [dictToSend setObject:regionalsDict forKey:@"Regionals"];
     [dictToSend setObject:pitTeamsDict forKey:@"PitTeams"];
     
-    NSData *dataToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
+    [dictToSend writeToFile:path atomically:YES];
     
-    NSError *error;
-    [self.mySession sendData:dataToSend toPeers:[self.mySession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
+    NSProgress *progress = [self.mySession sendResourceAtURL:tempDataURL withName:@"temporaryData" toPeer:[self.mySession connectedPeers] withCompletionHandler:^(NSError *error) {
+        NSLog(@"[Error] %@", error);
+    }];
 }
 
 #pragma marks MCBrowserViewControllerDelegate
@@ -363,6 +390,7 @@ UIButton *doneButton;
 // Notifies the delegate, when the user taps the done button
 -(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
     [self dismissBrowserVC];
+    
 }
 
 // Notifies delegate that the user taps the cancel button.
@@ -464,7 +492,7 @@ UIButton *doneButton;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             UIAlertView *messageAlert = [[UIAlertView alloc] initWithTitle:@"You Got Mail!"
-                                                                   message:[[NSString alloc] initWithFormat:@"%@ sent you: \n %d New Matches and \n %d New Pit Scouted Teams!", peerID.displayName, matchesReceived, pitTeamsReceived]
+                                                                   message:[[NSString alloc] initWithFormat:@"%@ sent you: \n %ld New Matches and \n %ld New Pit Scouted Teams!", peerID.displayName, (long)matchesReceived, (long)pitTeamsReceived]
                                                                   delegate:nil
                                                          cancelButtonTitle:@"Cool"
                                                          otherButtonTitles:nil];
