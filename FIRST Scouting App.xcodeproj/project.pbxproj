@@ -15,7 +15,6 @@
 		2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2893226B187E637B00A225EE /* UIAlertView+Blocks.m */; };
 		28C8C757185BB91F000FAE10 /* MatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C8C756185BB91F000FAE10 /* MatchCell.m */; };
 		8605BC4F1895A54700606B1A /* Sharing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEE91826D7D200B37E44 /* Sharing.m */; };
-		8605BC5118973BB800606B1A /* TempData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8605BC5018973BB800606B1A /* TempData.plist */; };
 		863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 863B352A1890E53400D5D528 /* PitTeam+Category.m */; };
 		863E68131891979200C028B3 /* PitTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 863E68121891979200C028B3 /* PitTeam.m */; };
 		86AB8DA6189342D200D411C9 /* PitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB8DA5189342D200D411C9 /* PitCell.m */; };
@@ -68,7 +67,6 @@
 		2893226B187E637B00A225EE /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		28C8C755185BB91F000FAE10 /* MatchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchCell.h; sourceTree = "<group>"; };
 		28C8C756185BB91F000FAE10 /* MatchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchCell.m; sourceTree = "<group>"; };
-		8605BC5018973BB800606B1A /* TempData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TempData.plist; sourceTree = "<group>"; };
 		863B35291890E53400D5D528 /* PitTeam+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PitTeam+Category.h"; sourceTree = "<group>"; };
 		863B352A1890E53400D5D528 /* PitTeam+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PitTeam+Category.m"; sourceTree = "<group>"; };
 		863E68111891979200C028B3 /* PitTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitTeam.h; sourceTree = "<group>"; };
@@ -276,7 +274,6 @@
 				28C8C756185BB91F000FAE10 /* MatchCell.m */,
 				86AB8DA4189342D200D411C9 /* PitCell.h */,
 				86AB8DA5189342D200D411C9 /* PitCell.m */,
-				8605BC5018973BB800606B1A /* TempData.plist */,
 				8846FEDF1826D7D200B37E44 /* LocationsAppDelegate.h */,
 				8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */,
 				8846FED81826D7D100B37E44 /* FIRST Scouting App-Info.plist */,
@@ -387,7 +384,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8605BC5118973BB800606B1A /* TempData.plist in Resources */,
 				2862D6A81854D4F900DC460F /* Images.xcassets in Resources */,
 				8846FEDB1826D7D100B37E44 /* InfoPlist.strings in Resources */,
 				8846FEE41826D7D200B37E44 /* Main.storyboard in Resources */,

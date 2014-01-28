@@ -301,15 +301,6 @@ UIButton *doneButton;
 }
 
 -(void)sendText{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *scoutingDirectory = [paths objectAtIndex:0];
-    NSString *path = [scoutingDirectory stringByAppendingPathComponent:@"TempData.plist"];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:@"TempData.plist"]) {
-        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"TempData" ofType:@"plist"] toPath:path error:nil];
-    }
-    
-    NSURL *tempDataURL = [[NSURL fileURLWithPath:path];
     
     NSMutableDictionary *dictToSend = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *regionalsDict = [[NSMutableDictionary alloc] init];
@@ -378,9 +369,11 @@ UIButton *doneButton;
     [dictToSend setObject:regionalsDict forKey:@"Regionals"];
     [dictToSend setObject:pitTeamsDict forKey:@"PitTeams"];
     
-    [dictToSend writeToFile:path atomically:YES];
     
-    NSProgress *progress = [self.mySession sendResourceAtURL:tempDataURL withName:@"temporaryData" toPeer:[self.mySession connectedPeers] withCompletionHandler:^(NSError *error) {
+    NSURL *tempDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"tempData"];
+    [dictToSend writeToURL:tempDataURL atomically:YES];
+    
+    NSProgress *progress = [self.mySession sendResourceAtURL:tempDataURL withName:@"temporaryData" toPeer:[[self.mySession connectedPeers] objectAtIndex:0] withCompletionHandler:^(NSError *error) {
         NSLog(@"[Error] %@", error);
     }];
 }

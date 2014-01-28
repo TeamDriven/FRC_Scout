@@ -37,8 +37,8 @@ UIControl *sixEightWheelDrop;
 BOOL isSixEightWheelDrop;
 UIControl *fourWheelDrive;
 BOOL isFourWheelDrive;
-UIControl *mechanum;
-BOOL isMechanum;
+UIControl *Mecanum;
+BOOL isMecanum;
 UIControl *swerveCrab;
 BOOL isSwerveCrab;
 UITextField *otherDriveTrain;
@@ -217,7 +217,7 @@ UIAlertView *overWriteAlert;
     
     isSixEightWheelDrop = false;
     isFourWheelDrive = false;
-    isMechanum = false;
+    isMecanum = false;
     isSwerveCrab = false;
     isOtherDriveTrain = false;
     
@@ -294,19 +294,19 @@ UIAlertView *overWriteAlert;
     [fourWheelDrive addSubview:fourWheelDriveLbl];
     [self.view addSubview:fourWheelDrive];
     
-    mechanum = [[UIControl alloc] initWithFrame:CGRectMake(435, 245, 75, 30)];
-    [mechanum addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-    mechanum.layer.cornerRadius = 5;
-    mechanum.center = CGPointMake(mechanum.center.x, _driveTrainLbl.center.y);
-    UILabel *mechanumLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
-    mechanumLbl.text = @"Mechanum";
-    mechanumLbl.textColor = [UIColor whiteColor];
-    mechanumLbl.textAlignment = NSTextAlignmentCenter;
-    mechanumLbl.font = [UIFont boldSystemFontOfSize:12];
-    mechanumLbl.backgroundColor = [UIColor clearColor];
-    [mechanum addSubview:mechanumLbl];
-    [self.view addSubview:mechanum];
+    Mecanum = [[UIControl alloc] initWithFrame:CGRectMake(435, 245, 75, 30)];
+    [Mecanum addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+    Mecanum.layer.cornerRadius = 5;
+    Mecanum.center = CGPointMake(Mecanum.center.x, _driveTrainLbl.center.y);
+    UILabel *mecanumLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
+    mecanumLbl.text = @"Mecanum";
+    mecanumLbl.textColor = [UIColor whiteColor];
+    mecanumLbl.textAlignment = NSTextAlignmentCenter;
+    mecanumLbl.font = [UIFont boldSystemFontOfSize:12];
+    mecanumLbl.backgroundColor = [UIColor clearColor];
+    [Mecanum addSubview:mecanumLbl];
+    [self.view addSubview:Mecanum];
     
     swerveCrab = [[UIControl alloc] initWithFrame:CGRectMake(520, 245, 85, 30)];
     [swerveCrab addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -889,12 +889,12 @@ UIAlertView *overWriteAlert;
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
                 fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = true;
             isFourWheelDrive = false;
-            isMechanum = false;
+            isMecanum = false;
             isSwerveCrab = false;
             isOtherDriveTrain = false;
             otherDriveTrain.text = @"";
@@ -914,12 +914,12 @@ UIAlertView *overWriteAlert;
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 fourWheelDrive.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = false;
             isFourWheelDrive = true;
-            isMechanum = false;
+            isMecanum = false;
             isSwerveCrab = false;
             isOtherDriveTrain = false;
             otherDriveTrain.text = @"";
@@ -927,29 +927,29 @@ UIAlertView *overWriteAlert;
             driveTrainString = @"Four Wheel Drive";
         }
     }
-    else if ([controller isEqual:mechanum]){
-        if (isMechanum) {
+    else if ([controller isEqual:Mecanum]){
+        if (isMecanum) {
             [UIView animateWithDuration:0.2 animations:^{
-                mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
-            isMechanum = false;
+            isMecanum = false;
             driveTrainString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                mechanum.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                Mecanum.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
                 swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = false;
             isFourWheelDrive = false;
-            isMechanum = true;
+            isMecanum = true;
             isSwerveCrab = false;
             isOtherDriveTrain = false;
             otherDriveTrain.text = @"";
             if (otherDriveTrain.isFirstResponder) {[otherDriveTrain resignFirstResponder];}
-            driveTrainString = @"Mechanum";
+            driveTrainString = @"Mecanum";
         }
     }
     else if ([controller isEqual:swerveCrab]){
@@ -964,12 +964,12 @@ UIAlertView *overWriteAlert;
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 swerveCrab.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isSixEightWheelDrop = false;
             isFourWheelDrive = false;
-            isMechanum = false;
+            isMecanum = false;
             isSwerveCrab = true;
             isOtherDriveTrain = false;
             otherDriveTrain.text = @"";
@@ -1425,12 +1425,12 @@ UIAlertView *overWriteAlert;
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                mechanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = false;
             isFourWheelDrive = false;
-            isMechanum = false;
+            isMecanum = false;
             isSwerveCrab = false;
             isOtherDriveTrain = true;
             driveTrainString = otherDriveTrain.text;
@@ -1656,7 +1656,7 @@ UIAlertView *overWriteAlert;
     
     isSixEightWheelDrop = false;
     isFourWheelDrive = false;
-    isMechanum = false;
+    isMecanum = false;
     isSwerveCrab = false;
     isOtherDriveTrain = false;
     
