@@ -376,6 +376,21 @@ UIButton *doneButton;
     NSProgress *progress = [self.mySession sendResourceAtURL:tempDataURL withName:@"temporaryData" toPeer:[[self.mySession connectedPeers] objectAtIndex:0] withCompletionHandler:^(NSError *error) {
         NSLog(@"[Error] %@", error);
     }];
+    [progress addObserver:self forKeyPath:@"cancelPath" options:NSKeyValueObservingOptionNew context:NULL];
+    [progress addObserver:self forKeyPath:@"completed" options:NSKeyValueObservingOptionNew context:NULL];
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if ([object isKindOfClass:[NSProgress class]]) {
+        NSProgress *progress = object;
+        NSLog(@"PROGRESS: %f", progress.fractionCompleted);
+        if ([keyPath isEqualToString:@"cancelPath"]) {
+            
+        }
+        else if ([keyPath isEqualToString:@"completed"]){
+            
+        }
+    }
 }
 
 #pragma marks MCBrowserViewControllerDelegate
@@ -457,7 +472,6 @@ UIButton *doneButton;
                         NSLog(@"Deleted and recreated a match");
                         matchesReceived++;
                     }
-                    [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
                 }
             }
         }
@@ -479,9 +493,9 @@ UIButton *doneButton;
                 NSLog(@"Deleted and recreated a pit scouted team");
                 pitTeamsReceived++;
             }
-            [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
-            
         }
+        
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             UIAlertView *messageAlert = [[UIAlertView alloc] initWithTitle:@"You Got Mail!"
@@ -507,12 +521,21 @@ UIButton *doneButton;
 
 // Start receiving a resource from remote peer
 -(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
-    
+    NSProgress *progres = progress;
+    [progres addObserver:self forKeyPath:@"cancelPath" options:NSKeyValueObservingOptionNew context:NULL];
+    [progres addObserver:self forKeyPath:@"completed" options:NSKeyValueObservingOptionNew context:NULL];
 }
 
 // Finished receiving a resource from remote peer and saved the content in a temporary location - the app is responsible for moving the file to a permanent location within its sandbox
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
+    NSURL *receivedTempDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"receivedTempData"];
     
+    NSError *error2 = nil;
+    if (![[NSFileManager defaultManager] moveItemAtURL:localURL
+                                                 toURL:receivedTempDataURL
+                                                 error:&error2]) {
+        NSLog(@"[Error] %@", error2);
+    }
 }
 
 @end
