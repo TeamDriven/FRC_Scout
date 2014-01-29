@@ -35,8 +35,12 @@
 @property (nonatomic, strong) UISwitch *visibleSwitch;
 
 @property (nonatomic,strong) UIActivityIndicatorView *loadingWheel;
+@property (nonatomic, strong) UIProgressView *progressBar;
 
 @end
+
+static NSString * const kProgressCancelledKeyPath          = @"cancelled";
+static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCount";
 
 @implementation LocationsSecondViewController
 
@@ -55,6 +59,7 @@ UIControl *grayOUT;
 UISegmentedControl *positionSelector;
 UITextField *teamNumberField;
 UIButton *doneButton;
+
 
 -(void)viewDidLoad{
     [super viewDidLoad];
@@ -249,11 +254,18 @@ UIButton *doneButton;
     self.sendMessageBtn.layer.cornerRadius = 5;
     [self.sendMessageBtn addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.sendMessageBtn];
+    self.sendMessageBtn.enabled = false;
+    self.sendMessageBtn.alpha = 0;
     
-    self.loadingWheel = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.loadingWheel.center = CGPointMake(self.view.center.x, 700);
-    [self.view addSubview:self.loadingWheel];
-    self.loadingWheel.alpha = 0;
+//    self.loadingWheel = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//    self.loadingWheel.center = CGPointMake(self.view.center.x, 700);
+//    [self.view addSubview:self.loadingWheel];
+//    self.loadingWheel.alpha = 0;
+    
+    self.progressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+    self.progressBar.frame = CGRectMake(309, 660, 150, 2);
+    [self.view addSubview:self.progressBar];
+    self.progressBar.alpha = 0;
 
 }
 
@@ -369,26 +381,52 @@ UIButton *doneButton;
     [dictToSend setObject:regionalsDict forKey:@"Regionals"];
     [dictToSend setObject:pitTeamsDict forKey:@"PitTeams"];
     
+    NSData *dataWithDictToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
+    
     
     NSURL *tempDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"tempData"];
-    [dictToSend writeToURL:tempDataURL atomically:YES];
+    [dataWithDictToSend writeToURL:tempDataURL atomically:YES];
     
     NSProgress *progress = [self.mySession sendResourceAtURL:tempDataURL withName:@"temporaryData" toPeer:[[self.mySession connectedPeers] objectAtIndex:0] withCompletionHandler:^(NSError *error) {
         NSLog(@"[Error] %@", error);
     }];
-    [progress addObserver:self forKeyPath:@"cancelPath" options:NSKeyValueObservingOptionNew context:NULL];
-    [progress addObserver:self forKeyPath:@"completed" options:NSKeyValueObservingOptionNew context:NULL];
+    [progress addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+    [progress addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+    self.progressBar.alpha = 1;
+    self.progressBar.progress = progress.fractionCompleted;
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if ([object isKindOfClass:[NSProgress class]]) {
         NSProgress *progress = object;
-        NSLog(@"PROGRESS: %f", progress.fractionCompleted);
-        if ([keyPath isEqualToString:@"cancelPath"]) {
+        
+        if (progress.fractionCompleted % 0.01 == 0) {
             
         }
-        else if ([keyPath isEqualToString:@"completed"]){
+        NSLog(@"PROGRESS: %f", progress.fractionCompleted);
+        if ([keyPath isEqualToString:kProgressCancelledKeyPath]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:0.2 animations:^{
+                    self.progressBar.alpha = 0;
+                } completion:^(BOOL finished) {
+                    self.progressBar.progress = 0.0;
+                }];
+            });
+        }
+        else if ([keyPath isEqualToString:kProgressCompletedUnitCountKeyPath]){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.progressBar.progress = progress.fractionCompleted;
+            });
             
+            if (progress.completedUnitCount == progress.totalUnitCount) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [UIView animateWithDuration:0.2 animations:^{
+                        self.progressBar.alpha = 0;
+                    } completion:^(BOOL finished) {
+                        self.progressBar.progress = 0.0;
+                    }];
+                });
+            }
         }
     }
 }
@@ -421,6 +459,11 @@ UIButton *doneButton;
                                                            cancelButtonTitle:@"Awesometastic"
                                                            otherButtonTitles:nil];
             [connectedAlert show];
+            [UIView animateWithDuration:0.2 animations:^{
+                self.sendMessageBtn.alpha = 1;
+            } completion:^(BOOL finished) {
+                self.sendMessageBtn.enabled = true;
+            }];
         });
     }
     else{
@@ -432,83 +475,91 @@ UIButton *doneButton;
                                                            cancelButtonTitle:@"Dang it!"
                                                            otherButtonTitles:nil];
             [disConnectedAlert show];
+            if ([[self.mySession connectedPeers] count] == 0) {
+                [UIView animateWithDuration:0.2 animations:^{
+                    self.sendMessageBtn.alpha = 0;
+                } completion:^(BOOL finished) {
+                    self.sendMessageBtn.enabled = false;
+                }];
+            };
         });
     }
 }
 
 // Received data from remote peer
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.loadingWheel.alpha = 1;
-        [self.loadingWheel startAnimating];
-        self.sendMessageBtn.enabled = false;
-    });
-    
-    __block NSInteger matchesReceived = 0;
-    __block NSInteger pitTeamsReceived = 0;
-    
-    NSDictionary *receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    [context performBlock:^{
-        NSDictionary *regionalsDict = [receivedDataDict objectForKey:@"Regionals"];
-        for (NSString *rgnl in regionalsDict) {
-            Regional *regional = [Regional createRegionalWithName:rgnl inManagedObjectContext:context];
-            for (NSString *tm in [regionalsDict objectForKey:rgnl]) {
-                Team *team = [Team createTeamWithName:tm inRegional:regional withManagedObjectContext:context];
-                for (NSString *mtch in [[regionalsDict objectForKey:rgnl] objectForKey:tm]) {
-                    NSDictionary *matchDict = [[[regionalsDict objectForKey:rgnl] objectForKey:tm] objectForKey:mtch];
-                    NSFetchRequest *matchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Match"];
-                    NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum = %@) AND (teamNum.name = %@)", [matchDict objectForKey:@"matchNum"], tm];
-                    matchRequest.predicate = matchPredicate;
-                    NSError *matchError;
-                    NSArray *matches = [context executeFetchRequest:matchRequest error:&matchError];
-                    if ([matches count] == 0){
-                        matchesReceived++;
-                    }
-                    int uniqueID = [[matchDict objectForKey:@"uniqueID"] intValue];
-                    Match *match = [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
-                    if ([match.uniqeID intValue] != uniqueID) {
-                        [FSAdocument.managedObjectContext deleteObject:match];
-                        [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
-                        NSLog(@"Deleted and recreated a match");
-                        matchesReceived++;
-                    }
-                }
-            }
-        }
-        NSDictionary *pitTeamsDict = [receivedDataDict objectForKey:@"PitTeams"];
-        for (NSString *pt in pitTeamsDict) {
-            NSFetchRequest *pitTeamRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
-            NSPredicate *pitTeamPredicate = [NSPredicate predicateWithFormat:@"(teamNumber = %@)", pt];
-            pitTeamRequest.predicate = pitTeamPredicate;
-            NSError *pitTeamError;
-            NSArray *pitTeams = [context executeFetchRequest:pitTeamRequest error:&pitTeamError];
-            if ([pitTeams count] == 0){
-                pitTeamsReceived++;
-            }
-            int uniqueID = [[[pitTeamsDict objectForKey:pt] objectForKey:@"uniqueID"] intValue];
-            PitTeam *pitTeam = [PitTeam createPitTeamWithDictionary:[pitTeamsDict objectForKey:pt] inManagedObjectContext:context];
-            if (uniqueID != [pitTeam.uniqueID intValue]) {
-                [FSAdocument.managedObjectContext deleteObject:pitTeam];
-                [PitTeam createPitTeamWithDictionary:[pitTeamsDict objectForKey:pt] inManagedObjectContext:context];
-                NSLog(@"Deleted and recreated a pit scouted team");
-                pitTeamsReceived++;
-            }
-        }
-        
-        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *messageAlert = [[UIAlertView alloc] initWithTitle:@"You Got Mail!"
-                                                                   message:[[NSString alloc] initWithFormat:@"%@ sent you: \n %ld New Matches and \n %ld New Pit Scouted Teams!", peerID.displayName, (long)matchesReceived, (long)pitTeamsReceived]
-                                                                  delegate:nil
-                                                         cancelButtonTitle:@"Cool"
-                                                         otherButtonTitles:nil];
-            [messageAlert show];
-            [self.loadingWheel stopAnimating];
-            self.loadingWheel.alpha = 0;
-            self.sendMessageBtn.enabled = true;
-        });
-    }];
+    NSLog(@"Did receive data of %lu bytes", (unsigned long)data.length);
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        self.loadingWheel.alpha = 1;
+//        [self.loadingWheel startAnimating];
+//        self.sendMessageBtn.enabled = false;
+//    });
+//    
+//    __block NSInteger matchesReceived = 0;
+//    __block NSInteger pitTeamsReceived = 0;
+//    
+//    NSDictionary *receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//    [context performBlock:^{
+//        NSDictionary *regionalsDict = [receivedDataDict objectForKey:@"Regionals"];
+//        for (NSString *rgnl in regionalsDict) {
+//            Regional *regional = [Regional createRegionalWithName:rgnl inManagedObjectContext:context];
+//            for (NSString *tm in [regionalsDict objectForKey:rgnl]) {
+//                Team *team = [Team createTeamWithName:tm inRegional:regional withManagedObjectContext:context];
+//                for (NSString *mtch in [[regionalsDict objectForKey:rgnl] objectForKey:tm]) {
+//                    NSDictionary *matchDict = [[[regionalsDict objectForKey:rgnl] objectForKey:tm] objectForKey:mtch];
+//                    NSFetchRequest *matchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Match"];
+//                    NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum = %@) AND (teamNum.name = %@)", [matchDict objectForKey:@"matchNum"], tm];
+//                    matchRequest.predicate = matchPredicate;
+//                    NSError *matchError;
+//                    NSArray *matches = [context executeFetchRequest:matchRequest error:&matchError];
+//                    if ([matches count] == 0){
+//                        matchesReceived++;
+//                    }
+//                    int uniqueID = [[matchDict objectForKey:@"uniqueID"] intValue];
+//                    Match *match = [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
+//                    if ([match.uniqeID intValue] != uniqueID) {
+//                        [FSAdocument.managedObjectContext deleteObject:match];
+//                        [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
+//                        NSLog(@"Deleted and recreated a match");
+//                        matchesReceived++;
+//                    }
+//                }
+//            }
+//        }
+//        NSDictionary *pitTeamsDict = [receivedDataDict objectForKey:@"PitTeams"];
+//        for (NSString *pt in pitTeamsDict) {
+//            NSFetchRequest *pitTeamRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+//            NSPredicate *pitTeamPredicate = [NSPredicate predicateWithFormat:@"(teamNumber = %@)", pt];
+//            pitTeamRequest.predicate = pitTeamPredicate;
+//            NSError *pitTeamError;
+//            NSArray *pitTeams = [context executeFetchRequest:pitTeamRequest error:&pitTeamError];
+//            if ([pitTeams count] == 0){
+//                pitTeamsReceived++;
+//            }
+//            int uniqueID = [[[pitTeamsDict objectForKey:pt] objectForKey:@"uniqueID"] intValue];
+//            PitTeam *pitTeam = [PitTeam createPitTeamWithDictionary:[pitTeamsDict objectForKey:pt] inManagedObjectContext:context];
+//            if (uniqueID != [pitTeam.uniqueID intValue]) {
+//                [FSAdocument.managedObjectContext deleteObject:pitTeam];
+//                [PitTeam createPitTeamWithDictionary:[pitTeamsDict objectForKey:pt] inManagedObjectContext:context];
+//                NSLog(@"Deleted and recreated a pit scouted team");
+//                pitTeamsReceived++;
+//            }
+//        }
+//        
+//        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            UIAlertView *messageAlert = [[UIAlertView alloc] initWithTitle:@"You Got Mail!"
+//                                                                   message:[[NSString alloc] initWithFormat:@"%@ sent you: \n %ld New Matches and \n %ld New Pit Scouted Teams!", peerID.displayName, (long)matchesReceived, (long)pitTeamsReceived]
+//                                                                  delegate:nil
+//                                                         cancelButtonTitle:@"Cool"
+//                                                         otherButtonTitles:nil];
+//            [messageAlert show];
+//            [self.loadingWheel stopAnimating];
+//            self.loadingWheel.alpha = 0;
+//            self.sendMessageBtn.enabled = true;
+//        });
+//    }];
     
     
 
@@ -522,19 +573,37 @@ UIButton *doneButton;
 // Start receiving a resource from remote peer
 -(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
     NSProgress *progres = progress;
-    [progres addObserver:self forKeyPath:@"cancelPath" options:NSKeyValueObservingOptionNew context:NULL];
-    [progres addObserver:self forKeyPath:@"completed" options:NSKeyValueObservingOptionNew context:NULL];
+    [progres addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+    [progres addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.2 animations:^{
+            self.progressBar.alpha = 1;
+        }];
+    });
 }
 
 // Finished receiving a resource from remote peer and saved the content in a temporary location - the app is responsible for moving the file to a permanent location within its sandbox
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
     NSURL *receivedTempDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"receivedTempData"];
     
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString alloc] initWithString:[receivedTempDataURL path]]]) {
+        NSError *errorA;
+        [[NSFileManager defaultManager] removeItemAtPath:[receivedTempDataURL path] error:&errorA];
+        if (errorA) {
+            NSLog(@"Removing Error: %@", errorA);
+        }
+    }
+    
+    NSLog(@"HOLY CRAP IT FINISHED!!");
+    
     NSError *error2 = nil;
     if (![[NSFileManager defaultManager] moveItemAtURL:localURL
                                                  toURL:receivedTempDataURL
                                                  error:&error2]) {
         NSLog(@"[Error] %@", error2);
+    }
+    else{
+        NSLog(@"Saved successfully!!!");
     }
 }
 
