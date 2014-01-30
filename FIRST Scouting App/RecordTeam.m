@@ -111,12 +111,12 @@ BOOL isCatchingNo;
 NSString *catchingMechanismString;
 
 // Bumper Quality
-UIControl *bumperOne;
-BOOL isBumperOne;
-UIControl *bumperThree;
-BOOL isBumperThree;
-UIControl *bumperFive;
-BOOL isBumperFive;
+UIControl *bumperPoor;
+BOOL isBumperPoor;
+UIControl *bumperGood;
+BOOL isBumperGood;
+UIControl *bumperGreat;
+BOOL isBumperGreat;
 NSString *bumperQualityString;
 
 // Core Data Helpers
@@ -249,9 +249,9 @@ UIAlertView *overWriteAlert;
     isCatchingYes = false;
     isCatchingNo = false;
     
-    isBumperOne = false;
-    isBumperThree = false;
-    isBumperFive = false;
+    isBumperPoor = false;
+    isBumperGood = false;
+    isBumperGreat = false;
     
     driveTrainString = @"";
     shooterString = @"";
@@ -627,47 +627,47 @@ UIAlertView *overWriteAlert;
     [self.view addSubview:catchingNo];
 }
 -(void)bumperQualityRowSetUp{
-    bumperOne = [[UIControl alloc] initWithFrame:CGRectMake(210, 496, 70, 30)];
-    bumperOne.center = CGPointMake(bumperOne.center.x, _bumperQualityLbl.center.y);
-    [bumperOne addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    bumperOne.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-    bumperOne.layer.cornerRadius = 5;
-    UILabel *bumperOneLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
-    bumperOneLbl.text = @"One";
-    bumperOneLbl.textColor = [UIColor whiteColor];
-    bumperOneLbl.textAlignment = NSTextAlignmentCenter;
-    bumperOneLbl.font = [UIFont boldSystemFontOfSize:12];
-    bumperOneLbl.backgroundColor = [UIColor clearColor];
-    [bumperOne addSubview:bumperOneLbl];
-    [self.view addSubview:bumperOne];
+    bumperPoor = [[UIControl alloc] initWithFrame:CGRectMake(210, 496, 70, 30)];
+    bumperPoor.center = CGPointMake(bumperPoor.center.x, _bumperQualityLbl.center.y);
+    [bumperPoor addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    bumperPoor.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+    bumperPoor.layer.cornerRadius = 5;
+    UILabel *bumperPoorLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+    bumperPoorLbl.text = @"Poor";
+    bumperPoorLbl.textColor = [UIColor whiteColor];
+    bumperPoorLbl.textAlignment = NSTextAlignmentCenter;
+    bumperPoorLbl.font = [UIFont boldSystemFontOfSize:12];
+    bumperPoorLbl.backgroundColor = [UIColor clearColor];
+    [bumperPoor addSubview:bumperPoorLbl];
+    [self.view addSubview:bumperPoor];
     
-    bumperThree = [[UIControl alloc] initWithFrame:CGRectMake(290, 496, 70, 30)];
-    bumperThree.center = CGPointMake(bumperThree.center.x, _bumperQualityLbl.center.y);
-    [bumperThree addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    bumperThree.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-    bumperThree.layer.cornerRadius = 5;
-    UILabel *bumperThreeLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
-    bumperThreeLbl.text = @"Three";
-    bumperThreeLbl.textColor = [UIColor whiteColor];
-    bumperThreeLbl.textAlignment = NSTextAlignmentCenter;
-    bumperThreeLbl.font = [UIFont boldSystemFontOfSize:12];
-    bumperThreeLbl.backgroundColor = [UIColor clearColor];
-    [bumperThree addSubview:bumperThreeLbl];
-    [self.view addSubview:bumperThree];
+    bumperGood = [[UIControl alloc] initWithFrame:CGRectMake(290, 496, 70, 30)];
+    bumperGood.center = CGPointMake(bumperGood.center.x, _bumperQualityLbl.center.y);
+    [bumperGood addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    bumperGood.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+    bumperGood.layer.cornerRadius = 5;
+    UILabel *bumperGoodLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+    bumperGoodLbl.text = @"Good";
+    bumperGoodLbl.textColor = [UIColor whiteColor];
+    bumperGoodLbl.textAlignment = NSTextAlignmentCenter;
+    bumperGoodLbl.font = [UIFont boldSystemFontOfSize:12];
+    bumperGoodLbl.backgroundColor = [UIColor clearColor];
+    [bumperGood addSubview:bumperGoodLbl];
+    [self.view addSubview:bumperGood];
     
-    bumperFive = [[UIControl alloc] initWithFrame:CGRectMake(370, 496, 70, 30)];
-    bumperFive.center = CGPointMake(bumperFive.center.x, _bumperQualityLbl.center.y);
-    [bumperFive addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    bumperFive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-    bumperFive.layer.cornerRadius = 5;
-    UILabel *bumperFiveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
-    bumperFiveLbl.text = @"Five";
-    bumperFiveLbl.textColor = [UIColor whiteColor];
-    bumperFiveLbl.textAlignment = NSTextAlignmentCenter;
-    bumperFiveLbl.font = [UIFont boldSystemFontOfSize:12];
-    bumperFiveLbl.backgroundColor = [UIColor clearColor];
-    [bumperFive addSubview:bumperFiveLbl];
-    [self.view addSubview:bumperFive];
+    bumperGreat = [[UIControl alloc] initWithFrame:CGRectMake(370, 496, 70, 30)];
+    bumperGreat.center = CGPointMake(bumperGreat.center.x, _bumperQualityLbl.center.y);
+    [bumperGreat addTarget:self action:@selector(bumperQualitySelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    bumperGreat.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+    bumperGreat.layer.cornerRadius = 5;
+    UILabel *bumperGreatLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+    bumperGreatLbl.text = @"Great";
+    bumperGreatLbl.textColor = [UIColor whiteColor];
+    bumperGreatLbl.textAlignment = NSTextAlignmentCenter;
+    bumperGreatLbl.font = [UIFont boldSystemFontOfSize:12];
+    bumperGreatLbl.backgroundColor = [UIColor clearColor];
+    [bumperGreat addSubview:bumperGreatLbl];
+    [self.view addSubview:bumperGreat];
 }
 
 - (IBAction)numberValidator:(id)sender {
@@ -1354,64 +1354,64 @@ UIAlertView *overWriteAlert;
     [_teamNumberField resignFirstResponder];
 }
 -(void)bumperQualitySelectionTapped:(UIControl *)controller{
-    if ([controller isEqual:bumperOne]){
-        if (isBumperOne) {
+    if ([controller isEqual:bumperPoor]){
+        if (isBumperPoor) {
             [UIView animateWithDuration:0.2 animations:^{
-                bumperOne.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                bumperPoor.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
-            isBumperOne = false;
+            isBumperPoor = false;
             bumperQualityString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                bumperOne.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                bumperThree.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                bumperFive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                bumperPoor.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                bumperGood.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                bumperGreat.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
-            isBumperOne = true;
-            isBumperThree = false;
-            isBumperFive = false;
-            bumperQualityString = @"One";
+            isBumperPoor = true;
+            isBumperGood = false;
+            isBumperGreat = false;
+            bumperQualityString = @"Poor";
         }
     }
-    else if ([controller isEqual:bumperThree]){
-        if (isBumperThree) {
+    else if ([controller isEqual:bumperGood]){
+        if (isBumperGood) {
             [UIView animateWithDuration:0.2 animations:^{
-                bumperThree.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                bumperGood.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
-            isBumperThree = false;
+            isBumperGood = false;
             bumperQualityString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                bumperOne.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                bumperThree.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                bumperFive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                bumperPoor.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                bumperGood.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                bumperGreat.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
-            isBumperOne = false;
-            isBumperThree = true;
-            isBumperFive = false;
-            bumperQualityString = @"Three";
+            isBumperPoor = false;
+            isBumperGood = true;
+            isBumperGreat = false;
+            bumperQualityString = @"Good";
         }
     }
-    else if ([controller isEqual:bumperFive]){
-        if (isBumperFive) {
+    else if ([controller isEqual:bumperGreat]){
+        if (isBumperGreat) {
             [UIView animateWithDuration:0.2 animations:^{
-                bumperFive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                bumperGreat.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
-            isBumperFive = false;
+            isBumperGreat = false;
             bumperQualityString = @"";
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                bumperOne.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                bumperThree.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                bumperFive.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                bumperPoor.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                bumperGood.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                bumperGreat.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
-            isBumperOne = false;
-            isBumperThree = false;
-            isBumperFive = true;
-            bumperQualityString = @"Five";
+            isBumperPoor = false;
+            isBumperGood = false;
+            isBumperGreat = true;
+            bumperQualityString = @"Great";
         }
     }
     [_teamNameField resignFirstResponder];
@@ -1688,9 +1688,9 @@ UIAlertView *overWriteAlert;
     isCatchingYes = false;
     isCatchingNo = false;
     
-    isBumperOne = false;
-    isBumperThree = false;
-    isBumperFive = false;
+    isBumperPoor = false;
+    isBumperGood = false;
+    isBumperGreat = false;
     
     for (__strong NSString *s in stringsArray) {
         s = @"";

@@ -61,6 +61,19 @@ CGRect selectedCellRect;
     cdtvc.fetchedResultsController = frc;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    NSError *error = nil;
+    [frc performFetch:&error]; // Refetch data
+    if (error != nil) {
+        NSLog(@"ViewTeams Fetch Error: %@", error);
+    }
+    
+    [self.tableView reloadData];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
