@@ -416,6 +416,14 @@ UILabel *blue3UpdaterLbl;
         [red1Selector addTarget:self action:@selector(red1Changed) forControlEvents:UIControlEventValueChanged];
         [red1Selector setFrame:red1SelectorRect];
         [setUpView addSubview:red1Selector];
+        if (pos != nil) {
+            if ([pos isEqualToString:@"Red 1"]) {red1Pos = 0;}
+            else if ([pos isEqualToString:@"Red 2"]){red1Pos = 1;}
+            else if ([pos isEqualToString:@"Red 3"]){red1Pos = 2;}
+            else if ([pos isEqualToString:@"Blue 1"]){red1Pos = 3;}
+            else if ([pos isEqualToString:@"Blue 2"]){red1Pos = 4;}
+            else if ([pos isEqualToString:@"Blue 3"]){red1Pos = 5;}
+        }
         red1Selector.selectedSegmentIndex = red1Pos;
         NSLog(@"Red 1 Pos: %ld", (long)red1Pos);
         

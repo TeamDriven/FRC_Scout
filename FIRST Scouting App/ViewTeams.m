@@ -137,7 +137,7 @@ CGRect selectedCellRect;
     [grayOutview addSubview:pitDetailView];
     
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    closeButton.frame = CGRectMake(480, 15, 60, 15);
+    closeButton.frame = CGRectMake(480, 5, 60, 35);
     [closeButton setTitle:@"Close X" forState:UIControlStateNormal];
     closeButton.titleLabel.font = [UIFont systemFontOfSize:12];
     closeButton.titleLabel.textAlignment = NSTextAlignmentCenter;
