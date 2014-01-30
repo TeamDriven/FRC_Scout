@@ -146,8 +146,6 @@ BOOL overWrite;
     }
 }
 
-
-
 -(void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -255,7 +253,7 @@ BOOL overWrite;
 
     self.sendMessageBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.sendMessageBtn setTitle:@"Send" forState:UIControlStateNormal];
-    self.sendMessageBtn.frame = CGRectMake(330, 250, 100, 50);
+    self.sendMessageBtn.frame = CGRectMake(330, 200, 100, 50);
     self.sendMessageBtn.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     self.sendMessageBtn.layer.cornerRadius = 5;
     [self.sendMessageBtn addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
@@ -264,18 +262,18 @@ BOOL overWrite;
     self.sendMessageBtn.alpha = 0;
     
     self.progressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-    self.progressBar.frame = CGRectMake(309, 310, 150, 2);
+    self.progressBar.frame = CGRectMake(309, 260, 150, 2);
     [self.view addSubview:self.progressBar];
     self.progressBar.alpha = 0;
     
-    overWriteLbl = [[UILabel alloc] initWithFrame:CGRectMake(324, 320, 120, 20)];
+    overWriteLbl = [[UILabel alloc] initWithFrame:CGRectMake(324, 270, 120, 20)];
     overWriteLbl.text = @"Allow Overwriting";
     overWriteLbl.textAlignment = NSTextAlignmentCenter;
     overWriteLbl.font = [UIFont systemFontOfSize:14];
     [self.view addSubview:overWriteLbl];
     overWriteLbl.alpha = 0;
     
-    self.overWriteSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(359, 340, 49, 31)];
+    self.overWriteSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(359, 290, 49, 31)];
     [self.overWriteSwitch addTarget:self action:@selector(overWriteOption) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.overWriteSwitch];
     self.overWriteSwitch.hidden = true;
@@ -396,7 +394,7 @@ BOOL overWrite;
     [dictToSend setObject:regionalsDict forKey:@"Regionals"];
     [dictToSend setObject:pitTeamsDict forKey:@"PitTeams"];
     
-    NSData *dataWithDictToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
+//    NSData *dataWithDictToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
     
     
     NSURL *tempDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"tempData"];
@@ -408,7 +406,7 @@ BOOL overWrite;
         }
     }
     
-    [dataWithDictToSend writeToURL:tempDataURL atomically:YES];
+    [dictToSend writeToURL:tempDataURL atomically:YES];
     
     NSProgress *progress = [self.mySession sendResourceAtURL:tempDataURL withName:@"temporaryData" toPeer:[[self.mySession connectedPeers] objectAtIndex:0] withCompletionHandler:^(NSError *error) {
         if (error) {
@@ -565,16 +563,12 @@ BOOL overWrite;
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
     NSURL *receivedTempDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"receivedTempData"];
     
-    
     if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString alloc] initWithString:[receivedTempDataURL path]]]) {
         NSError *errorA;
         [[NSFileManager defaultManager] removeItemAtPath:[receivedTempDataURL path] error:&errorA];
         if (errorA) {
             NSLog(@"Removing Error: %@", errorA);
         }
-    }
-    else{
-        [[NSFileManager defaultManager] createFileAtPath:[receivedTempDataURL path] contents:nil attributes:nil];
     }
     
     NSLog(@"HOLY CRAP IT FINISHED!!");
@@ -594,8 +588,9 @@ BOOL overWrite;
 
 -(void)updateCoreDataFromTransferredFileFromPeer:(MCPeerID *)peer{
     NSURL *receivedDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"receivedTempData"];
-    NSData *dataReceived = [[NSData alloc] initWithContentsOfURL:receivedDataURL];
-    NSDictionary *receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
+//    NSData *dataReceived = [[NSData alloc] initWithContentsOfURL:receivedDataURL];
+//    NSDictionary *receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
+    NSDictionary *receivedDataDict = [[NSDictionary alloc] initWithContentsOfURL:receivedDataURL];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.loadingWheel.alpha = 1;
