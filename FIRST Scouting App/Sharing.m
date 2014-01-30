@@ -395,7 +395,6 @@ BOOL overWrite;
     
     [dictToSend setObject:regionalsDict forKey:@"Regionals"];
     [dictToSend setObject:pitTeamsDict forKey:@"PitTeams"];
-    NSLog(@"dictToSend: \n %@", dictToSend);
     
     NSData *dataWithDictToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
     
@@ -596,7 +595,6 @@ BOOL overWrite;
 -(void)updateCoreDataFromTransferredFileFromPeer:(MCPeerID *)peer{
     NSURL *receivedDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"receivedTempData"];
     NSData *dataReceived = [[NSData alloc] initWithContentsOfURL:receivedDataURL];
-    NSLog(@"Byte count of read data: %lu", (unsigned long)dataReceived.length);
     NSDictionary *receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
     
     dispatch_async(dispatch_get_main_queue(), ^{
