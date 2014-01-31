@@ -21,6 +21,11 @@
 
 @interface LocationsFirstViewController ()
 
+@property (nonatomic, strong) MCBrowserViewController *browserVC;
+@property (nonatomic, strong) MCAdvertiserAssistant *advertiser;
+@property (nonatomic, strong) MCSession *mySession;
+@property (nonatomic, strong) MCPeerID *myPeerID;
+
 @end
 
 @implementation LocationsFirstViewController
@@ -145,12 +150,19 @@ NSDictionary *duplicateMatchDict;
 UIAlertView *overWriteAlert;
 MCPeerID *senderPeer;
 NSArray *posUpdateArray;
+UIView *red1Updater;
 UILabel *red1UpdaterLbl;
+UIView *red2Updater;
 UILabel *red2UpdaterLbl;
+UIView *red3Updater;
 UILabel *red3UpdaterLbl;
+UIView *blue1Updater;
 UILabel *blue1UpdaterLbl;
+UIView *blue2Updater;
 UILabel *blue2UpdaterLbl;
+UIView *blue3Updater;
 UILabel *blue3UpdaterLbl;
+NSMutableArray *connectedPeersArray;
 
 
 
@@ -173,7 +185,7 @@ UILabel *blue3UpdaterLbl;
     FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
     context = FSAdocument.managedObjectContext;
     
-    NSLog(@"\n Documents URL: %@ \n Path URL: %@ \n ", FSAdocumentsDirectory, FSApathurl);
+//    NSLog(@"\n Documents URL: %@ \n Path URL: %@ \n ", FSAdocumentsDirectory, FSApathurl);
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
         [FSAdocument openWithCompletionHandler:^(BOOL success){
@@ -303,7 +315,7 @@ UILabel *blue3UpdaterLbl;
     [self.view addSubview:lastUpdatedLbl];
     
     lastX += 85;
-    UIView *red1Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    red1Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
     red1Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     red1Updater.layer.cornerRadius = 5;
     [self.view addSubview:red1Updater];
@@ -315,7 +327,7 @@ UILabel *blue3UpdaterLbl;
     [red1Updater addSubview:red1UpdaterLbl];
     
     lastX += 95;
-    UIView *red2Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    red2Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
     red2Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     red2Updater.layer.cornerRadius = 5;
     [self.view addSubview:red2Updater];
@@ -327,7 +339,7 @@ UILabel *blue3UpdaterLbl;
     [red2Updater addSubview:red2UpdaterLbl];
     
     lastX += 95;
-    UIView *red3Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    red3Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
     red3Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     red3Updater.layer.cornerRadius = 5;
     [self.view addSubview:red3Updater];
@@ -339,7 +351,7 @@ UILabel *blue3UpdaterLbl;
     [red3Updater addSubview:red3UpdaterLbl];
     
     lastX += 95;
-    UIView *blue1Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    blue1Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
     blue1Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     blue1Updater.layer.cornerRadius = 5;
     [self.view addSubview:blue1Updater];
@@ -351,7 +363,7 @@ UILabel *blue3UpdaterLbl;
     [blue1Updater addSubview:blue1UpdaterLbl];
     
     lastX += 95;
-    UIView *blue2Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    blue2Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
     blue2Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     blue2Updater.layer.cornerRadius = 5;
     [self.view addSubview:blue2Updater];
@@ -363,7 +375,7 @@ UILabel *blue3UpdaterLbl;
     [blue2Updater addSubview:blue2UpdaterLbl];
     
     lastX += 95;
-    UIView *blue3Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    blue3Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
     blue3Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     blue3Updater.layer.cornerRadius = 5;
     [self.view addSubview:blue3Updater];
@@ -763,6 +775,9 @@ UILabel *blue3UpdaterLbl;
 
 - (IBAction)instashare:(id)sender {
     [self shareScreen];
+    if (self.mySession == NULL) {
+        [self setUpMultiPeer];
+    }
 }
 // Creates custom screen for Multipeer Connectivity
 -(void)shareScreen{
@@ -816,7 +831,7 @@ UILabel *blue3UpdaterLbl;
     inviteMoreBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     inviteMoreBtn.frame = inviteMoreBtnRect;
     [inviteMoreBtn setTitle:@"Invite More" forState:UIControlStateNormal];
-    [inviteMoreBtn addTarget:self action:@selector(inviteMorePeers) forControlEvents:UIControlEventTouchUpInside];
+    [inviteMoreBtn addTarget:self action:@selector(hostSwitch) forControlEvents:UIControlEventTouchUpInside];
     [shareScreen addSubview:inviteMoreBtn];
     
     // Labels the Visible Switch
@@ -877,6 +892,7 @@ UILabel *blue3UpdaterLbl;
                          visibleSwitchLbl.hidden = false;
                          visibleSwitch.hidden = false;
                          visibleSwitch.enabled = true;
+                         [visibleSwitch setOn:true animated:YES];
                          inviteMoreBtn.enabled = host;
                          inviteMoreBtn.hidden = !host;
                          doneButton.hidden = false;
@@ -1092,113 +1108,73 @@ UILabel *blue3UpdaterLbl;
     return sectionWidth;
 }
 
-// Sets up the match data to be sent
--(void)setUpData{
-    dictToSend = nil;
-    dictToSend = [[NSMutableDictionary alloc] init];
-    [dictToSend setObject:[[NSMutableDictionary alloc] init] forKey:currentRegional];
-    [[dictToSend objectForKey:currentRegional] setObject:[[NSMutableDictionary alloc] init] forKey:currentTeamNum];
-//    [[[dictToSend objectForKey:currentRegional] objectForKey:currentTeamNum] setObject:[[NSDictionary alloc] initWithObjectsAndKeys:
-//                                                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleHighScore",
-//                                                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-//                                                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleMidScore",
-//                                                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-//                                                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleLowScore",
-//                                                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-//                                                                                        //[NSNumber numberWithInteger:[m.endGame integerValue]], @"endGame",
-//                                                                                        [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
-//                                                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
-//                                                                                        [NSString stringWithString:pos], @"red1Pos",
-//                                                                                        [NSString stringWithString:scoutTeamNum], @"recordingTeam",
-//                                                                                        [NSString stringWithString:currentMatchType], @"matchType",
-//                                                                                        [NSString stringWithString:currentMatchNum], @"matchNum",
-//                                                                                        [NSNumber numberWithInteger:secs], @"uniqueID", nil] forKey:currentMatchNum];
-}
 
 /**********************************
  ********** Insta-Share ***********
  **********************************/
 
 -(void)setUpMultiPeer{
-    self.myPeerIDS = [[MCPeerID alloc] initWithDisplayName:pos];
+    //  Setup peer ID
+    self.myPeerID = [[MCPeerID alloc] initWithDisplayName:[[NSString alloc] initWithFormat:@"%@ - %@", pos, scoutTeamNum]];
     
-    self.browserSession = [[MCSession alloc] initWithPeer:self.myPeerIDS];
+    //  Setup session
+    self.mySession = [[MCSession alloc] initWithPeer:self.myPeerID];
+    self.mySession.delegate = self;
     
-    self.browserSession.delegate = self;
+    //  Setup BrowserViewController
+    self.browserVC = [[MCBrowserViewController alloc] initWithServiceType:@"frcScorer" session:self.mySession];
+    self.browserVC.delegate = self;
     
-    self.browserVCS = [[MCBrowserViewController alloc] initWithServiceType:@"firstscout" session:self.browserSession];
+    //  Setup Advertiser
+    self.advertiser = [[MCAdvertiserAssistant alloc] initWithServiceType:@"frcScorer" discoveryInfo:nil session:self.mySession];
+    [self.advertiser start];
     
-    self.browserVCS.delegate = self;
-    
-    self.advertiserSession = [[MCSession alloc] initWithPeer:self.myPeerIDS];
-    
-    self.advertiserSession.delegate = self;
-    
-    self.advertiserS = [[MCAdvertiserAssistant alloc] initWithServiceType:@"firstscout" discoveryInfo:nil session:self.advertiserSession];
+    [connectedPeersArray addObject:pos];
 }
 
 
 // Starts Browser role and initiates the MCSession
 -(void)hostSwitch{
     if (hostSwitch.on) {
-        if (visible) {
-//            [self.advertiserS stop];
-        }
-//        host = true;
-//        visible = false;
-        [self setUpMultiPeer];
-//        inviteMoreBtn.enabled = true;
-//        inviteMoreBtn.hidden = false;
-        [self presentViewController:self.browserVCS animated:YES completion:nil];
-//        self.browserVCS.view.layer.cornerRadius = 5;
-//        self.browserVCS.view.superview.layer.cornerRadius = 5;
+        [self presentViewController:self.browserVC animated:YES completion:nil];
+        inviteMoreBtn.enabled = true;
+        inviteMoreBtn.hidden = false;
+        host = true;
     }
     else{
-        if (!visibleSwitch.on) {
-            NSLog(@"Should disconnect");
-//            inviteMoreBtn.enabled = false;
-//            inviteMoreBtn.hidden = true;
-//            [self.browserSession disconnect];
-        }
+        inviteMoreBtn.enabled = false;
+        inviteMoreBtn.hidden = true;
+        host = false;
     }
 }
 // Starts Advertiser role
 -(void)visibleSwitch{
     if (visibleSwitch.on) {
-//        visible = true;
-//        host = false;
-//        [hostSwitch setOn:false animated:YES];
         [self setUpMultiPeer];
-        [self.advertiserS start];
+        visible = true;
     }
     else{
-        [self.advertiserS stop];
-//        [self hostSwitch];
+        [self.mySession disconnect];
+        [self.advertiser stop];
+        visible = false;
     }
 }
--(void)inviteMorePeers{
-    [self presentViewController:self.browserVCS animated:YES completion:nil];
-}
 
--(void)dismissBrowserVCS{
-    [self.browserVCS dismissViewControllerAnimated:NO completion: nil];//^(void){
-//        [visibleSwitch setOn:false animated:YES];
-//        [self closeShareView];
-//    }];
+-(void)dismissBrowserVC{
+    [self.browserVC dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserVCS{
-    NSLog(@"Finished");
-    [self dismissBrowserVCS];
+    [self dismissBrowserVC];
+    [self closeShareView];
 }
 
 -(void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
-    NSLog(@"Cancelled");
-    [self dismissBrowserVCS];
+    [self dismissBrowserVC];
 }
 
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
-    
+    [self dismissBrowserVC];
 }
 
 -(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
@@ -1210,103 +1186,111 @@ UILabel *blue3UpdaterLbl;
 }
 
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
+    NSString *peerString = [peerID displayName];
+    NSString *updatedPeerString = [[peerString componentsSeparatedByString:@" - "] firstObject];
     if (state == MCSessionStateConnected) {
-        NSLog(@"HOLY FRIGGIN CRAP YESSS!!!!");
-        self.advertiserSession = session;
+        NSLog(@"Connected with %@", updatedPeerString);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([updatedPeerString isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor redColor]];}
+            else if ([updatedPeerString isEqualToString:@"Red 2"]){[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor redColor]];}
+            else if ([updatedPeerString isEqualToString:@"Red 3"]){[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor redColor]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 1"]){[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor blueColor]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor blueColor]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor blueColor]];}
+        });
         
-//        self.browserSession = session;
-//        dispatch_async(dispatch_get_main_queue(), ^(void) {
-//            if (visible) {
-//                [UIAlertView showWithTitle:@"Wahoo!" message:[[NSString alloc] initWithFormat:@"You connected with %@!", [peerID displayName]] cancelButtonTitle:@"Got it bro" otherButtonTitles:nil completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-//                    [self closeShareView];
-//                }];
-////                [self.advertiserS stop];
-//            }
-//            if ([[peerID displayName] isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor redColor]];}
-//            else if ([[peerID displayName] isEqualToString:@"Red 2"]) {[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor redColor]];}
-//            else if ([[peerID displayName] isEqualToString:@"Red 3"]) {[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor redColor]];}
-//            else if ([[peerID displayName] isEqualToString:@"Blue 1"]) {[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor blueColor]];}
-//            else if ([[peerID displayName] isEqualToString:@"Blue 2"]) {[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor blueColor]];}
-//            else if ([[peerID displayName] isEqualToString:@"Blue 3"]) {[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor blueColor]];}
-//        });
+        if ([connectedPeersArray containsObject:updatedPeerString]) {
+            NSLog(@"Already Connected, send error!!");
+        }
+        else{
+            [connectedPeersArray addObject:updatedPeerString];
+        }
     }
-    else if (state == MCSessionStateNotConnected){
+    else if (state == MCSessionStateConnected){
+        [connectedPeersArray removeObject:updatedPeerString];
         NSLog(@"Disconnected");
-//        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            if (host) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Uh Oh!"
-                                                               message: [[NSString alloc] initWithFormat:@"%@ left the party!", [peerID displayName]]
-                                                              delegate: nil
-                                                     cancelButtonTitle:@"Got it bro"
-                                                     otherButtonTitles:nil];
-                [alert show];
-            }
-            else if (visible){
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Uh Oh!"
-                                                               message: @"You disconnected from the party!"
-                                                              delegate: nil
-                                                     cancelButtonTitle:@"Got it bro"
-                                                     otherButtonTitles:nil];
-                [alert show];
-            }
-            if ([[peerID displayName] isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];}
-            else if ([[peerID displayName] isEqualToString:@"Red 2"]) {[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];}
-            else if ([[peerID displayName] isEqualToString:@"Red 3"]) {[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];}
-            else if ([[peerID displayName] isEqualToString:@"Blue 1"]) {[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];}
-            else if ([[peerID displayName] isEqualToString:@"Blue 2"]) {[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];}
-            else if ([[peerID displayName] isEqualToString:@"Blue 3"]) {[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];}
-//        });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([updatedPeerString isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Red 2"]){[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Red 3"]){[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 1"]){[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+        });
     }
 }
 
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
-    NSData *dataReceived = data;
-    
-    receivedDataDict = [[NSMutableDictionary alloc] init];
-    receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:dataReceived];
-    
-    senderPeer = [[MCPeerID alloc] initWithDisplayName:[peerID displayName]];
-    
-    NSLog(@"DATA RECEIVED: %lu bytes! \n FROM: %@", (unsigned long)data.length, senderPeer.displayName);
-    NSLog(@"DICT: %@", receivedDataDict);
-    
-    [self dataDictToCoreData];
+    receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    [self dataDictToCoreDataFromPeer:peerID];
 }
 
--(void)dataDictToCoreData{
+-(void)dataDictToCoreDataFromPeer:(MCPeerID *)peer{
     [context performBlock:^{
-        for (NSString *r in receivedDataDict) {
-            Regional *rgnl = [Regional createRegionalWithName:r inManagedObjectContext:context];
-            for (NSString *t in [receivedDataDict objectForKey:r]) {
-                Team *tm = [Team createTeamWithName:t inRegional:rgnl withManagedObjectContext:context];
-                for (NSString *m in [[receivedDataDict objectForKey:r] objectForKey:t]) {
-                    NSDictionary *matchDict = [[[receivedDataDict objectForKey:r] objectForKey:t] objectForKey:m];
-                    NSNumber *uniqueID = [NSNumber numberWithInteger:[[matchDict objectForKey:@"uniqueID"] integerValue]];
-                    Match *mtch = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+        NSString *matchNumberReceived;
+        for (NSString *rgnl in receivedDataDict) {
+            Regional *regional = [Regional createRegionalWithName:rgnl inManagedObjectContext:context];
+            for (NSString *tm in [receivedDataDict objectForKey:rgnl]) {
+                Team *team = [Team createTeamWithName:tm inRegional:regional withManagedObjectContext:context];
+                for (NSString *mtch in [[receivedDataDict objectForKey:rgnl] objectForKey:tm]) {
+                    matchNumberReceived = mtch;
+                    NSDictionary *matchDict = [[[receivedDataDict objectForKey:rgnl] objectForKey:tm] objectForKey:mtch];
+                    Match *match = [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
                     
-                    if ([mtch.uniqeID integerValue] == [uniqueID integerValue]) {
-                        NSLog(@"No conflicts!");
-                    }
-                    else{
-                        [FSAdocument.managedObjectContext deleteObject:mtch];
-                        NSLog(@"Deleted the conflicting match");
-                        [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+                    if ([match.uniqeID integerValue] != [[matchDict objectForKey:@"uniqueID"] integerValue]) {
+                        [[FSAdocument managedObjectContext] deleteObject:match];
+                        [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
                     }
                 }
             }
         }
-        
-        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
-            if (success) {
-                NSLog(@"Saved transferred data");
-            }
-            else{
-                NSLog(@"Didn't transfer regionals correctly.");
-            }
-        }];
-        
-        receivedDataDict = nil;
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {}];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString *peerString = [[NSString alloc] initWithFormat:@"%@", [peer displayName]];
+            NSString *identifiedPeerString = [[peerString componentsSeparatedByString:@" - "] firstObject];
+            if ([identifiedPeerString isEqualToString:@"Red 1"]) {red1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 1 : %@", matchNumberReceived];}
+            else if ([identifiedPeerString isEqualToString:@"Red 2"]){red2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 2 : %@", matchNumberReceived];}
+            else if ([identifiedPeerString isEqualToString:@"Red 3"]){red3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 3 : %@", matchNumberReceived];}
+            else if ([identifiedPeerString isEqualToString:@"Blue 1"]){blue1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 1 : %@", matchNumberReceived];}
+            else if ([identifiedPeerString isEqualToString:@"Blue 2"]){blue2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 2 : %@", matchNumberReceived];}
+            else if ([identifiedPeerString isEqualToString:@"Blue 3"]){blue3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 3 : %@", matchNumberReceived];}
+        });
     }];
+}
+
+-(void)setUpData{
+    NSDate *date = [NSDate date];
+    NSInteger secs = [date timeIntervalSince1970];
+    dictToSend = nil;
+    dictToSend = [[NSMutableDictionary alloc]init];
+    [dictToSend setObject:[[NSMutableDictionary alloc] init] forKey:currentRegional];
+    [[dictToSend objectForKey:currentRegional] setObject:[[NSMutableDictionary alloc] init] forKey:currentTeamNum];
+    [[[dictToSend objectForKey:currentRegional] objectForKey:currentTeamNum] setObject:[[NSDictionary alloc] initWithObjectsAndKeys:
+                [NSNumber numberWithInteger:autoHighHotScore], @"autoHighHotScore",
+                [NSNumber numberWithInteger:autoHighNotScore], @"autoHighNotScore",
+                [NSNumber numberWithInteger:autoHighMissScore], @"autoHighMissScore",
+                [NSNumber numberWithInteger:autoLowHotScore], @"autoLowHotScore",
+                [NSNumber numberWithInteger:autoLowNotScore], @"autoLowNotScore",
+                [NSNumber numberWithInteger:autoLowMissScore], @"autoLowMissScore",
+                [NSNumber numberWithInteger:mobilityBonus], @"mobilityBonus",
+                [NSNumber numberWithInteger:teleopHighMake], @"teleopHighMake",
+                [NSNumber numberWithInteger:teleopHighMiss], @"teleopHighMiss",
+                [NSNumber numberWithInteger:teleopLowMake], @"teleopLowMake",
+                [NSNumber numberWithInteger:teleopLowMiss], @"teleoplowMiss",
+                [NSNumber numberWithInteger:teleopOver], @"teleopOver",
+                [NSNumber numberWithInteger:teleopPassed], @"teleopPassed",
+                [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
+                [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
+                [NSString stringWithString:notes], @"notes",
+                [NSString stringWithString:pos], @"red1Pos",
+                [NSString stringWithString:scoutTeamNum], @"recordingTeam",
+                [NSString stringWithString:initials], @"scoutInitials",
+                [NSString stringWithString:currentMatchType], @"matchType",
+                [NSString stringWithString:currentMatchNum], @"matchNum",
+                [NSNumber numberWithInteger:secs], @"uniqueID", nil]
+        forKey:currentMatchNum];
+    
+                  
 }
 
 /*****************************************
@@ -2049,11 +2033,19 @@ float startY;
                                          otherButtonTitles:nil];
     [alert show];
     
-    // Sends data to connected peers
-//    [self setUpData];
-//    NSData *dataToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
-//    NSError *error;
-//    [self.browserSession sendData:dataToSend toPeers:[self.browserSession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
+    if (self.mySession != NULL) {
+        // Sends data to connected peers
+        [self setUpData];
+        NSData *dataToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
+        NSError *error;
+        [self.mySession sendData:dataToSend toPeers:[self.mySession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
+    }
+    if (red1Pos == 0) {red1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 1 : %@", currentMatchNum];}
+    else if (red1Pos == 1){red2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 2 : %@", currentMatchNum];}
+    else if (red1Pos == 2){red3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 3 : %@", currentMatchNum];}
+    else if (red1Pos == 3){blue1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 1 : %@", currentMatchNum];}
+    else if (red1Pos == 4){blue2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 2 : %@", currentMatchNum];}
+    else if (red1Pos == 5){blue3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 3 : %@", currentMatchNum];}
     
     // Reset all the scores and labels
     autoHighHotScore = 0;
