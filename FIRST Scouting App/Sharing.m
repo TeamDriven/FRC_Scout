@@ -21,7 +21,7 @@
 #import "PitTeam+Category.h"
 
 
-@interface LocationsSecondViewController ()<MCBrowserViewControllerDelegate, MCSessionDelegate, UITextFieldDelegate>
+@interface LocationsSecondViewController ()<MCBrowserViewControllerDelegate, MCSessionDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) MCBrowserViewController *browserVC;
 @property (nonatomic, strong) MCAdvertiserAssistant *advertiser;
@@ -56,14 +56,19 @@ NSManagedObjectContext *context;
 
 NSString *pos;
 
+// Mini Sign in (in case user hasn't signed in yet)
 UIControl *miniSignIn;
 UIControl *grayOUT;
 UISegmentedControl *positionSelector;
 UITextField *teamNumberField;
 UIButton *doneButton;
 
+// Sharing stuff
 UILabel *overWriteLbl;
 BOOL overWrite;
+UIView *syncView;
+UITableView *peersTable;
+UIButton *closeSyncView;
 
 -(void)viewDidLoad{
     [super viewDidLoad];
@@ -408,18 +413,53 @@ BOOL overWrite;
     
     [dictToSend writeToURL:tempDataURL atomically:YES];
     
-    NSProgress *progress = [self.mySession sendResourceAtURL:tempDataURL withName:@"temporaryData" toPeer:[[self.mySession connectedPeers] objectAtIndex:0] withCompletionHandler:^(NSError *error) {
-        if (error) {
-            NSLog(@"[Error] %@", error);
-        }
-        else{
-            NSLog(@"Send Success!");
-        }
-    }];
-    [progress addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
-    [progress addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
-    self.progressBar.alpha = 1;
-    self.progressBar.progress = progress.fractionCompleted;
+    if ([[self.mySession connectedPeers] count] == 1) {
+        NSProgress *progress = [self.mySession sendResourceAtURL:tempDataURL withName:@"temporaryData" toPeer:[[self.mySession connectedPeers] objectAtIndex:0] withCompletionHandler:^(NSError *error) {
+            if (error) {
+                NSLog(@"[Error] %@", error);
+            }
+            else{
+                NSLog(@"Send Success!");
+            }
+        }];
+        [progress addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+        [progress addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+        self.progressBar.alpha = 1;
+        self.progressBar.progress = progress.fractionCompleted;
+    }
+    else{
+        grayOUT = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+        grayOUT.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+        [self.view addSubview:grayOUT];
+        
+        syncView = [[UIView alloc] initWithFrame:CGRectMake(184, 200, 400, 500)];
+        syncView.backgroundColor = [UIColor whiteColor];
+        syncView.layer.cornerRadius = 10;
+        
+        peersTable = [[UITableView alloc] initWithFrame:CGRectMake(15, 100, 370, 480) style:UITableViewStylePlain];
+        peersTable.delegate = self;
+        peersTable.dataSource = self;
+        [syncView addSubview:peersTable];
+        
+        [grayOUT addSubview:syncView];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            
+        }];
+    }
+    
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return [[self.mySession connectedPeers] count];
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"peerCell"];
+    
+    cell.textLabel.text = [[[self.mySession connectedPeers] objectAtIndex:indexPath.row] displayName];
+    
+    return cell;
 }
 
 -(void)overWriteOption{

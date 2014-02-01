@@ -893,7 +893,7 @@
         <scene sceneID="3vf-OK-JxX">
             <objects>
                 <navigationController definesPresentationContext="YES" id="H3i-wM-DTL" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Pit Scouting" id="wYL-Rw-chA"/>
+                    <tabBarItem key="tabBarItem" title="Pit Scouting" image="PitScoutingIcon" id="wYL-Rw-chA"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ntc-hl-WHS">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1504,6 +1504,7 @@
         <image name="Binoculars" width="29" height="29"/>
         <image name="DataArrows" width="30" height="30"/>
         <image name="DataStacks" width="30" height="30"/>
+        <image name="PitScoutingIcon" width="30" height="30"/>
         <image name="RedRobot" width="300" height="200"/>
         <image name="SlideArrow" width="36" height="86"/>
         <image name="TeleopMinusDown" width="200" height="100"/>

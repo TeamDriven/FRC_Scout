@@ -162,7 +162,6 @@ UIView *blue2Updater;
 UILabel *blue2UpdaterLbl;
 UIView *blue3Updater;
 UILabel *blue3UpdaterLbl;
-NSMutableArray *connectedPeersArray;
 
 
 
@@ -804,7 +803,7 @@ NSMutableArray *connectedPeersArray;
     [shareScreen addSubview:instaShareTitle];
     
     // Exit button on the top right
-    CGRect closeButtonRect = CGRectMake(340, 5, 60, 20);
+    CGRect closeButtonRect = CGRectMake(340, 0, 60, 30);
     closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
     closeButton.frame = closeButtonRect;
     [closeButton addTarget:self action:@selector(closeShareView) forControlEvents:UIControlEventTouchUpInside];
@@ -937,6 +936,9 @@ NSMutableArray *connectedPeersArray;
 
 // Called by the red1Selector UISegmentedControl in the SetUpView so that the scout's position is changed precisely when user changes it
 -(void)red1Changed{
+    [self.mySession disconnect];
+    self.mySession = NULL;
+    [self.advertiser stop];
     red1SelectedPos = red1Selector.selectedSegmentIndex;
     pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
     NSLog(@"%@", pos);
@@ -1128,8 +1130,6 @@ NSMutableArray *connectedPeersArray;
     //  Setup Advertiser
     self.advertiser = [[MCAdvertiserAssistant alloc] initWithServiceType:@"frcScorer" discoveryInfo:nil session:self.mySession];
     [self.advertiser start];
-    
-    [connectedPeersArray addObject:pos];
 }
 
 
@@ -1199,15 +1199,18 @@ NSMutableArray *connectedPeersArray;
             else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor blueColor]];}
         });
         
-        if ([connectedPeersArray containsObject:updatedPeerString]) {
+        if ([updatedPeerString isEqualToString:pos]) {
             NSLog(@"Already Connected, send error!!");
-        }
-        else{
-            [connectedPeersArray addObject:updatedPeerString];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *duplicateRolesAlert = [[UIAlertView alloc] initWithTitle:@"Hold Up!"
+                                                                              message:[[NSString alloc] initWithFormat:@"There are two \"%@\" positions connected! One needs to disconnect (toggle the \"Visible\" switch off and on) for this to work right", pos]
+                                                                             delegate:nil
+                                                                    cancelButtonTitle:@"I'm on it." otherButtonTitles: nil];
+                [duplicateRolesAlert show];
+            });
         }
     }
-    else if (state == MCSessionStateConnected){
-        [connectedPeersArray removeObject:updatedPeerString];
+    else if (state == MCSessionStateNotConnected){
         NSLog(@"Disconnected");
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([updatedPeerString isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
@@ -1216,6 +1219,12 @@ NSMutableArray *connectedPeersArray;
             else if ([updatedPeerString isEqualToString:@"Blue 1"]){[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            UIAlertView *disconnectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh no!"
+                                                                        message:[[NSString alloc] initWithFormat:@"You disconnected with %@!", updatedPeerString]
+                                                                       delegate:nil
+                                                              cancelButtonTitle:@"Aw man!"
+                                                              otherButtonTitles:nil];
+            [disconnectedAlert show];
         });
     }
 }
