@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Brown_AutonomousMinus200.png"
+      "filename" : "Brown_TeleopMinus200.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Brown_AutonomousMinus400.png"
+      "filename" : "Brown_TeleopMinus400.png"
     }
   ],
   "info" : {

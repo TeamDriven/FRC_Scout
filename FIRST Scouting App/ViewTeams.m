@@ -61,8 +61,7 @@ CGRect selectedCellRect;
     cdtvc.fetchedResultsController = frc;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
     NSError *error = nil;
@@ -74,23 +73,19 @@ CGRect selectedCellRect;
     [self.tableView reloadData];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)sender
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)sender{
     return 1;
 }
-- (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section{
     return [[[frc sections] objectAtIndex:section] numberOfObjects];
 }
 - (UITableViewCell *)tableView:(UITableView *)sender
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     PitCell *cell = (PitCell *)[_tableView dequeueReusableCellWithIdentifier:@"PitCell"];
     PitTeam *pt = [frc objectAtIndexPath:indexPath];
     
@@ -114,8 +109,7 @@ CGRect selectedCellRect;
    didChangeObject:(id)anObject
        atIndexPath:(NSIndexPath *)indexPath
      forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath
-{
+      newIndexPath:(NSIndexPath *)newIndexPath{
     // here you are supposed call appropriate UITableView methods to update rows!
     // but don’t worry, we’re going to make it easy on you ...
 }

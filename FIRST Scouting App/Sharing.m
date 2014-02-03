@@ -425,6 +425,7 @@ UIButton *closeSyncView;
         [progress addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
         [progress addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
         self.progressBar.alpha = 1;
+        self.progressBar.progressTintColor = [UIColor greenColor];
         self.progressBar.progress = progress.fractionCompleted;
     }
     else{
@@ -436,18 +437,48 @@ UIButton *closeSyncView;
         syncView.backgroundColor = [UIColor whiteColor];
         syncView.layer.cornerRadius = 10;
         
-        peersTable = [[UITableView alloc] initWithFrame:CGRectMake(15, 100, 370, 480) style:UITableViewStylePlain];
+        UIButton *syncViewCloseBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        syncViewCloseBtn.frame = CGRectMake(340, 0, 60, 40);
+        syncViewCloseBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
+        syncViewCloseBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+        [syncViewCloseBtn setTitle:@"Close X" forState:UIControlStateNormal];
+        [syncViewCloseBtn addTarget:self action:@selector(closeSyncView) forControlEvents:UIControlEventTouchUpInside];
+        [syncView addSubview:syncViewCloseBtn];
+        
+        UILabel *syncViewLbl = [[UILabel alloc] initWithFrame:CGRectMake(50, 25, 300, 60)];
+        syncViewLbl.text = @"Select someone to send to";
+        syncViewLbl.textAlignment = NSTextAlignmentCenter;
+        syncViewLbl.font = [UIFont systemFontOfSize:20];
+        [syncView addSubview:syncViewLbl];
+        
+        peersTable = [[UITableView alloc] initWithFrame:CGRectMake(15, 100, 370, 380) style:UITableViewStylePlain];
         peersTable.delegate = self;
         peersTable.dataSource = self;
+        peersTable.layer.cornerRadius = 5;
+        peersTable.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
+        peersTable.layer.borderWidth = 1;
         [syncView addSubview:peersTable];
         
         [grayOUT addSubview:syncView];
         
+        syncView.center = CGPointMake(syncView.center.x, 1424);
         [UIView animateWithDuration:0.3 animations:^{
-            
+            syncView.center = CGPointMake(syncView.center.x, 500);
+        } completion:^(BOOL finished) {
+            [peersTable reloadData];
         }];
     }
     
+}
+
+-(void)closeSyncView{
+    [UIView animateWithDuration:0.3 animations:^{
+        syncView.center = CGPointMake(syncView.center.x, 1424);
+    } completion:^(BOOL finished) {
+        [syncView removeFromSuperview];
+        [grayOUT removeFromSuperview];
+        self.sendMessageBtn.enabled = true;
+    }];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -574,6 +605,9 @@ UIButton *closeSyncView;
             };
         });
     }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [peersTable reloadData];
+    });
 }
 
 // Received data from remote peer
@@ -589,6 +623,7 @@ UIButton *closeSyncView;
 // Start receiving a resource from remote peer
 -(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
     NSProgress *progres = progress;
+    self.progressBar.progressTintColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
     [progres addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
     [progres addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -603,27 +638,30 @@ UIButton *closeSyncView;
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
     NSURL *receivedTempDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"receivedTempData"];
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString alloc] initWithString:[receivedTempDataURL path]]]) {
-        NSError *errorA;
-        [[NSFileManager defaultManager] removeItemAtPath:[receivedTempDataURL path] error:&errorA];
-        if (errorA) {
-            NSLog(@"Removing Error: %@", errorA);
+    if ([self.mySession.connectedPeers containsObject:peerID]) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString alloc] initWithString:[receivedTempDataURL path]]]) {
+            NSError *errorA;
+            [[NSFileManager defaultManager] removeItemAtPath:[receivedTempDataURL path] error:&errorA];
+            if (errorA) {
+                NSLog(@"Removing Error: %@", errorA);
+            }
         }
+        
+        NSLog(@"HOLY CRAP IT FINISHED!!");
+        
+        NSError *error2 = nil;
+        
+        if (![[NSFileManager defaultManager] moveItemAtURL:localURL
+                                                     toURL:receivedTempDataURL
+                                                     error:&error2]) {
+            NSLog(@"[Error] %@", error2);
+        }
+        else{
+            NSLog(@"Saved successfully!!!");
+        }
+        
+        [self updateCoreDataFromTransferredFileFromPeer:peerID];
     }
-    
-    NSLog(@"HOLY CRAP IT FINISHED!!");
-    
-    NSError *error2 = nil;
-    if (![[NSFileManager defaultManager] moveItemAtURL:localURL
-                                                 toURL:receivedTempDataURL
-                                                 error:&error2]) {
-        NSLog(@"[Error] %@", error2);
-    }
-    else{
-        NSLog(@"Saved successfully!!!");
-    }
-    
-    [self updateCoreDataFromTransferredFileFromPeer:peerID];
 }
 
 -(void)updateCoreDataFromTransferredFileFromPeer:(MCPeerID *)peer{

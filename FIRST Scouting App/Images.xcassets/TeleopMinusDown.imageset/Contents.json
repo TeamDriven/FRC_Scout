@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "TeleOp2Minus200.png"
+      "filename" : "TeleopMinusDown200.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "TeleOp2Minus400.png"
+      "filename" : "TeleopMinusDown400.png"
     }
   ],
   "info" : {
