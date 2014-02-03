@@ -19,6 +19,7 @@
 #import "Match+Category.h"
 #import "PitTeam.h"
 #import "PitTeam+Category.h"
+#import "PeerCell.h"
 
 
 @interface LocationsSecondViewController ()<MCBrowserViewControllerDelegate, MCSessionDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
@@ -54,6 +55,8 @@ NSURL *FSApathurl;
 UIManagedDocument *FSAdocument;
 NSManagedObjectContext *context;
 
+NSURL *tempDataURL;
+
 NSString *pos;
 
 // Mini Sign in (in case user hasn't signed in yet)
@@ -69,6 +72,10 @@ BOOL overWrite;
 UIView *syncView;
 UITableView *peersTable;
 UIButton *closeSyncView;
+PeerCell *selectedCell;
+BOOL isSending;
+PeerCell *receivingCell;
+BOOL isReceiving;
 
 -(void)viewDidLoad{
     [super viewDidLoad];
@@ -332,6 +339,179 @@ UIButton *closeSyncView;
 -(void)sendText{
     self.sendMessageBtn.enabled = false;
     
+    
+    if ([[self.mySession connectedPeers] count] == 1) {
+        
+        NSMutableDictionary *dictToSend = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *regionalsDict = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *pitTeamsDict = [[NSMutableDictionary alloc] init];
+        
+        NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
+        NSError *regionalError;
+        
+        NSArray *regionals = [context executeFetchRequest:regionalRequest error:&regionalError];
+        for (Regional *rgnl in regionals) {
+            [regionalsDict setObject:[[NSMutableDictionary alloc] init] forKey:rgnl.name];
+            for (Team *tm in rgnl.teams) {
+                [[regionalsDict objectForKey:rgnl.name] setObject:[[NSMutableDictionary alloc] init] forKey:tm.name];
+                for (Match *mtch in tm.matches) {
+                    [[[regionalsDict objectForKey:rgnl.name] objectForKey:tm.name]
+                     setObject:[[NSDictionary alloc]
+                                initWithObjectsAndKeys:
+                                [NSNumber numberWithInteger:[mtch.autoHighHotScore integerValue]], @"autoHighHotScore",
+                                [NSNumber numberWithInteger:[mtch.autoHighNotScore integerValue]], @"autoHighNotScore",
+                                [NSNumber numberWithInteger:[mtch.autoHighMissScore integerValue]], @"autoHighMissScore",
+                                [NSNumber numberWithInteger:[mtch.autoLowHotScore integerValue]], @"autoLowHotScore",
+                                [NSNumber numberWithInteger:[mtch.autoLowNotScore integerValue]], @"autoLowNotScore",
+                                [NSNumber numberWithInteger:[mtch.autoLowMissScore integerValue]], @"autoLowMissScore",
+                                [NSNumber numberWithInteger:[mtch.mobilityBonus integerValue]], @"mobilityBonus",
+                                [NSNumber numberWithInteger:[mtch.teleopHighMake integerValue]], @"teleopHighMake",
+                                [NSNumber numberWithInteger:[mtch.teleopHighMiss integerValue]], @"teleopHighMiss",
+                                [NSNumber numberWithInteger:[mtch.teleopLowMake integerValue]], @"teleopLowMake",
+                                [NSNumber numberWithInteger:[mtch.teleopLowMiss integerValue]], @"teleopLowMiss",
+                                [NSNumber numberWithInteger:[mtch.teleopOver integerValue]], @"teleopOver",
+                                [NSNumber numberWithInteger:[mtch.teleopPassed integerValue]], @"teleopPassed",
+                                [NSNumber numberWithInteger:[mtch.penaltyLarge integerValue]], @"penaltyLarge",
+                                [NSNumber numberWithInteger:[mtch.penaltySmall integerValue]], @"penaltySmall",
+                                [NSString stringWithString:mtch.notes], @"notes",
+                                [NSString stringWithString:mtch.red1Pos], @"red1Pos",
+                                [NSString stringWithString:mtch.recordingTeam], @"recordingTeam",
+                                [NSString stringWithString:mtch.scoutInitials], @"scoutInitials",
+                                [NSString stringWithString:mtch.matchType], @"matchType",
+                                [NSString stringWithString:mtch.matchNum], @"matchNum",
+                                [NSNumber numberWithInteger:[mtch.uniqeID integerValue]], @"uniqueID",nil] forKey:mtch.matchNum];
+                }
+            }
+        }
+        
+        NSFetchRequest *pitTeamsRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+        NSError *pitTeamError;
+        NSArray *pitTeams = [context executeFetchRequest:pitTeamsRequest error:&pitTeamError];
+        for (PitTeam *pt in pitTeams) {
+            [pitTeamsDict setObject:[[NSDictionary alloc] initWithObjectsAndKeys:
+                                     [NSString stringWithString:pt.driveTrain], @"driveTrain",
+                                     [NSString stringWithString:pt.shooter], @"shooter",
+                                     [NSString stringWithString:pt.preferredGoal], @"preferredGoal",
+                                     [NSString stringWithString:pt.goalieArm], @"goalieArm",
+                                     [NSString stringWithString:pt.floorCollector], @"floorCollector",
+                                     [NSString stringWithString:pt.autonomous], @"autonomous",
+                                     [NSString stringWithString:pt.autoStartingPosition], @"autoStartingPosition",
+                                     [NSString stringWithString:pt.hotGoalTracking], @"hotGoalTracking",
+                                     [NSString stringWithString:pt.catchingMechanism], @"catchingMechanism",
+                                     [NSString stringWithString:pt.bumperQuality], @"bumperQuality",
+                                     [NSData dataWithData:pt.image], @"image",
+                                     [NSString stringWithString:pt.teamNumber], @"teamNumber",
+                                     [NSString stringWithString:pt.teamName], @"teamName",
+                                     [NSString stringWithString:pt.notes], @"notes",
+                                     [NSNumber numberWithInteger:[pt.uniqueID integerValue]], @"uniqueID", nil] forKey:pt.teamNumber];
+        }
+        
+        [dictToSend setObject:regionalsDict forKey:@"Regionals"];
+        [dictToSend setObject:pitTeamsDict forKey:@"PitTeams"];
+        
+        //    NSData *dataWithDictToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
+        
+        
+        tempDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"tempData"];
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[tempDataURL path]]) {
+            NSError *deleteError;
+            if (![[NSFileManager defaultManager] removeItemAtURL:tempDataURL error:&deleteError]) {
+                NSLog(@"Delete Error: %@", deleteError);
+            }
+        }
+        
+        [dictToSend writeToURL:tempDataURL atomically:YES];
+        
+        NSProgress *progress = [self.mySession sendResourceAtURL:tempDataURL withName:@"temporaryData" toPeer:[[self.mySession connectedPeers] objectAtIndex:0] withCompletionHandler:^(NSError *error) {
+            if (error) {
+                NSLog(@"Progress Error no Sync Screen: %@", error);
+            }
+            else{
+                NSLog(@"Send Success!");
+            }
+        }];
+        [progress addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+        [progress addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+        self.progressBar.alpha = 1;
+        self.progressBar.progressTintColor = [UIColor greenColor];
+        self.progressBar.progress = progress.fractionCompleted;
+    }
+    else{
+        grayOUT = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+        grayOUT.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+        [self.view addSubview:grayOUT];
+        
+        syncView = [[UIView alloc] initWithFrame:CGRectMake(184, 200, 400, 500)];
+        syncView.backgroundColor = [UIColor whiteColor];
+        syncView.layer.cornerRadius = 10;
+        
+        UIButton *syncViewCloseBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        syncViewCloseBtn.frame = CGRectMake(340, 0, 60, 40);
+        syncViewCloseBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
+        syncViewCloseBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+        [syncViewCloseBtn setTitle:@"Close X" forState:UIControlStateNormal];
+        [syncViewCloseBtn addTarget:self action:@selector(closeSyncView) forControlEvents:UIControlEventTouchUpInside];
+        [syncView addSubview:syncViewCloseBtn];
+        
+        UILabel *syncViewLbl = [[UILabel alloc] initWithFrame:CGRectMake(50, 25, 300, 60)];
+        syncViewLbl.text = @"Select someone to send to";
+        syncViewLbl.textAlignment = NSTextAlignmentCenter;
+        syncViewLbl.font = [UIFont systemFontOfSize:20];
+        [syncView addSubview:syncViewLbl];
+        
+        peersTable = [[UITableView alloc] initWithFrame:CGRectMake(15, 100, 370, 380) style:UITableViewStylePlain];
+        peersTable.delegate = self;
+        peersTable.dataSource = self;
+        peersTable.layer.cornerRadius = 5;
+        peersTable.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
+        peersTable.layer.borderWidth = 1;
+        peersTable.rowHeight = 70;
+        peersTable.separatorInset = UIEdgeInsetsMake(0, 3, 0, 3);
+        [syncView addSubview:peersTable];
+        
+        [grayOUT addSubview:syncView];
+        
+        syncView.center = CGPointMake(syncView.center.x, 1424);
+        [UIView animateWithDuration:0.3 animations:^{
+            syncView.center = CGPointMake(syncView.center.x, 500);
+        } completion:^(BOOL finished) {
+            [peersTable reloadData];
+        }];
+    }
+    
+}
+
+-(void)closeSyncView{
+    [UIView animateWithDuration:0.3 animations:^{
+        syncView.center = CGPointMake(syncView.center.x, 1424);
+    } completion:^(BOOL finished) {
+        [syncView removeFromSuperview];
+        [grayOUT removeFromSuperview];
+        self.sendMessageBtn.enabled = true;
+    }];
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return [[self.mySession connectedPeers] count];
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    PeerCell *cell = (PeerCell *)[[PeerCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"peerCell"];
+    
+    cell.peerNameLbl.text = [[[self.mySession connectedPeers] objectAtIndex:indexPath.row] displayName];
+    
+    cell.selected = false;
+    
+    
+    return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    selectedCell = (PeerCell  *)[peersTable cellForRowAtIndexPath:indexPath];
+    
+    [peersTable deselectRowAtIndexPath:indexPath animated:YES];
+    
     NSMutableDictionary *dictToSend = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *regionalsDict = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *pitTeamsDict = [[NSMutableDictionary alloc] init];
@@ -399,10 +579,7 @@ UIButton *closeSyncView;
     [dictToSend setObject:regionalsDict forKey:@"Regionals"];
     [dictToSend setObject:pitTeamsDict forKey:@"PitTeams"];
     
-//    NSData *dataWithDictToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
-    
-    
-    NSURL *tempDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"tempData"];
+    tempDataURL = [FSAdocumentsDirectory URLByAppendingPathComponent:@"tempData"];
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:[tempDataURL path]]) {
         NSError *deleteError;
@@ -413,84 +590,26 @@ UIButton *closeSyncView;
     
     [dictToSend writeToURL:tempDataURL atomically:YES];
     
-    if ([[self.mySession connectedPeers] count] == 1) {
-        NSProgress *progress = [self.mySession sendResourceAtURL:tempDataURL withName:@"temporaryData" toPeer:[[self.mySession connectedPeers] objectAtIndex:0] withCompletionHandler:^(NSError *error) {
-            if (error) {
-                NSLog(@"[Error] %@", error);
-            }
-            else{
-                NSLog(@"Send Success!");
-            }
-        }];
-        [progress addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
-        [progress addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
-        self.progressBar.alpha = 1;
-        self.progressBar.progressTintColor = [UIColor greenColor];
-        self.progressBar.progress = progress.fractionCompleted;
-    }
-    else{
-        grayOUT = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
-        grayOUT.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
-        [self.view addSubview:grayOUT];
-        
-        syncView = [[UIView alloc] initWithFrame:CGRectMake(184, 200, 400, 500)];
-        syncView.backgroundColor = [UIColor whiteColor];
-        syncView.layer.cornerRadius = 10;
-        
-        UIButton *syncViewCloseBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-        syncViewCloseBtn.frame = CGRectMake(340, 0, 60, 40);
-        syncViewCloseBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
-        syncViewCloseBtn.titleLabel.font = [UIFont systemFontOfSize:12];
-        [syncViewCloseBtn setTitle:@"Close X" forState:UIControlStateNormal];
-        [syncViewCloseBtn addTarget:self action:@selector(closeSyncView) forControlEvents:UIControlEventTouchUpInside];
-        [syncView addSubview:syncViewCloseBtn];
-        
-        UILabel *syncViewLbl = [[UILabel alloc] initWithFrame:CGRectMake(50, 25, 300, 60)];
-        syncViewLbl.text = @"Select someone to send to";
-        syncViewLbl.textAlignment = NSTextAlignmentCenter;
-        syncViewLbl.font = [UIFont systemFontOfSize:20];
-        [syncView addSubview:syncViewLbl];
-        
-        peersTable = [[UITableView alloc] initWithFrame:CGRectMake(15, 100, 370, 380) style:UITableViewStylePlain];
-        peersTable.delegate = self;
-        peersTable.dataSource = self;
-        peersTable.layer.cornerRadius = 5;
-        peersTable.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
-        peersTable.layer.borderWidth = 1;
-        [syncView addSubview:peersTable];
-        
-        [grayOUT addSubview:syncView];
-        
-        syncView.center = CGPointMake(syncView.center.x, 1424);
-        [UIView animateWithDuration:0.3 animations:^{
-            syncView.center = CGPointMake(syncView.center.x, 500);
-        } completion:^(BOOL finished) {
-            [peersTable reloadData];
-        }];
+    
+    
+    for (int i = 0; i < [[self.mySession connectedPeers] count]; i++) {
+        [peersTable cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]].userInteractionEnabled = false;
     }
     
-}
-
--(void)closeSyncView{
-    [UIView animateWithDuration:0.3 animations:^{
-        syncView.center = CGPointMake(syncView.center.x, 1424);
-    } completion:^(BOOL finished) {
-        [syncView removeFromSuperview];
-        [grayOUT removeFromSuperview];
-        self.sendMessageBtn.enabled = true;
+    NSProgress *progress = [self.mySession sendResourceAtURL:tempDataURL withName:@"temporaryData" toPeer:[[self.mySession connectedPeers] objectAtIndex:indexPath.row] withCompletionHandler:^(NSError *error) {
+        if (error) {
+            NSLog(@"Progress Error With Sync Screen: %@", error);
+        }
+        else{
+            NSLog(@"Send Success!");
+        }
     }];
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [[self.mySession connectedPeers] count];
-}
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"peerCell"];
+    [progress addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+    [progress addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+    selectedCell.progressBar.alpha = 1;
+    selectedCell.progressBar.progressTintColor = [UIColor greenColor];
+    selectedCell.progressBar.progress = progress.fractionCompleted;
     
-    cell.textLabel.text = [[[self.mySession connectedPeers] objectAtIndex:indexPath.row] displayName];
-    
-    return cell;
 }
 
 -(void)overWriteOption{
@@ -514,33 +633,64 @@ UIButton *closeSyncView;
 //        }
         if ([keyPath isEqualToString:kProgressCancelledKeyPath]) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [UIView animateWithDuration:0.2 animations:^{
-                    self.progressBar.alpha = 0;
-                } completion:^(BOOL finished) {
-                    self.progressBar.progress = 0.0;
-                }];
-            });
-        }
-        else if ([keyPath isEqualToString:kProgressCompletedUnitCountKeyPath]){
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.progressBar.progress = progress.fractionCompleted;
-            });
-        
-            if (progress.completedUnitCount == progress.totalUnitCount) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                if ([syncView isDescendantOfView:grayOUT]) {
+                    [UIView animateWithDuration:0.2 animations:^{
+                        selectedCell.progressBar.alpha = 0;
+                        receivingCell.progressBar.alpha = 0;
+                    } completion:^(BOOL finished) {
+                        selectedCell.progressBar.progress = 0.0;
+                        receivingCell.progressBar.progress = 0.0;
+                    }];
+                }
+                else{
                     [UIView animateWithDuration:0.2 animations:^{
                         self.progressBar.alpha = 0;
                     } completion:^(BOOL finished) {
                         self.progressBar.progress = 0.0;
                     }];
-                    if ([[NSFileManager defaultManager] fileExistsAtPath:[[FSAdocumentsDirectory URLByAppendingPathComponent:@"tempData"] path]]) {
-                        NSError *deleteSentDataError;
-                        if (![[NSFileManager defaultManager] removeItemAtURL:[FSAdocumentsDirectory URLByAppendingPathComponent:@"tempData"] error:&deleteSentDataError]) {
-                            NSLog(@"Delete Sent Data Error: %@", deleteSentDataError);
-                        }
+                }
+            });
+        }
+        else if ([keyPath isEqualToString:kProgressCompletedUnitCountKeyPath]){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([syncView isDescendantOfView:grayOUT]) {
+                    selectedCell.progressBar.progress = progress.fractionCompleted;
+                    receivingCell.progressBar.progress = progress.fractionCompleted;
+                }
+                else{
+                    self.progressBar.progress = progress.fractionCompleted;
+                }
+            });
+        
+            if (progress.completedUnitCount == progress.totalUnitCount) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([syncView isDescendantOfView:grayOUT]) {
+                        [UIView animateWithDuration:0.2 animations:^{
+                            selectedCell.progressBar.alpha = 0;
+                            receivingCell.progressBar.alpha = 0;
+                        } completion:^(BOOL finished) {
+                            selectedCell.progressBar.progress = 0.0;
+                            receivingCell.progressBar.progress = 0.0;
+                        }];
+                    }
+                    else{
+                        [UIView animateWithDuration:0.2 animations:^{
+                            self.progressBar.alpha = 0;
+                        } completion:^(BOOL finished) {
+                            self.progressBar.progress = 0.0;
+                        }];
+                    }
+                    for (int i = 0; i < [[self.mySession connectedPeers] count]; i++) {
+                        [peersTable cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]].userInteractionEnabled = true;
                     }
                     self.sendMessageBtn.enabled = true;
                 });
+                if ([[NSFileManager defaultManager] fileExistsAtPath:[[FSAdocumentsDirectory URLByAppendingPathComponent:@"tempData"] path]]) {
+                    NSError *deleteSentDataError;
+                    if (![[NSFileManager defaultManager] removeItemAtURL:[FSAdocumentsDirectory URLByAppendingPathComponent:@"tempData"] error:&deleteSentDataError]) {
+                        NSLog(@"Delete Sent Data Error: %@", deleteSentDataError);
+                    }
+                }
             }
         }
     }
@@ -623,15 +773,28 @@ UIButton *closeSyncView;
 // Start receiving a resource from remote peer
 -(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
     NSProgress *progres = progress;
-    self.progressBar.progressTintColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-    [progres addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
-    [progres addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.2 animations:^{
-            self.progressBar.alpha = 1;
-        }];
-        self.sendMessageBtn.enabled = false;
-    });
+    if ([syncView isDescendantOfView:grayOUT]) {
+        receivingCell = (PeerCell *)[peersTable cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[[self.mySession connectedPeers] indexOfObject:peerID] inSection:0]];
+        [progres addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+        [progres addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            receivingCell.progressBar.progressTintColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+            [UIView animateWithDuration:0.2 animations:^{
+                receivingCell.progressBar.alpha = 1;
+            }];
+        });
+    }
+    else{
+        [progres addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+        [progres addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.progressBar.progressTintColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+            [UIView animateWithDuration:0.2 animations:^{
+                self.progressBar.alpha = 1;
+            }];
+            self.sendMessageBtn.enabled = false;
+        });
+    }
 }
 
 // Finished receiving a resource from remote peer and saved the content in a temporary location - the app is responsible for moving the file to a permanent location within its sandbox
@@ -654,7 +817,7 @@ UIButton *closeSyncView;
         if (![[NSFileManager defaultManager] moveItemAtURL:localURL
                                                      toURL:receivedTempDataURL
                                                      error:&error2]) {
-            NSLog(@"[Error] %@", error2);
+            NSLog(@"Move local URL Error %@", error2);
         }
         else{
             NSLog(@"Saved successfully!!!");
@@ -740,9 +903,9 @@ UIButton *closeSyncView;
             self.sendMessageBtn.enabled = true;
         });
         
-        NSError *deleteError;
-        if (![[NSFileManager defaultManager] removeItemAtURL:receivedDataURL error:&deleteError]) {
-            NSLog(@"Error: %@", deleteError);
+        NSError *receivedDeleteError;
+        if (![[NSFileManager defaultManager] removeItemAtURL:receivedDataURL error:&receivedDeleteError]) {
+            NSLog(@"ReceivedDataDelete Error: %@", receivedDeleteError);
         }
         else{
             NSLog(@"Deleted received data properly!");

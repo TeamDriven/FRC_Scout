@@ -10,4 +10,8 @@
 
 @interface PeerCell : UITableViewCell
 
+@property (nonatomic, strong)UILabel *peerNameLbl;
+
+@property (nonatomic, strong)UIProgressView *progressBar;
+
 @end
