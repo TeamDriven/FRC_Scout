@@ -1105,7 +1105,7 @@ UILabel *blue3UpdaterLbl;
 
 // Tell the picker the width of each row for a given component (420)
 -(CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
-    int sectionWidth = 420;
+    int sectionWidth = 480;
     
     return sectionWidth;
 }

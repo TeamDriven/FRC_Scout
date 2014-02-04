@@ -24,5 +24,13 @@ extern NSString *currentRegional;
 
 // All regionals in the 2014 season in chronological order
 extern NSArray *regionalNames;
+extern NSArray *week1Regionals;
+extern NSArray *week2Regionals;
+extern NSArray *week3Regionals;
+extern NSArray *week4Regionals;
+extern NSArray *week5Regionals;
+extern NSArray *week6Regionals;
+extern NSArray *week7Regionals;
+extern NSArray *allWeekRegionals;
 
 @end
