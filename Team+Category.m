@@ -15,7 +15,7 @@
     Team *team = nil;
     
     NSFetchRequest *teamRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
-    NSPredicate *teamPredicate = [NSPredicate predicateWithFormat:@"(name contains %@) AND (regionalIn.name contains %@)", name, rgnl.name];
+    NSPredicate *teamPredicate = [NSPredicate predicateWithFormat:@"(name = %@) AND (regionalIn.name = %@)", name, rgnl.name];
     teamRequest.predicate = teamPredicate;
     
     NSError *teamError;

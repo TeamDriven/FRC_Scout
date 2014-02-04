@@ -2,7 +2,7 @@
 //  PeerCell.m
 //  FIRST Scouting App
 //
-//  Created by Louie Bertoncin on 1/6/14.
+//  Created by Bertoncin,Louie on 2/3/14.
 //  Copyright (c) 2014 teamDriven. All rights reserved.
 //
 
@@ -15,26 +15,16 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        self.peerLbl = [[UILabel alloc] initWithFrame:CGRectMake(150, 30, 80, 20)];
-        self.peerLbl.textAlignment = NSTextAlignmentCenter;
-        self.peerLbl.font = [UIFont systemFontOfSize:16];
-        [self addSubview:self.peerLbl];
+        self.peerNameLbl = [[UILabel alloc] initWithFrame:CGRectMake(10, 15, 200, 40)];
+        self.peerNameLbl.textAlignment = NSTextAlignmentLeft;
+        self.peerNameLbl.font = [UIFont boldSystemFontOfSize:20];
+        [self addSubview:self.peerNameLbl];
         
-        self.connectedLbl = [[UILabel alloc] initWithFrame:CGRectMake(220, 28, 140, 20)];
-        self.connectedLbl.textAlignment = NSTextAlignmentRight;
-        self.connectedLbl.font = [UIFont boldSystemFontOfSize:18];
-        self.connectedLbl.text = @"Connected!";
-        self.connectedLbl.alpha = 0;
-        self.connectedLbl.textColor = [UIColor greenColor];
-        [self addSubview:self.connectedLbl];
-        
-        self.alreadyConnectedLbl = [[UILabel alloc] initWithFrame:CGRectMake(15, 30, 120, 20)];
-        self.alreadyConnectedLbl.textAlignment = NSTextAlignmentLeft;
-        self.alreadyConnectedLbl.font = [UIFont systemFontOfSize:12];
-        self.alreadyConnectedLbl.textColor = [UIColor redColor];
-        self.alreadyConnectedLbl.alpha = 0;
-        [self addSubview:self.alreadyConnectedLbl];
-        
+        self.progressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+        self.progressBar.frame = CGRectMake(220, 34, 130, 1);
+        self.progressBar.transform = CGAffineTransformMakeScale(1.0f, 3.0f);
+        self.progressBar.alpha = 0;
+        [self addSubview:self.progressBar];
     }
     return self;
 }

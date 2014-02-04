@@ -15,10 +15,16 @@
 #import "Team+Category.h"
 #import "Match.h"
 #import "Match+Category.h"
-#import "PeerCell.h"
+#import "PitTeam.h"
+#import "PitTeam+Category.h"
 #import "UIAlertView+Blocks.h"
 
 @interface LocationsFirstViewController ()
+
+@property (nonatomic, strong) MCBrowserViewController *browserVC;
+@property (nonatomic, strong) MCAdvertiserAssistant *advertiser;
+@property (nonatomic, strong) MCSession *mySession;
+@property (nonatomic, strong) MCPeerID *myPeerID;
 
 @end
 
@@ -26,14 +32,26 @@
 
 
 // Match Data Variables
-NSInteger teleopHighScore;
-NSInteger autoHighScore;
-NSInteger teleopMidScore;
-NSInteger autoMidScore;
-NSInteger teleopLowScore;
-NSInteger autoLowScore;
+NSInteger autoHighHotScore;
+NSInteger autoHighNotScore;
+NSInteger autoHighMissScore;
+NSInteger autoLowHotScore;
+NSInteger autoLowNotScore;
+NSInteger autoLowMissScore;
+NSInteger mobilityBonus;
+
+NSInteger teleopHighMake;
+NSInteger teleopHighMiss;
+NSInteger teleopLowMake;
+NSInteger teleopLowMiss;
+NSInteger teleopOver;
+NSInteger teleopCatch;
+NSInteger teleopPassed;
+NSInteger teleopReceived;
 NSInteger smallPenaltyTally;
 NSInteger largePenaltyTally;
+
+NSString *notes;
 
 
 // Match Defining Variables
@@ -58,6 +76,8 @@ NSManagedObjectContext *context;
 // Finger Swipes
 UISwipeGestureRecognizer *twoFingerUp;
 UISwipeGestureRecognizer *twoFingerDown;
+NSArray *autoScreenObjects;
+NSArray *teleopScreenObjects;
 Boolean autoYN;
 
 
@@ -76,6 +96,7 @@ UITextField *initialsField;
 UIPickerView *regionalPicker;
 UISegmentedControl *weekSelector;
 NSInteger weekSelected;
+UILabel *red1Lbl;
 
 
 // Share Screen Declarations
@@ -84,28 +105,29 @@ UILabel *instaShareTitle;
 UIButton *closeButton;
 UILabel *hostSwitchLbl;
 UISwitch *hostSwitch;
-bool host;
 UILabel *visibleSwitchLbl;
 UISwitch *visibleSwitch;
-bool visible;
-UITableView *visibleTable;
-UILabel *visibleTableLbl;
+UIButton *inviteMoreBtn;
 UIButton *doneButton;
+BOOL host;
+BOOL visible;
 UIAlertView *inviteAlert;
-MCPeerID *inviterPeerID;
-NSArray *arrayInvitationHandler;
-NSMutableArray *peersArray;
-MCPeerID *myPeerID;
-MCNearbyServiceAdvertiser *advertiser;
-MCNearbyServiceBrowser *browser;
-MCSession *mySession;
-UIAlertView *inviteAlert;
-NSTimer *closeReenabler;
-PeerCell *lastSelectedCell;
-NSString *peerFoundID;
-NSString *myUniqueID;
-BOOL safe;
 NSMutableDictionary *dictToSend;
+NSMutableDictionary *receivedDataDict;
+
+// Notes Screen Declarations
+UIControl *notesScreen;
+UITextView *notesTextField;
+UIControl *redZone;
+BOOL inRedZone;
+UIControl *whiteZone;
+BOOL inWhiteZone;
+UIControl *blueZone;
+BOOL inBlueZone;
+UIControl *goodDefense;
+BOOL didGoodDefense;
+UIControl *didntMove;
+BOOL didDidntMove;
 
 
 // Regional Arrays
@@ -126,6 +148,21 @@ Team *teamWithDuplicate;
 Match *duplicateMatch;
 NSDictionary *duplicateMatchDict;
 UIAlertView *overWriteAlert;
+MCPeerID *senderPeer;
+NSArray *posUpdateArray;
+UIView *red1Updater;
+UILabel *red1UpdaterLbl;
+UIView *red2Updater;
+UILabel *red2UpdaterLbl;
+UIView *red3Updater;
+UILabel *red3UpdaterLbl;
+UIView *blue1Updater;
+UILabel *blue1UpdaterLbl;
+UIView *blue2Updater;
+UILabel *blue2UpdaterLbl;
+UIView *blue3Updater;
+UILabel *blue3UpdaterLbl;
+
 
 
 /***********************************
@@ -146,6 +183,8 @@ UIAlertView *overWriteAlert;
     FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
     FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
     context = FSAdocument.managedObjectContext;
+    
+//    NSLog(@"\n Documents URL: %@ \n Path URL: %@ \n ", FSAdocumentsDirectory, FSApathurl);
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
         [FSAdocument openWithCompletionHandler:^(BOOL success){
@@ -184,36 +223,32 @@ UIAlertView *overWriteAlert;
     // Helps prepare the setUpView
     red1Pos = -1;
     pos = nil;
-    // Creates a unique ID for the app to use for Multipeer interactions
-    NSDate *date = [NSDate date];
-    myUniqueID = [[NSString alloc] initWithFormat:@"%ld", (long)[date timeIntervalSince1970]];
-    
     
     _saveBtn.layer.cornerRadius = 5;
     
     // All Regionals in 2014
-    regionalNames = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line District Competition",@"Southfield District Competition",@"Granite State District Event",@"PNW Auburn Mountainview District Event",@"MAR Mt. Olive District Competition",@"MAR Hatboro-Horsham District Comp.",@"Israel Regional",@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University District Competition",@"Gull Lake District Competition",@"PNW Oregon City District Event",@"PNW Glacier Peak District Event",@"Groton District Event",@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba District Competition",@"Howell District Competition",@"MAR Springside Chestnut Hill District Comp.",@"PNW Eastern Wash. University District Event",@"PNW Mt. Vernon District Event",@"MAR Clifton District Competition",@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan District Competition",@"Great Lakes Bay Region District Competition",@"Traverse City District Competition",@"PNW Wilsonville District Event",@"Rhode Island District Event",@"PNW Shorewood District Event",@"Southington District Event",@"MAR Lenape-Seneca District Competition",@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia District Competition",@"St. Joseph District Competition",@"Waterford District Competition",@"PNW Auburn District Event",@"PNW Central Wash. University District Event",@"Hartford District Event",@"MAR Bridgewater-Raritan District Competition",@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford District Competition",@"Troy District Competition",@"PNW Oregon State University District Event",@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
+    regionalNames = @[@"Central Illinois Regional", @"Palmetto Regional", @"Alamo Regional sponsored by Rackspace Hosting", @"Greater Toronto West Regional", @"Inland Empire Regional", @"Center Line FIRST Robotics District Competition", @"Southfield FIRST Robotics District Competition", @"Granite State District Event", @"PNW FIRST Robotics Auburn Mountainview District Event", @"MAR FIRST Robotics Mt. Olive District Competition", @"MAR FIRST Robotics Hatboro-Horsham District Competition", @"Israel Regional", @"Greater Toronto East Regional", @"Arkansas Regional", @"San Diego Regional", @"Crossroads Regional", @"Lake Superior Regional", @"Northern Lights Regional", @"Hub City Regional", @"UNH District Event", @"Central Valley Regional", @"Kettering University FIRST Robotics District Competition", @"Gull Lake FIRST Robotics District Competition", @"PNW FIRST Robotics Oregon City District Event", @"PNW FIRST Robotics Glacier Peak District Event", @"Groton District Event", @"Mexico City Regional", @"Sacramento Regional", @"Orlando Regional", @"Greater Kansas City Regional", @"St. Louis Regional", @"North Carolina Regional", @"New York Tech Valley Regional", @"Dallas Regional", @"Utah Regional", @"WPI District Event", @"Escanaba FIRST Robotics District Competition", @"Howell FIRST Robotics District Competition", @"MAR FIRST Robotics Springside Chestnut Hill District Competition", @"PNW FIRST Robotics Eastern Washington University District Event", @"PNW FIRST Robotics Mt. Vernon District Event", @"MAR FIRST Robotics Clifton District Competition", @"Waterloo Regional", @"Festival de Robotique FRC a Montreal Regional", @"Arizona Regional", @"Los Angeles Regional sponsored by The Roddenberry Foundation", @"Boilermaker Regional", @"Buckeye Regional", @"Virginia Regional", @"Wisconsin Regional", @"West Michigan FIRST Robotics District Competition", @"Great Lakes Bay Region FIRST Robotics District Competition", @"Traverse City FIRST Robotics District Competition", @"PNW FIRST Robotics Wilsonville District Event", @"Rhode Island District Event", @"PNW FIRST Robotics Shorewood District Event", @"Southington District Event", @"MAR FIRST Robotics Lenape-Seneca District Competition", @"North Bay Regional", @"Peachtree Regional", @"Hawaii Regional", @"Minnesota 10000 Lakes Regional", @"Minnesota North Star Regional", @"SBPLI Long Island Regional", @"Finger Lakes Regional", @"Queen City Regional", @"Oklahoma Regional", @"Greater Pittsburgh Regional", @"Smoky Mountains Regional", @"Greater DC Regional", @"Northeastern University District Event", @"Livonia FIRST Robotics District Competition", @"St. Joseph FIRST Robotics District Competition", @"Waterford FIRST Robotics District Competition", @"PNW FIRST Robotics Auburn District Event", @"PNW FIRST Robotics Central Washington University District Event", @"Hartford District Event", @"MAR FIRST Robotics Bridgewater-Raritan District Competition", @"Western Canada Regional", @"Windsor Essex Great Lakes Regional", @"Silicon Valley Regional", @"Colorado Regional", @"South Florida Regional", @"Midwest Regional", @"Bayou Regional", @"Chesapeake Regional", @"Las Vegas Regional", @"New York City Regional", @"Lone Star Regional", @"Pine Tree District Event", @"Lansing FIRST Robotics District Competition", @"Bedford FIRST Robotics District Competition", @"Troy FIRST Robotics District Competition", @"PNW FIRST Robotics Oregon State University District Event", @"New England FRC Region Championship", @"Michigan FRC State Championship", @"Autodesk PNW FRC Championship", @"Mid-Atlantic Robotics FRC Region Championship", @"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
    
     // Week 1 Regionals of 2014
-    week1Regionals = @[@"Central Illinois Regional",@"Palmetto Regional",@"Alamo Regional",@"Greater Toronto West Regional",@"Inland Empire Regional",@"Center Line District Competition",@"Southfield District Competition",@"Granite State District Event",@"PNW Auburn Mountainview District Event",@"MAR Mt. Olive District Competition",@"MAR Hatboro-Horsham District Comp.",@"Israel Regional"];
+    week1Regionals = @[@"Central Illinois Regional", @"Palmetto Regional", @"Alamo Regional sponsored by Rackspace Hosting", @"Greater Toronto West Regional", @"Inland Empire Regional", @"Center Line FIRST Robotics District Competition", @"Southfield FIRST Robotics District Competition", @"Granite State District Event", @"PNW FIRST Robotics Auburn Mountainview District Event", @"MAR FIRST Robotics Mt. Olive District Competition", @"MAR FIRST Robotics Hatboro-Horsham District Competition", @"Israel Regional"];
     
     // Week 2 Regionals of 2014
-    week2Regionals = @[@"Greater Toronto East Regional",@"Arkansas Regional",@"San Diego Regional",@"Crossroads Regional",@"Lake Superior Regional",@"Northern Lights Regional",@"Hub City Regional",@"UNH District Event",@"Central Valley Regional",@"Kettering University District Competition",@"Gull Lake District Competition",@"PNW Oregon City District Event",@"PNW Glacier Peak District Event",@"Groton District Event"];
+    week2Regionals = @[@"Greater Toronto East Regional", @"Arkansas Regional", @"San Diego Regional", @"Crossroads Regional", @"Lake Superior Regional", @"Northern Lights Regional", @"Hub City Regional", @"UNH District Event", @"Central Valley Regional", @"Kettering University FIRST Robotics District Competition", @"Gull Lake FIRST Robotics District Competition", @"PNW FIRST Robotics Oregon City District Event", @"PNW FIRST Robotics Glacier Peak District Event", @"Groton District Event"];
     
     // Week 3 Regionals of 2014
-    week3Regionals = @[@"Mexico City Regional",@"Sacramento Regional",@"Orlando Regional",@"Greater Kansas City Regional",@"St. Louis Regional",@"North Carolina Regional",@"New York Tech Valley Regional",@"Dallas Regional",@"Utah Regional",@"WPI District Event",@"Escanaba District Competition",@"Howell District Competition",@"MAR Springside Chestnut Hill District Comp.",@"PNW Eastern Wash. University District Event",@"PNW Mt. Vernon District Event",@"MAR Clifton District Competition"];
+    week3Regionals = @[@"Mexico City Regional", @"Sacramento Regional", @"Orlando Regional", @"Greater Kansas City Regional", @"St. Louis Regional", @"North Carolina Regional", @"New York Tech Valley Regional", @"Dallas Regional", @"Utah Regional", @"WPI District Event", @"Escanaba FIRST Robotics District Competition", @"Howell FIRST Robotics District Competition", @"MAR FIRST Robotics Springside Chestnut Hill District Competition", @"PNW FIRST Robotics Eastern Washington University District Event", @"PNW FIRST Robotics Mt. Vernon District Event", @"MAR FIRST Robotics Clifton District Competition"];
     
     // Week 4 Regionals of 2014
-    week4Regionals = @[@"Waterloo Regional",@"Festival de Robotique FRC a Montreal Regional",@"Arizona Regional",@"Los Angeles Regional",@"Boilermaker Regional",@"Buckeye Regional",@"Virginia Regional",@"Wisconsin Regional",@"West Michigan District Competition",@"Great Lakes Bay Region District Competition",@"Traverse City District Competition",@"PNW Wilsonville District Event",@"Rhode Island District Event",@"PNW Shorewood District Event",@"Southington District Event",@"MAR Lenape-Seneca District Competition"];
+    week4Regionals = @[@"Waterloo Regional", @"Festival de Robotique FRC a Montreal Regional", @"Arizona Regional", @"Los Angeles Regional sponsored by The Roddenberry Foundation", @"Boilermaker Regional", @"Buckeye Regional", @"Virginia Regional", @"Wisconsin Regional", @"West Michigan FIRST Robotics District Competition", @"Great Lakes Bay Region FIRST Robotics District Competition", @"Traverse City FIRST Robotics District Competition", @"PNW FIRST Robotics Wilsonville District Event", @"Rhode Island District Event", @"PNW FIRST Robotics Shorewood District Event", @"Southington District Event", @"MAR FIRST Robotics Lenape-Seneca District Competition"];
     
     // Week 5 Regionals of 2014
-    week5Regionals = @[@"North Bay Regional",@"Peachtree Regional",@"Hawaii Regional",@"Minnesota 10000 Lakes Regional",@"Minnesota North Star Regional",@"SBPLI Long Island Regional",@"Finger Lakes Regional",@"Queen City Regional",@"Oklahoma Regional",@"Greater Pittsburgh Regional",@"Smoky Mountains Regional",@"Greater DC Regional",@"Northeastern University District Event",@"Livonia District Competition",@"St. Joseph District Competition",@"Waterford District Competition",@"PNW Auburn District Event",@"PNW Central Wash. University District Event",@"Hartford District Event",@"MAR Bridgewater-Raritan District Competition"];
+    week5Regionals = @[@"North Bay Regional", @"Peachtree Regional", @"Hawaii Regional", @"Minnesota 10000 Lakes Regional", @"Minnesota North Star Regional", @"SBPLI Long Island Regional", @"Finger Lakes Regional", @"Queen City Regional", @"Oklahoma Regional", @"Greater Pittsburgh Regional", @"Smoky Mountains Regional", @"Greater DC Regional", @"Northeastern University District Event", @"Livonia FIRST Robotics District Competition", @"St. Joseph FIRST Robotics District Competition", @"Waterford FIRST Robotics District Competition", @"PNW FIRST Robotics Auburn District Event", @"PNW FIRST Robotics Central Washington University District Event", @"Hartford District Event", @"MAR FIRST Robotics Bridgewater-Raritan District Competition"];
     
     // Week 6 Regionals of 2014
-    week6Regionals = @[@"Western Canada Regional",@"Windsor Essex Great Lakes Regional",@"Silicon Valley Regional",@"Colorado Regional",@"South Florida Regional",@"Midwest Regional",@"Bayou Regional",@"Chesapeake Regional",@"Las Vegas Regional",@"New York City Regional",@"Lone Star Regional",@"Pine Tree District Event",@"Bedford District Competition",@"Troy District Competition",@"PNW Oregon State University District Event"];
+    week6Regionals = @[@"Western Canada Regional", @"Windsor Essex Great Lakes Regional", @"Silicon Valley Regional", @"Colorado Regional", @"South Florida Regional", @"Midwest Regional", @"Bayou Regional", @"Chesapeake Regional", @"Las Vegas Regional", @"New York City Regional", @"Lone Star Regional", @"Pine Tree District Event", @"Lansing FIRST Robotics District Competition", @"Bedford FIRST Robotics District Competition", @"Troy FIRST Robotics District Competition", @"PNW FIRST Robotics Oregon State University District Event"];
     
     // Week 7+ Regionals of 2014
-    week7Regionals = @[@"New England FRC Region Championship",@"Michigan FRC State Championship",@"Autodesk PNW FRC Championship",@"Mid-Atlantic Robotics FRC Region Championship",@"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
+    week7Regionals = @[@"New England FRC Region Championship", @"Michigan FRC State Championship", @"Autodesk PNW FRC Championship", @"Mid-Atlantic Robotics FRC Region Championship", @"FIRST Championship - Archimedes Division",@"FIRST Championship - Curie Division",@"FIRST Championship - Galileo Division",@"FIRST Championship - Newton Division",@"FIRST Championship - Einstein"];
     
     allWeekRegionals = @[regionalNames,week1Regionals,week2Regionals,week3Regionals,week4Regionals,week5Regionals,week6Regionals,week7Regionals];
     
@@ -223,39 +258,32 @@ UIAlertView *overWriteAlert;
     // Match type: Qualifying vs. Elimination
     currentMatchType = @"Q";
     
-    // Multipeer roles booleans
+    // Visible and Host booleans to control roles
     host = false;
     visible = false;
     
-    // Sets up storyboard UI
-    _teleopHighMinusBtn.alpha = 0;
-    _teleopHighMinusBtn.enabled = false;
-    _teleopHighPlusBtn.alpha = 0;
-    _teleopHighPlusBtn.enabled = false;
-    _teleopMidMinusBtn.alpha = 0;
-    _teleopMidMinusBtn.enabled = false;
-    _teleopMidPlusBtn.alpha = 0;
-    _teleopMidPlusBtn.enabled = false;
-    _teleopLowMinusBtn.alpha = 0;
-    _teleopLowMinusBtn.enabled = false;
-    _teleopLowPlusBtn.alpha = 0;
-    _teleopLowPlusBtn.enabled = false;
+    autoScreenObjects = @[_autoTitleLbl, _autoHotHighMinus, _autoHotHighDispLbl, _autoHotHighLbl, _autoHotHighPlus, _autoNotHighMinus, _autoNotHighDispLbl, _autoNotHighLbl, _autoNotHighPlus, _autoMissHighMinus, _autoMissHighDispLbl, _autoMissHighLbl, _autoMissHighPlus, _autoHotLowMinus, _autoHotLowDispLbl, _autoHotLowLbl, _autoHotLowPlus, _autoNotLowMinus, _autoNotLowDispLbl, _autoNotLowLbl, _autoNotLowPlus, _autoMissLowMinus, _autoMissLowDispLbl, _autoMissLowLbl, _autoMissLowPlus, _mobilityBonusLbl, _movementLine, _movementRobot, _swipeUpArrow];
     
-    _autoHighMinusBtn.alpha = 1;
-    _autoHighMinusBtn.enabled = true;
-    _autoHighPlusBtn.alpha = 1;
-    _autoHighPlusBtn.enabled = true;
-    _autoMidMinusBtn.alpha = 1;
-    _autoMidMinusBtn.enabled = true;
-    _autoMidPlusBtn.alpha = 1;
-    _autoMidPlusBtn.enabled = true;
-    _autoLowMinusBtn.alpha = 1;
-    _autoLowMinusBtn.enabled = true;
-    _autoLowPlusBtn.alpha = 1;
-    _autoLowPlusBtn.enabled = true;
+    teleopScreenObjects = @[_teleopTitleLbl, _teleopMakeHighMinus, _teleopMakeHighDispLbl, _teleopMakeHighLbl, _teleopMakeHighPlus, _teleopMissHighMinus, _teleopMissHighDispLbl, _teleopMissHighLbl, _teleopMissHighPlus, _teleopMakeLowMinus, _teleopMakeLowDispLbl, _teleopMakeLowLbl, _teleopMakeLowPlus, _teleopMissLowMinus, _teleopMissLowDispLbl, _teleopMissLowLbl, _teleopMissLowPlus, _teleopTrussLbl, _teleopOverMinus, _teleopOverDispLbl, _teleopOverLbl, _teleopOverPlus, _teleopCatchMinus, _teleopCatchDispLbl, _teleopCatchLbl, _teleopCatchPlus, _teleopAssistsLbl, _teleopPassedMinus, _teleopPassedDispLbl, _teleopPassedLbl, _teleopPassedPlus, _teleopReceivedMinus, _teleopReceivedDispLbl, _teleopReceivedLbl, _teleopReceivedPlus, _smallPenaltyLbl, _smallPenaltyStepper, _smallPenaltyTitleLbl, _largePenaltyLbl, _largePenaltyStepper, _largePenaltyTitleLbl];
     
-    // Mutable array of connected peers in the Multipeer Connection
-    peersArray = [[NSMutableArray alloc] init];
+    
+    
+    for (UIView *v in autoScreenObjects) {
+        if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
+            v.userInteractionEnabled = NO;
+        }
+        v.alpha = 0;
+        v.hidden = true;
+    }
+    for (UIView *v in teleopScreenObjects) {
+        if ([v isKindOfClass:[UIResponder class]]) {
+            v.userInteractionEnabled = NO;
+        }
+        v.alpha = 0;
+        v.hidden = true;
+    }
+    
+    notes = @"";
 }
 
 -(void)didReceiveMemoryWarning{
@@ -272,7 +300,96 @@ UIAlertView *overWriteAlert;
         [greyOut removeFromSuperview];
     }
     [self setUpScreen];
-    [self autoOn];
+//    [self autoOn];
+    
+    _movementRobot.userInteractionEnabled = YES;
+    
+    NSInteger lastX = 55;
+    
+    UILabel *lastUpdatedLbl = [[UILabel alloc] initWithFrame:CGRectMake(lastX, 920, 70, 30)];
+    lastUpdatedLbl.text = @"Last Updated Matches";
+    lastUpdatedLbl.textAlignment = NSTextAlignmentCenter;
+    lastUpdatedLbl.font = [UIFont systemFontOfSize:11];
+    lastUpdatedLbl.numberOfLines = 2;
+    [self.view addSubview:lastUpdatedLbl];
+    
+    lastX += 85;
+    red1Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    red1Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    red1Updater.layer.cornerRadius = 5;
+    [self.view addSubview:red1Updater];
+    red1UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
+    red1UpdaterLbl.text = @"Red 1 : ??";
+    red1UpdaterLbl.textColor = [UIColor whiteColor];
+    red1UpdaterLbl.textAlignment = NSTextAlignmentCenter;
+    red1UpdaterLbl.font = [UIFont systemFontOfSize:12];
+    [red1Updater addSubview:red1UpdaterLbl];
+    
+    lastX += 95;
+    red2Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    red2Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    red2Updater.layer.cornerRadius = 5;
+    [self.view addSubview:red2Updater];
+    red2UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
+    red2UpdaterLbl.text = @"Red 2 : ??";
+    red2UpdaterLbl.textColor = [UIColor whiteColor];
+    red2UpdaterLbl.textAlignment = NSTextAlignmentCenter;
+    red2UpdaterLbl.font = [UIFont systemFontOfSize:12];
+    [red2Updater addSubview:red2UpdaterLbl];
+    
+    lastX += 95;
+    red3Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    red3Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    red3Updater.layer.cornerRadius = 5;
+    [self.view addSubview:red3Updater];
+    red3UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
+    red3UpdaterLbl.text = @"Red 3 : ??";
+    red3UpdaterLbl.textColor = [UIColor whiteColor];
+    red3UpdaterLbl.textAlignment = NSTextAlignmentCenter;
+    red3UpdaterLbl.font = [UIFont systemFontOfSize:12];
+    [red3Updater addSubview:red3UpdaterLbl];
+    
+    lastX += 95;
+    blue1Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    blue1Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    blue1Updater.layer.cornerRadius = 5;
+    [self.view addSubview:blue1Updater];
+    blue1UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
+    blue1UpdaterLbl.text = @"Blue 1 : ??";
+    blue1UpdaterLbl.textColor = [UIColor whiteColor];
+    blue1UpdaterLbl.textAlignment = NSTextAlignmentCenter;
+    blue1UpdaterLbl.font = [UIFont systemFontOfSize:12];
+    [blue1Updater addSubview:blue1UpdaterLbl];
+    
+    lastX += 95;
+    blue2Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    blue2Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    blue2Updater.layer.cornerRadius = 5;
+    [self.view addSubview:blue2Updater];
+    blue2UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
+    blue2UpdaterLbl.text = @"Blue 2 : ??";
+    blue2UpdaterLbl.textColor = [UIColor whiteColor];
+    blue2UpdaterLbl.textAlignment = NSTextAlignmentCenter;
+    blue2UpdaterLbl.font = [UIFont systemFontOfSize:12];
+    [blue2Updater addSubview:blue2UpdaterLbl];
+    
+    lastX += 95;
+    blue3Updater = [[UIView alloc] initWithFrame:CGRectMake(lastX, 920, 80, 30)];
+    blue3Updater.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    blue3Updater.layer.cornerRadius = 5;
+    [self.view addSubview:blue3Updater];
+    blue3UpdaterLbl = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 70, 20)];
+    blue3UpdaterLbl.text = @"Blue 3 : ??";
+    blue3UpdaterLbl.textColor = [UIColor whiteColor];
+    blue3UpdaterLbl.textAlignment = NSTextAlignmentCenter;
+    blue3UpdaterLbl.font = [UIFont systemFontOfSize:12];
+    [blue3Updater addSubview:blue3UpdaterLbl];
+    
+    posUpdateArray = @[lastUpdatedLbl, red1Updater, red2Updater, red3Updater, blue1Updater, blue2Updater, blue3Updater];
+    
+    for (UIView *v in posUpdateArray) {
+        v.hidden = true;
+    }
 }
 
 // Creates the initial UIView that the user interacts with
@@ -310,6 +427,14 @@ UIAlertView *overWriteAlert;
         [red1Selector addTarget:self action:@selector(red1Changed) forControlEvents:UIControlEventValueChanged];
         [red1Selector setFrame:red1SelectorRect];
         [setUpView addSubview:red1Selector];
+        if (pos != nil) {
+            if ([pos isEqualToString:@"Red 1"]) {red1Pos = 0;}
+            else if ([pos isEqualToString:@"Red 2"]){red1Pos = 1;}
+            else if ([pos isEqualToString:@"Red 3"]){red1Pos = 2;}
+            else if ([pos isEqualToString:@"Blue 1"]){red1Pos = 3;}
+            else if ([pos isEqualToString:@"Blue 2"]){red1Pos = 4;}
+            else if ([pos isEqualToString:@"Blue 3"]){red1Pos = 5;}
+        }
         red1Selector.selectedSegmentIndex = red1Pos;
         NSLog(@"Red 1 Pos: %ld", (long)red1Pos);
         
@@ -317,7 +442,7 @@ UIAlertView *overWriteAlert;
         CGRect initialsFieldLblRect = CGRectMake(129, 190, 100, 15);
         UILabel *initialsFieldLbl = [[UILabel alloc] initWithFrame:initialsFieldLblRect];
         initialsFieldLbl.textAlignment = NSTextAlignmentCenter;
-        initialsFieldLbl.text = @"Enter YOUR three initials";
+        initialsFieldLbl.text = @"YOUR 3 initials";
         initialsFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:initialsFieldLbl];
         
@@ -342,7 +467,7 @@ UIAlertView *overWriteAlert;
         CGRect scoutTeamNumFieldLblRect = CGRectMake(264, 190, 100, 15);
         UILabel *scoutTeamNumFieldLbl = [[UILabel alloc] initWithFrame:scoutTeamNumFieldLblRect];
         scoutTeamNumFieldLbl.textAlignment = NSTextAlignmentCenter;
-        scoutTeamNumFieldLbl.text = @"Enter YOUR team number";
+        scoutTeamNumFieldLbl.text = @"YOUR team #";
         scoutTeamNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:scoutTeamNumFieldLbl];
         
@@ -369,7 +494,7 @@ UIAlertView *overWriteAlert;
         CGRect currentMatchNumFieldLblRect = CGRectMake(384, 190, 130, 15);
         UILabel *currentMatchNumFieldLbl = [[UILabel alloc] initWithFrame:currentMatchNumFieldLblRect];
         currentMatchNumFieldLbl.textAlignment = NSTextAlignmentCenter;
-        currentMatchNumFieldLbl.text = @"Enter the current match number";
+        currentMatchNumFieldLbl.text = @"Current Match Number";
         currentMatchNumFieldLbl.adjustsFontSizeToFitWidth = YES;
         [setUpView addSubview:currentMatchNumFieldLbl];
         
@@ -399,7 +524,7 @@ UIAlertView *overWriteAlert;
         matchTypeSelector.transform = CGAffineTransformMakeScale(0.8, 0.8);
         
         // Title for week selector UISegmentedControl
-        CGRect weekSelectorLblRect = CGRectMake(54, 310, 30, 30);
+        CGRect weekSelectorLblRect = CGRectMake(43, 310, 30, 30);
         UILabel *weekSelectorLbl = [[UILabel alloc] initWithFrame:weekSelectorLblRect];
         weekSelectorLbl.textAlignment = NSTextAlignmentCenter;
         weekSelectorLbl.text = @"Week";
@@ -408,7 +533,7 @@ UIAlertView *overWriteAlert;
         [setUpView addSubview:weekSelectorLbl];
         
         // Narrows the selection list by week selected by user
-        CGRect weekSelectorRect = CGRectMake(-39, 433, 215, 30);
+        CGRect weekSelectorRect = CGRectMake(-50, 433, 215, 30);
         weekSelector = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"All",@"1", @"2", @"3", @"4", @"5", @"6", @"7+",  nil]];
         [weekSelector setFrame:weekSelectorRect];
         [weekSelector addTarget:self action:@selector(changeWeek) forControlEvents:UIControlEventValueChanged];
@@ -437,7 +562,7 @@ UIAlertView *overWriteAlert;
         [setUpView addSubview:regionalPickerLbl];
         
         // Displays all regionals for user to select from
-        CGRect regionalPickerRect = CGRectMake(104, 340, 420, 300);
+        CGRect regionalPickerRect = CGRectMake(90, 340, 495, 300);
         regionalPicker = [[UIPickerView alloc] initWithFrame:regionalPickerRect];
         regionalPicker.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.5];
         regionalPicker.layer.cornerRadius = 5;
@@ -445,7 +570,7 @@ UIAlertView *overWriteAlert;
         regionalPicker.showsSelectionIndicator = YES;
         [setUpView addSubview:regionalPicker];
         if (currentRegional) {
-            [regionalPicker selectRow:[regionalNames indexOfObject:currentRegional] inComponent:0 animated:YES];
+            [regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelected] indexOfObject:currentRegional] inComponent:0 animated:YES];
         }
         
         // Save and exit button
@@ -464,9 +589,7 @@ UIAlertView *overWriteAlert;
                          animations:^{
                              setUpView.transform = CGAffineTransformIdentity;
                          }
-                         completion:^(BOOL finished){
-                         }];
-
+                         completion:^(BOOL finished){}];
         }
 }
 // Checks values and closes SetUpScreen after the "Save Settings" button is pressed
@@ -558,8 +681,8 @@ UIAlertView *overWriteAlert;
                              twoFingerDown.enabled = true;
                              
                              // Shows the scouts position nice and large-like in the top center of the screen
-                             CGRect red1Rect = CGRectMake(282, 150, 200, 60);
-                             UILabel *red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
+                             CGRect red1Rect = CGRectMake(282, 145, 200, 60);
+                             red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
                              red1Lbl.text = pos;
                              red1Lbl.font = [UIFont boldSystemFontOfSize:25];
                              red1Lbl.textColor = [UIColor whiteColor];
@@ -573,9 +696,63 @@ UIAlertView *overWriteAlert;
                              }
                              [self.view addSubview:red1Lbl];
                              
+                             if (red1Pos != red1SelectedPos && red1Pos > -1) {
+                                 [[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+                             }
+                             
                              red1Pos = red1Selector.selectedSegmentIndex;
                              
+                             NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+                             NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %ld", randomTeamNum];
+                             roboPicRequest.predicate = roboPicPredicate;
+                             NSError *roboPicError = nil;
+                             NSArray *roboPics = [context executeFetchRequest:roboPicRequest error:&roboPicError];
+                             PitTeam *pt = [roboPics firstObject];
+                             _robotPic.alpha = 0;
+                             UIImage *image = [UIImage imageWithData:[pt valueForKey:@"image"]];
+                             _robotPic.image = image;
                              
+                             [UIView animateWithDuration:0.2 animations:^{
+                                 _robotPic.alpha = 1;
+                             }];
+                             
+                             for (UIView *v in posUpdateArray) {
+                                 v.hidden = false;
+                             }
+                             if (red1Pos >= 0 && red1Pos < 3) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor redColor]]; [_movementRobot setImage:[UIImage imageNamed:@"RedRobot"]];}
+                             else if (red1Pos >= 3 && red1Pos < 6) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor blueColor]]; [_movementRobot setImage:[UIImage imageNamed:@"BlueRobot"]];}
+                             [self.view bringSubviewToFront:_movementRobot];
+                             
+                             for (UIView *v in autoScreenObjects) {
+                                 v.hidden = false;
+                             }
+                             _movementLine.alpha = 1;
+                             [self autoOn];
+//                             [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+//                                 for (UIView *v in autoScreenObjects) {
+//                                     if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
+//                                         v.userInteractionEnabled = YES;
+//                                     }
+//                                     v.alpha = 1;
+//                                 }
+//                                 for (UIView *v in teleopScreenObjects) {
+//                                     v.alpha = 0;
+//                                 }
+//                                 _mobilityBonusLbl.backgroundColor = [UIColor whiteColor];
+//                                 _mobilityBonusLbl.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
+//                                 _mobilityBonusLbl.layer.borderWidth = 1;
+//                             } completion:^(BOOL finished) {}];
+
+//                             self.myPeerIDS = [[MCPeerID alloc] initWithDisplayName:pos];
+//                             [self.browserSession disconnect];
+//                             self.browserSession = nil;
+//                             if (visible) {
+//                                 visible = false;
+//                                 [self.advertiserS stop];
+//                             }
+//                             else if (host){
+//                                 host = false;
+//                             }
                          }];
         NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
     }
@@ -597,6 +774,9 @@ UIAlertView *overWriteAlert;
 
 - (IBAction)instashare:(id)sender {
     [self shareScreen];
+    if (self.mySession == NULL) {
+        [self setUpMultiPeer];
+    }
 }
 // Creates custom screen for Multipeer Connectivity
 -(void)shareScreen{
@@ -608,7 +788,7 @@ UIAlertView *overWriteAlert;
     [self.view addSubview:greyOut];
     
     // The view itself
-    CGRect shareScreenRect = CGRectMake(0, 0, 400, 500);
+    CGRect shareScreenRect = CGRectMake(0, 0, 400, 200);
     shareScreen = [[UIView alloc] initWithFrame:shareScreenRect];
     shareScreen.backgroundColor = [UIColor whiteColor];
     shareScreen.layer.cornerRadius = 10;
@@ -623,7 +803,7 @@ UIAlertView *overWriteAlert;
     [shareScreen addSubview:instaShareTitle];
     
     // Exit button on the top right
-    CGRect closeButtonRect = CGRectMake(340, 5, 60, 20);
+    CGRect closeButtonRect = CGRectMake(340, 0, 60, 30);
     closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
     closeButton.frame = closeButtonRect;
     [closeButton addTarget:self action:@selector(closeShareView) forControlEvents:UIControlEventTouchUpInside];
@@ -646,6 +826,13 @@ UIAlertView *overWriteAlert;
     [shareScreen addSubview:hostSwitch];
     [hostSwitch setOn:host animated:YES];
     
+    CGRect inviteMoreBtnRect = CGRectMake(60, 100, 80, 30);
+    inviteMoreBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    inviteMoreBtn.frame = inviteMoreBtnRect;
+    [inviteMoreBtn setTitle:@"Invite More" forState:UIControlStateNormal];
+    [inviteMoreBtn addTarget:self action:@selector(hostSwitch) forControlEvents:UIControlEventTouchUpInside];
+    [shareScreen addSubview:inviteMoreBtn];
+    
     // Labels the Visible Switch
     CGRect visibleSwitchLblRect = CGRectMake(275, 45, 50, 15);
     visibleSwitchLbl = [[UILabel alloc] initWithFrame:visibleSwitchLblRect];
@@ -661,40 +848,8 @@ UIAlertView *overWriteAlert;
     [shareScreen addSubview:visibleSwitch];
     [visibleSwitch setOn:visible animated:YES];
     
-    // Labels the "Who's Visible" table
-    CGRect visibleTableLblRect = CGRectMake(100, 110, 200, 15);
-    visibleTableLbl = [[UILabel alloc] initWithFrame:visibleTableLblRect];
-    visibleTableLbl.text = @"Who's in Range to Invite";
-    visibleTableLbl.textAlignment = NSTextAlignmentCenter;
-    visibleTableLbl.font = [UIFont systemFontOfSize:12];
-    [shareScreen addSubview:visibleTableLbl];
-    visibleTableLbl.enabled = visible;
-    
-    // Displays all advertisers in range of the browser (host)
-    CGRect visibleTableRect = CGRectMake(10, 130, 380, 300);
-    visibleTable = [[UITableView alloc] initWithFrame:visibleTableRect style:UITableViewStylePlain];
-    visibleTable.layer.cornerRadius = 5;
-    visibleTable.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.3];
-    [visibleTable setScrollEnabled:YES];
-    visibleTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    [visibleTable setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-    visibleTable.rowHeight = 80;
-    [shareScreen addSubview:visibleTable];
-    visibleTable.delegate = self;
-    visibleTable.dataSource = self;
-    visibleTable.userInteractionEnabled = visible;
-    visibleTable.layer.borderWidth = 1;
-    visibleTable.layer.borderColor = [[UIColor colorWithWhite:0.7 alpha:0.3] CGColor];
-    if (visible) {
-        visibleTable.alpha = 1;
-        [visibleTable reloadData];
-    }
-    else{
-        visibleTable.alpha = 0.5;
-    }
-    
     // Finish process (only enabled after a connection is established)
-    CGRect doneButtonRect = CGRectMake(170, 445, 60, 40);
+    CGRect doneButtonRect = CGRectMake(170, 145, 60, 40);
     doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
     doneButton.frame = doneButtonRect;
     [doneButton setTitle:@"Done" forState:UIControlStateNormal];
@@ -713,8 +868,8 @@ UIAlertView *overWriteAlert;
     visibleSwitchLbl.hidden = true;
     visibleSwitch.hidden = true;
     visibleSwitch.enabled = false;
-    visibleTableLbl.hidden = true;
-    visibleTable.hidden = true;
+    inviteMoreBtn.enabled = false;
+    inviteMoreBtn.hidden = true;
     doneButton.hidden = true;
     doneButton.enabled = false;
     
@@ -723,7 +878,7 @@ UIAlertView *overWriteAlert;
     [greyOut addSubview:shareScreen];
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         shareScreen.frame = CGRectMake(183, 264, 400, 500);
+                         shareScreen.frame = CGRectMake(183, 364, 400, 200);
                      }
                      completion:^(BOOL finished){
                          // Shows and enables subviews of ShareScreen after animation is done
@@ -736,39 +891,42 @@ UIAlertView *overWriteAlert;
                          visibleSwitchLbl.hidden = false;
                          visibleSwitch.hidden = false;
                          visibleSwitch.enabled = true;
-                         visibleTableLbl.hidden = false;
-                         visibleTable.hidden = false;
+                         [visibleSwitch setOn:true animated:YES];
+                         inviteMoreBtn.enabled = host;
+                         inviteMoreBtn.hidden = !host;
                          doneButton.hidden = false;
-                         doneButton.enabled = host;
+                         doneButton.enabled = true;
                      }];
     
 }
 // Takes away the ShareView with animation
 -(void)closeShareView{
-    instaShareTitle.hidden = true;
-    closeButton.hidden = true;
-    closeButton.enabled = false;
-    hostSwitchLbl.hidden = true;
-    hostSwitch.hidden = true;
-    hostSwitch.enabled = false;
-    visibleSwitchLbl.hidden = true;
-    visibleSwitch.hidden = true;
-    visibleSwitch.enabled = false;
-    visibleTableLbl.hidden = true;
-    visibleTable.hidden = true;
-    doneButton.hidden = true;
-    doneButton.enabled = false;
-    
-    // Zooms the ShareScreen small and back up to the top left corner
-    [greyOut addSubview:shareScreen];
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         shareScreen.frame = CGRectMake(0, 0, 1, 1);
-                     }
-                     completion:^(BOOL finished){
-                         [shareScreen removeFromSuperview];
-                         [greyOut removeFromSuperview];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        instaShareTitle.hidden = true;
+        closeButton.hidden = true;
+        closeButton.enabled = false;
+        hostSwitchLbl.hidden = true;
+        hostSwitch.hidden = true;
+        hostSwitch.enabled = false;
+        visibleSwitchLbl.hidden = true;
+        visibleSwitch.hidden = true;
+        visibleSwitch.enabled = false;
+        inviteMoreBtn.hidden = true;
+        inviteMoreBtn.enabled = false;
+        doneButton.hidden = true;
+        doneButton.enabled = false;
+        
+        // Zooms the ShareScreen small and back up to the top left corner
+        [greyOut addSubview:shareScreen];
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             shareScreen.frame = CGRectMake(0, 0, 1, 1);
+                         }
+                         completion:^(BOOL finished){
+                             [shareScreen removeFromSuperview];
+                             [greyOut removeFromSuperview];
                          }];
+    });
 }
 
 
@@ -778,6 +936,9 @@ UIAlertView *overWriteAlert;
 
 // Called by the red1Selector UISegmentedControl in the SetUpView so that the scout's position is changed precisely when user changes it
 -(void)red1Changed{
+    [self.mySession disconnect];
+    self.mySession = NULL;
+    [self.advertiser stop];
     red1SelectedPos = red1Selector.selectedSegmentIndex;
     pos = [red1Selector titleForSegmentAtIndex:red1Selector.selectedSegmentIndex];
     NSLog(@"%@", pos);
@@ -934,7 +1095,7 @@ UIAlertView *overWriteAlert;
             tView.text = [week7Regionals objectAtIndex:row];
         }
         
-        tView.textAlignment = NSTextAlignmentCenter;
+        tView.textAlignment = NSTextAlignmentLeft;
         tView.font = [UIFont systemFontOfSize:20];
         tView.minimumScaleFactor = 0.2;
         tView.adjustsFontSizeToFitWidth = YES;
@@ -949,345 +1110,197 @@ UIAlertView *overWriteAlert;
     return sectionWidth;
 }
 
-/***********************************
- *********** ShareScreen ***********
- ***********************************/
+
+/**********************************
+ ********** Insta-Share ***********
+ **********************************/
+
+-(void)setUpMultiPeer{
+    //  Setup peer ID
+    self.myPeerID = [[MCPeerID alloc] initWithDisplayName:[[NSString alloc] initWithFormat:@"%@ - %@", pos, scoutTeamNum]];
+    
+    //  Setup session
+    self.mySession = [[MCSession alloc] initWithPeer:self.myPeerID];
+    self.mySession.delegate = self;
+    
+    //  Setup BrowserViewController
+    self.browserVC = [[MCBrowserViewController alloc] initWithServiceType:@"frcScorer" session:self.mySession];
+    self.browserVC.delegate = self;
+    
+    //  Setup Advertiser
+    self.advertiser = [[MCAdvertiserAssistant alloc] initWithServiceType:@"frcScorer" discoveryInfo:nil session:self.mySession];
+    [self.advertiser start];
+}
 
 
-// Initiates the Browser (host) role in Multipeer
+// Starts Browser role and initiates the MCSession
 -(void)hostSwitch{
     if (hostSwitch.on) {
+        [self presentViewController:self.browserVC animated:YES completion:nil];
+        inviteMoreBtn.enabled = true;
+        inviteMoreBtn.hidden = false;
         host = true;
-        visible = false;
-        myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
-        NSLog(@"My Peer ID: %@", myPeerID.displayName);
-        if (!mySession) {
-            mySession = [[MCSession alloc] initWithPeer:myPeerID];
-            mySession.delegate = self;
-        }
-        [visibleSwitch setOn:false animated:YES];
-        doneButton.enabled = true;
-        visibleTable.userInteractionEnabled = true;
-        visibleTable.alpha = 1;
-        visibleTableLbl.enabled = true;
-        [visibleTable reloadData];
-        browser = [[MCNearbyServiceBrowser alloc] initWithPeer:myPeerID serviceType:@"FRCSCOUT"];
-        browser.delegate = self;
-        [browser startBrowsingForPeers];
-        [self visibleSwitch];
     }
     else{
+        inviteMoreBtn.enabled = false;
+        inviteMoreBtn.hidden = true;
         host = false;
-        visibleTable.userInteractionEnabled = false;
-        visibleTable.alpha = 0.5;
-        visibleTableLbl.enabled = false;
-        for (long i = [visibleTable numberOfRowsInSection:0]-1; i > -1; i--) {
-            [peersArray removeLastObject];
-            NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
-            [visibleTable deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationLeft];
-        }
-        doneButton.enabled = false;
-        [browser stopBrowsingForPeers];
-        lastSelectedCell = nil;
-        if (!visibleSwitch.on) {
-            [mySession disconnect];
-        }
     }
 }
-// Initiates the Advertiser (visible) role in Multipeer
+// Starts Advertiser role
 -(void)visibleSwitch{
     if (visibleSwitch.on) {
+        [self setUpMultiPeer];
         visible = true;
-        host = false;
-        myPeerID = [[MCPeerID alloc] initWithDisplayName:pos];
-        [hostSwitch setOn:false animated:YES];
-        doneButton.enabled = false;
-        advertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:myPeerID discoveryInfo:@{@"DiscoveryString" : myUniqueID} serviceType:@"FRCSCOUT"];
-        advertiser.delegate = self;
-        [advertiser startAdvertisingPeer];
-        if (!mySession) {
-            mySession = [[MCSession alloc] initWithPeer:myPeerID];
-            mySession.delegate = self;
-        }
-        [self hostSwitch];
     }
     else{
+        [self.mySession disconnect];
+        [self.advertiser stop];
         visible = false;
-        [advertiser stopAdvertisingPeer];
-        if (!hostSwitch.on) {
-            [mySession disconnect];
-        }
     }
 }
 
-
-/*-----------------------------------
- ------- Visible Table Code ---------
- -----------------------------------*/
-
-// Returns 1. No other sections needed for the Advertising peers
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
+-(void)dismissBrowserVC{
+    [self.browserVC dismissViewControllerAnimated:YES completion:nil];
 }
 
-// Returns the number of peers that the Browser detects
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [peersArray count];
+-(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserVCS{
+    [self dismissBrowserVC];
+    [self closeShareView];
 }
 
-// Creates the cells for the table
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *cellIdentifier = @"peerCellID";
-    
-    PeerCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    // Create the cell if it doesn't exist
-    if (cell == nil)
-    {
-        cell = [[PeerCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                       reuseIdentifier:cellIdentifier];
-        // Stores the Advertiser's uniqueID in the cell's property
-        cell.uniqueID = [[NSString alloc] initWithString:peerFoundID];
-        NSLog(@"Unique ID: %@", cell.uniqueID);
-    }
-    
-    // Converts the shortened discovery string into a string that matches the pos variable
-    NSString *smallString;
-    if ([myPeerID.displayName isEqualToString:@"Red 1"]) {smallString = @"0";}
-    else if ([myPeerID.displayName isEqualToString:@"Red 2"]){smallString = @"1";}
-    else if ([myPeerID.displayName isEqualToString:@"Red 3"]){smallString = @"2";}
-    else if ([myPeerID.displayName isEqualToString:@"Blue 1"]){smallString = @"3";}
-    else if ([myPeerID.displayName isEqualToString:@"Blue 2"]){smallString = @"4";}
-    else if ([myPeerID.displayName isEqualToString:@"Blue 3"]){smallString = @"5";}
-    
-    // Displays the discovered scout's postition name
-    cell.peerLbl.text = [[peersArray objectAtIndex:indexPath.row] displayName];
-    
-    // Hides the labels for connecting info
-    cell.connectedLbl.alpha = 0;
-    cell.userInteractionEnabled = true;
-    doneButton.enabled = false;
-    cell.alreadyConnectedLbl.alpha = 0;
-    cell.userInteractionEnabled = true;
-    
-    // If the cell represents the last selected peer, then make the connected label visible
-    if ([lastSelectedCell.uniqueID isEqualToString:cell.uniqueID]) {
-        NSLog(@"UniqueID of last selected cell: %@", lastSelectedCell.uniqueID);
-        cell.connectedLbl.alpha = 1;
-        cell.userInteractionEnabled = false;
-        doneButton.enabled = true;
-    }
-    
-    NSMutableArray *peerNamesArray = [[NSMutableArray alloc] init];
-    for (MCPeerID *i in peersArray) {
-        [peerNamesArray addObject:i.displayName];
-    }
-    // If there is already a scout for that position in the group, this disallows user interaction and shows the alreadyConnected label
-    if ([peerNamesArray containsObject:smallString] || [smallString isEqualToString:pos]) {
-        cell.alreadyConnectedLbl.text = [[NSString alloc] initWithFormat:@"Already has a %@", myPeerID.displayName];
-        cell.alreadyConnectedLbl.alpha = 1;
-        cell.userInteractionEnabled = false;
-    }
-    
-    
-    return cell;
-}
-
-// Returns the height of the cell (80)
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    return 80;
-    
-}
-
-// Invites the peer associated with the cell selected
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    // Disables the exit button so the user doesn't stop the process short of completion
-    closeButton.enabled = false;
-    
-    [visibleTable deselectRowAtIndexPath:indexPath animated:YES];
-    PeerCell *selectedCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:indexPath];
-    selectedCell.userInteractionEnabled = false;
-    lastSelectedCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:indexPath];
-    
-    [browser invitePeer:[peersArray objectAtIndex:indexPath.row] toSession:mySession withContext:nil timeout:15];
-}
-
-
-/*-----------------------------------
- --------- Multipeer Code -----------
- -----------------------------------*/
-
-// Adds the peer to the table if the peer doesn't already exist there
--(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info{
-    NSLog(@"Found peer %@", peerID.displayName);
-    NSString *uniqueIDString = [[NSString alloc] initWithString:[info objectForKey:@"DiscoveryString"]];
-    if (![uniqueIDString isEqualToString:myUniqueID]) {
-        NSLog(@"Not my Unique ID");
-        if ([visibleTable numberOfRowsInSection:0] == 0) {
-            safe = true;
-        }
-        else{
-            for (long i = [visibleTable numberOfRowsInSection:0]-1; i > -1; i--) {
-                PeerCell *checkCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
-                if (![checkCell.uniqueID isEqualToString:uniqueIDString]) {
-                    NSLog(@"Safe");
-                    safe = true;
-                }
-            }
-        }
-    }
-    if (safe) {
-        NSLog(@"safe loop");
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [peersArray addObject:peerID];
-            NSIndexPath *myIndex = [NSIndexPath indexPathForRow:[peersArray count]-1 inSection:0];
-            peerFoundID = uniqueIDString;
-            [visibleTable insertRowsAtIndexPaths:@[myIndex] withRowAnimation:UITableViewRowAnimationRight];
-            safe = false;
-        });
-    }
-}
-
-// Removes the peer from the list if the Browser no longer sees them
--(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID{
-    for (long i = [visibleTable numberOfRowsInSection:0]-1; i > -1; i--) {
-        PeerCell *checkCell = (PeerCell *)[visibleTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
-        if ([peerID.displayName isEqualToString:checkCell.peerLbl.text]) {
-            NSLog(@"lostPeer");
-            if (!safe) {
-                NSLog(@"Not Safe");
-                dispatch_async(dispatch_get_main_queue(), ^(void){
-                    [peersArray removeObjectAtIndex:[visibleTable indexPathForCell:checkCell].row];
-                    [visibleTable deleteRowsAtIndexPaths:@[[visibleTable indexPathForCell:checkCell]] withRowAnimation:UITableViewRowAnimationLeft];
-                    lastSelectedCell = nil;
-                });
-            }
-        }
-    }
-    
-}
-
-// Handles when the Advertiser gets an invite
--(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL accept, MCSession *session))invitationHandler{
-    NSLog(@"Received invite from %@", peerID.displayName);
-    
-    [UIAlertView showWithTitle:[[NSString alloc] initWithFormat:@"%@ Invites you to their group!", peerID.displayName] message:@"Do you accept?" cancelButtonTitle:@"No Way!" otherButtonTitles:@[@"Sure!"] completion:^(UIAlertView *inviteAlert, NSInteger buttonIndex){
-        BOOL accept = (buttonIndex != inviteAlert.cancelButtonIndex) ? YES : NO;
-        invitationHandler(accept, mySession);
-    }];
-}
-
-// I don't use these five, but I included them to avoid a yellow warning
--(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController{
-    NSLog(@"BrowserViewControllerDidFinish");
-}
 -(void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController{
-    NSLog(@"BrowserViewControllerWasCancelled");
+    [self dismissBrowserVC];
 }
+
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error{
-    
+    [self dismissBrowserVC];
 }
+
 -(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
     
 }
+
 -(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress{
     
 }
 
-// Takes data received and creates matches with that data
+-(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
+    NSString *peerString = [peerID displayName];
+    NSString *updatedPeerString = [[peerString componentsSeparatedByString:@" - "] firstObject];
+    if (state == MCSessionStateConnected) {
+        NSLog(@"Connected with %@", updatedPeerString);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([updatedPeerString isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor redColor]];}
+            else if ([updatedPeerString isEqualToString:@"Red 2"]){[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor redColor]];}
+            else if ([updatedPeerString isEqualToString:@"Red 3"]){[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor redColor]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 1"]){[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor blueColor]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor blueColor]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor blueColor]];}
+        });
+        
+        if ([updatedPeerString isEqualToString:pos]) {
+            NSLog(@"Already Connected, send error!!");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *duplicateRolesAlert = [[UIAlertView alloc] initWithTitle:@"Hold Up!"
+                                                                              message:[[NSString alloc] initWithFormat:@"There are two \"%@\" positions connected! One needs to disconnect (toggle the \"Visible\" switch off and on) for this to work right", pos]
+                                                                             delegate:nil
+                                                                    cancelButtonTitle:@"I'm on it." otherButtonTitles: nil];
+                [duplicateRolesAlert show];
+            });
+        }
+    }
+    else if (state == MCSessionStateNotConnected){
+        NSLog(@"Disconnected");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([updatedPeerString isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Red 2"]){[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Red 3"]){[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 1"]){[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            UIAlertView *disconnectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh no!"
+                                                                        message:[[NSString alloc] initWithFormat:@"You disconnected with %@!", updatedPeerString]
+                                                                       delegate:nil
+                                                              cancelButtonTitle:@"Aw man!"
+                                                              otherButtonTitles:nil];
+            [disconnectedAlert show];
+        });
+    }
+}
+
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
-    NSLog(@"Received Data with length of: %ld", (long)[data length]);
-    NSDictionary *receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    receivedDataDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    [self dataDictToCoreDataFromPeer:peerID];
+}
+
+-(void)dataDictToCoreDataFromPeer:(MCPeerID *)peer{
     [context performBlock:^{
-        for (NSString *r in receivedDataDict) {
-            Regional *rgnl = [Regional createRegionalWithName:r inManagedObjectContext:context];
-            for (NSString *t in [receivedDataDict objectForKey:r]) {
-                Team *tm = [Team createTeamWithName:t inRegional:rgnl withManagedObjectContext:context];
-                for (NSString *m in [[receivedDataDict objectForKey:r] objectForKey:t]) {
-                    NSDictionary *matchDict = [[[receivedDataDict objectForKey:r] objectForKey:t] objectForKey:m];
-                    NSNumber *uniqueID = [NSNumber numberWithInteger:[[matchDict objectForKey:@"uniqueID"] integerValue]];
-                    Match *mtch = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+        NSString *matchNumberReceived;
+        for (NSString *rgnl in receivedDataDict) {
+            Regional *regional = [Regional createRegionalWithName:rgnl inManagedObjectContext:context];
+            for (NSString *tm in [receivedDataDict objectForKey:rgnl]) {
+                Team *team = [Team createTeamWithName:tm inRegional:regional withManagedObjectContext:context];
+                for (NSString *mtch in [[receivedDataDict objectForKey:rgnl] objectForKey:tm]) {
+                    matchNumberReceived = mtch;
+                    NSDictionary *matchDict = [[[receivedDataDict objectForKey:rgnl] objectForKey:tm] objectForKey:mtch];
+                    Match *match = [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
                     
-                    if ([mtch.uniqeID integerValue] == [uniqueID integerValue]) {
-                        NSLog(@"No conflicts!");
-                    }
-                    else{
-                        [FSAdocument.managedObjectContext deleteObject:mtch];
-                        NSLog(@"Deleted the conflicting match");
-                        [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+                    if ([match.uniqeID integerValue] != [[matchDict objectForKey:@"uniqueID"] integerValue]) {
+                        [[FSAdocument managedObjectContext] deleteObject:match];
+                        [Match createMatchWithDictionary:matchDict inTeam:team withManagedObjectContext:context];
                     }
                 }
             }
         }
-        
-        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
-            if (success) {
-                NSLog(@"Saved transferred data");
-            }
-            else{
-                NSLog(@"Didn't transfer regionals correctly.");
-            }
-        }];
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {}];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString *peerString = [[NSString alloc] initWithFormat:@"%@", [peer displayName]];
+            NSString *identifiedPeerString = [[peerString componentsSeparatedByString:@" - "] firstObject];
+            if ([identifiedPeerString isEqualToString:@"Red 1"]) {red1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 1 : %@", matchNumberReceived];}
+            else if ([identifiedPeerString isEqualToString:@"Red 2"]){red2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 2 : %@", matchNumberReceived];}
+            else if ([identifiedPeerString isEqualToString:@"Red 3"]){red3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 3 : %@", matchNumberReceived];}
+            else if ([identifiedPeerString isEqualToString:@"Blue 1"]){blue1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 1 : %@", matchNumberReceived];}
+            else if ([identifiedPeerString isEqualToString:@"Blue 2"]){blue2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 2 : %@", matchNumberReceived];}
+            else if ([identifiedPeerString isEqualToString:@"Blue 3"]){blue3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 3 : %@", matchNumberReceived];}
+        });
     }];
 }
 
-// Alerts user about the change in connection whether it's successful or broken
--(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
-    if (state == MCSessionStateConnected) {
-        NSLog(@"Woohooo!!! It worked!!!");
-        if (visible) {
-            [advertiser stopAdvertisingPeer];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            doneButton.enabled = true;
-            closeButton.enabled = true;
-            UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Wahooo!!!" message:[[NSString alloc] initWithFormat:@"You connected to %@! Feel free to scout like normal and they will get your matches as you save them!", peerID.displayName] delegate:nil cancelButtonTitle:@"Awesometastic" otherButtonTitles:nil];
-            [connectedAlert show];
-            lastSelectedCell.connectedLbl.alpha = 1;
-            [visibleTable reloadData];
-        });
-    }
-    else if (state == MCSessionStateNotConnected){
-        NSLog(@"Somehow Disconnected");
-        if (visible) {
-            [advertiser startAdvertisingPeer];
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                UIAlertView *connectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!" message:[[NSString alloc] initWithFormat:@"The connection to %@ is broken!", peerID.displayName] delegate:nil cancelButtonTitle:@"Oh snap." otherButtonTitles:nil];
-                [connectedAlert show];
-            });
-        }
-        if (host) {
-            [visibleTable reloadData];
-        }
-        closeButton.enabled = true;
-    }
-}
-
-// Sets up the match data to be sent
 -(void)setUpData{
+    NSDate *date = [NSDate date];
+    NSInteger secs = [date timeIntervalSince1970];
     dictToSend = nil;
-    dictToSend = [[NSMutableDictionary alloc] init];
+    dictToSend = [[NSMutableDictionary alloc]init];
     [dictToSend setObject:[[NSMutableDictionary alloc] init] forKey:currentRegional];
     [[dictToSend objectForKey:currentRegional] setObject:[[NSMutableDictionary alloc] init] forKey:currentTeamNum];
     [[[dictToSend objectForKey:currentRegional] objectForKey:currentTeamNum] setObject:[[NSDictionary alloc] initWithObjectsAndKeys:
-                                                                                        [NSNumber numberWithInteger:teleopHighScore], @"teleHighScore",
-                                                                                        [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-                                                                                        [NSNumber numberWithInteger:teleopMidScore], @"teleMidScore",
-                                                                                        [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-                                                                                        [NSNumber numberWithInteger:teleopLowScore], @"teleLowScore",
-                                                                                        [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                                                                        //[NSNumber numberWithInteger:[m.endGame integerValue]], @"endGame",
-                                                                                        [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
-                                                                                        [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
-                                                                                        [NSString stringWithString:pos], @"red1Pos",
-                                                                                        [NSString stringWithString:scoutTeamNum], @"recordingTeam",
-                                                                                        [NSString stringWithString:currentMatchType], @"matchType",
-                                                                                        [NSString stringWithString:currentMatchNum], @"matchNum",
-                                                                                        [NSNumber numberWithInteger:secs], @"uniqueID", nil] forKey:currentMatchNum];
+                [NSNumber numberWithInteger:autoHighHotScore], @"autoHighHotScore",
+                [NSNumber numberWithInteger:autoHighNotScore], @"autoHighNotScore",
+                [NSNumber numberWithInteger:autoHighMissScore], @"autoHighMissScore",
+                [NSNumber numberWithInteger:autoLowHotScore], @"autoLowHotScore",
+                [NSNumber numberWithInteger:autoLowNotScore], @"autoLowNotScore",
+                [NSNumber numberWithInteger:autoLowMissScore], @"autoLowMissScore",
+                [NSNumber numberWithInteger:mobilityBonus], @"mobilityBonus",
+                [NSNumber numberWithInteger:teleopHighMake], @"teleopHighMake",
+                [NSNumber numberWithInteger:teleopHighMiss], @"teleopHighMiss",
+                [NSNumber numberWithInteger:teleopLowMake], @"teleopLowMake",
+                [NSNumber numberWithInteger:teleopLowMiss], @"teleoplowMiss",
+                [NSNumber numberWithInteger:teleopOver], @"teleopOver",
+                [NSNumber numberWithInteger:teleopPassed], @"teleopPassed",
+                [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
+                [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
+                [NSString stringWithString:notes], @"notes",
+                [NSString stringWithString:pos], @"red1Pos",
+                [NSString stringWithString:scoutTeamNum], @"recordingTeam",
+                [NSString stringWithString:initials], @"scoutInitials",
+                [NSString stringWithString:currentMatchType], @"matchType",
+                [NSString stringWithString:currentMatchNum], @"matchNum",
+                [NSNumber numberWithInteger:secs], @"uniqueID", nil]
+        forKey:currentMatchNum];
+    
+                  
 }
-
 
 /*****************************************
  ******** User Interaction Code **********
@@ -1298,56 +1311,40 @@ UIAlertView *overWriteAlert;
     autoYN = true;
     twoFingerUp.enabled = false;
     twoFingerDown.enabled = true;
-    
+    for (UIView *v in autoScreenObjects) {
+        if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
+            v.userInteractionEnabled = YES;
+        }
+        v.hidden = false;
+    }
     [UIView animateWithDuration:0.3 animations:^{
-        _autoTitleLbl.alpha = 1;
-        _autoHighScoreLbl.alpha = 1;
-        _autoMidScoreLbl.alpha = 1;
-        _autoLowScoreLbl.alpha = 1;
-        
-        _teleopTitleLbl.alpha = 0;
-        _teleopHighScoreLbl.alpha = 0;
-        _teleopMidScoreLbl.alpha = 0;
-        _teleopLowScoreLbl.alpha = 0;
-        
-        _smallPenaltyLbl.enabled = false;
-        _smallPenaltyStepper.enabled = false;
-        _smallPenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
-        _smallPenaltyTitleLbl.enabled = false;
-        
-        _largePenaltyLbl.enabled = false;
-        _largePenaltyStepper.enabled = false;
-        _largePenaltyStepper.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
-        _largePenaltyTitleLbl.enabled = false;
-        
-        _teleopHighMinusBtn.alpha = 0;
-        _teleopHighMinusBtn.enabled = false;
-        _teleopHighPlusBtn.alpha = 0;
-        _teleopHighPlusBtn.enabled = false;
-        _teleopMidMinusBtn.alpha = 0;
-        _teleopMidMinusBtn.enabled = false;
-        _teleopMidPlusBtn.alpha = 0;
-        _teleopMidPlusBtn.enabled = false;
-        _teleopLowMinusBtn.alpha = 0;
-        _teleopLowMinusBtn.enabled = false;
-        _teleopLowPlusBtn.alpha = 0;
-        _teleopLowPlusBtn.enabled = false;
-        
-        _autoHighMinusBtn.alpha = 1;
-        _autoHighMinusBtn.enabled = true;
-        _autoHighPlusBtn.alpha = 1;
-        _autoHighPlusBtn.enabled = true;
-        _autoMidMinusBtn.alpha = 1;
-        _autoMidMinusBtn.enabled = true;
-        _autoMidPlusBtn.alpha = 1;
-        _autoMidPlusBtn.enabled = true;
-        _autoLowMinusBtn.alpha = 1;
-        _autoLowMinusBtn.enabled = true;
-        _autoLowPlusBtn.alpha = 1;
-        _autoLowPlusBtn.enabled = true;
+        for (UIView *v in autoScreenObjects) {
+            
+            if (mobilityBonus) {
+                if (![v isEqual:_swipeUpArrow]) {
+                    v.alpha = 1.0;
+                }
+                else{
+                    v.alpha = 0;
+                }
+            }
+            else{
+                v.alpha = 1.0;
+            }
+        }
+        for (UIView *v in teleopScreenObjects) {
+            v.alpha = 0;
+        }
+    } completion:^(BOOL finished) {
+        for (UIView *v in teleopScreenObjects) {
+            if ([v isKindOfClass:[UIResponder class]]) {
+                v.userInteractionEnabled = NO;
+            }
+            v.hidden = true;
+        }
     }];
     
-    NSLog(@"AUTO ON");
+//    NSLog(@"AUTO ON");
 }
 // Activated by two finger swipe down (changes to telop UI)
 -(void)autoOff{
@@ -1355,128 +1352,233 @@ UIAlertView *overWriteAlert;
     twoFingerUp.enabled = true;
     twoFingerDown.enabled = false;
     
+    for (UIView *v in teleopScreenObjects) {
+        if ([v isKindOfClass:[UIResponder class]]) {
+            v.userInteractionEnabled = YES;
+        }
+        v.hidden = false;
+    }
     [UIView animateWithDuration:0.3 animations:^{
-        _autoTitleLbl.alpha = 0;
-        _autoHighScoreLbl.alpha = 0;
-        _autoMidScoreLbl.alpha = 0;
-        _autoLowScoreLbl.alpha = 0;
-        
-        _teleopTitleLbl.alpha = 1;
-        _teleopHighScoreLbl.alpha = 1;
-        _teleopMidScoreLbl.alpha = 1;
-        _teleopLowScoreLbl.alpha = 1;
-        
-        _smallPenaltyLbl.enabled = true;
-        _smallPenaltyStepper.enabled = true;
-        _smallPenaltyStepper.tintColor = [UIColor redColor];
-        _smallPenaltyStepper.alpha = 1;
-        _smallPenaltyTitleLbl.enabled = true;
-        
-        _largePenaltyLbl.enabled = true;
-        _largePenaltyStepper.enabled = true;
-        _largePenaltyStepper.tintColor = [UIColor redColor];
-        _largePenaltyStepper.alpha = 1;
-        _largePenaltyTitleLbl.enabled = true;
-        
-        _teleopHighMinusBtn.alpha = 1;
-        _teleopHighMinusBtn.enabled = true;
-        _teleopHighPlusBtn.alpha = 1;
-        _teleopHighPlusBtn.enabled = true;
-        _teleopMidMinusBtn.alpha = 1;
-        _teleopMidMinusBtn.enabled = true;
-        _teleopMidPlusBtn.alpha = 1;
-        _teleopMidPlusBtn.enabled = true;
-        _teleopLowMinusBtn.alpha = 1;
-        _teleopLowMinusBtn.enabled = true;
-        _teleopLowPlusBtn.alpha = 1;
-        _teleopLowPlusBtn.enabled = true;
-        
-        _autoHighMinusBtn.alpha = 0;
-        _autoHighMinusBtn.enabled = false;
-        _autoHighPlusBtn.alpha = 0;
-        _autoHighPlusBtn.enabled = false;
-        _autoMidMinusBtn.alpha = 0;
-        _autoMidMinusBtn.enabled = false;
-        _autoMidPlusBtn.alpha = 0;
-        _autoMidPlusBtn.enabled = false;
-        _autoLowMinusBtn.alpha = 0;
-        _autoLowMinusBtn.enabled = false;
-        _autoLowPlusBtn.alpha = 0;
-        _autoLowPlusBtn.enabled = false;
+        for (UIView *v in teleopScreenObjects) {
+            v.alpha = 1.0;
+        }
+        for (UIView *v in autoScreenObjects) {
+            v.alpha = 0;
+        }
+    } completion:^(BOOL finished) {
+        for (UIView *v in autoScreenObjects) {
+            if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
+                v.userInteractionEnabled = NO;
+            }
+            v.hidden = true;
+        }
     }];
     
-    NSLog(@"AUTO OFF");
+//    NSLog(@"AUTO OFF");
+}
+
+float startY;
+- (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        startY = recognizer.view.center.y;
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^(void){
+            _swipeUpArrow.alpha = 0;
+        }completion:^(BOOL finished) {}];
+    }
+    
+    CGPoint translation = [recognizer translationInView:self.view];
+    recognizer.view.center = CGPointMake(recognizer.view.center.x,
+                                         recognizer.view.center.y + translation.y);
+    if (recognizer.view.center.y < _movementLine.center.y - 50) {
+        recognizer.view.center = CGPointMake(recognizer.view.center.x, _movementLine.center.y - 50);
+    }
+    else if (recognizer.view.center.y > _movementLine.center.y + 50){
+        recognizer.view.center = CGPointMake(recognizer.view.center.x, _movementLine.center.y + 50);
+    }
+    [recognizer setTranslation:CGPointMake(0, 0) inView:self.view];
+    
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        if (_movementRobot.center.y < _movementLine.center.y - 10) {
+            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                recognizer.view.center = CGPointMake(recognizer.view.center.x, _movementLine.center.y - 50);
+            } completion:^(BOOL finished) {}];
+        }
+        else if (_movementRobot.center.y > _movementLine.center.y + 10){
+            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                recognizer.view.center = CGPointMake(recognizer.view.center.x, _movementLine.center.y + 50);
+            } completion:^(BOOL finished) {}];
+        }
+        else{
+            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                recognizer.view.center = CGPointMake(recognizer.view.center.x, startY);
+            } completion:^(BOOL finished) {}];
+        }
+        
+        if (_movementRobot.center.y == _movementLine.center.y - 50) {
+            [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                _mobilityBonusLbl.backgroundColor = [UIColor greenColor];
+                _mobilityBonusLbl.layer.borderColor = [[UIColor whiteColor] CGColor];
+            } completion:^(BOOL finished) {}];
+            mobilityBonus = 1;
+        }
+        else{
+            [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                _mobilityBonusLbl.backgroundColor = [UIColor whiteColor];
+                _mobilityBonusLbl.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
+            } completion:^(BOOL finished) {}];
+            mobilityBonus = 0;
+        }
+    }
+}
+
+- (IBAction)autoHotHighPlus:(id)sender {
+    autoHighHotScore++;
+    _autoHotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighHotScore];
+}
+- (IBAction)autoHotHighMinus:(id)sender {
+    if (autoHighHotScore > 0) {
+        autoHighHotScore--;
+        _autoHotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighHotScore];
+    }
+}
+- (IBAction)autoNotHighPlus:(id)sender {
+    autoHighNotScore++;
+    _autoNotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighNotScore];
+}
+- (IBAction)autoNotHighMinus:(id)sender {
+    if (autoHighNotScore > 0) {
+        autoHighNotScore--;
+        _autoNotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighNotScore];
+    }
+}
+- (IBAction)autoMissHighPlus:(id)sender {
+    autoHighMissScore++;
+    _autoMissHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighMissScore];
+}
+- (IBAction)autoMissHighMinus:(id)sender {
+    if (autoHighMissScore > 0) {
+        autoHighMissScore--;
+        _autoMissHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighMissScore];
+    }
+}
+
+- (IBAction)autoHotLowPlus:(id)sender {
+    autoLowHotScore++;
+    _autoHotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowHotScore];
+}
+- (IBAction)autoHotLowMinus:(id)sender {
+    if (autoLowHotScore > 0) {
+        autoLowHotScore--;
+        _autoHotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowHotScore];
+    }
+}
+- (IBAction)autoNotLowPlus:(id)sender {
+    autoLowNotScore++;
+    _autoNotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowNotScore];
+}
+- (IBAction)autoNotLowMinus:(id)sender {
+    if (autoLowNotScore > 0) {
+        autoLowNotScore--;
+        _autoNotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowNotScore];
+    }
+}
+- (IBAction)autoMissLowPlus:(id)sender {
+    autoLowMissScore++;
+    _autoMissLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowMissScore];
+}
+- (IBAction)autoMissLowMinus:(id)sender {
+    if (autoLowMissScore > 0) {
+        autoLowMissScore--;
+        _autoMissLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowMissScore];
+    }
 }
 
 
-// Adds to the respective high scores
-- (IBAction)autoHighPlus:(id)sender {
-    autoHighScore++;
-    _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
+
+- (IBAction)teleopMakeHighPlus:(id)sender {
+    teleopHighMake++;
+    _teleopMakeHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopHighMake];
 }
-- (IBAction)teleopHighPlus:(id)sender {
-    teleopHighScore++;
-    _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
-}
-// Subtracts from the respective high scores
-- (IBAction)autoHighMinus:(id)sender {
-    if (autoHighScore > 0) {
-        autoHighScore--;
-        _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
+- (IBAction)teleopMakeHighMinus:(id)sender {
+    if (teleopHighMake > 0) {
+        teleopHighMake--;
+        _teleopMakeHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopHighMake];
     }
 }
-- (IBAction)teleopHighMinus:(id)sender {
-    if (teleopHighScore > 0) {
-        teleopHighScore--;
-        _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
+- (IBAction)teleopMissHighPlus:(id)sender {
+    teleopHighMiss++;
+    _teleopMissHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopHighMiss];
+}
+- (IBAction)teleopMissHighMinus:(id)sender {
+    if (teleopHighMiss > 0) {
+        teleopHighMiss--;
+        _teleopMissHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopHighMiss];
     }
 }
 
-// Adds to the respective mid scores
-- (IBAction)autoMidPlus:(id)sender {
-    autoMidScore++;
-    _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
+- (IBAction)teleopMakeLowPlus:(id)sender {
+    teleopLowMake++;
+    _teleopMakeLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopLowMake];
 }
-- (IBAction)teleopMidPlus:(id)sender {
-    teleopMidScore++;
-    _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
-}
-// Subtracts from the respective mid scores
-- (IBAction)autoMidMinus:(id)sender {
-    if (autoMidScore > 0) {
-        autoMidScore--;
-        _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
+- (IBAction)teleopMakeLowMinus:(id)sender {
+    if (teleopLowMake > 0) {
+        teleopLowMake--;
+        _teleopMakeLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopLowMake];
     }
 }
-- (IBAction)teleopMidMinus:(id)sender {
-    if (teleopMidScore > 0) {
-        teleopMidScore--;
-        _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
+- (IBAction)teleopMissLowPlus:(id)sender {
+    teleopLowMiss++;
+    _teleopMissLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopLowMiss];
+}
+- (IBAction)teleopMissLowMinus:(id)sender {
+    if (teleopLowMiss > 0) {
+        teleopLowMiss--;
+        _teleopMissLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopLowMiss];
     }
 }
 
-// Adds to the respective low scores
-- (IBAction)autoLowPlus:(id)sender {
-    autoLowScore++;
-    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+- (IBAction)teleopOverPlus:(id)sender {
+    teleopOver++;
+    _teleopOverLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopOver];
 }
-- (IBAction)teleopLowPlus:(id)sender {
-    teleopLowScore++;
-    _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
-}
-// Subtracts from the respective low scores
-- (IBAction)autoLowMinus:(id)sender {
-    if (autoLowScore > 0) {
-        autoLowScore--;
-        _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+- (IBAction)teleopOverMinus:(id)sender {
+    if (teleopOver > 0) {
+        teleopOver--;
+        _teleopOverLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopOver];
     }
 }
-- (IBAction)teleopLowMinus:(id)sender {
-    if (teleopLowScore > 0) {
-        teleopLowScore--;
-        _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
+- (IBAction)teleopCatchPlus:(id)sender {
+    teleopCatch++;
+    _teleopCatchLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopCatch];
+}
+- (IBAction)teleopCatchMinus:(id)sender {
+    if (teleopCatch > 0) {
+        teleopCatch--;
+        _teleopCatchLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopCatch];
     }
 }
+
+- (IBAction)teleopPassedPlus:(id)sender {
+    teleopPassed++;
+    _teleopPassedLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopPassed];
+}
+- (IBAction)teleopPassedMinus:(id)sender {
+    if (teleopPassed > 0) {
+        teleopPassed--;
+        _teleopPassedLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopPassed];
+    }
+}
+- (IBAction)teleopReceivedPlus:(id)sender {
+    teleopReceived++;
+    _teleopReceivedLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopReceived];
+}
+- (IBAction)teleopReceivedMinus:(id)sender {
+    if (teleopReceived > 0) {
+        teleopReceived--;
+        _teleopReceivedLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopReceived];
+    }
+}
+
 
 
 // Makes the match number editable
@@ -1497,6 +1599,20 @@ UIAlertView *overWriteAlert;
     _teamNumField.text = _teamNumEdit.titleLabel.text;
     _teamNumField.selected = true;
     [_teamNumField becomeFirstResponder];
+}
+-(IBAction)teamNumberEditFinished:(id)sender {
+    NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+    NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %@", _teamNumField.text];
+    roboPicRequest.predicate = roboPicPredicate;
+    NSError *roboPicError = nil;
+    NSArray *roboPics = [context executeFetchRequest:roboPicRequest error:&roboPicError];
+    _robotPic.alpha = 0;
+    PitTeam *pt = [roboPics firstObject];
+    UIImage *image = [UIImage imageWithData:[pt valueForKey:@"image"]];
+    _robotPic.image = image;
+    [UIView animateWithDuration:0.2 animations:^{
+        _robotPic.alpha = 1;
+    }];
 }
 
 // Changes the value for the number of small penalties recorded
@@ -1530,7 +1646,7 @@ UIAlertView *overWriteAlert;
     }
     
     // If for some reason there was no match number (Shouldn't occur, but just in case)
-    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""]) {
+    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""] || [currentMatchNum integerValue] < 1) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO MATCH NUMBER"
                                                        message: @"Please enter a match number for this match."
                                                       delegate: nil
@@ -1539,7 +1655,7 @@ UIAlertView *overWriteAlert;
         [alert show];
     }
     // Another unlikely case: No team number. Also shouldn't happen, but a good safety net
-    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""]) {
+    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""] || [currentTeamNum integerValue] < 1) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO TEAM NUMBER"
                                                        message: @"Please enter a team number for this match."
                                                       delegate: nil
@@ -1549,72 +1665,336 @@ UIAlertView *overWriteAlert;
     }
     // If everything checks out, save the match locally
     else{
-        [context performBlock:^{
-            Regional *rgnl = [Regional createRegionalWithName:currentRegional inManagedObjectContext:context];
-            
-            Team *tm = [Team createTeamWithName:currentTeamNum inRegional:rgnl withManagedObjectContext:context];
-            
-            // Create a uniqueID for this match
-            NSDate *now = [NSDate date];
-            secs = [now timeIntervalSince1970];
-            
-            NSDictionary *matchDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       [NSNumber numberWithInteger:teleopHighScore], @"teleHighScore",
-                                       [NSNumber numberWithInteger:autoHighScore], @"autoHighScore",
-                                       [NSNumber numberWithInteger:teleopMidScore], @"teleMidScore",
-                                       [NSNumber numberWithInteger:autoMidScore], @"autoMidScore",
-                                       [NSNumber numberWithInteger:teleopLowScore], @"teleLowScore",
-                                       [NSNumber numberWithInteger:autoLowScore], @"autoLowScore",
-                                       //[NSNumber numberWithInteger:endGame], @"endGame",
-                                       [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
-                                       [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
-                                       [NSString stringWithString:pos], @"red1Pos",
-                                       [NSString stringWithString:scoutTeamNum], @"recordingTeam",
-                                       [NSString stringWithString:initials], @"scoutInitials",
-                                       [NSString stringWithString:currentMatchType], @"matchType",
-                                       [NSString stringWithString:currentMatchNum], @"matchNum",
-                                       [NSNumber numberWithInteger:secs], @"uniqueID", nil];
-            
-            Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
-            
-            // If the match doesn't exist
-            if ([match.uniqeID integerValue] == secs) {
-                [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
-                    if (success) {
-                        [self saveSuccess];
-                    }
-                    else{
-                        NSLog(@"Didn't save correctly");
-                    }
-                }];
-            }
-            else{
-                // Temporarily store the match and team that there was a duplicate of and call the AlertView
-                duplicateMatch = match;
-                teamWithDuplicate = tm;
-                duplicateMatchDict = matchDict;
-                [self overWriteAlert];
-            }
-        }];
-        
+        [self createNotesScreen];
     }
-
 
 }
 
-// Called by the overWriteAlert AlertView affirmative response
--(void)overWriteMatch{
+-(void)createNotesScreen{
+    greyOut = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+    [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+    greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
+    [self.view addSubview:greyOut];
+    
+    notesScreen = [[UIControl alloc] initWithFrame:CGRectMake(159, 200, 450, 500)];
+    [notesScreen addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+    notesScreen.backgroundColor = [UIColor whiteColor];
+    notesScreen.layer.cornerRadius = 10;
+    
+    UILabel *notesScreenLbl = [[UILabel alloc] initWithFrame:CGRectMake(125, 15, 200, 20)];
+    notesScreenLbl.text = @"Add Some Notes!";
+    notesScreenLbl.font = [UIFont systemFontOfSize:20];
+    notesScreenLbl.textAlignment = NSTextAlignmentCenter;
+    [notesScreen addSubview:notesScreenLbl];
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    cancelButton.frame = CGRectMake(375, 10, 70, 15);
+    [cancelButton setTitle:@"Cancel X" forState:UIControlStateNormal];
+    [cancelButton addTarget:self action:@selector(cancelNotesScreen) forControlEvents:UIControlEventTouchUpInside];
+    [notesScreen addSubview:cancelButton];
+    
+    UILabel *zoneSelectorLbl = [[UILabel alloc] initWithFrame:CGRectMake(100, 58, 250, 12)];
+    zoneSelectorLbl.text = @"Select the Zones they tended to hang out in";
+    zoneSelectorLbl.font = [UIFont systemFontOfSize:10];
+    zoneSelectorLbl.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+    zoneSelectorLbl.textAlignment = NSTextAlignmentCenter;
+    [notesScreen addSubview:zoneSelectorLbl];
+    
+    NSInteger redZoneX = 105;
+    
+    redZone = [[UIControl alloc] initWithFrame:CGRectMake(redZoneX, 75, 80, 30)];
+    redZone.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
+    [redZone addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    UILabel *redZoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    redZoneLabel.textAlignment = NSTextAlignmentCenter;
+    redZoneLabel.textColor = [UIColor whiteColor];
+    redZoneLabel.font = [UIFont boldSystemFontOfSize:16];
+    redZoneLabel.text = @"Red";
+    [redZone addSubview:redZoneLabel];
+    [notesScreen addSubview:redZone];
+    
+    redZoneX+=80;
+    whiteZone = [[UIControl alloc] initWithFrame:CGRectMake(redZoneX, 75, 80, 30)];
+    whiteZone.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.8];
+    [whiteZone addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    UILabel *whiteZoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    whiteZoneLabel.textAlignment = NSTextAlignmentCenter;
+    whiteZoneLabel.textColor = [UIColor whiteColor];
+    whiteZoneLabel.font = [UIFont boldSystemFontOfSize:16];
+    whiteZoneLabel.text = @"White";
+    [whiteZone addSubview:whiteZoneLabel];
+    [notesScreen addSubview:whiteZone];
+    
+    redZoneX+=80;
+    blueZone = [[UIControl alloc] initWithFrame:CGRectMake(redZoneX, 75, 80, 30)];
+    blueZone.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.3];
+    [blueZone addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    UILabel *blueZoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
+    blueZoneLabel.textAlignment = NSTextAlignmentCenter;
+    blueZoneLabel.textColor = [UIColor whiteColor];
+    blueZoneLabel.font = [UIFont boldSystemFontOfSize:16];
+    blueZoneLabel.text = @"Blue";
+    [blueZone addSubview:blueZoneLabel];
+    [notesScreen addSubview:blueZone];
+    
+    if (red1Pos < 3) {
+        UIBezierPath *leftMaskPath;
+        leftMaskPath = [UIBezierPath bezierPathWithRoundedRect:redZone.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerTopLeft) cornerRadii:CGSizeMake(3.0, 3.0)];
+        CAShapeLayer *leftMaskLayer = [[CAShapeLayer alloc] init];
+        leftMaskLayer.frame = redZone.bounds;
+        leftMaskLayer.path = leftMaskPath.CGPath;
+        redZone.layer.mask = leftMaskLayer;
+        
+        UIBezierPath *rightMaskPath;
+        rightMaskPath = [UIBezierPath bezierPathWithRoundedRect:blueZone.bounds byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerTopRight) cornerRadii:CGSizeMake(3.0, 3.0)];
+        CAShapeLayer *rightMaskLayer = [[CAShapeLayer alloc] init];
+        rightMaskLayer.frame = blueZone.bounds;
+        rightMaskLayer.path = rightMaskPath.CGPath;
+        blueZone.layer.mask = rightMaskLayer;
+    }
+    else {
+        redZone.center = CGPointMake(redZone.center.x + 160, redZone.center.y);
+        blueZone.center = CGPointMake(blueZone.center.x - 160, blueZone.center.y);
+        
+        UIBezierPath *leftMaskPath;
+        leftMaskPath = [UIBezierPath bezierPathWithRoundedRect:redZone.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerTopLeft) cornerRadii:CGSizeMake(3.0, 3.0)];
+        CAShapeLayer *leftMaskLayer = [[CAShapeLayer alloc] init];
+        leftMaskLayer.frame = blueZone.bounds;
+        leftMaskLayer.path = leftMaskPath.CGPath;
+        blueZone.layer.mask = leftMaskLayer;
+        
+        UIBezierPath *rightMaskPath;
+        rightMaskPath = [UIBezierPath bezierPathWithRoundedRect:blueZone.bounds byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerTopRight) cornerRadii:CGSizeMake(3.0, 3.0)];
+        CAShapeLayer *rightMaskLayer = [[CAShapeLayer alloc] init];
+        rightMaskLayer.frame = redZone.bounds;
+        rightMaskLayer.path = rightMaskPath.CGPath;
+        redZone.layer.mask = rightMaskLayer;
+    }
+    
+    UILabel *quickNotesLbl = [[UILabel alloc] initWithFrame:CGRectMake(175, 130, 100, 13)];
+    quickNotesLbl.text = @"Quick Notes (tap)";
+    quickNotesLbl.textAlignment = NSTextAlignmentCenter;
+    quickNotesLbl.font = [UIFont systemFontOfSize:10];
+    quickNotesLbl.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+    [notesScreen addSubview:quickNotesLbl];
+    
+    goodDefense = [[UIControl alloc] initWithFrame:CGRectMake(40, 150, 130, 30)];
+    goodDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [goodDefense addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    goodDefense.layer.cornerRadius = 5;
+    UILabel *goodDefenseLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 125, 30)];
+    goodDefenseLbl.text = @"Good Defense";
+    goodDefenseLbl.textAlignment = NSTextAlignmentCenter;
+    goodDefenseLbl.textColor = [UIColor whiteColor];
+    goodDefenseLbl.font = [UIFont systemFontOfSize:15];
+    [goodDefense addSubview:goodDefenseLbl];
+    [notesScreen addSubview:goodDefense];
+    
+    didntMove = [[UIControl alloc] initWithFrame:CGRectMake(180, 150, 110, 30)];
+    didntMove.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [didntMove addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    didntMove.layer.cornerRadius = 5;
+    UILabel *didntMoveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 110, 30)];
+    didntMoveLbl.text = @"Didn't Move";
+    didntMoveLbl.textAlignment = NSTextAlignmentCenter;
+    didntMoveLbl.textColor = [UIColor whiteColor];
+    didntMoveLbl.font = [UIFont systemFontOfSize:15];
+    [didntMove addSubview:didntMoveLbl];
+    [notesScreen addSubview:didntMove];
+    
+    
+    notesTextField = [[UITextView alloc] initWithFrame:CGRectMake(75, 350, 300, 100)];
+    notesTextField.textAlignment = NSTextAlignmentCenter;
+    notesTextField.layer.borderColor = [[UIColor colorWithWhite:0.8 alpha:1.0] CGColor];
+    notesTextField.layer.borderWidth = 1;
+    notesTextField.layer.cornerRadius = 10;
+    notesTextField.font = [UIFont systemFontOfSize:14];
+    notesTextField.text = @"Custom Notes";
+    notesTextField.textColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    notesTextField.delegate = self;
+    [notesScreen addSubview:notesTextField];
+    
+    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    saveButton.frame = CGRectMake(190, 460, 70, 30);
+    saveButton.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+    [saveButton setTitle:@"Save" forState:UIControlStateNormal];
+    [saveButton addTarget:self action:@selector(coreDataSave) forControlEvents:UIControlEventTouchUpInside];
+    saveButton.layer.cornerRadius = 5;
+    [notesScreen addSubview:saveButton];
+    
+    [greyOut addSubview:notesScreen];
+    notesScreen.center = CGPointMake(notesScreen.center.x, 1524);
+    [UIView animateWithDuration:0.3 animations:^{
+        notesScreen.center = CGPointMake(notesScreen.center.x, 450);
+    }];
+}
+
+-(void)cancelNotesScreen{
+    [UIView animateWithDuration:0.3 animations:^{
+        notesScreen.center = CGPointMake(notesScreen.center.x, 1524);
+    } completion:^(BOOL finished) {
+        [notesScreen removeFromSuperview];
+        [greyOut removeFromSuperview];
+    }];
+}
+
+-(void)notesControllerTapped:(UIControl *)controlView{
+    if ([controlView isEqual:redZone]) {
+        if (inRedZone) {
+            [UIView animateWithDuration:0.1 animations:^{
+                redZone.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
+            }];
+            inRedZone = false;
+        }
+        else{
+            [UIView animateWithDuration:0.1 animations:^{
+                redZone.backgroundColor = [UIColor redColor];
+            }];
+            inRedZone = true;
+        }
+    }
+    else if ([controlView isEqual:whiteZone]) {
+        if (inWhiteZone) {
+            [UIView animateWithDuration:0.2 animations:^{
+                whiteZone.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.8];
+            }];
+            inWhiteZone = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                whiteZone.backgroundColor = [UIColor colorWithWhite:0.4 alpha:1.0];
+            }];
+            inWhiteZone = true;
+        }
+    }
+    else if ([controlView isEqual:blueZone]) {
+        if (inBlueZone) {
+            [UIView animateWithDuration:0.2 animations:^{
+                blueZone.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.3];
+            }];
+            inBlueZone = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                blueZone.backgroundColor = [UIColor blueColor];
+            }];
+            inBlueZone = true;
+        }
+    }
+    else if ([controlView isEqual:goodDefense]){
+        if (didGoodDefense) {
+            [UIView animateWithDuration:0.2 animations:^{
+                goodDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGoodDefense = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                goodDefense.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+            }];
+            didGoodDefense = true;
+        }
+    }
+    else if ([controlView isEqual:didntMove]){
+        if (didDidntMove) {
+            [UIView animateWithDuration:0.2 animations:^{
+                didntMove.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didDidntMove = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                didntMove.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+            }];
+            didDidntMove = true;
+        }
+    }
+}
+
+-(void)textViewDidBeginEditing:(UITextView *)textField{
+    if ([textField isEqual:notesTextField]) {
+        if ([textField.text isEqualToString:@"Custom Notes"]) {
+            textField.text = @"";
+            textField.textColor = [UIColor blackColor];
+        }
+    }
+    [textField becomeFirstResponder];
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textField{
+    if ([textField isEqual:notesTextField]) {
+        if ([textField.text isEqualToString:@""]) {
+            textField.text = @"Custom Notes";
+            textField.textColor = [UIColor lightGrayColor];
+        }
+    }
+    [textField resignFirstResponder];
+}
+
+-(void)coreDataSave{
+    if ([notesTextField.text isEqualToString:@"Custom Notes"]) {notesTextField.text = @"";}
+    notes = notesTextField.text;
+    [UIView animateWithDuration:0.3 animations:^{
+        notesScreen.center = CGPointMake(notesScreen.center.x, 1524);
+    } completion:^(BOOL finished) {
+        [notesScreen removeFromSuperview];
+        [greyOut removeFromSuperview];
+    }];
     [context performBlock:^{
-        [FSAdocument.managedObjectContext deleteObject:duplicateMatch];
-        [Match createMatchWithDictionary:duplicateMatchDict inTeam:teamWithDuplicate withManagedObjectContext:context];
-        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
-            if (success) {
-                [self saveSuccess];
-            }
-            else{
-                NSLog(@"Didn't overwrite correctly");
-            }
-        }];
+        Regional *rgnl = [Regional createRegionalWithName:currentRegional inManagedObjectContext:context];
+        
+        Team *tm = [Team createTeamWithName:currentTeamNum inRegional:rgnl withManagedObjectContext:context];
+        
+        // Create a uniqueID for this match
+        NSDate *now = [NSDate date];
+        secs = [now timeIntervalSince1970];
+        
+        NSDictionary *matchDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithInteger:autoHighHotScore], @"autoHighHotScore",
+                                   [NSNumber numberWithInteger:autoHighNotScore], @"autoHighNotScore",
+                                   [NSNumber numberWithInteger:autoHighMissScore], @"autoHighMissScore",
+                                   [NSNumber numberWithInteger:autoLowHotScore], @"autoLowHotScore",
+                                   [NSNumber numberWithInteger:autoLowNotScore], @"autoLowNotScore",
+                                   [NSNumber numberWithInteger:autoLowMissScore], @"autoLowMissScore",
+                                   [NSNumber numberWithInteger:mobilityBonus], @"mobilityBonus",
+                                   [NSNumber numberWithInteger:teleopHighMake], @"teleopHighMake",
+                                   [NSNumber numberWithInteger:teleopHighMiss], @"teleopHighMiss",
+                                   [NSNumber numberWithInteger:teleopLowMake], @"teleopLowMake",
+                                   [NSNumber numberWithInteger:teleopLowMiss], @"teleopLowMiss",
+                                   [NSNumber numberWithInteger:teleopOver], @"teleopOver",
+                                   [NSNumber numberWithInteger:teleopCatch], @"teleopCatch",
+                                   [NSNumber numberWithInteger:teleopPassed], @"teleopPassed",
+                                   [NSNumber numberWithInteger:teleopReceived], @"teleopReceived",
+                                   [NSNumber numberWithInteger:largePenaltyTally], @"penaltyLarge",
+                                   [NSNumber numberWithInteger:smallPenaltyTally], @"penaltySmall",
+                                   [NSString stringWithString:notes], @"notes",
+                                   [NSString stringWithString:pos], @"red1Pos",
+                                   [NSString stringWithString:scoutTeamNum], @"recordingTeam",
+                                   [NSString stringWithString:initials], @"scoutInitials",
+                                   [NSString stringWithString:currentMatchType], @"matchType",
+                                   [NSString stringWithString:currentMatchNum], @"matchNum",
+                                   [NSNumber numberWithInteger:secs], @"uniqueID", nil];
+        
+        Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
+        
+        // If the match doesn't exist
+        if ([match.uniqeID integerValue] == secs) {
+            [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+                if (success) {
+                    [self saveSuccess];
+                }
+                else{
+                    NSLog(@"Didn't save correctly");
+                }
+            }];
+        }
+        else{
+            // Temporarily store the match and team that there was a duplicate of and call the AlertView
+            duplicateMatch = match;
+            teamWithDuplicate = tm;
+            duplicateMatchDict = matchDict;
+            [self overWriteAlert];
+        }
     }];
 }
 
@@ -1636,6 +2016,22 @@ UIAlertView *overWriteAlert;
     [overWriteAlert show];
 }
 
+// Called by the overWriteAlert AlertView affirmative response
+-(void)overWriteMatch{
+    [context performBlock:^{
+        [FSAdocument.managedObjectContext deleteObject:duplicateMatch];
+        [Match createMatchWithDictionary:duplicateMatchDict inTeam:teamWithDuplicate withManagedObjectContext:context];
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+            if (success) {
+                [self saveSuccess];
+            }
+            else{
+                NSLog(@"Didn't overwrite correctly");
+            }
+        }];
+    }];
+}
+
 // Alerts user that there was a successful save and sends the match data on to connected peers
 -(void)saveSuccess{
     // AlertView to show there was a successful save
@@ -1646,29 +2042,64 @@ UIAlertView *overWriteAlert;
                                          otherButtonTitles:nil];
     [alert show];
     
-    // Sends data to connected peers
-    [self setUpData];
-    NSData *dataToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
-    NSError *error;
-    [mySession sendData:dataToSend toPeers:[mySession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
+    if (self.mySession != NULL) {
+        // Sends data to connected peers
+        [self setUpData];
+        NSData *dataToSend = [NSKeyedArchiver archivedDataWithRootObject:dictToSend];
+        NSError *error;
+        [self.mySession sendData:dataToSend toPeers:[self.mySession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
+    }
+    if (red1Pos == 0) {red1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 1 : %@", currentMatchNum];}
+    else if (red1Pos == 1){red2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 2 : %@", currentMatchNum];}
+    else if (red1Pos == 2){red3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 3 : %@", currentMatchNum];}
+    else if (red1Pos == 3){blue1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 1 : %@", currentMatchNum];}
+    else if (red1Pos == 4){blue2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 2 : %@", currentMatchNum];}
+    else if (red1Pos == 5){blue3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 3 : %@", currentMatchNum];}
     
     // Reset all the scores and labels
-    teleopHighScore = 0;
-    _teleopHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)teleopHighScore];
-    autoHighScore = 0;
-    _autoHighScoreLbl.text = [[NSString alloc] initWithFormat:@"High: %ld", (long)autoHighScore];
-    teleopMidScore = 0;
-    _teleopMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)teleopMidScore];
-    autoMidScore = 0;
-    _autoMidScoreLbl.text = [[NSString alloc] initWithFormat:@"Mid: %ld", (long)autoMidScore];
-    teleopLowScore = 0;
-    _teleopLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)teleopLowScore];
-    autoLowScore = 0;
-    _autoLowScoreLbl.text = [[NSString alloc] initWithFormat:@"Low: %ld", (long)autoLowScore];
+    autoHighHotScore = 0;
+    _autoHotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighHotScore];
+    autoHighNotScore = 0;
+    _autoNotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighNotScore];
+    autoHighMissScore = 0;
+    _autoMissHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighMissScore];
+    autoLowHotScore = 0;
+    _autoHotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowHotScore];
+    autoLowNotScore = 0;
+    _autoNotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowNotScore];
+    autoLowMissScore = 0;
+    _autoMissLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowMissScore];
+    mobilityBonus = 0;
+    [UIView animateWithDuration:0.2 animations:^{
+        _movementRobot.center = CGPointMake(_movementRobot.center.x, _movementLine.center.y + 50);
+        _swipeUpArrow.alpha = 1.0;
+        _mobilityBonusLbl.backgroundColor = [UIColor whiteColor];
+        _mobilityBonusLbl.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
+    }];
+    
+    teleopHighMake = 0;
+    _teleopMakeHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopHighMake];
+    teleopHighMiss = 0;
+    _teleopMissHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopHighMiss];
+    teleopLowMake = 0;
+    _teleopMakeLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopLowMake];
+    teleopLowMiss = 0;
+    _teleopMissLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopLowMiss];
+    teleopOver = 0;
+    _teleopOverLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopOver];
+    teleopCatch = 0;
+    _teleopCatchLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopCatch];
+    teleopPassed = 0;
+    _teleopPassedLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopPassed];
+    teleopReceived = 0;
+    _teleopReceivedLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopReceived];
+    
     smallPenaltyTally = 0;
     _smallPenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)smallPenaltyTally];
+    _smallPenaltyStepper.value = 0;
     largePenaltyTally = 0;
     _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
+    _largePenaltyStepper.value = 0;
     
     // Increment match number by 1
     NSInteger matchNumTranslator = [currentMatchNum integerValue];
@@ -1697,6 +2128,22 @@ UIAlertView *overWriteAlert;
         _teamNumEdit.hidden = false;
     }
     
+    NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+    NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %ld", randomTeamNum];
+    roboPicRequest.predicate = roboPicPredicate;
+    NSError *roboPicError = nil;
+    NSArray *roboPics = [context executeFetchRequest:roboPicRequest error:&roboPicError];
+    PitTeam *pt = [roboPics firstObject];
+    _robotPic.alpha = 0;
+    UIImage *image = [UIImage imageWithData:[pt valueForKey:@"image"]];
+    _robotPic.image = image;
+    
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^(void){
+        _movementRobot.center = CGPointMake(_movementRobot.center.x, _movementLine.center.y + 50);
+        _swipeUpArrow.alpha = 1;
+        _robotPic.alpha = 1;
+    }completion:^(BOOL finished) {}];
+    
     // Turns autonomous mode on
     [self autoOn];
     
@@ -1709,6 +2156,7 @@ UIAlertView *overWriteAlert;
     [scoutTeamNumField resignFirstResponder];
     [currentMatchNumField resignFirstResponder];
     [initialsField resignFirstResponder];
+    [notesTextField resignFirstResponder];
 }
 
 

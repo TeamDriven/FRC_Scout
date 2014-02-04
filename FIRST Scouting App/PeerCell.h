@@ -2,7 +2,7 @@
 //  PeerCell.h
 //  FIRST Scouting App
 //
-//  Created by Louie Bertoncin on 1/6/14.
+//  Created by Bertoncin,Louie on 2/3/14.
 //  Copyright (c) 2014 teamDriven. All rights reserved.
 //
 
@@ -10,9 +10,8 @@
 
 @interface PeerCell : UITableViewCell
 
-@property(nonatomic, strong)UILabel *alreadyConnectedLbl;
-@property(nonatomic, strong)UILabel *peerLbl;
-@property(nonatomic, strong)UILabel *connectedLbl;
-@property(nonatomic, retain)NSString *uniqueID;
+@property (nonatomic, strong)UILabel *peerNameLbl;
+
+@property (nonatomic, strong)UIProgressView *progressBar;
 
 @end

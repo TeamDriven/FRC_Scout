@@ -1,22 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B3116" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A3028" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Match" representedClassName="Match" syncable="YES">
-        <attribute name="autoHighScore" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
-        <attribute name="autoLowScore" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
-        <attribute name="autoMidScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="endGame" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="autoHighHotScore" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
+        <attribute name="autoHighMissScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="autoHighNotScore" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
+        <attribute name="autoLowHotScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="autoLowMissScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="autoLowNotScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="matchNum" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="matchType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mobilityBonus" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="penaltyLarge" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="penaltySmall" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="recordingTeam" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="red1Pos" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="scoutInitials" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="teleHighScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="teleLowScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="teleMidScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="teleopCatch" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="teleopHighMake" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="teleopHighMiss" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="teleopLowMake" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="teleopLowMiss" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="teleopOver" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="teleopPassed" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="teleopReceived" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="uniqeID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="teamNum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matches" inverseEntity="Team" syncable="YES"/>
+    </entity>
+    <entity name="PitTeam" representedClassName="PitTeam" syncable="YES">
+        <attribute name="autonomous" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="autoStartingPosition" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bumperQuality" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="catchingMechanism" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="driveTrain" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="floorCollector" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="goalieArm" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hotGoalTracking" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="preferredGoal" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="shooter" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="teamName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="teamNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="Regional" representedClassName="Regional" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -28,8 +54,9 @@
         <relationship name="regionalIn" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Regional" inverseName="teams" inverseEntity="Regional" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Match" positionX="0" positionY="0" width="128" height="268"/>
-        <element name="Regional" positionX="0" positionY="-225" width="128" height="73"/>
-        <element name="Team" positionX="-513" positionY="-162" width="128" height="90"/>
+        <element name="Match" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="PitTeam" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Regional" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Team" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>
