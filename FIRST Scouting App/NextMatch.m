@@ -33,7 +33,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeLeft animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -43,13 +43,5 @@
 }
 
 
-
--(BOOL)shouldAutorotate{
-    return ([[UIDevice currentDevice] orientation] == UIInterfaceOrientationLandscapeLeft);
-}
-
--(NSUInteger)supportedInterfaceOrientations{
-    return UIInterfaceOrientationMaskLandscapeLeft;
-}
 
 @end

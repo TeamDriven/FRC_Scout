@@ -33,6 +33,7 @@
 		86E8713D18A095A200EA2663 /* NextMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8713C18A095A200EA2663 /* NextMatch.m */; };
 		86E8714018A095BB00EA2663 /* AllianceSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8713F18A095BB00EA2663 /* AllianceSelection.m */; };
 		86E8714718A0ABEB00EA2663 /* DetailsNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8714618A0ABEB00EA2663 /* DetailsNavigationController.m */; };
+		86E8714A18A1A0AF00EA2663 /* MainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8714918A1A0AF00EA2663 /* MainTabBarController.m */; };
 		8846FED11826D7D100B37E44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED01826D7D100B37E44 /* Foundation.framework */; };
 		8846FED31826D7D100B37E44 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED21826D7D100B37E44 /* CoreGraphics.framework */; };
 		8846FED51826D7D100B37E44 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED41826D7D100B37E44 /* UIKit.framework */; };
@@ -110,6 +111,8 @@
 		86E8713F18A095BB00EA2663 /* AllianceSelection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllianceSelection.m; sourceTree = "<group>"; };
 		86E8714518A0ABEB00EA2663 /* DetailsNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailsNavigationController.h; sourceTree = "<group>"; };
 		86E8714618A0ABEB00EA2663 /* DetailsNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailsNavigationController.m; sourceTree = "<group>"; };
+		86E8714818A1A0AF00EA2663 /* MainTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabBarController.h; sourceTree = "<group>"; };
+		86E8714918A1A0AF00EA2663 /* MainTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBarController.m; sourceTree = "<group>"; };
 		8846FECD1826D7D100B37E44 /* FIRST Scouting App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIRST Scouting App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8846FED01826D7D100B37E44 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8846FED21826D7D100B37E44 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -300,6 +303,8 @@
 			isa = PBXGroup;
 			children = (
 				8846FEE21826D7D200B37E44 /* Main.storyboard */,
+				86E8714818A1A0AF00EA2663 /* MainTabBarController.h */,
+				86E8714918A1A0AF00EA2663 /* MainTabBarController.m */,
 				888F0EF61850177F00412022 /* Globals.h */,
 				888F0EF71850177F00412022 /* Globals.m */,
 				8846FEE51826D7D200B37E44 /* Scoring.h */,
@@ -486,6 +491,7 @@
 				863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */,
 				888F0EF81850177F00412022 /* Globals.m in Sources */,
 				8846FEE71826D7D200B37E44 /* Scoring.m in Sources */,
+				86E8714A18A1A0AF00EA2663 /* MainTabBarController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
