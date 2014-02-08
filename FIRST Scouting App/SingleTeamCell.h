@@ -21,6 +21,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *teleopAvgLbl;
 
 
-
-
 @end

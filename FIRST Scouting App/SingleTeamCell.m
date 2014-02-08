@@ -16,6 +16,8 @@
     if (self) {
         // Initialization code
         _teamNameLbl.adjustsFontSizeToFitWidth = true;
+        _autoAvgLbl.adjustsFontSizeToFitWidth = true;
+        _teleopAvgLbl.adjustsFontSizeToFitWidth = true;
     }
     return self;
 }

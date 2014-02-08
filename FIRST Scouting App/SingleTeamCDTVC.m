@@ -29,6 +29,27 @@
                                      cacheName:nil];
 }
 
+-(void)setTextField:(UITextField *)textField{
+    _textField = textField;
+    
+    [_textField addTarget:self action:@selector(searching) forControlEvents:UIControlEventEditingChanged];
+}
+
+-(void)searching{
+    NSFetchRequest *numberRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
+    if (_textField.text.length == 0){
+        numberRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]];
+        [self setFetchedResultsController:[[NSFetchedResultsController alloc] initWithFetchRequest:numberRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil]];
+    }
+    else{
+        numberRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name contains %@", _textField.text];
+        numberRequest.predicate = predicate;
+        [self setFetchedResultsController:[[NSFetchedResultsController alloc] initWithFetchRequest:numberRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil]];
+    }
+    [self performFetch];
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     SingleTeamCell *cell = (SingleTeamCell *)[tableView dequeueReusableCellWithIdentifier:@"singleTeamCell"];
     
@@ -68,8 +89,27 @@
     cell.autoAvgLbl.text = [[NSString alloc] initWithFormat:@"%.1f", autoAvg];
     cell.teleopAvgLbl.text = [[NSString alloc] initWithFormat:@"%.1f", teleopAvg];
     
+    if (indexPath.row % 2 == 1) {
+        cell.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    }
+    else{
+        cell.backgroundColor = [UIColor whiteColor];
+    }
     
     return cell;
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [_textField resignFirstResponder];
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [_textField resignFirstResponder];
 }
 
 @end

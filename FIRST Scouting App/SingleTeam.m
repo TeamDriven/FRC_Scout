@@ -62,14 +62,21 @@ SingleTeamCDTVC *cdtvc;
     }
     // *** Done Mapping to Core Data **
     
-    cdtvc = [[SingleTeamCDTVC alloc] initWithStyle:UITableViewStylePlain];
+    cdtvc = [[SingleTeamCDTVC alloc] init];
     [cdtvc setManagedObjectContext:context];
-    cdtvc.debug = true;
+    [cdtvc setTextField:_searchBox];
+//    cdtvc.debug = true;
     
     _tableView.delegate = cdtvc;
     _tableView.dataSource = cdtvc;
+    _tableView.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
+    _tableView.layer.borderWidth = 1;
+    _tableView.layer.cornerRadius = 5;
+    _tableView.separatorInset = UIEdgeInsetsMake(0, 3, 0, 3);
     
     cdtvc.tableView = _tableView;
+    
+    _searchBox.delegate = cdtvc;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -82,6 +89,9 @@ SingleTeamCDTVC *cdtvc;
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)screenTapped:(id)sender {
+    [_searchBox resignFirstResponder];
+}
 
 
 @end

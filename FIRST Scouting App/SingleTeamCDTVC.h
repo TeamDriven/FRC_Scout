@@ -8,8 +8,10 @@
 
 #import "CoreDataTableViewController.h"
 
-@interface SingleTeamCDTVC : CoreDataTableViewController
+@interface SingleTeamCDTVC : CoreDataTableViewController<UITextFieldDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
+@property (weak,nonatomic) UITextField *textField;
 
 @end

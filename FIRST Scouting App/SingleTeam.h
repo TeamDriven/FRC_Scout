@@ -10,7 +10,6 @@
 #import "CoreData/CoreData.h"
 
 @interface SingleTeam : UIViewController
-//<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, NSFetchedResultsControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *searchBox;
 
