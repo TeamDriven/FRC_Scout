@@ -34,6 +34,8 @@
 		86E8714018A095BB00EA2663 /* AllianceSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8713F18A095BB00EA2663 /* AllianceSelection.m */; };
 		86E8714718A0ABEB00EA2663 /* DetailsNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8714618A0ABEB00EA2663 /* DetailsNavigationController.m */; };
 		86E8714A18A1A0AF00EA2663 /* MainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8714918A1A0AF00EA2663 /* MainTabBarController.m */; };
+		86E8715918A6D1A800EA2663 /* SingleTeamCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8715818A6D1A800EA2663 /* SingleTeamCell.m */; };
+		86E8715C18A6D3D000EA2663 /* SingleTeamCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8715B18A6D3D000EA2663 /* SingleTeamCDTVC.m */; };
 		8846FED11826D7D100B37E44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED01826D7D100B37E44 /* Foundation.framework */; };
 		8846FED31826D7D100B37E44 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED21826D7D100B37E44 /* CoreGraphics.framework */; };
 		8846FED51826D7D100B37E44 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED41826D7D100B37E44 /* UIKit.framework */; };
@@ -113,6 +115,10 @@
 		86E8714618A0ABEB00EA2663 /* DetailsNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailsNavigationController.m; sourceTree = "<group>"; };
 		86E8714818A1A0AF00EA2663 /* MainTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabBarController.h; sourceTree = "<group>"; };
 		86E8714918A1A0AF00EA2663 /* MainTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBarController.m; sourceTree = "<group>"; };
+		86E8715718A6D1A800EA2663 /* SingleTeamCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTeamCell.h; sourceTree = "<group>"; };
+		86E8715818A6D1A800EA2663 /* SingleTeamCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeamCell.m; sourceTree = "<group>"; };
+		86E8715A18A6D3D000EA2663 /* SingleTeamCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTeamCDTVC.h; sourceTree = "<group>"; };
+		86E8715B18A6D3D000EA2663 /* SingleTeamCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeamCDTVC.m; sourceTree = "<group>"; };
 		8846FECD1826D7D100B37E44 /* FIRST Scouting App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIRST Scouting App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8846FED01826D7D100B37E44 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8846FED21826D7D100B37E44 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -330,6 +336,10 @@
 				86AB8DA5189342D200D411C9 /* PitCell.m */,
 				86E8712E18A038CD00EA2663 /* PeerCell.h */,
 				86E8712F18A038CD00EA2663 /* PeerCell.m */,
+				86E8715718A6D1A800EA2663 /* SingleTeamCell.h */,
+				86E8715818A6D1A800EA2663 /* SingleTeamCell.m */,
+				86E8715A18A6D3D000EA2663 /* SingleTeamCDTVC.h */,
+				86E8715B18A6D3D000EA2663 /* SingleTeamCDTVC.m */,
 				8846FEDF1826D7D200B37E44 /* LocationsAppDelegate.h */,
 				8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */,
 				8846FED81826D7D100B37E44 /* FIRST Scouting App-Info.plist */,
@@ -481,6 +491,7 @@
 				2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */,
 				28270E141871247D00809047 /* Match+Category.m in Sources */,
 				28270E101871199100809047 /* Team+Category.m in Sources */,
+				86E8715918A6D1A800EA2663 /* SingleTeamCell.m in Sources */,
 				863E68131891979200C028B3 /* PitTeam.m in Sources */,
 				86AB8DA6189342D200D411C9 /* PitCell.m in Sources */,
 				86E8713018A038CD00EA2663 /* PeerCell.m in Sources */,
@@ -490,6 +501,7 @@
 				86CDCD30188DC016002B6522 /* ViewTeams.m in Sources */,
 				863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */,
 				888F0EF81850177F00412022 /* Globals.m in Sources */,
+				86E8715C18A6D3D000EA2663 /* SingleTeamCDTVC.m in Sources */,
 				8846FEE71826D7D200B37E44 /* Scoring.m in Sources */,
 				86E8714A18A1A0AF00EA2663 /* MainTabBarController.m in Sources */,
 			);

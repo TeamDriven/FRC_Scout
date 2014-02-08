@@ -1601,6 +1601,7 @@ UIAlertView *overWriteAlert;
 }
 
 -(void)somethingSelectedInEveryRowValidator{
+    autoStartingPositionString = [[NSMutableString alloc] initWithString:@""];
     if (isStartLeft == true) {
         [autoStartingPositionString appendString:@"Left, "];
     }
