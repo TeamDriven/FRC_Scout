@@ -110,6 +110,10 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [_textField resignFirstResponder];
+    
+    SingleTeamCell *selectedCell = (SingleTeamCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    teamNumber = selectedCell.teamNumberLbl.text;
+    teamName = selectedCell.teamNameLbl.text;
 }
 
 @end

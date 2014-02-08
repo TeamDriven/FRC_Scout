@@ -14,4 +14,7 @@
 
 @property (weak,nonatomic) UITextField *textField;
 
+extern NSString *teamNumber;
+extern NSString *teamName;
+
 @end
