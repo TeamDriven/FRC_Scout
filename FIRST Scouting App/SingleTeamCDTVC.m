@@ -35,7 +35,7 @@
     Team *tm = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     NSFetchRequest *pitTeamRequest = [[NSFetchRequest alloc] initWithEntityName:@"PitTeam"];
-    pitTeamRequest.predicate = [NSPredicate predicateWithFormat:@"teamNumber = %@", [tm valueForKey:@"teamNumber"]];
+    pitTeamRequest.predicate = [NSPredicate predicateWithFormat:@"teamNumber = %@", [tm valueForKey:@"name"]];
     NSError *pitTeamError;
     NSArray *pitTeamArray = [self.managedObjectContext executeFetchRequest:pitTeamRequest error:&pitTeamError];
     PitTeam *pt = [pitTeamArray firstObject];

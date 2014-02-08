@@ -1293,9 +1293,6 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <connections>
-                            <action selector="screenTapped:" destination="skg-ol-qgb" eventType="touchUpInside" id="lCX-9E-ZXN"/>
-                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" title="Data" image="DataStacks" id="tbP-G7-3eJ"/>
                     <navigationItem key="navigationItem" title="Data" id="aKD-75-8x6"/>
