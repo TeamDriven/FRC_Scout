@@ -18,7 +18,10 @@
 -(void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext{
     _managedObjectContext = managedObjectContext;
     
+    
+    
     NSFetchRequest *teamRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
+    [teamRequest setReturnsDistinctResults:YES];
     teamRequest.predicate = nil;
     teamRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]];
     
