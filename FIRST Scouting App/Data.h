@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "Globals.h"
-#import "MatchCell.h"
 
 @interface Data : UIViewController
 
