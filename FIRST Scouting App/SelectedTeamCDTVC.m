@@ -39,7 +39,14 @@
     
     Match *mtch = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    cell.titleLbl.text = mtch.matchNum;
+    if ([mtch.matchType isEqualToString:@"Q"]) {
+        cell.titleLbl.text = [[NSString alloc] initWithFormat:@"%@ - Q", mtch.matchNum];
+    }
+    else{
+        cell.titleLbl.text = mtch.matchNum;
+    }
+    
+    
     
     NSInteger autoTotal = 0;
     autoTotal += [mtch.autoHighHotScore integerValue]*20;

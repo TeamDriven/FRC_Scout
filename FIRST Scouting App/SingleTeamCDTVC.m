@@ -22,7 +22,7 @@
     
     
     NSFetchRequest *teamRequest = [[NSFetchRequest alloc] initWithEntityName:@"MasterTeam"];
-    teamRequest.predicate = nil;
+    teamRequest.predicate = [NSPredicate predicateWithFormat:@"teamsWithin.@count > 0"];
     teamRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc]
