@@ -1975,6 +1975,8 @@ float startY;
                                    [NSString stringWithString:currentMatchNum], @"matchNum",
                                    [NSNumber numberWithInteger:secs], @"uniqueID", nil];
         
+        NSLog(@"%@", matchDict);
+        
         Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
         
         // If the match doesn't exist

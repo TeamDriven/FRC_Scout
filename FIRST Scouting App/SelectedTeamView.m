@@ -57,25 +57,16 @@ SelectedTeamCDTVC *cdtvc;
     _teamNameLbl.layer.cornerRadius = 5;
     _statBox.layer.cornerRadius = 10;
     
-    
-    cdtvc = [[SelectedTeamCDTVC alloc] init];
-    [cdtvc setTeamToDisplay:teamNumber];
-    [cdtvc setManagedObjectContext:context];
-    cdtvc.debug = true;
-    
     _tableView.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
     _tableView.layer.borderWidth = 1;
     _tableView.layer.cornerRadius = 5;
     _tableView.separatorInset = UIEdgeInsetsMake(0, 3, 0, 3);
-    _tableView.delegate = cdtvc;
-    _tableView.dataSource = cdtvc;
     
-    cdtvc.tableView = _tableView;
+    
+    
 }
 
--(void)viewDidAppear:(BOOL)animated{
-
-    
+-(void)viewWillAppear:(BOOL)animated{
     NSFetchRequest *masterTeamRequest = [NSFetchRequest fetchRequestWithEntityName:@"MasterTeam"];
     masterTeamRequest.predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"name = %@", teamNumber]];
     
@@ -134,6 +125,22 @@ SelectedTeamCDTVC *cdtvc;
     _receivesAvgLbl.text = [[NSString alloc] initWithFormat:@"%.1f", receiveAvg];
     _overTrussAvgLbl.text = [[NSString alloc] initWithFormat:@"%.1f", overTrussAvg];
     _catchesAvgLbl.text = [[NSString alloc] initWithFormat:@"%.1f", catchAvg];
+    
+    cdtvc = [[SelectedTeamCDTVC alloc] init];
+    [cdtvc setTeamToDisplay:teamNumber];
+    [cdtvc setManagedObjectContext:context];
+    
+    _tableView.delegate = cdtvc;
+    _tableView.dataSource = cdtvc;
+    
+    cdtvc.tableView = _tableView;
+    
+    [cdtvc performFetch];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
