@@ -1532,7 +1532,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="myW-Td-EYZ">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="singleTeamMatchCell" rowHeight="60" id="myW-Td-EYZ" customClass="SingleTeamMatchCell">
                                         <rect key="frame" x="0.0" y="22" width="728" height="60"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="myW-Td-EYZ" id="6be-nj-cLO">
@@ -1586,6 +1586,12 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="autoLbl" destination="2zb-83-bvr" id="GBc-9l-ui7"/>
+                                            <outlet property="passReceiveLbl" destination="JxA-vA-AWV" id="eAZ-QJ-jDT"/>
+                                            <outlet property="teleopLbl" destination="Dh7-PF-Wjw" id="PFr-kS-m7A"/>
+                                            <outlet property="titleLbl" destination="Sab-o0-n3o" id="3LM-fm-QQ4"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>

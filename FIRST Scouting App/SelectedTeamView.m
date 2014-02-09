@@ -7,6 +7,12 @@
 //
 
 #import "SelectedTeamView.h"
+#import "Globals.h"
+#import "MasterTeam.h"
+#import "Regional.h"
+#import "Team.h"
+#import "Match.h"
+#import "PitTeam.h"
 
 @interface SelectedTeamView ()
 
@@ -16,6 +22,16 @@
 
 NSString *teamNumber;
 NSString *teamName;
+
+// Core Data Filepath
+NSFileManager *FSAfileManager;
+NSURL *FSAdocumentsDirectory;
+NSString *FSAdocumentName;
+NSURL *FSApathurl;
+UIManagedDocument *FSAdocument;
+NSManagedObjectContext *context;
+
+MasterTeam *master;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,6 +50,16 @@ NSString *teamName;
     
     _header.title = teamNumber;
     _teamNameLbl.text = teamName;
+    
+    NSFetchRequest *masterTeamRequest = [NSFetchRequest fetchRequestWithEntityName:@"MasterTeam"];
+    masterTeamRequest.predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"name = %@", teamNumber]];
+    
+    NSError *masterTeamError;
+    NSArray *masterTeamArray = [context executeFetchRequest:masterTeamRequest error:&masterTeamError];
+    
+    master = [masterTeamArray firstObject];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning

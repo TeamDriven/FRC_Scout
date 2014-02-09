@@ -33,4 +33,12 @@ extern NSArray *week6Regionals;
 extern NSArray *week7Regionals;
 extern NSArray *allWeekRegionals;
 
+// Core Data Filepath
+extern NSFileManager *FSAfileManager;
+extern NSURL *FSAdocumentsDirectory;
+extern NSString *FSAdocumentName;
+extern NSURL *FSApathurl;
+extern UIManagedDocument *FSAdocument;
+extern NSManagedObjectContext *context;
+
 @end

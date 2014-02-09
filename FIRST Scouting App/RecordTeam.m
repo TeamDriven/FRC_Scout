@@ -9,6 +9,7 @@
 #import "RecordTeam.h"
 #import "PitTeam.h"
 #import "PitTeam+Category.h"
+#import "Globals.h"
 
 @interface RecordTeam ()
 
@@ -143,27 +144,27 @@ UIAlertView *overWriteAlert;
 -(void)viewDidLoad{
     [super viewDidLoad];
     
-    // *** Map to Core Data ***
-    FSAfileManager = [NSFileManager defaultManager];
-    FSAdocumentsDirectory = [[FSAfileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
-    FSAdocumentName = @"FSA";
-    FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
-    FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
-    context = FSAdocument.managedObjectContext;
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
-        [FSAdocument openWithCompletionHandler:^(BOOL success){
-            if (success) NSLog(@"Found the document!");
-            if (!success) NSLog(@"Couldn't find the document at path: %@", FSApathurl);
-        }];
-    }
-    else{
-        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
-            if (success) NSLog(@"Created the document!");
-            if (!success) NSLog(@"Couldn't create the document at path: %@", FSApathurl);
-        }];
-    }
-    // *** Done Mapping to Core Data **
+//    // *** Map to Core Data ***
+//    FSAfileManager = [NSFileManager defaultManager];
+//    FSAdocumentsDirectory = [[FSAfileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+//    FSAdocumentName = @"FSA";
+//    FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
+//    FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
+//    context = FSAdocument.managedObjectContext;
+//    
+//    if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
+//        [FSAdocument openWithCompletionHandler:^(BOOL success){
+//            if (success) NSLog(@"Found the document!");
+//            if (!success) NSLog(@"Couldn't find the document at path: %@", FSApathurl);
+//        }];
+//    }
+//    else{
+//        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
+//            if (success) NSLog(@"Created the document!");
+//            if (!success) NSLog(@"Couldn't create the document at path: %@", FSApathurl);
+//        }];
+//    }
+//    // *** Done Mapping to Core Data **
     
     robotImageLbl = [[UILabel alloc] initWithFrame:CGRectMake(40, 75, 125, 15)];
     robotImageLbl.text = @"Tap to Capture Image";
