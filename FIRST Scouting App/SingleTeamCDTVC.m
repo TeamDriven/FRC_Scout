@@ -22,7 +22,6 @@
     
     
     NSFetchRequest *teamRequest = [[NSFetchRequest alloc] initWithEntityName:@"MasterTeam"];
-    [teamRequest setReturnsDistinctResults:YES];
     teamRequest.predicate = nil;
     teamRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]];
     

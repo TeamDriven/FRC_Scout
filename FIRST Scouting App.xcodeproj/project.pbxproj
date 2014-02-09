@@ -14,6 +14,7 @@
 		2862D6A81854D4F900DC460F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A71854D4F900DC460F /* Images.xcassets */; };
 		2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2893226B187E637B00A225EE /* UIAlertView+Blocks.m */; };
 		8605BC4F1895A54700606B1A /* Sharing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEE91826D7D200B37E44 /* Sharing.m */; };
+		861F207718A7EFE500D8D561 /* SelectedTeamCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 861F207618A7EFE500D8D561 /* SelectedTeamCDTVC.m */; };
 		863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 863B352A1890E53400D5D528 /* PitTeam+Category.m */; };
 		8653E0ED18A6EF890080CAC5 /* SelectedTeamView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8653E0EC18A6EF890080CAC5 /* SelectedTeamView.m */; };
 		8653E0FF18A750430080CAC5 /* PitTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 8653E0FE18A750430080CAC5 /* PitTeam.m */; };
@@ -78,6 +79,8 @@
 		2862D6A71854D4F900DC460F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2893226A187E637B00A225EE /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		2893226B187E637B00A225EE /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
+		861F207518A7EFE500D8D561 /* SelectedTeamCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedTeamCDTVC.h; sourceTree = "<group>"; };
+		861F207618A7EFE500D8D561 /* SelectedTeamCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectedTeamCDTVC.m; sourceTree = "<group>"; };
 		863B35291890E53400D5D528 /* PitTeam+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PitTeam+Category.h"; sourceTree = "<group>"; };
 		863B352A1890E53400D5D528 /* PitTeam+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PitTeam+Category.m"; sourceTree = "<group>"; };
 		8653E0EB18A6EF890080CAC5 /* SelectedTeamView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedTeamView.h; sourceTree = "<group>"; };
@@ -363,6 +366,8 @@
 				86E8715B18A6D3D000EA2663 /* SingleTeamCDTVC.m */,
 				869A58A118A7E75E00FFCDEB /* SingleTeamMatchCell.h */,
 				869A58A218A7E75E00FFCDEB /* SingleTeamMatchCell.m */,
+				861F207518A7EFE500D8D561 /* SelectedTeamCDTVC.h */,
+				861F207618A7EFE500D8D561 /* SelectedTeamCDTVC.m */,
 				8846FEDF1826D7D200B37E44 /* LocationsAppDelegate.h */,
 				8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */,
 				8846FED81826D7D100B37E44 /* FIRST Scouting App-Info.plist */,
@@ -513,6 +518,7 @@
 				86E8713718A0955E00EA2663 /* Rankings.m in Sources */,
 				86E8713418A0954200EA2663 /* SingleTeam.m in Sources */,
 				2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */,
+				861F207718A7EFE500D8D561 /* SelectedTeamCDTVC.m in Sources */,
 				28270E141871247D00809047 /* Match+Category.m in Sources */,
 				28270E101871199100809047 /* Team+Category.m in Sources */,
 				86E8715918A6D1A800EA2663 /* SingleTeamCell.m in Sources */,
