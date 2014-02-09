@@ -14,7 +14,7 @@
 #import "PitCell.h"
 #import "CoreDataTableViewController.h"
 
-@interface ViewTeams : UIViewController<UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, UITextFieldDelegate>
+@interface ViewTeams : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 

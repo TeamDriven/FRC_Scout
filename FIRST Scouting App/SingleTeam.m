@@ -65,7 +65,6 @@ SingleTeamCDTVC *cdtvc;
     cdtvc = [[SingleTeamCDTVC alloc] init];
     [cdtvc setManagedObjectContext:context];
     [cdtvc setTextField:_searchBox];
-//    cdtvc.debug = true;
     
     _tableView.delegate = cdtvc;
     _tableView.dataSource = cdtvc;

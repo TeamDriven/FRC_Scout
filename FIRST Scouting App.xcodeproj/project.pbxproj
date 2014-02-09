@@ -22,6 +22,7 @@
 		8653E10518A750430080CAC5 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 8653E10418A750430080CAC5 /* Match.m */; };
 		8653E10818A750440080CAC5 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 8653E10718A750440080CAC5 /* Team.m */; };
 		8653E10B18A750440080CAC5 /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 8653E10A18A750440080CAC5 /* Regional.m */; };
+		8653E10F18A75A730080CAC5 /* ViewTeamsCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8653E10E18A75A730080CAC5 /* ViewTeamsCDTVC.m */; };
 		86AB8DA6189342D200D411C9 /* PitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB8DA5189342D200D411C9 /* PitCell.m */; };
 		86AB8DA91893575E00D411C9 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */; };
 		86CDCD26188DBD18002B6522 /* PitScouting.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD25188DBD18002B6522 /* PitScouting.m */; };
@@ -93,6 +94,8 @@
 		8653E10718A750440080CAC5 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		8653E10918A750440080CAC5 /* Regional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regional.h; sourceTree = "<group>"; };
 		8653E10A18A750440080CAC5 /* Regional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Regional.m; sourceTree = "<group>"; };
+		8653E10D18A75A730080CAC5 /* ViewTeamsCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewTeamsCDTVC.h; sourceTree = "<group>"; };
+		8653E10E18A75A730080CAC5 /* ViewTeamsCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewTeamsCDTVC.m; sourceTree = "<group>"; };
 		86AB8DA4189342D200D411C9 /* PitCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitCell.h; sourceTree = "<group>"; };
 		86AB8DA5189342D200D411C9 /* PitCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitCell.m; sourceTree = "<group>"; };
 		86AB8DA71893575600D411C9 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoreDataTableViewController.h; path = ../../../Downloads/CoreDataTableViewController/CoreDataTableViewController.h; sourceTree = "<group>"; };
@@ -182,16 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				2821DE37186E0B000059CDF6 /* FSA.xcdatamodeld */,
-				8653E10918A750440080CAC5 /* Regional.h */,
-				8653E10A18A750440080CAC5 /* Regional.m */,
-				8653E10618A750440080CAC5 /* Team.h */,
-				8653E10718A750440080CAC5 /* Team.m */,
-				8653E10318A750430080CAC5 /* Match.h */,
-				8653E10418A750430080CAC5 /* Match.m */,
-				8653E10018A750430080CAC5 /* MasterTeam.h */,
-				8653E10118A750430080CAC5 /* MasterTeam.m */,
-				8653E0FD18A750430080CAC5 /* PitTeam.h */,
-				8653E0FE18A750430080CAC5 /* PitTeam.m */,
+				8653E10C18A758740080CAC5 /* MasterTeam */,
 				285A1E1D1870E9B1002AA01C /* Regional */,
 				28270E0D1871197600809047 /* Team */,
 				28270E111871246D00809047 /* Match */,
@@ -203,6 +197,8 @@
 		28270E0D1871197600809047 /* Team */ = {
 			isa = PBXGroup;
 			children = (
+				8653E10618A750440080CAC5 /* Team.h */,
+				8653E10718A750440080CAC5 /* Team.m */,
 				28270E0E1871199100809047 /* Team+Category.h */,
 				28270E0F1871199100809047 /* Team+Category.m */,
 			);
@@ -212,6 +208,8 @@
 		28270E111871246D00809047 /* Match */ = {
 			isa = PBXGroup;
 			children = (
+				8653E10318A750430080CAC5 /* Match.h */,
+				8653E10418A750430080CAC5 /* Match.m */,
 				28270E121871247D00809047 /* Match+Category.h */,
 				28270E131871247D00809047 /* Match+Category.m */,
 			);
@@ -221,6 +219,8 @@
 		285A1E1D1870E9B1002AA01C /* Regional */ = {
 			isa = PBXGroup;
 			children = (
+				8653E10918A750440080CAC5 /* Regional.h */,
+				8653E10A18A750440080CAC5 /* Regional.m */,
 				285A1E1A1870E941002AA01C /* Regional+Category.h */,
 				285A1E1B1870E941002AA01C /* Regional+Category.m */,
 			);
@@ -230,10 +230,21 @@
 		863B35281890E50200D5D528 /* PitTeam */ = {
 			isa = PBXGroup;
 			children = (
+				8653E0FD18A750430080CAC5 /* PitTeam.h */,
+				8653E0FE18A750430080CAC5 /* PitTeam.m */,
 				863B35291890E53400D5D528 /* PitTeam+Category.h */,
 				863B352A1890E53400D5D528 /* PitTeam+Category.m */,
 			);
 			name = PitTeam;
+			sourceTree = "<group>";
+		};
+		8653E10C18A758740080CAC5 /* MasterTeam */ = {
+			isa = PBXGroup;
+			children = (
+				8653E10018A750430080CAC5 /* MasterTeam.h */,
+				8653E10118A750430080CAC5 /* MasterTeam.m */,
+			);
+			name = MasterTeam;
 			sourceTree = "<group>";
 		};
 		86CDCD2A188DBFE5002B6522 /* Pit Scouting */ = {
@@ -344,6 +355,8 @@
 				28C8C756185BB91F000FAE10 /* MatchCell.m */,
 				86AB8DA4189342D200D411C9 /* PitCell.h */,
 				86AB8DA5189342D200D411C9 /* PitCell.m */,
+				8653E10D18A75A730080CAC5 /* ViewTeamsCDTVC.h */,
+				8653E10E18A75A730080CAC5 /* ViewTeamsCDTVC.m */,
 				86E8712E18A038CD00EA2663 /* PeerCell.h */,
 				86E8712F18A038CD00EA2663 /* PeerCell.m */,
 				86E8715718A6D1A800EA2663 /* SingleTeamCell.h */,
@@ -485,6 +498,7 @@
 				86E8713A18A0957C00EA2663 /* WithinRegional.m in Sources */,
 				8653E10218A750430080CAC5 /* MasterTeam.m in Sources */,
 				86AB8DA91893575E00D411C9 /* CoreDataTableViewController.m in Sources */,
+				8653E10F18A75A730080CAC5 /* ViewTeamsCDTVC.m in Sources */,
 				88ED27F81829FE58008F3FDF /* Data.m in Sources */,
 				8653E10818A750440080CAC5 /* Team.m in Sources */,
 				8846FEDD1826D7D200B37E44 /* main.m in Sources */,
