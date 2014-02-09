@@ -1,5 +1,5 @@
 //
-//  MatchCell.h
+//  SingleTeamMatchCell.h
 //  FIRST Scouting App
 //
 //  Created by Bertoncin,Louie on 2/9/14.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MatchCell : UITableViewCell
+@interface SingleTeamMatchCell : UITableViewCell
 
 @end
