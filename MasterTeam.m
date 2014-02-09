@@ -7,11 +7,14 @@
 //
 
 #import "MasterTeam.h"
+#import "PitTeam.h"
 #import "Team.h"
 
 
 @implementation MasterTeam
 
+@dynamic name;
 @dynamic teamsWithin;
+@dynamic pitTeam;
 
 @end

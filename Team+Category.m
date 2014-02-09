@@ -8,6 +8,7 @@
 
 #import "Team+Category.h"
 #import "Regional.h"
+#import "MasterTeam.h"
 
 @implementation Team (Category)
 
@@ -44,6 +45,34 @@
         [rgnl addTeamsObject:team];
         
         NSLog(@"Created a new team named: %@", team.name);
+        
+        NSFetchRequest *masterRequest = [NSFetchRequest fetchRequestWithEntityName:@"MasterTeam"];
+        masterRequest.predicate = [NSPredicate predicateWithFormat:@"name = %@", name];
+        NSError *masterError;
+        NSArray *masterArray = [context executeFetchRequest:masterRequest error:&masterError];
+        
+        MasterTeam *mt = nil;
+        
+        if (!masterArray || masterError) {
+            NSLog(@"Master Error: %@", masterError);
+        }
+        else if ([masterArray count] == 1){
+            mt = [masterArray firstObject];
+            [mt addTeamsWithinObject:team];
+            NSLog(@"Added team to master: %@", mt.name);
+        }
+        else if ([masterArray count] > 1){
+            for (MasterTeam *master in masterArray) {
+                NSLog(@"Master Team: %@", master.name);
+            }
+        }
+        else{
+            mt = [NSEntityDescription insertNewObjectForEntityForName:@"MasterTeam" inManagedObjectContext:context];
+            mt.name = name;
+            [mt addTeamsWithinObject:team];
+            
+            NSLog(@"Created a new master team named: %@", mt.name);
+        }
     }
     
     return team;

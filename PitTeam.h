@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class MasterTeam;
 
 @interface PitTeam : NSManagedObject
 
@@ -27,5 +28,6 @@
 @property (nonatomic, retain) NSString * teamName;
 @property (nonatomic, retain) NSString * teamNumber;
 @property (nonatomic, retain) NSNumber * uniqueID;
+@property (nonatomic, retain) MasterTeam *master;
 
 @end

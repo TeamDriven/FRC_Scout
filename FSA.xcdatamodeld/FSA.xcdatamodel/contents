@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A3028" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="MasterTeam" representedClassName="MasterTeam" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="pitTeam" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PitTeam" inverseName="master" inverseEntity="PitTeam" syncable="YES"/>
         <relationship name="teamsWithin" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="master" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Match" representedClassName="Match" syncable="YES">
@@ -46,6 +48,7 @@
         <attribute name="teamName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="teamNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="master" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MasterTeam" inverseName="pitTeam" inverseEntity="MasterTeam" syncable="YES"/>
     </entity>
     <entity name="Regional" representedClassName="Regional" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -59,9 +62,9 @@
     </entity>
     <elements>
         <element name="Match" positionX="0" positionY="0" width="128" height="420"/>
-        <element name="PitTeam" positionX="180" positionY="-225" width="128" height="270"/>
+        <element name="PitTeam" positionX="547" positionY="-360" width="128" height="283"/>
         <element name="Regional" positionX="394" positionY="-72" width="128" height="75"/>
         <element name="Team" positionX="504" positionY="54" width="128" height="103"/>
-        <element name="MasterTeam" positionX="765" positionY="-25" width="128" height="58"/>
+        <element name="MasterTeam" positionX="754" positionY="-76" width="128" height="88"/>
     </elements>
 </model>

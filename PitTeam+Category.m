@@ -7,6 +7,7 @@
 //
 
 #import "PitTeam+Category.h"
+#import "MasterTeam.h"
 
 @implementation PitTeam (Category)
 
@@ -52,6 +53,34 @@
         
         
         NSLog(@"Created a new Pit Team with team number %@ and team name %@", pitTm.teamNumber, pitTm.teamName);
+        
+        NSFetchRequest *masterRequest = [NSFetchRequest fetchRequestWithEntityName:@"MasterTeam"];
+        masterRequest.predicate = [NSPredicate predicateWithFormat:@"name = %@", pitTm.teamNumber];
+        NSError *masterError;
+        NSArray *masterArray = [context executeFetchRequest:masterRequest error:&masterError];
+        
+        MasterTeam *mt = nil;
+        
+        if (!masterArray || masterError) {
+            NSLog(@"Master Error: %@", masterError);
+        }
+        else if ([masterArray count] == 1){
+            mt = [masterArray firstObject];
+            mt.pitTeam = pitTm;
+            NSLog(@"Added pit team to master: %@", pitTm.teamNumber);
+        }
+        else if ([masterArray count] > 1){
+            for (MasterTeam *master in masterArray) {
+                NSLog(@"Master Team: %@", master.name);
+            }
+        }
+        else{
+            mt = [NSEntityDescription insertNewObjectForEntityForName:@"MasterTeam" inManagedObjectContext:context];
+            mt.name = pitTm.teamNumber;
+            mt.pitTeam = pitTm;
+            
+            NSLog(@"Created a new master team named: %@", mt.name);
+        }
         
     }
     

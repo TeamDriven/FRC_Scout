@@ -7,6 +7,7 @@
 //
 
 #import "PitTeam.h"
+#import "MasterTeam.h"
 
 
 @implementation PitTeam
@@ -26,5 +27,6 @@
 @dynamic teamName;
 @dynamic teamNumber;
 @dynamic uniqueID;
+@dynamic master;
 
 @end

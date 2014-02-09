@@ -9,11 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Team;
+@class PitTeam, Team;
 
 @interface MasterTeam : NSManagedObject
 
+@property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSSet *teamsWithin;
+@property (nonatomic, retain) PitTeam *pitTeam;
 @end
 
 @interface MasterTeam (CoreDataGeneratedAccessors)
