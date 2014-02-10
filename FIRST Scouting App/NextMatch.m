@@ -28,12 +28,6 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    
-    
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeLeft animated:YES];
 }
 
 - (void)didReceiveMemoryWarning

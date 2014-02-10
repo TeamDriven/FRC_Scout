@@ -154,7 +154,7 @@ CGRect selectedCellRect;
     }
     
     UIView *autoStatBox = [[UIView alloc] initWithFrame:CGRectMake(40, 60, 470, 150)];
-    autoStatBox.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:127.0/255.0 blue:0.0/255.0 alpha:0.2];
+    autoStatBox.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:127.0/255.0 blue:0.0/255.0 alpha:0.3];
     autoStatBox.layer.cornerRadius = 5;
     
     UILabel *autoTitleLbl = [[UILabel alloc] initWithFrame:CGRectMake(190, 5, 90, 20)];
@@ -246,9 +246,158 @@ CGRect selectedCellRect;
     mobilityBonusValue.font = [UIFont boldSystemFontOfSize:19];
     [autoStatBox addSubview:mobilityBonusValue];
     
-    UIView *teleopStatBox = [[UIView alloc] initWithFrame:CGRectMake(40, 230, 470, 210)];
-    teleopStatBox.backgroundColor = [UIColor colorWithRed:153.0/255.0 green:102.0/255.0 blue:51.0/255.0 alpha:0.2];
+    UIView *teleopStatBox = [[UIView alloc] initWithFrame:CGRectMake(40, 225, 470, 210)];
+    teleopStatBox.backgroundColor = [UIColor colorWithRed:153.0/255.0 green:102.0/255.0 blue:51.0/255.0 alpha:0.3];
     teleopStatBox.layer.cornerRadius = 5;
+    
+    UILabel *teleopTitleLbl = [[UILabel alloc] initWithFrame:CGRectMake(190, 5, 90, 20)];
+    teleopTitleLbl.attributedText = [[NSAttributedString alloc] initWithString:@"Teleop"
+                                                                    attributes:underlineAttribute];
+    teleopTitleLbl.textAlignment = NSTextAlignmentCenter;
+    teleopTitleLbl.font = [UIFont systemFontOfSize:14];
+    [teleopStatBox addSubview:teleopTitleLbl];
+    
+    UILabel *teleopHighMadeLbl = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 92, 25)];
+    teleopHighMadeLbl.font = [UIFont systemFontOfSize:17];
+    teleopHighMadeLbl.text = @"High Made:";
+    [teleopHighMadeLbl sizeToFit];
+    [teleopStatBox addSubview:teleopHighMadeLbl];
+    
+    UILabel *teleopHighMadeCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopHighMadeLbl.center.x + teleopHighMadeLbl.frame.size.width/2 + 2, 30, 30, 25)];
+    teleopHighMadeCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopHighMake];
+    teleopHighMadeCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [teleopHighMadeCountLbl sizeToFit];
+    [teleopStatBox addSubview:teleopHighMadeCountLbl];
+    
+    UILabel *teleopHighMissedLbl = [[UILabel alloc] initWithFrame:CGRectMake(30, 60, 104, 25)];
+    teleopHighMissedLbl.font = [UIFont systemFontOfSize:17];
+    teleopHighMissedLbl.text = @"High Missed:";
+    [teleopHighMissedLbl sizeToFit];
+    [teleopStatBox addSubview:teleopHighMissedLbl];
+    
+    UILabel *teleopHighMissedCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopHighMissedLbl.center.x + teleopHighMissedLbl.frame.size.width/2 + 2, 59, 30, 25)];
+    teleopHighMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopHighMiss];
+    teleopHighMissedCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [teleopHighMissedCountLbl sizeToFit];
+    [teleopStatBox addSubview:teleopHighMissedCountLbl];
+    
+    UILabel *teleopOverLbl = [[UILabel alloc] initWithFrame:CGRectMake(90, 100, 104, 25)];
+    teleopOverLbl.font = [UIFont systemFontOfSize:17];
+    teleopOverLbl.text = @"Over Truss:";
+    [teleopOverLbl sizeToFit];
+    [teleopStatBox addSubview:teleopOverLbl];
+    
+    UILabel *teleopOverCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopOverLbl.center.x + teleopOverLbl.frame.size.width/2 + 2, 99, 30, 25)];
+    teleopOverCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopOver];
+    teleopOverCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [teleopOverCountLbl sizeToFit];
+    [teleopStatBox addSubview:teleopOverCountLbl];
+    
+    UILabel *teleopCatchLbl = [[UILabel alloc] initWithFrame:CGRectMake(90, 130, 104, 25)];
+    teleopCatchLbl.font = [UIFont systemFontOfSize:17];
+    teleopCatchLbl.text = @"Truss Catch:";
+    [teleopCatchLbl sizeToFit];
+    [teleopStatBox addSubview:teleopCatchLbl];
+    
+    UILabel *teleopCatchCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopCatchLbl.center.x + teleopCatchLbl.frame.size.width/2 + 2, 129, 30, 25)];
+    teleopCatchCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopCatch];
+    teleopCatchCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [teleopCatchCountLbl sizeToFit];
+    [teleopStatBox addSubview:teleopCatchCountLbl];
+    
+    UILabel *teleopLowMadeLbl = [[UILabel alloc] initWithFrame:CGRectMake(315, 30, 92, 25)];
+    teleopLowMadeLbl.font = [UIFont systemFontOfSize:17];
+    teleopLowMadeLbl.text = @"Low Made:";
+    [teleopLowMadeLbl sizeToFit];
+    [teleopStatBox addSubview:teleopLowMadeLbl];
+    
+    UILabel *teleopLowMadeCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopLowMadeLbl.center.x + teleopLowMadeLbl.frame.size.width/2 + 2, 30, 30, 25)];
+    teleopLowMadeCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopLowMake];
+    teleopLowMadeCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [teleopLowMadeCountLbl sizeToFit];
+    [teleopStatBox addSubview:teleopLowMadeCountLbl];
+    
+    UILabel *teleopLowMissedLbl = [[UILabel alloc] initWithFrame:CGRectMake(315, 60, 104, 25)];
+    teleopLowMissedLbl.font = [UIFont systemFontOfSize:17];
+    teleopLowMissedLbl.text = @"Low Missed:";
+    [teleopLowMissedLbl sizeToFit];
+    [teleopStatBox addSubview:teleopLowMissedLbl];
+    
+    UILabel *teleopLowMissedCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopLowMissedLbl.center.x + teleopLowMissedLbl.frame.size.width/2 + 2, 59, 30, 25)];
+    teleopLowMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopLowMiss];
+    teleopLowMissedCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [teleopLowMissedCountLbl sizeToFit];
+    [teleopStatBox addSubview:teleopLowMissedCountLbl];
+    
+    UILabel *teleopPassLbl = [[UILabel alloc] initWithFrame:CGRectMake(260, 100, 104, 25)];
+    teleopPassLbl.font = [UIFont systemFontOfSize:17];
+    teleopPassLbl.text = @"Pass Count:";
+    [teleopPassLbl sizeToFit];
+    [teleopStatBox addSubview:teleopPassLbl];
+    
+    UILabel *teleopPassCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopPassLbl.center.x + teleopPassLbl.frame.size.width/2 + 2, 99, 30, 25)];
+    teleopPassCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopPassed];
+    teleopPassCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [teleopPassCountLbl sizeToFit];
+    [teleopStatBox addSubview:teleopPassCountLbl];
+    
+    UILabel *teleopReceivedLbl = [[UILabel alloc] initWithFrame:CGRectMake(260, 130, 104, 25)];
+    teleopReceivedLbl.font = [UIFont systemFontOfSize:17];
+    teleopReceivedLbl.text = @"Received Count:";
+    [teleopReceivedLbl sizeToFit];
+    [teleopStatBox addSubview:teleopReceivedLbl];
+    
+    UILabel *teleopReceivedCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopReceivedLbl.center.x + teleopReceivedLbl.frame.size.width/2 + 2, 129, 30, 25)];
+    teleopReceivedCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopReceived];
+    teleopReceivedCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [teleopReceivedCountLbl sizeToFit];
+    [teleopStatBox addSubview:teleopReceivedCountLbl];
+    
+    UILabel *smallPenaltyLbl = [[UILabel alloc] initWithFrame:CGRectMake(40, 170, 104, 25)];
+    smallPenaltyLbl.font = [UIFont systemFontOfSize:17];
+    smallPenaltyLbl.text = @"Small Penalties:";
+    [smallPenaltyLbl sizeToFit];
+    [teleopStatBox addSubview:smallPenaltyLbl];
+    
+    UILabel *smallPenaltyCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(smallPenaltyLbl.center.x + smallPenaltyLbl.frame.size.width/2 + 2, 169, 30, 25)];
+    smallPenaltyCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.penaltySmall];
+    smallPenaltyCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    smallPenaltyCountLbl.textColor = [UIColor redColor];
+    [smallPenaltyCountLbl sizeToFit];
+    [teleopStatBox addSubview:smallPenaltyCountLbl];
+    
+    UILabel *largePenaltyLbl = [[UILabel alloc] initWithFrame:CGRectMake(290, 170, 104, 25)];
+    largePenaltyLbl.font = [UIFont systemFontOfSize:17];
+    largePenaltyLbl.text = @"Large Penalties:";
+    [largePenaltyLbl sizeToFit];
+    [teleopStatBox addSubview:largePenaltyLbl];
+    
+    UILabel *largePenaltyCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(largePenaltyLbl.center.x + largePenaltyLbl.frame.size.width/2 + 2, 169, 30, 25)];
+    largePenaltyCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.penaltyLarge];
+    largePenaltyCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    largePenaltyCountLbl.textColor = [UIColor redColor];
+    [largePenaltyCountLbl sizeToFit];
+    [teleopStatBox addSubview:largePenaltyCountLbl];
+    
+    UILabel *whoRecordedLbl = [[UILabel alloc] initWithFrame:CGRectMake(140, 570, 104, 25)];
+    whoRecordedLbl.font = [UIFont systemFontOfSize:17];
+    whoRecordedLbl.text = @"Recorded by";
+    [whoRecordedLbl sizeToFit];
+    
+    UILabel *whoRecordedValueLbl = [[UILabel alloc] initWithFrame:CGRectMake(whoRecordedLbl.center.x + whoRecordedLbl.frame.size.width/2 + 3, whoRecordedLbl.frame.origin.y-1, 30, 25)];
+    whoRecordedValueLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.scoutInitials];
+    whoRecordedValueLbl.font = [UIFont boldSystemFontOfSize:19];
+    [whoRecordedValueLbl sizeToFit];
+    
+    UILabel *teamRecordedLbl = [[UILabel alloc] initWithFrame:CGRectMake(whoRecordedValueLbl.center.x + whoRecordedValueLbl.frame.size.width/2 + 4, whoRecordedValueLbl.frame.origin.y + 1, 104, 25)];
+    teamRecordedLbl.font = [UIFont systemFontOfSize:17];
+    teamRecordedLbl.text = @"from team ";
+    [teamRecordedLbl sizeToFit];
+    
+    UILabel *teamRecordedValueLbl = [[UILabel alloc] initWithFrame:CGRectMake(teamRecordedLbl.center.x + teamRecordedLbl.frame.size.width/2 + 2, teamRecordedLbl.frame.origin.y-1, 30, 25)];
+    teamRecordedValueLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.recordingTeam];
+    teamRecordedValueLbl.font = [UIFont boldSystemFontOfSize:19];
+    [teamRecordedValueLbl sizeToFit];
     
     matchDetailView.frame = CGRectMake(selectedCellRect.origin.x + 364, selectedCellRect.origin.y + 30, 1, 1);
     [UIView animateWithDuration:0.2 animations:^{
@@ -258,6 +407,10 @@ CGRect selectedCellRect;
         [matchDetailView addSubview:titleLbl];
         [matchDetailView addSubview:autoStatBox];
         [matchDetailView addSubview:teleopStatBox];
+        [matchDetailView addSubview:whoRecordedLbl];
+        [matchDetailView addSubview:whoRecordedValueLbl];
+        [matchDetailView addSubview:teamRecordedLbl];
+        [matchDetailView addSubview:teamRecordedValueLbl];
     }];
     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

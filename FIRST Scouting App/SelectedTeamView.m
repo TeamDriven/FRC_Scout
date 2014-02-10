@@ -89,6 +89,15 @@ BOOL isImageLarge;
         _pitScoutingInfoBtn.hidden = true;
     }
     
+    if (_robotPic.image == nil) {
+        _robotPic.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.5];
+        UILabel *noPicLbl = [[UILabel alloc] initWithFrame:CGRectMake(_robotPic.center.x - 100, _robotPic.center.y - 15, _robotPic.frame.size.width, 30)];
+        noPicLbl.textAlignment = NSTextAlignmentCenter;
+        noPicLbl.text = @"No Picture";
+        noPicLbl.font = [UIFont boldSystemFontOfSize:20];
+        [self.view addSubview:noPicLbl];
+    }
+    
     float autoTotal = 0;
     float teleopTotal = 0;
     float passTotal = 0;
