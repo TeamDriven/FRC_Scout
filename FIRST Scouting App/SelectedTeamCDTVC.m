@@ -195,6 +195,57 @@ CGRect selectedCellRect;
     autoHighMissedCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [autoStatBox addSubview:autoHighMissedCountLbl];
     
+    UILabel *autoLowHotLbl = [[UILabel alloc] initWithFrame:CGRectMake(315, 30, 92, 25)];
+    autoLowHotLbl.font = [UIFont systemFontOfSize:17];
+    autoLowHotLbl.text = @"Low Hot:";
+    [autoStatBox addSubview:autoLowHotLbl];
+    
+    UILabel *autoLowHotCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(388, 30, 30, 25)];
+    autoLowHotCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoLowHotScore];
+    autoLowHotCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [autoStatBox addSubview:autoLowHotCountLbl];
+    
+    UILabel *autoLowNotLbl = [[UILabel alloc] initWithFrame:CGRectMake(315, 57, 92, 25)];
+    autoLowNotLbl.font = [UIFont systemFontOfSize:17];
+    autoLowNotLbl.text = @"Low Not:";
+    [autoStatBox addSubview:autoLowNotLbl];
+    
+    UILabel *autoLowNotCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(388, 57, 30, 25)];
+    autoLowNotCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoLowNotScore];
+    autoLowNotCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [autoStatBox addSubview:autoLowNotCountLbl];
+    
+    UILabel *autoLowMissedLbl = [[UILabel alloc] initWithFrame:CGRectMake(315, 84, 115, 25)];
+    autoLowMissedLbl.font = [UIFont systemFontOfSize:17];
+    autoLowMissedLbl.text = @"Low Missed:";
+    [autoStatBox addSubview:autoLowMissedLbl];
+    
+    UILabel *autoLowMissedCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(414, 84, 30, 25)];
+    autoLowMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoLowMissScore];
+    autoLowMissedCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [autoStatBox addSubview:autoLowMissedCountLbl];
+    
+    UILabel *mobilityBonusLbl = [[UILabel alloc] initWithFrame:CGRectMake(148, 114, 120, 25)];
+    mobilityBonusLbl.text = @"Mobility Bonus:";
+    mobilityBonusLbl.font = [UIFont systemFontOfSize:17];
+    [autoStatBox addSubview:mobilityBonusLbl];
+    
+    UILabel *mobilityBonusValue = [[UILabel alloc] initWithFrame:CGRectMake(273, 114, 40, 25)];
+    if ([matchSelected.mobilityBonus integerValue] == 1) {
+        mobilityBonusValue.backgroundColor = [UIColor greenColor];
+        mobilityBonusValue.textColor = [UIColor whiteColor];
+        mobilityBonusValue.text = @"Yes";
+    }
+    else{
+        mobilityBonusValue.backgroundColor = [UIColor redColor];
+        mobilityBonusValue.textColor = [UIColor whiteColor];
+        mobilityBonusValue.text = @"No";
+    }
+    mobilityBonusValue.textAlignment = NSTextAlignmentCenter;
+    mobilityBonusValue.layer.cornerRadius = 5;
+    mobilityBonusValue.font = [UIFont boldSystemFontOfSize:19];
+    [autoStatBox addSubview:mobilityBonusValue];
+    
     UIView *teleopStatBox = [[UIView alloc] initWithFrame:CGRectMake(40, 230, 470, 210)];
     teleopStatBox.backgroundColor = [UIColor colorWithRed:153.0/255.0 green:102.0/255.0 blue:51.0/255.0 alpha:0.2];
     teleopStatBox.layer.cornerRadius = 5;
