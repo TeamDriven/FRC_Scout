@@ -13,7 +13,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLbl;
 
 @property (weak, nonatomic) IBOutlet UILabel *autoLbl;
+@property (weak, nonatomic) IBOutlet UILabel *autoAccuracyLbl;
 @property (weak, nonatomic) IBOutlet UILabel *teleopLbl;
+@property (weak, nonatomic) IBOutlet UILabel *teleopAccuracyLbl;
 @property (weak, nonatomic) IBOutlet UILabel *passReceiveLbl;
 
 @end

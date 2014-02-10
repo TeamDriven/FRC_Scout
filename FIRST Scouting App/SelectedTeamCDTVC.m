@@ -61,6 +61,48 @@
     teleopTotal += [mtch.teleopOver integerValue]*10;
     teleopTotal += [mtch.teleopCatch integerValue]*10;
     
+    float autoShotsMade = 0;
+    autoShotsMade += [mtch.autoHighHotScore floatValue];
+    autoShotsMade += [mtch.autoHighNotScore floatValue];
+    autoShotsMade += [mtch.autoLowHotScore floatValue];
+    autoShotsMade += [mtch.autoLowNotScore floatValue];
+    
+    float autoShotsMissed = 0;
+    autoShotsMissed += [mtch.autoHighMissScore floatValue];
+    autoShotsMissed += [mtch.autoLowMissScore floatValue];
+    
+    if (autoShotsMissed > 0) {
+        cell.autoAccuracyLbl.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)(autoShotsMade/(autoShotsMissed+autoShotsMade)*100)];
+    }
+    else{
+        if (autoShotsMade > 0) {
+            cell.autoAccuracyLbl.text = @"100%";
+        }
+        else{
+            cell.autoAccuracyLbl.text = @"0%";
+        }
+    }
+    
+    float teleopShotsMade = 0;
+    teleopShotsMade += [mtch.teleopHighMake floatValue];
+    teleopShotsMade += [mtch.teleopLowMake floatValue];
+    
+    float teleopShotsMissed = 0;
+    teleopShotsMissed += [mtch.teleopHighMiss floatValue];
+    teleopShotsMissed += [mtch.teleopLowMiss floatValue];
+    
+    if (teleopShotsMissed > 0) {
+        cell.teleopAccuracyLbl.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)(teleopShotsMade/(teleopShotsMissed+teleopShotsMade)*100)];
+    }
+    else{
+        if (teleopShotsMade > 0) {
+            cell.teleopAccuracyLbl.text = @"100%";
+        }
+        else{
+            cell.teleopAccuracyLbl.text = @"0%";
+        }
+    }
+    
     cell.autoLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoTotal];
     cell.teleopLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopTotal];
     cell.passReceiveLbl.text = [[NSString alloc] initWithFormat:@"%ld/%ld", (long)[mtch.teleopPassed integerValue], (long)[mtch.teleopReceived integerValue]];
