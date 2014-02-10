@@ -16,6 +16,11 @@
 
 @implementation SelectedTeamCDTVC
 
+UIView *greyOutView;
+UIView *matchDetailView;
+
+CGRect selectedCellRect;
+
 -(void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext{
     _managedObjectContext = managedObjectContext;
     
@@ -115,6 +120,113 @@
     }
     
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.tableView.userInteractionEnabled = false;
+    Match *matchSelected = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    selectedCellRect = [self.tableView convertRect:[self.tableView rectForRowAtIndexPath:indexPath] toView:[[self.tableView superview] superview]];
+    
+    greyOutView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+    greyOutView.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+    [[[self.tableView superview] superview] addSubview:greyOutView];
+    
+    matchDetailView = [[UIView alloc] initWithFrame:CGRectMake(109, 190, 550, 600)];
+    matchDetailView.layer.cornerRadius = 10;
+    matchDetailView.backgroundColor = [UIColor whiteColor];
+    [greyOutView addSubview:matchDetailView];
+    
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    closeButton.frame = CGRectMake(480, 5, 60, 35);
+    [closeButton setTitle:@"Close X" forState:UIControlStateNormal];
+    closeButton.titleLabel.font = [UIFont systemFontOfSize:12];
+    closeButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [closeButton addTarget:self action:@selector(closeDetailView) forControlEvents:UIControlEventTouchUpInside];
+    
+    UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(75, 15, 400, 30)];
+    titleLbl.textAlignment = NSTextAlignmentCenter;
+    titleLbl.font = [UIFont fontWithName:@"Futura-CondensedExtraBold" size:20];
+    if ([matchSelected.matchType isEqualToString:@"Q"]) {
+        titleLbl.text = [[NSString alloc] initWithFormat:@"Qualification Match %@", matchSelected.matchNum];
+    }
+    else{
+        titleLbl.text = matchSelected.matchNum;
+    }
+    
+    UIView *autoStatBox = [[UIView alloc] initWithFrame:CGRectMake(40, 60, 470, 150)];
+    autoStatBox.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:127.0/255.0 blue:0.0/255.0 alpha:0.2];
+    autoStatBox.layer.cornerRadius = 5;
+    
+    UILabel *autoTitleLbl = [[UILabel alloc] initWithFrame:CGRectMake(190, 5, 90, 20)];
+    NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
+    autoTitleLbl.attributedText = [[NSAttributedString alloc] initWithString:@"Autonomous"
+                                                             attributes:underlineAttribute];
+    autoTitleLbl.textAlignment = NSTextAlignmentCenter;
+    autoTitleLbl.font = [UIFont systemFontOfSize:14];
+    [autoStatBox addSubview:autoTitleLbl];
+    
+    UILabel *autoHighHotLbl = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 92, 25)];
+    autoHighHotLbl.font = [UIFont systemFontOfSize:17];
+    autoHighHotLbl.text = @"High Hot:";
+    [autoStatBox addSubview:autoHighHotLbl];
+    
+    UILabel *autoHighHotCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(106, 30, 30, 25)];
+    autoHighHotCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoHighHotScore];
+    autoHighHotCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [autoStatBox addSubview:autoHighHotCountLbl];
+    
+    UILabel *autoHighNotLbl = [[UILabel alloc] initWithFrame:CGRectMake(30, 57, 92, 25)];
+    autoHighNotLbl.font = [UIFont systemFontOfSize:17];
+    autoHighNotLbl.text = @"High Not:";
+    [autoStatBox addSubview:autoHighNotLbl];
+    
+    UILabel *autoHighNotCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(106, 57, 30, 25)];
+    autoHighNotCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoHighNotScore];
+    autoHighNotCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [autoStatBox addSubview:autoHighNotCountLbl];
+    
+    UILabel *autoHighMissedLbl = [[UILabel alloc] initWithFrame:CGRectMake(30, 84, 115, 25)];
+    autoHighMissedLbl.font = [UIFont systemFontOfSize:17];
+    autoHighMissedLbl.text = @"High Missed:";
+    [autoStatBox addSubview:autoHighMissedLbl];
+    
+    UILabel *autoHighMissedCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(133, 84, 30, 25)];
+    autoHighMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoHighMissScore];
+    autoHighMissedCountLbl.font = [UIFont boldSystemFontOfSize:19];
+    [autoStatBox addSubview:autoHighMissedCountLbl];
+    
+    UIView *teleopStatBox = [[UIView alloc] initWithFrame:CGRectMake(40, 230, 470, 210)];
+    teleopStatBox.backgroundColor = [UIColor colorWithRed:153.0/255.0 green:102.0/255.0 blue:51.0/255.0 alpha:0.2];
+    teleopStatBox.layer.cornerRadius = 5;
+    
+    matchDetailView.frame = CGRectMake(selectedCellRect.origin.x + 364, selectedCellRect.origin.y + 30, 1, 1);
+    [UIView animateWithDuration:0.2 animations:^{
+        matchDetailView.frame = CGRectMake(109, 190, 550, 600);
+    } completion:^(BOOL finished) {
+        [matchDetailView addSubview:closeButton];
+        [matchDetailView addSubview:titleLbl];
+        [matchDetailView addSubview:autoStatBox];
+        [matchDetailView addSubview:teleopStatBox];
+    }];
+    
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+-(void)closeDetailView{
+    for (UIView *v in [matchDetailView subviews]) {
+        [v removeFromSuperview];
+    }
+    [UIView animateWithDuration:0.2 animations:^{
+        matchDetailView.frame = CGRectMake(selectedCellRect.origin.x + 364, selectedCellRect.origin.y + 30, 1, 1);
+    } completion:^(BOOL finished) {
+        [matchDetailView removeFromSuperview];
+        [greyOutView removeFromSuperview];
+        self.tableView.userInteractionEnabled = true;
+    }];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [self closeDetailView];
 }
 
 @end

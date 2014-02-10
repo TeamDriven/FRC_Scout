@@ -291,16 +291,13 @@ UILabel *blue3UpdaterLbl;
     // Dispose of any resources that can be recreated.
 }
 
-// Sets up UI and setUpView. Recreates setUpView if it already exists (fixes crash when switching pages before interaction)
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    [NSThread sleepForTimeInterval:0.3];
+-(void)viewWillAppear:(BOOL)animated{
     if (setUpView) {
         [setUpView removeFromSuperview];
         [greyOut removeFromSuperview];
     }
     [self setUpScreen];
-//    [self autoOn];
+    //    [self autoOn];
     
     _movementRobot.userInteractionEnabled = YES;
     

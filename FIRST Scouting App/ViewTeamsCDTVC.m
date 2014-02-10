@@ -354,6 +354,10 @@ CGRect selectedCellRect;
     [_textField resignFirstResponder];
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [self closeDetailView];
+}
+
 @end
 
 
