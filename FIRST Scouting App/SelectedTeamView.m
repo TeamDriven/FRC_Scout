@@ -106,6 +106,10 @@ BOOL isImageLarge;
     float catchTotal = 0;
     float totalMatches = 0;
     
+    float offensiveZoneCount = 0;
+    float neutralZoneCount = 0;
+    float defensiveZoneCount = 0;
+    
     for (Team *tm in master.teamsWithin) {
         for (Match *mtch in tm.matches) {
             autoTotal += [mtch.autoHighHotScore floatValue]*20;
@@ -121,6 +125,27 @@ BOOL isImageLarge;
             receiveTotal += [mtch.teleopReceived floatValue];
             overTrussTotal += [mtch.teleopOver floatValue];
             catchTotal += [mtch.teleopCatch floatValue];
+            
+            NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
+            if ([zoneString rangeOfString:@"White"].location != NSNotFound) {neutralZoneCount ++;}
+            
+            if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
+                if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
+                    defensiveZoneCount++;
+                }
+                if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
+                    offensiveZoneCount++;
+                }
+            }
+            else{
+                if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
+                    defensiveZoneCount++;
+                }
+                if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
+                    offensiveZoneCount++;
+                }
+            }
+            
             totalMatches++;
         }
     }
@@ -131,12 +156,18 @@ BOOL isImageLarge;
     float receiveAvg = 0;
     float overTrussAvg = 0;
     float catchAvg = 0;
+    float offensiveZoneTendency = 0;
+    float neutralZoneTendency = 0;
+    float defensiveZoneTendency = 0;
     autoAvg = (float)autoTotal/(float)totalMatches;
     teleopAvg = (float)teleopTotal/(float)totalMatches;
     passAvg = (float)passTotal/(float)totalMatches;
     receiveAvg = (float)receiveTotal/(float)totalMatches;
     overTrussAvg = (float)overTrussTotal/(float)totalMatches;
     catchAvg = (float)catchTotal/(float)totalMatches;
+    offensiveZoneTendency = (float)offensiveZoneCount/(float)totalMatches;
+    neutralZoneTendency = (float)neutralZoneCount/(float)totalMatches;
+    defensiveZoneTendency = (float)defensiveZoneCount/(float)totalMatches;
     
     _autoAvgLbl.text = [[NSString alloc] initWithFormat:@"%.1f", autoAvg];
     _teleopAvgLbl.text = [[NSString alloc] initWithFormat:@"%.1f", teleopAvg];
@@ -144,6 +175,9 @@ BOOL isImageLarge;
     _receivesAvgLbl.text = [[NSString alloc] initWithFormat:@"%.1f", receiveAvg];
     _overTrussAvgLbl.text = [[NSString alloc] initWithFormat:@"%.1f", overTrussAvg];
     _catchesAvgLbl.text = [[NSString alloc] initWithFormat:@"%.1f", catchAvg];
+    _offensivePercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", offensiveZoneTendency*100];
+    _neutralPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", neutralZoneTendency*100];
+    _defensivePercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", defensiveZoneTendency*100];
     
     cdtvc = [[SelectedTeamCDTVC alloc] init];
     [cdtvc setTeamToDisplay:teamNumber];

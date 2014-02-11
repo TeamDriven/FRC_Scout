@@ -51,7 +51,7 @@ NSInteger teleopReceived;
 NSInteger smallPenaltyTally;
 NSInteger largePenaltyTally;
 
-NSString *notes;
+NSMutableString *notes;
 
 
 // Match Defining Variables
@@ -283,7 +283,7 @@ UILabel *blue3UpdaterLbl;
         v.hidden = true;
     }
     
-    notes = @"";
+    notes = [[NSMutableString alloc] initWithString:@""];
 }
 
 -(void)didReceiveMemoryWarning{
@@ -725,31 +725,6 @@ UILabel *blue3UpdaterLbl;
                              }
                              _movementLine.alpha = 1;
                              [self autoOn];
-//                             [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-//                                 for (UIView *v in autoScreenObjects) {
-//                                     if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
-//                                         v.userInteractionEnabled = YES;
-//                                     }
-//                                     v.alpha = 1;
-//                                 }
-//                                 for (UIView *v in teleopScreenObjects) {
-//                                     v.alpha = 0;
-//                                 }
-//                                 _mobilityBonusLbl.backgroundColor = [UIColor whiteColor];
-//                                 _mobilityBonusLbl.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
-//                                 _mobilityBonusLbl.layer.borderWidth = 1;
-//                             } completion:^(BOOL finished) {}];
-
-//                             self.myPeerIDS = [[MCPeerID alloc] initWithDisplayName:pos];
-//                             [self.browserSession disconnect];
-//                             self.browserSession = nil;
-//                             if (visible) {
-//                                 visible = false;
-//                                 [self.advertiserS stop];
-//                             }
-//                             else if (host){
-//                                 host = false;
-//                             }
                          }];
         NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
     }
@@ -1668,6 +1643,12 @@ float startY;
 }
 
 -(void)createNotesScreen{
+    inRedZone = false;
+    inWhiteZone = false;
+    inBlueZone = false;
+    didGoodDefense = false;
+    didDidntMove = false;
+    
     greyOut = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
     [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
     greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
@@ -1690,9 +1671,9 @@ float startY;
     [cancelButton addTarget:self action:@selector(cancelNotesScreen) forControlEvents:UIControlEventTouchUpInside];
     [notesScreen addSubview:cancelButton];
     
-    UILabel *zoneSelectorLbl = [[UILabel alloc] initWithFrame:CGRectMake(100, 58, 250, 12)];
-    zoneSelectorLbl.text = @"Select the Zones they tended to hang out in";
-    zoneSelectorLbl.font = [UIFont systemFontOfSize:10];
+    UILabel *zoneSelectorLbl = [[UILabel alloc] initWithFrame:CGRectMake(100, 58, 250, 17)];
+    zoneSelectorLbl.text = @"Zones They Hung Out In";
+    zoneSelectorLbl.font = [UIFont systemFontOfSize:13];
     zoneSelectorLbl.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
     zoneSelectorLbl.textAlignment = NSTextAlignmentCenter;
     [notesScreen addSubview:zoneSelectorLbl];
@@ -1799,7 +1780,6 @@ float startY;
     [didntMove addSubview:didntMoveLbl];
     [notesScreen addSubview:didntMove];
     
-    
     notesTextField = [[UITextView alloc] initWithFrame:CGRectMake(75, 350, 300, 100)];
     notesTextField.textAlignment = NSTextAlignmentCenter;
     notesTextField.layer.borderColor = [[UIColor colorWithWhite:0.8 alpha:1.0] CGColor];
@@ -1838,13 +1818,13 @@ float startY;
 -(void)notesControllerTapped:(UIControl *)controlView{
     if ([controlView isEqual:redZone]) {
         if (inRedZone) {
-            [UIView animateWithDuration:0.1 animations:^{
+            [UIView animateWithDuration:0.2 animations:^{
                 redZone.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
             }];
             inRedZone = false;
         }
         else{
-            [UIView animateWithDuration:0.1 animations:^{
+            [UIView animateWithDuration:0.2 animations:^{
                 redZone.backgroundColor = [UIColor redColor];
             }];
             inRedZone = true;
@@ -1930,7 +1910,39 @@ float startY;
 
 -(void)coreDataSave{
     if ([notesTextField.text isEqualToString:@"Custom Notes"]) {notesTextField.text = @"";}
-    notes = notesTextField.text;
+    notes = [[NSMutableString alloc] initWithString:@""];
+    if (inRedZone) {
+        [notes appendString:@"Red "];
+    }
+    if (inWhiteZone) {
+        [notes appendString:@"White "];
+    }
+    if (inBlueZone) {
+        [notes appendString:@"Blue "];
+    }
+    [notes appendString:@": "];
+    
+    NSMutableString *realNotes = [[NSMutableString alloc] initWithString:@""];
+    if (didGoodDefense) {
+        [realNotes appendString:@"Did Good Defense, "];
+    }
+    if (didDidntMove) {
+        [realNotes appendString:@"Didn't Move, "];
+    }
+    if (notesTextField.text.length > 0) {
+        if (realNotes.length == 0) {
+            [realNotes appendString:notesTextField.text];
+        }
+        else{
+            [realNotes appendString: [[NSString alloc] initWithFormat:@"\n%@", notesTextField.text]];
+        }
+    }
+    else {
+        if (didGoodDefense || didDidntMove) {
+            [realNotes deleteCharactersInRange:NSMakeRange(notes.length-2, 2)];
+        }
+    }
+    [notes appendString:realNotes];
     [UIView animateWithDuration:0.3 animations:^{
         notesScreen.center = CGPointMake(notesScreen.center.x, 1524);
     } completion:^(BOOL finished) {
@@ -1972,7 +1984,7 @@ float startY;
                                    [NSString stringWithString:currentMatchNum], @"matchNum",
                                    [NSNumber numberWithInteger:secs], @"uniqueID", nil];
         
-        NSLog(@"%@", matchDict);
+//        NSLog(@"%@", matchDict);
         
         Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
         
@@ -2099,6 +2111,12 @@ float startY;
     largePenaltyTally = 0;
     _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
     _largePenaltyStepper.value = 0;
+    
+    inRedZone = false;
+    inWhiteZone = false;
+    inBlueZone = false;
+    didGoodDefense = false;
+    didDidntMove = false;
     
     // Increment match number by 1
     NSInteger matchNumTranslator = [currentMatchNum integerValue];

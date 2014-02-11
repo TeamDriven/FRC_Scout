@@ -257,7 +257,7 @@ CGRect selectedCellRect;
     teleopTitleLbl.font = [UIFont systemFontOfSize:14];
     [teleopStatBox addSubview:teleopTitleLbl];
     
-    UILabel *teleopHighMadeLbl = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 92, 25)];
+    UILabel *teleopHighMadeLbl = [[UILabel alloc] initWithFrame:CGRectMake(50, 30, 92, 25)];
     teleopHighMadeLbl.font = [UIFont systemFontOfSize:17];
     teleopHighMadeLbl.text = @"High Made:";
     [teleopHighMadeLbl sizeToFit];
@@ -269,7 +269,7 @@ CGRect selectedCellRect;
     [teleopHighMadeCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopHighMadeCountLbl];
     
-    UILabel *teleopHighMissedLbl = [[UILabel alloc] initWithFrame:CGRectMake(30, 60, 104, 25)];
+    UILabel *teleopHighMissedLbl = [[UILabel alloc] initWithFrame:CGRectMake(50, 60, 104, 25)];
     teleopHighMissedLbl.font = [UIFont systemFontOfSize:17];
     teleopHighMissedLbl.text = @"High Missed:";
     [teleopHighMissedLbl sizeToFit];
@@ -281,7 +281,7 @@ CGRect selectedCellRect;
     [teleopHighMissedCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopHighMissedCountLbl];
     
-    UILabel *teleopOverLbl = [[UILabel alloc] initWithFrame:CGRectMake(90, 100, 104, 25)];
+    UILabel *teleopOverLbl = [[UILabel alloc] initWithFrame:CGRectMake(50, 100, 104, 25)];
     teleopOverLbl.font = [UIFont systemFontOfSize:17];
     teleopOverLbl.text = @"Over Truss:";
     [teleopOverLbl sizeToFit];
@@ -293,7 +293,7 @@ CGRect selectedCellRect;
     [teleopOverCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopOverCountLbl];
     
-    UILabel *teleopCatchLbl = [[UILabel alloc] initWithFrame:CGRectMake(90, 130, 104, 25)];
+    UILabel *teleopCatchLbl = [[UILabel alloc] initWithFrame:CGRectMake(50, 130, 104, 25)];
     teleopCatchLbl.font = [UIFont systemFontOfSize:17];
     teleopCatchLbl.text = @"Truss Catch:";
     [teleopCatchLbl sizeToFit];
@@ -305,7 +305,7 @@ CGRect selectedCellRect;
     [teleopCatchCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopCatchCountLbl];
     
-    UILabel *teleopLowMadeLbl = [[UILabel alloc] initWithFrame:CGRectMake(315, 30, 92, 25)];
+    UILabel *teleopLowMadeLbl = [[UILabel alloc] initWithFrame:CGRectMake(295, 30, 92, 25)];
     teleopLowMadeLbl.font = [UIFont systemFontOfSize:17];
     teleopLowMadeLbl.text = @"Low Made:";
     [teleopLowMadeLbl sizeToFit];
@@ -317,7 +317,7 @@ CGRect selectedCellRect;
     [teleopLowMadeCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopLowMadeCountLbl];
     
-    UILabel *teleopLowMissedLbl = [[UILabel alloc] initWithFrame:CGRectMake(315, 60, 104, 25)];
+    UILabel *teleopLowMissedLbl = [[UILabel alloc] initWithFrame:CGRectMake(295, 60, 104, 25)];
     teleopLowMissedLbl.font = [UIFont systemFontOfSize:17];
     teleopLowMissedLbl.text = @"Low Missed:";
     [teleopLowMissedLbl sizeToFit];
@@ -329,7 +329,7 @@ CGRect selectedCellRect;
     [teleopLowMissedCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopLowMissedCountLbl];
     
-    UILabel *teleopPassLbl = [[UILabel alloc] initWithFrame:CGRectMake(260, 100, 104, 25)];
+    UILabel *teleopPassLbl = [[UILabel alloc] initWithFrame:CGRectMake(295, 100, 104, 25)];
     teleopPassLbl.font = [UIFont systemFontOfSize:17];
     teleopPassLbl.text = @"Pass Count:";
     [teleopPassLbl sizeToFit];
@@ -341,7 +341,7 @@ CGRect selectedCellRect;
     [teleopPassCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopPassCountLbl];
     
-    UILabel *teleopReceivedLbl = [[UILabel alloc] initWithFrame:CGRectMake(260, 130, 104, 25)];
+    UILabel *teleopReceivedLbl = [[UILabel alloc] initWithFrame:CGRectMake(295, 130, 104, 25)];
     teleopReceivedLbl.font = [UIFont systemFontOfSize:17];
     teleopReceivedLbl.text = @"Received Count:";
     [teleopReceivedLbl sizeToFit];
@@ -353,7 +353,7 @@ CGRect selectedCellRect;
     [teleopReceivedCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopReceivedCountLbl];
     
-    UILabel *smallPenaltyLbl = [[UILabel alloc] initWithFrame:CGRectMake(40, 170, 104, 25)];
+    UILabel *smallPenaltyLbl = [[UILabel alloc] initWithFrame:CGRectMake(50, 170, 104, 25)];
     smallPenaltyLbl.font = [UIFont systemFontOfSize:17];
     smallPenaltyLbl.text = @"Small Penalties:";
     [smallPenaltyLbl sizeToFit];
@@ -366,7 +366,7 @@ CGRect selectedCellRect;
     [smallPenaltyCountLbl sizeToFit];
     [teleopStatBox addSubview:smallPenaltyCountLbl];
     
-    UILabel *largePenaltyLbl = [[UILabel alloc] initWithFrame:CGRectMake(290, 170, 104, 25)];
+    UILabel *largePenaltyLbl = [[UILabel alloc] initWithFrame:CGRectMake(295, 170, 104, 25)];
     largePenaltyLbl.font = [UIFont systemFontOfSize:17];
     largePenaltyLbl.text = @"Large Penalties:";
     [largePenaltyLbl sizeToFit];
@@ -378,6 +378,99 @@ CGRect selectedCellRect;
     largePenaltyCountLbl.textColor = [UIColor redColor];
     [largePenaltyCountLbl sizeToFit];
     [teleopStatBox addSubview:largePenaltyCountLbl];
+    
+    NSArray *splitNotes = [matchSelected.notes componentsSeparatedByString:@":"];
+    
+    UILabel *notesLbl = [[UILabel alloc] initWithFrame:CGRectMake(140, 443, 70, 15)];
+    notesLbl.text = @"Notes";
+    notesLbl.textAlignment = NSTextAlignmentCenter;
+    notesLbl.textColor = [UIColor colorWithWhite:0.3 alpha:1.0];
+    notesLbl.font = [UIFont systemFontOfSize:14];
+    
+    UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(50, 460, 250, 75)];
+    notesView.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
+    notesView.layer.borderWidth = 1;
+    notesView.layer.cornerRadius = 5;
+    notesView.textAlignment = NSTextAlignmentCenter;
+    notesView.text = [[NSString alloc] initWithFormat:@"%@", [splitNotes lastObject]];
+    
+    UILabel *allianceInLbl = [[UILabel alloc] initWithFrame:CGRectMake(350, 455, 90, 20)];
+    allianceInLbl.text = @"Alliance In: ";
+    allianceInLbl.font = [UIFont systemFontOfSize:16];
+    [allianceInLbl sizeToFit];
+    
+    UILabel *allianceInValueLbl = [[UILabel alloc] initWithFrame:CGRectMake(allianceInLbl.frame.origin.x + allianceInLbl.frame.size.width + 2, allianceInLbl.frame.origin.y, 30, 20)];
+    NSString *allianceString = @"";
+    if ([[matchSelected.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
+        allianceString = @"Red";
+        allianceInValueLbl.textColor = [UIColor redColor];
+    }
+    else{
+        allianceString = @"Blue";
+        allianceInValueLbl.textColor = [UIColor blueColor];
+    }
+    allianceInValueLbl.font = [UIFont boldSystemFontOfSize:17];
+    allianceInValueLbl.text = allianceString;
+    [allianceInValueLbl sizeToFit];
+    
+    UILabel *zonesHungOutInLbl = [[UILabel alloc] initWithFrame:CGRectMake(330, 485, 165, 17)];
+    zonesHungOutInLbl.textAlignment = NSTextAlignmentCenter;
+    zonesHungOutInLbl.text = @"Zones Hung Out In";
+    zonesHungOutInLbl.font = [UIFont systemFontOfSize:14];
+    
+    NSInteger redZoneX = 330;
+    
+    UIView *redZone = [[UIView alloc] initWithFrame:CGRectMake(redZoneX, 505, 55, 30)];
+    redZone.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
+    UILabel *redZoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 55, 30)];
+    redZoneLabel.textAlignment = NSTextAlignmentCenter;
+    redZoneLabel.textColor = [UIColor whiteColor];
+    redZoneLabel.font = [UIFont boldSystemFontOfSize:16];
+    redZoneLabel.text = @"Red";
+    [redZone addSubview:redZoneLabel];
+    if ([[splitNotes firstObject] rangeOfString:@"Red"].location != NSNotFound) {
+        redZone.backgroundColor = [UIColor redColor];
+    }
+    
+    redZoneX+=55;
+    UIView *whiteZone = [[UIView alloc] initWithFrame:CGRectMake(redZoneX, 505, 55, 30)];
+    whiteZone.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.8];
+    UILabel *whiteZoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 55, 30)];
+    whiteZoneLabel.textAlignment = NSTextAlignmentCenter;
+    whiteZoneLabel.textColor = [UIColor whiteColor];
+    whiteZoneLabel.font = [UIFont boldSystemFontOfSize:16];
+    whiteZoneLabel.text = @"White";
+    [whiteZone addSubview:whiteZoneLabel];
+    if ([[splitNotes firstObject] rangeOfString:@"White"].location != NSNotFound) {
+        whiteZone.backgroundColor = [UIColor colorWithWhite:0.4 alpha:1.0];
+    }
+    
+    redZoneX+=55;
+    UIView *blueZone = [[UIView alloc] initWithFrame:CGRectMake(redZoneX, 505, 55, 30)];
+    blueZone.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.3];
+    UILabel *blueZoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 55, 30)];
+    blueZoneLabel.textAlignment = NSTextAlignmentCenter;
+    blueZoneLabel.textColor = [UIColor whiteColor];
+    blueZoneLabel.font = [UIFont boldSystemFontOfSize:16];
+    blueZoneLabel.text = @"Blue";
+    [blueZone addSubview:blueZoneLabel];
+    if ([[splitNotes firstObject] rangeOfString:@"Blue"].location != NSNotFound) {
+        blueZone.backgroundColor = [UIColor blueColor];
+    }
+    
+    UIBezierPath *leftMaskPath;
+    leftMaskPath = [UIBezierPath bezierPathWithRoundedRect:redZone.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerTopLeft) cornerRadii:CGSizeMake(3.0, 3.0)];
+    CAShapeLayer *leftMaskLayer = [[CAShapeLayer alloc] init];
+    leftMaskLayer.frame = redZone.bounds;
+    leftMaskLayer.path = leftMaskPath.CGPath;
+    redZone.layer.mask = leftMaskLayer;
+    
+    UIBezierPath *rightMaskPath;
+    rightMaskPath = [UIBezierPath bezierPathWithRoundedRect:blueZone.bounds byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerTopRight) cornerRadii:CGSizeMake(3.0, 3.0)];
+    CAShapeLayer *rightMaskLayer = [[CAShapeLayer alloc] init];
+    rightMaskLayer.frame = blueZone.bounds;
+    rightMaskLayer.path = rightMaskPath.CGPath;
+    blueZone.layer.mask = rightMaskLayer;
     
     UILabel *whoRecordedLbl = [[UILabel alloc] initWithFrame:CGRectMake(140, 570, 104, 25)];
     whoRecordedLbl.font = [UIFont systemFontOfSize:17];
@@ -407,10 +500,19 @@ CGRect selectedCellRect;
         [matchDetailView addSubview:titleLbl];
         [matchDetailView addSubview:autoStatBox];
         [matchDetailView addSubview:teleopStatBox];
+        [matchDetailView addSubview:notesLbl];
+        [matchDetailView addSubview:notesView];
+        [matchDetailView addSubview:allianceInLbl];
+        [matchDetailView addSubview:allianceInValueLbl];
+        [matchDetailView addSubview:zonesHungOutInLbl];
+        [matchDetailView addSubview:redZone];
+        [matchDetailView addSubview:whiteZone];
+        [matchDetailView addSubview:blueZone];
         [matchDetailView addSubview:whoRecordedLbl];
         [matchDetailView addSubview:whoRecordedValueLbl];
         [matchDetailView addSubview:teamRecordedLbl];
         [matchDetailView addSubview:teamRecordedValueLbl];
+        
     }];
     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

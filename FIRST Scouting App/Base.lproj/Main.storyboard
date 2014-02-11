@@ -1642,6 +1642,48 @@
                                     <action selector="pitScoutingInfoPressed:" destination="MBl-DA-XKR" eventType="touchUpInside" id="pa5-Xo-9Tl"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Zone Tendencies" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TOV-WH-Gn0">
+                                <rect key="frame" x="503" y="348" width="104" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Offensive:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VCx-65-2th">
+                                <rect key="frame" x="385" y="366" width="69" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Neutral:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AQc-AC-6cR">
+                                <rect key="frame" x="506" y="366" width="54" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Defensive:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S1L-Ua-SkV">
+                                <rect key="frame" x="610" y="366" width="72" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="100%" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="tem-Kx-vPI">
+                                <rect key="frame" x="456" y="366" width="42" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="100%" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Lte-RW-OFR">
+                                <rect key="frame" x="562" y="366" width="42" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="100%" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="EXc-xf-YzM">
+                                <rect key="frame" x="684" y="366" width="42" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -1649,7 +1691,10 @@
                     <connections>
                         <outlet property="autoAvgLbl" destination="lJd-TV-hTf" id="vMc-oP-WGR"/>
                         <outlet property="catchesAvgLbl" destination="CCY-Pk-9L6" id="5oz-yH-fGs"/>
+                        <outlet property="defensivePercentage" destination="EXc-xf-YzM" id="g1V-RK-5Kx"/>
                         <outlet property="header" destination="ydP-tI-EWX" id="bis-x2-7Oq"/>
+                        <outlet property="neutralPercentage" destination="Lte-RW-OFR" id="8Vc-mQ-Z7R"/>
+                        <outlet property="offensivePercentage" destination="tem-Kx-vPI" id="XA6-oP-xUe"/>
                         <outlet property="overTrussAvgLbl" destination="3Y1-dM-HBe" id="4e5-Z3-He1"/>
                         <outlet property="passesAvgLbl" destination="FGV-ls-l0S" id="CyE-ht-K1k"/>
                         <outlet property="pitScoutingInfoBtn" destination="4US-te-KIg" id="fEt-Ys-vgv"/>

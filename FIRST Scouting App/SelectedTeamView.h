@@ -18,6 +18,9 @@
 @property (weak, nonatomic) IBOutlet UIImageView *robotPic;
 
 @property (weak, nonatomic) IBOutlet UIView *statBox;
+@property (weak, nonatomic) IBOutlet UILabel *offensivePercentage;
+@property (weak, nonatomic) IBOutlet UILabel *neutralPercentage;
+@property (weak, nonatomic) IBOutlet UILabel *defensivePercentage;
 
 @property (weak, nonatomic) IBOutlet UILabel *autoAvgLbl;
 @property (weak, nonatomic) IBOutlet UILabel *teleopAvgLbl;
