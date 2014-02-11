@@ -7,12 +7,15 @@
 //
 
 #import "NextMatch.h"
+#import "WithinRegional.h"
 
 @interface NextMatch ()
 
 @end
 
 @implementation NextMatch
+
+NSString *regionalSelected;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
