@@ -35,8 +35,8 @@ NSString *regionalSelected;
     
     
     
-    weekSelector = [[UISegmentedControl alloc] initWithItems:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7+"]];
-    weekSelector.frame = CGRectMake(-35, 327, 215, 30);
+    weekSelector = [[UISegmentedControl alloc] initWithItems:@[@"All",@"1", @"2", @"3", @"4", @"5", @"6", @"7+"]];
+    weekSelector.frame = CGRectMake(-35, 324, 215, 30);
     [weekSelector addTarget:self action:@selector(changeWeek) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:weekSelector];
     weekSelector.transform = CGAffineTransformMakeRotation(M_PI/2.0);

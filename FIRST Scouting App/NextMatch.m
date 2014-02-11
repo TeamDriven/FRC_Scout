@@ -8,6 +8,7 @@
 
 #import "NextMatch.h"
 #import "WithinRegional.h"
+#import "Globals.h"
 
 @interface NextMatch ()
 
@@ -26,11 +27,15 @@ NSString *regionalSelected;
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
+    _red1SearchBox.delegate = self;
+    _red2SearchBox.delegate = self;
+    _red3SearchBox.delegate = self;
+    _blue1SearchBox.delegate = self;
+    _blue2SearchBox.delegate = self;
+    _blue3SearchBox.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning
@@ -39,6 +44,133 @@ NSString *regionalSelected;
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)red1FinishedEditing:(id)sender {
+}
+
+- (IBAction)red2FinishedEditing:(id)sender {
+}
+
+- (IBAction)red3FinishedEditing:(id)sender {
+}
+
+- (IBAction)blue1FinishedEditing:(id)sender {
+}
+
+- (IBAction)blue2FinishedEditing:(id)sender {
+}
+
+- (IBAction)blue3FinishedEditing:(id)sender {
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (IBAction)baseScreenTapped:(id)sender {
+    [_red1SearchBox resignFirstResponder];
+    [_red2SearchBox resignFirstResponder];
+    [_red3SearchBox resignFirstResponder];
+    [_blue1SearchBox resignFirstResponder];
+    [_blue2SearchBox resignFirstResponder];
+    [_blue3SearchBox resignFirstResponder];
+}
+- (IBAction)redScreenTapped:(id)sender {
+    [_red1SearchBox resignFirstResponder];
+    [_red2SearchBox resignFirstResponder];
+    [_red3SearchBox resignFirstResponder];
+    [_blue1SearchBox resignFirstResponder];
+    [_blue2SearchBox resignFirstResponder];
+    [_blue3SearchBox resignFirstResponder];
+}
+- (IBAction)blueScreenTapped:(id)sender {
+    [_red1SearchBox resignFirstResponder];
+    [_red2SearchBox resignFirstResponder];
+    [_red3SearchBox resignFirstResponder];
+    [_blue1SearchBox resignFirstResponder];
+    [_blue2SearchBox resignFirstResponder];
+    [_blue3SearchBox resignFirstResponder];
+}
+- (IBAction)grayStripe1Tapped:(id)sender {
+    [_red1SearchBox resignFirstResponder];
+    [_red2SearchBox resignFirstResponder];
+    [_red3SearchBox resignFirstResponder];
+    [_blue1SearchBox resignFirstResponder];
+    [_blue2SearchBox resignFirstResponder];
+    [_blue3SearchBox resignFirstResponder];
+}
+- (IBAction)grayStripe2Tapped:(id)sender {
+    [_red1SearchBox resignFirstResponder];
+    [_red2SearchBox resignFirstResponder];
+    [_red3SearchBox resignFirstResponder];
+    [_blue1SearchBox resignFirstResponder];
+    [_blue2SearchBox resignFirstResponder];
+    [_blue3SearchBox resignFirstResponder];
+}
+- (IBAction)grayStripe3Tapped:(id)sender {
+    [_red1SearchBox resignFirstResponder];
+    [_red2SearchBox resignFirstResponder];
+    [_red3SearchBox resignFirstResponder];
+    [_blue1SearchBox resignFirstResponder];
+    [_blue2SearchBox resignFirstResponder];
+    [_blue3SearchBox resignFirstResponder];
+}
+- (IBAction)grayStripe4Tapped:(id)sender {
+    [_red1SearchBox resignFirstResponder];
+    [_red2SearchBox resignFirstResponder];
+    [_red3SearchBox resignFirstResponder];
+    [_blue1SearchBox resignFirstResponder];
+    [_blue2SearchBox resignFirstResponder];
+    [_blue3SearchBox resignFirstResponder];
+}
+- (IBAction)grayStripe5Tapped:(id)sender {
+    [_red1SearchBox resignFirstResponder];
+    [_red2SearchBox resignFirstResponder];
+    [_red3SearchBox resignFirstResponder];
+    [_blue1SearchBox resignFirstResponder];
+    [_blue2SearchBox resignFirstResponder];
+    [_blue3SearchBox resignFirstResponder];
+}
+- (IBAction)grayStripe6Tapped:(id)sender {
+    [_red1SearchBox resignFirstResponder];
+    [_red2SearchBox resignFirstResponder];
+    [_red3SearchBox resignFirstResponder];
+    [_blue1SearchBox resignFirstResponder];
+    [_blue2SearchBox resignFirstResponder];
+    [_blue3SearchBox resignFirstResponder];
+}
+- (IBAction)grayStripe7Tapped:(id)sender {
+    [_red1SearchBox resignFirstResponder];
+    [_red2SearchBox resignFirstResponder];
+    [_red3SearchBox resignFirstResponder];
+    [_blue1SearchBox resignFirstResponder];
+    [_blue2SearchBox resignFirstResponder];
+    [_blue3SearchBox resignFirstResponder];
+}
+
+
 
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
