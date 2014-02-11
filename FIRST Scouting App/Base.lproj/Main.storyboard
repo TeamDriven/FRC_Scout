@@ -1825,7 +1825,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Red 1" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Muj-ey-yTK">
-                                        <rect key="frame" x="20" y="30" width="70" height="30"/>
+                                        <rect key="frame" x="20" y="29" width="70" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="go"/>
@@ -1834,7 +1834,7 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Red 2" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FxN-R3-79M">
-                                        <rect key="frame" x="134" y="30" width="70" height="30"/>
+                                        <rect key="frame" x="134" y="29" width="70" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="go"/>
@@ -1843,7 +1843,7 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Red 3" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fe5-U8-2Qw">
-                                        <rect key="frame" x="249" y="30" width="70" height="30"/>
+                                        <rect key="frame" x="249" y="29" width="70" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="go"/>
@@ -2013,6 +2013,36 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CjP-Hu-b3w">
+                                        <rect key="frame" x="20" y="50" width="70" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Pit Data">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="red1PitData:" destination="Z4f-gN-KuY" eventType="touchUpInside" id="AQr-fu-LzH"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pqU-bg-aCA">
+                                        <rect key="frame" x="134" y="50" width="70" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Pit Data">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="red2PitData:" destination="Z4f-gN-KuY" eventType="touchUpInside" id="CRc-Kb-QNO"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zb0-ca-I1h">
+                                        <rect key="frame" x="249" y="50" width="70" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Pit Data">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="red3PitData:" destination="Z4f-gN-KuY" eventType="touchUpInside" id="2e4-sR-nrm"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -2024,13 +2054,13 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Blue Alliance" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oLC-KE-WB1">
-                                        <rect key="frame" x="120" y="5" width="99" height="21"/>
+                                        <rect key="frame" x="120" y="2" width="99" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Blue 1" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uEM-6P-XTF">
-                                        <rect key="frame" x="20" y="32" width="70" height="30"/>
+                                        <rect key="frame" x="20" y="29" width="70" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="go"/>
@@ -2039,7 +2069,7 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Blue 2" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qcp-eZ-yYZ">
-                                        <rect key="frame" x="134" y="32" width="70" height="30"/>
+                                        <rect key="frame" x="134" y="29" width="70" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="go"/>
@@ -2048,7 +2078,7 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Blue 3" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fNx-d9-3DY">
-                                        <rect key="frame" x="249" y="32" width="70" height="30"/>
+                                        <rect key="frame" x="249" y="29" width="70" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="go"/>
@@ -2218,6 +2248,36 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="olr-3i-UDz">
+                                        <rect key="frame" x="20" y="50" width="70" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Pit Data">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="blue1PitData:" destination="Z4f-gN-KuY" eventType="touchUpInside" id="DXb-wp-WxT"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fXX-Hc-77f">
+                                        <rect key="frame" x="134" y="50" width="70" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Pit Data">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="blue2PitData:" destination="Z4f-gN-KuY" eventType="touchUpInside" id="bFc-D8-OQu"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a2a-eS-Azk">
+                                        <rect key="frame" x="249" y="50" width="70" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Pit Data">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="blue3PitData:" destination="Z4f-gN-KuY" eventType="touchUpInside" id="IV5-6S-QVC"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -2672,6 +2732,7 @@
                         <outlet property="blue1Neutral" destination="KfR-8M-Fdv" id="RpK-Eu-ifw"/>
                         <outlet property="blue1Offensive" destination="zVD-w7-10y" id="azF-Cc-oeI"/>
                         <outlet property="blue1Passes" destination="8m5-UZ-WeO" id="h1h-Q3-RLU"/>
+                        <outlet property="blue1PitData" destination="olr-3i-UDz" id="NlC-oZ-ITF"/>
                         <outlet property="blue1Receives" destination="yke-y7-fQd" id="OGe-Tb-YbJ"/>
                         <outlet property="blue1SearchBox" destination="uEM-6P-XTF" id="Kqp-oJ-6VY"/>
                         <outlet property="blue1SmallPenalty" destination="dvo-qO-jHs" id="xiw-j5-wkb"/>
@@ -2689,6 +2750,7 @@
                         <outlet property="blue2Neutral" destination="We2-9J-f8A" id="qAe-KP-vKz"/>
                         <outlet property="blue2Offensive" destination="B2R-gD-W4t" id="oVA-mG-laB"/>
                         <outlet property="blue2Passes" destination="b2m-1k-Udg" id="JYt-I7-Ygq"/>
+                        <outlet property="blue2PitData" destination="fXX-Hc-77f" id="UZ3-EO-asW"/>
                         <outlet property="blue2Receives" destination="u3P-zX-4Gn" id="wam-XD-vmR"/>
                         <outlet property="blue2SearchBox" destination="Qcp-eZ-yYZ" id="o1K-6s-DuX"/>
                         <outlet property="blue2SmallPenalty" destination="Mdb-js-dBO" id="oaA-4K-8PK"/>
@@ -2706,6 +2768,7 @@
                         <outlet property="blue3Neutral" destination="v9M-1w-wBV" id="n0c-4t-NeP"/>
                         <outlet property="blue3Offensive" destination="aHa-40-4Io" id="bUm-4z-8Ab"/>
                         <outlet property="blue3Passes" destination="GDJ-oM-vXR" id="hr4-zx-G3i"/>
+                        <outlet property="blue3PitData" destination="a2a-eS-Azk" id="rgF-gq-DSm"/>
                         <outlet property="blue3Receives" destination="knz-Es-Ouv" id="PYS-XC-nbe"/>
                         <outlet property="blue3SearchBox" destination="fNx-d9-3DY" id="zIa-st-PRl"/>
                         <outlet property="blue3SmallPenalty" destination="87e-TV-bwR" id="c2N-gQ-Q2V"/>
@@ -2723,6 +2786,7 @@
                         <outlet property="red1Neutral" destination="SSm-08-rGh" id="sms-Je-D4U"/>
                         <outlet property="red1Offensive" destination="F4B-o5-9Ku" id="vka-M5-cTy"/>
                         <outlet property="red1Passes" destination="OMm-7G-5DG" id="mNG-8N-0AB"/>
+                        <outlet property="red1PitData" destination="CjP-Hu-b3w" id="iKE-oU-J0r"/>
                         <outlet property="red1Receives" destination="R8V-UV-dGA" id="MWB-PQ-6WL"/>
                         <outlet property="red1SearchBox" destination="Muj-ey-yTK" id="58A-dE-e5L"/>
                         <outlet property="red1SmallPenalty" destination="2kS-7Z-Lyg" id="pjZ-Q8-hhF"/>
@@ -2740,6 +2804,7 @@
                         <outlet property="red2Neutral" destination="3xm-vE-xgG" id="eSl-Ud-PeU"/>
                         <outlet property="red2Offensive" destination="vmT-qK-a3v" id="pQv-CT-2ZW"/>
                         <outlet property="red2Passes" destination="A6e-35-bEo" id="gml-Ww-JdM"/>
+                        <outlet property="red2PitData" destination="pqU-bg-aCA" id="N9j-lJ-FcI"/>
                         <outlet property="red2Receives" destination="Als-dm-gn7" id="Ay9-Mc-7ZZ"/>
                         <outlet property="red2SearchBox" destination="FxN-R3-79M" id="VsS-Mk-i1v"/>
                         <outlet property="red2SmallPenalty" destination="MDF-FL-tc9" id="hRc-Cq-iEh"/>
@@ -2757,6 +2822,7 @@
                         <outlet property="red3Neutral" destination="7JT-TP-1UB" id="XjP-hl-l8E"/>
                         <outlet property="red3Offensive" destination="fVi-gO-Wkn" id="UkD-36-RQl"/>
                         <outlet property="red3Passes" destination="VkF-uc-3Pe" id="aN6-cc-dCT"/>
+                        <outlet property="red3PitData" destination="Zb0-ca-I1h" id="RNL-eD-poW"/>
                         <outlet property="red3Receives" destination="4oc-xc-ehm" id="wwf-ot-tkK"/>
                         <outlet property="red3SearchBox" destination="fe5-U8-2Qw" id="E4y-XR-gQF"/>
                         <outlet property="red3SmallPenalty" destination="ov1-7y-GZx" id="ahb-Yb-Ffu"/>

@@ -12,6 +12,7 @@
 
 // Red 1
 @property (weak, nonatomic) IBOutlet UITextField *red1SearchBox;
+@property (weak, nonatomic) IBOutlet UIButton *red1PitData;
 @property (weak, nonatomic) IBOutlet UILabel *red1AutoHighMakes;
 @property (weak, nonatomic) IBOutlet UILabel *red1AutoHighHot;
 @property (weak, nonatomic) IBOutlet UILabel *red1AutoLowMakes;
@@ -31,6 +32,7 @@
 
 // Red 2
 @property (weak, nonatomic) IBOutlet UITextField *red2SearchBox;
+@property (weak, nonatomic) IBOutlet UIButton *red2PitData;
 @property (weak, nonatomic) IBOutlet UILabel *red2AutoHighMakes;
 @property (weak, nonatomic) IBOutlet UILabel *red2AutoHighHot;
 @property (weak, nonatomic) IBOutlet UILabel *red2AutoLowMakes;
@@ -50,6 +52,7 @@
 
 // Red 3
 @property (weak, nonatomic) IBOutlet UITextField *red3SearchBox;
+@property (weak, nonatomic) IBOutlet UIButton *red3PitData;
 @property (weak, nonatomic) IBOutlet UILabel *red3AutoHighMakes;
 @property (weak, nonatomic) IBOutlet UILabel *red3AutoHighHot;
 @property (weak, nonatomic) IBOutlet UILabel *red3AutoLowMakes;
@@ -69,6 +72,7 @@
 
 // Blue 1
 @property (weak, nonatomic) IBOutlet UITextField *blue1SearchBox;
+@property (weak, nonatomic) IBOutlet UIButton *blue1PitData;
 @property (weak, nonatomic) IBOutlet UILabel *blue1AutoHighMakes;
 @property (weak, nonatomic) IBOutlet UILabel *blue1AutoHighHot;
 @property (weak, nonatomic) IBOutlet UILabel *blue1AutoLowMakes;
@@ -89,6 +93,7 @@
 
 // Blue 2
 @property (weak, nonatomic) IBOutlet UITextField *blue2SearchBox;
+@property (weak, nonatomic) IBOutlet UIButton *blue2PitData;
 @property (weak, nonatomic) IBOutlet UILabel *blue2AutoHighMakes;
 @property (weak, nonatomic) IBOutlet UILabel *blue2AutoHighHot;
 @property (weak, nonatomic) IBOutlet UILabel *blue2AutoLowMakes;
@@ -109,6 +114,7 @@
 
 // Blue 3
 @property (weak, nonatomic) IBOutlet UITextField *blue3SearchBox;
+@property (weak, nonatomic) IBOutlet UIButton *blue3PitData;
 @property (weak, nonatomic) IBOutlet UILabel *blue3AutoHighMakes;
 @property (weak, nonatomic) IBOutlet UILabel *blue3AutoHighHot;
 @property (weak, nonatomic) IBOutlet UILabel *blue3AutoLowMakes;
