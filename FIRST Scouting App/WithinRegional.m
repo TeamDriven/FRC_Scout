@@ -64,6 +64,8 @@ NSString *regionalSelected;
         [_regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelected] indexOfObject:regionalSelected] inComponent:0 animated:YES];
     }
     
+    regionalSelected = [regionalNames firstObject];
+    
 }
 
 - (void)didReceiveMemoryWarning{

@@ -13,7 +13,7 @@
 
 @interface Regional : NSManagedObject
 
-@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSSet *teams;
 @end
 

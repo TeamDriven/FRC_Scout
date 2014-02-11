@@ -12,6 +12,7 @@
 #import "Globals.h"
 #import "Team.h"
 #import "PitTeam.h"
+#import "Match.h"
 
 @interface NextMatch ()
 
@@ -36,6 +37,13 @@ NSArray *red3Labels;
 NSArray *blue1Labels;
 NSArray *blue2Labels;
 NSArray *blue3Labels;
+
+PitTeam *red1PitTeam;
+PitTeam *red2PitTeam;
+PitTeam *red3PitTeam;
+PitTeam *blue1PitTeam;
+PitTeam *blue2PitTeam;
+PitTeam *blue3PitTeam;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -106,51 +114,148 @@ NSArray *blue3Labels;
 }
 
 - (IBAction)red1FinishedEditing:(id)sender {
-    NSFetchRequest *red1TeamRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
-    red1TeamRequest.predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"(regionalIn = %@) AND (matches.@count > 0)", regionalSelected]];
-    
-    NSError *red1TeamError;
-    NSArray *red1TeamArray = [context executeFetchRequest:red1TeamRequest error:&red1TeamError];
-    
-    if (red1TeamArray.count == 0) {
-        UIAlertView *noTeamAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!"
-                                                              message:@"That team doesn't have any matches recorded in this regional!"
-                                                             delegate:nil
-                                                    cancelButtonTitle:@"Darn"
-                                                    otherButtonTitles:nil];
-        [noTeamAlert show];
-    }
-    else{
-        Team *team = [red1TeamArray firstObject];
+    if (_red1SearchBox.text.length > 0) {
+        NSFetchRequest *red1TeamRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
+        red1TeamRequest.predicate = [NSPredicate predicateWithFormat:@"(name = %@) AND (regionalIn.name = %@)", _red1SearchBox.text, regionalSelected];
         
+        NSError *red1TeamError;
+        NSArray *red1TeamArray = [context executeFetchRequest:red1TeamRequest error:&red1TeamError];
         
-        float autoHighMakes = 0;
-        float autoHighAttempts = 0;
-        float autoHighHot = 0;
-        float autoLowMakes = 0;
-        float autoLowAttempts = 0;
-        float autoLowHot = 0;
-        float mobilityBonus = 0;
-        float teleopHighMakes = 0;
-        float teleopHighAttempts = 0;
-        float teleopLowMakes = 0;
-        float teleopLowAttempts = 0;
-        float trussShot = 0;
-        float trussCatch = 0;
-        float passes = 0;
-        float receives = 0;
-        float smallPenalties = 0;
-        float largePenalties = 0;
-        float offensiveCount = 0;
-        float neutralCount = 0;
-        float defensiveCount = 0;
-        
-        for (Match *mtch in team.matches) {
+        if (red1TeamArray.count == 0) {
+            UIAlertView *noTeamAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!"
+                                                                  message:@"That team doesn't have any matches recorded in this regional!"
+                                                                 delegate:nil
+                                                        cancelButtonTitle:@"Darn"
+                                                        otherButtonTitles:nil];
+            [noTeamAlert show];
+            [UIView animateWithDuration:0.2 animations:^{
+                for (UILabel *lbl in red1Labels) {
+                    lbl.alpha = 0;
+                }
+                _red1SearchBox.center = CGPointMake(_red1SearchBox.center.x, 47);
+                _red1PitData.alpha = 0;
+            } completion:^(BOOL finished) {
+                _red1PitData.enabled = false;
+            }];
+        }
+        else{
+            Team *team = [red1TeamArray firstObject];
+            
+            
+            float autoHighMakes = 0;
+            float autoHighAttempts = 0;
+            float autoHighHot = 0;
+            float autoLowMakes = 0;
+            float autoLowAttempts = 0;
+            float autoLowHot = 0;
+            float mobilityBonus = 0;
+            float teleopHighMakes = 0;
+            float teleopHighAttempts = 0;
+            float teleopLowMakes = 0;
+            float teleopLowAttempts = 0;
+            float trussShot = 0;
+            float trussCatch = 0;
+            float passes = 0;
+            float receives = 0;
+            float smallPenalties = 0;
+            float largePenalties = 0;
+            float offensiveCount = 0;
+            float neutralCount = 0;
+            float defensiveCount = 0;
+            float matchesCount = 0;
+            
+            for (Match *mtch in team.matches) {
+                autoHighMakes += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue];
+                autoHighAttempts += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue] + [mtch.autoHighMissScore floatValue];
+                autoHighHot += [mtch.autoHighHotScore floatValue];
+                autoLowMakes += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue];
+                autoLowAttempts += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue] + [mtch.autoLowMissScore floatValue];
+                autoLowHot += [mtch.autoLowHotScore floatValue];
+                mobilityBonus += [mtch.mobilityBonus floatValue];
+                teleopHighMakes += [mtch.teleopHighMake floatValue];
+                teleopHighAttempts += [mtch.teleopHighMake floatValue] + [mtch.teleopHighMiss floatValue];
+                teleopLowMakes += [mtch.teleopLowMake floatValue];
+                teleopLowAttempts += [mtch.teleopLowMake floatValue] + [mtch.teleopLowMiss floatValue];
+                trussShot += [mtch.teleopOver floatValue];
+                trussCatch += [mtch.teleopCatch floatValue];
+                passes += [mtch.teleopPassed floatValue];
+                receives += [mtch.teleopReceived floatValue];
+                smallPenalties += [mtch.penaltySmall floatValue];
+                largePenalties += [mtch.penaltyLarge floatValue];
+                
+                NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
+                if ([zoneString rangeOfString:@"White"].location != NSNotFound) {neutralCount ++;}
+                
+                if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
+                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
+                        defensiveCount++;
+                    }
+                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
+                        offensiveCount++;
+                    }
+                }
+                else{
+                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
+                        defensiveCount++;
+                    }
+                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
+                        offensiveCount++;
+                    }
+                }
+                
+                matchesCount ++;
+            }
+            
+            _red1AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoHighMakes/(float)matchesCount, (float)autoHighAttempts/(float)matchesCount];
+            _red1AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoHighHot/(float)autoHighMakes*100];
+            _red1AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoLowMakes/(float)matchesCount, (float)autoLowAttempts/(float)matchesCount];
+            _red1AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoLowHot/(float)autoLowMakes*100];
+            _red1MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)mobilityBonus/(float)matchesCount*100];
+            _red1TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopHighMakes/(float)matchesCount, (float)teleopHighAttempts/(float)matchesCount];
+            _red1TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopLowMakes/(float)matchesCount, (float)teleopLowAttempts/(float)matchesCount];
+            _red1TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussShot/(float)matchesCount];
+            _red1TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussCatch/(float)matchesCount];
+            _red1Passes.text = [[NSString alloc] initWithFormat:@"%.1f", (float)passes/(float)matchesCount];
+            _red1Receives.text = [[NSString alloc] initWithFormat:@"%.1f", (float)receives/(float)matchesCount];
+            _red1SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)smallPenalties/(float)matchesCount];
+            _red1LargePenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)largePenalties/(float)matchesCount];
+            _red1Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)offensiveCount/(float)matchesCount*100];
+            _red1Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)neutralCount/(float)matchesCount*100];
+            _red1Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)defensiveCount/(float)matchesCount*100];
+            
+            NSFetchRequest *red1PitRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+            red1PitRequest.predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"teamNumber = %@", team.name]];
+            
+            NSError *red1PitError;
+            NSArray *red1PitTeamArray = [context executeFetchRequest:red1PitRequest error:&red1PitError];
+            
+            [UIView animateWithDuration:0.2 animations:^{
+                for (UILabel *lbl in red1Labels) {
+                    lbl.alpha = 1;
+                }
+                if (red1PitTeamArray.count > 0) {
+                    red1PitTeam = [red1PitTeamArray firstObject];
+                    _red1SearchBox.center = CGPointMake(_red1SearchBox.center.x, 37);
+                    _red1PitData.alpha = 1;
+                }
+            } completion:^(BOOL finished) {
+                _red1PitData.enabled = true;
+            }];
+            
             
         }
     }
-    
-    
+    else{
+        [UIView animateWithDuration:0.2 animations:^{
+            for (UILabel *lbl in red1Labels) {
+                lbl.alpha = 0;
+            }
+            _red1SearchBox.center = CGPointMake(_red1SearchBox.center.x, 47);
+            _red1PitData.alpha = 0;
+        } completion:^(BOOL finished) {
+            _red1PitData.enabled = false;
+        }];
+    }
 }
 - (IBAction)red1PitData:(id)sender {
 }
