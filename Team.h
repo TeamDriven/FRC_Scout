@@ -2,7 +2,7 @@
 //  Team.h
 //  FIRST Scouting App
 //
-//  Created by Bertoncin,Louie on 2/8/14.
+//  Created by Bertoncin,Louie on 2/11/14.
 //  Copyright (c) 2014 teamDriven. All rights reserved.
 //
 
@@ -14,9 +14,11 @@
 @interface Team : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) MasterTeam *master;
 @property (nonatomic, retain) NSSet *matches;
 @property (nonatomic, retain) Regional *regionalIn;
-@property (nonatomic, retain) MasterTeam *master;
+@property (nonatomic, retain) Regional *firstPickListRegional;
+@property (nonatomic, retain) Regional *secondPickListRegional;
 @end
 
 @interface Team (CoreDataGeneratedAccessors)

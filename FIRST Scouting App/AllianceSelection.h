@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AllianceSelection : UIViewController
+@interface AllianceSelection : UIViewController<UITableViewDataSource, UITableViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UITableView *poolTableView;
+
+@property (weak, nonatomic) IBOutlet UITableView *firstPickTableView;
+
+@property (weak, nonatomic) IBOutlet UITableView *secondPickTableView;
 @end

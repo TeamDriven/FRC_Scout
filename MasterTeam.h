@@ -2,7 +2,7 @@
 //  MasterTeam.h
 //  FIRST Scouting App
 //
-//  Created by Bertoncin,Louie on 2/8/14.
+//  Created by Bertoncin,Louie on 2/11/14.
 //  Copyright (c) 2014 teamDriven. All rights reserved.
 //
 
@@ -14,8 +14,8 @@
 @interface MasterTeam : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSSet *teamsWithin;
 @property (nonatomic, retain) PitTeam *pitTeam;
+@property (nonatomic, retain) NSSet *teamsWithin;
 @end
 
 @interface MasterTeam (CoreDataGeneratedAccessors)
