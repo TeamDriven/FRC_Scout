@@ -52,12 +52,14 @@
     </entity>
     <entity name="Regional" representedClassName="Regional" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="firstPickList" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="firstPickListRegional" inverseEntity="Team" syncable="YES"/>
-        <relationship name="secondPickList" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="secondPickListRegional" inverseEntity="Team" syncable="YES"/>
+        <relationship name="firstPickList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="firstPickListRegional" inverseEntity="Team" syncable="YES"/>
+        <relationship name="secondPickList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="secondPickListRegional" inverseEntity="Team" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="regionalIn" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES">
+        <attribute name="firstPickListIndex" optional="YES" attributeType="Integer 64" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="secondPickListIndex" optional="YES" attributeType="Integer 64" syncable="YES"/>
         <relationship name="firstPickListRegional" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Regional" inverseName="firstPickList" inverseEntity="Regional" syncable="YES"/>
         <relationship name="master" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MasterTeam" inverseName="teamsWithin" inverseEntity="MasterTeam" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamNum" inverseEntity="Match" syncable="YES"/>
@@ -69,6 +71,6 @@
         <element name="Match" positionX="0" positionY="0" width="128" height="420"/>
         <element name="PitTeam" positionX="547" positionY="-360" width="128" height="283"/>
         <element name="Regional" positionX="171" positionY="90" width="128" height="103"/>
-        <element name="Team" positionX="504" positionY="54" width="128" height="133"/>
+        <element name="Team" positionX="504" positionY="54" width="128" height="163"/>
     </elements>
 </model>
