@@ -7,6 +7,11 @@
 //
 
 #import "SecondPickListCDTVC.h"
+#import "AlliancePickListCell.h"
+#import "Team.h"
+#import "Regional.h"
+#import "Match.h"
+#import "PitTeam.h"
 
 @interface SecondPickListCDTVC ()
 

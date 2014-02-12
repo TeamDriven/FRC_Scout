@@ -28,6 +28,7 @@
 		869F0A9D18AB3E450026B6EC /* RegionalPoolCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0A9C18AB3E450026B6EC /* RegionalPoolCDTVC.m */; };
 		869F0AA018AB3E610026B6EC /* FirstPickListCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0A9F18AB3E610026B6EC /* FirstPickListCDTVC.m */; };
 		869F0AA318AB3E730026B6EC /* SecondPickListCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0AA218AB3E730026B6EC /* SecondPickListCDTVC.m */; };
+		869F0AA618ABEBD30026B6EC /* AllianceSelectionPoolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0AA518ABEBD30026B6EC /* AllianceSelectionPoolCell.m */; };
 		86AB8DA6189342D200D411C9 /* PitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB8DA5189342D200D411C9 /* PitCell.m */; };
 		86AB8DA91893575E00D411C9 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */; };
 		86CDCD26188DBD18002B6522 /* PitScouting.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD25188DBD18002B6522 /* PitScouting.m */; };
@@ -111,6 +112,8 @@
 		869F0A9F18AB3E610026B6EC /* FirstPickListCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstPickListCDTVC.m; sourceTree = "<group>"; };
 		869F0AA118AB3E730026B6EC /* SecondPickListCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondPickListCDTVC.h; sourceTree = "<group>"; };
 		869F0AA218AB3E730026B6EC /* SecondPickListCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondPickListCDTVC.m; sourceTree = "<group>"; };
+		869F0AA418ABEBD30026B6EC /* AllianceSelectionPoolCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllianceSelectionPoolCell.h; sourceTree = "<group>"; };
+		869F0AA518ABEBD30026B6EC /* AllianceSelectionPoolCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllianceSelectionPoolCell.m; sourceTree = "<group>"; };
 		86AB8DA4189342D200D411C9 /* PitCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitCell.h; sourceTree = "<group>"; };
 		86AB8DA5189342D200D411C9 /* PitCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitCell.m; sourceTree = "<group>"; };
 		86AB8DA71893575600D411C9 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoreDataTableViewController.h; path = ../../../Downloads/CoreDataTableViewController/CoreDataTableViewController.h; sourceTree = "<group>"; };
@@ -319,6 +322,8 @@
 				86E8713F18A095BB00EA2663 /* AllianceSelection.m */,
 				869F0A9318AB2B8E0026B6EC /* AlliancePickListCell.h */,
 				869F0A9418AB2B8E0026B6EC /* AlliancePickListCell.m */,
+				869F0AA418ABEBD30026B6EC /* AllianceSelectionPoolCell.h */,
+				869F0AA518ABEBD30026B6EC /* AllianceSelectionPoolCell.m */,
 				869F0A9B18AB3E450026B6EC /* RegionalPoolCDTVC.h */,
 				869F0A9C18AB3E450026B6EC /* RegionalPoolCDTVC.m */,
 				869F0A9E18AB3E610026B6EC /* FirstPickListCDTVC.h */,
@@ -590,6 +595,7 @@
 				869F0A8918AB251F0026B6EC /* PitTeam.m in Sources */,
 				86CDCD30188DC016002B6522 /* ViewTeams.m in Sources */,
 				869F0A8F18AB25200026B6EC /* Team.m in Sources */,
+				869F0AA618ABEBD30026B6EC /* AllianceSelectionPoolCell.m in Sources */,
 				863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */,
 				869A58A318A7E75E00FFCDEB /* SingleTeamMatchCell.m in Sources */,
 				869F0AA318AB3E730026B6EC /* SecondPickListCDTVC.m in Sources */,
