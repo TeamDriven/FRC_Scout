@@ -7,7 +7,7 @@
 //
 
 #import "CoreDataTableViewController.h"
-#import "AllianceSelection.h"
+#import "FirstPickListController.h"
 
 @interface RegionalPoolCDTVC : CoreDataTableViewController
 
@@ -15,6 +15,6 @@
 
 @property (strong, nonatomic) NSString *regionalToDisplay;
 
-@property (strong, nonatomic) AllianceSelection *bigView;
+@property (strong, nonatomic) FirstPickListController *firstPickListTableView;
 
 @end

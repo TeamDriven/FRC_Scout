@@ -38,10 +38,6 @@ NSManagedObjectContext *context;
                                                                                    cacheName:nil];
 }
 
--(void)setRegionalToDisplay:(NSString *)regionalToDisplay{
-    _regionalToDisplay = regionalToDisplay;
-}
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     AllianceSelectionPoolCell *cell = (AllianceSelectionPoolCell *)[tableView dequeueReusableCellWithIdentifier:@"poolCell"];
     
@@ -106,7 +102,9 @@ NSManagedObjectContext *context;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     Team *teamSelected = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    
+    if (![self.firstPickListTableView.firstPickList containsObject:teamSelected]) {
+        [self.firstPickListTableView insertNewTeamIntoFirstPickList:teamSelected];
+    }
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
