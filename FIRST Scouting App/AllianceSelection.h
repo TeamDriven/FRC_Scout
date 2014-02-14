@@ -11,11 +11,12 @@
 #import "AlliancePickListCell.h"
 #import "RegionalPoolCDTVC.h"
 #import "FirstPickListController.h"
+#import "SecondPickListController.h"
 #import "Regional.h"
 #import "Team.h"
 #import "Match.h"
 
-@interface AllianceSelection : UIViewController<UITableViewDataSource, UITableViewDelegate>
+@interface AllianceSelection : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITableView *poolTableView;
 
@@ -26,7 +27,5 @@
 @property (weak, nonatomic) IBOutlet UIButton *firstPickListEditBtn;
 
 @property (weak, nonatomic) IBOutlet UIButton *secondPickListEditBtn;
-
-//-(void)insertTeamIntoFirstPickList:(Team *)team;
 
 @end

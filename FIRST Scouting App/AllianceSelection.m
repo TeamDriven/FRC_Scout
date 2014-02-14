@@ -31,6 +31,7 @@ NSMutableArray *secondPickArray;
 RegionalPoolCDTVC *regionalPoolCDTVC;
 
 FirstPickListController *firstPickListController;
+SecondPickListController *secondPickListController;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -59,15 +60,10 @@ FirstPickListController *firstPickListController;
     _firstPickTableView.layer.cornerRadius = 5;
     _firstPickTableView.separatorInset = UIEdgeInsetsMake(0, 3, 0, 3);
     
-    _secondPickTableView.delegate = self;
-    _secondPickTableView.dataSource = self;
     _secondPickTableView.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
     _secondPickTableView.layer.borderWidth = 1;
     _secondPickTableView.layer.cornerRadius = 5;
     _secondPickTableView.separatorInset = UIEdgeInsetsMake(0, 3, 0, 3);
-    
-    secondPickArray = [[NSMutableArray alloc] initWithArray:@[@[@"1730", @"22", @"11"], @[@"1986", @"44", @"0"]]];
-    
 }
 
 
@@ -91,6 +87,7 @@ FirstPickListController *firstPickListController;
     regionalObject = [[context executeFetchRequest:regionalFetch error:&regionalError] firstObject];
     
     NSArray *firstPickArray = [regionalObject.firstPickList array];
+    NSArray *secondPickArray = [regionalObject.secondPickList array];
     
     firstPickListController = [[FirstPickListController alloc] init];
     [firstPickListController setFirstPickList:firstPickArray];
@@ -99,10 +96,19 @@ FirstPickListController *firstPickListController;
     firstPickListController.tableView = _firstPickTableView;
     
     [regionalPoolCDTVC setFirstPickListTableView:firstPickListController];
+    
+    secondPickListController = [[SecondPickListController alloc] init];
+    [secondPickListController setSecondPickList:secondPickArray];
+    _secondPickTableView.delegate = secondPickListController;
+    _secondPickTableView.dataSource = secondPickListController;
+    secondPickListController.tableView = _secondPickTableView;
+    
+    [regionalPoolCDTVC setSecondPickListController:secondPickListController];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     regionalObject.firstPickList = [NSOrderedSet orderedSetWithArray:firstPickListController.firstPickList];
+    regionalObject.secondPickList = [NSOrderedSet orderedSetWithArray:secondPickListController.secondPickList];
     [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
         if (success) {
             NSLog(@"Saved correctly on exit");
@@ -113,75 +119,6 @@ FirstPickListController *firstPickListController;
     }];
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([tableView isEqual:_secondPickTableView]){
-        AlliancePickListCell *cell = (AlliancePickListCell *)[tableView dequeueReusableCellWithIdentifier:@"secondPickCell"];
-        cell.teamNum.text = [[secondPickArray objectAtIndex:indexPath.row] objectAtIndex:0];
-        cell.autoAvg.text = [[secondPickArray objectAtIndex:indexPath.row] objectAtIndex:1];
-        cell.teleopAvg.text = [[secondPickArray objectAtIndex:indexPath.row] objectAtIndex:2];
-        return cell;
-    }
-    else{
-        return nil;
-    }
-}
-
--(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([tableView isEqual:_secondPickTableView]){
-        if (indexPath.row > secondPickArray.count) {
-            return UITableViewCellEditingStyleNone;
-        }
-        else{
-            return UITableViewCellEditingStyleDelete;
-        }
-    }
-    else{
-        return UITableViewCellEditingStyleNone;
-    }
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if ([tableView isEqual:_secondPickTableView]){
-        return [secondPickArray count];
-    }
-    else{
-        return 0;
-    }
-}
-
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([tableView isEqual:_secondPickTableView]) {
-        return YES;
-    }
-    else{
-        return NO;
-    }
-}
--(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
-    if ([tableView isEqual:_secondPickTableView]){
-        NSArray *teamToMove = [secondPickArray objectAtIndex:sourceIndexPath.row];
-        [secondPickArray removeObjectAtIndex:sourceIndexPath.row];
-        [secondPickArray insertObject:teamToMove atIndex:destinationIndexPath.row];
-    }
-}
-
--(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([tableView isEqual:_secondPickTableView]) {
-        return YES;
-    }
-    else{
-        return NO;
-    }
-}
-
--(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        if ([tableView isEqual:_secondPickTableView]){
-            [secondPickArray removeObjectAtIndex:indexPath.row];
-        }
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }
-}
 
 - (IBAction)reorderSecondPickList:(id)sender {
     if (_secondPickTableView.isEditing) {

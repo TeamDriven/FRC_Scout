@@ -25,6 +25,7 @@
 		86AB8DA6189342D200D411C9 /* PitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB8DA5189342D200D411C9 /* PitCell.m */; };
 		86AB8DA91893575E00D411C9 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */; };
 		86C8C6E118AEA2BD0056B5D8 /* FirstPickListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C8C6E018AEA2BD0056B5D8 /* FirstPickListController.m */; };
+		86C8C6E418AEB5220056B5D8 /* SecondPickListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C8C6E318AEB5220056B5D8 /* SecondPickListController.m */; };
 		86CDCD26188DBD18002B6522 /* PitScouting.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD25188DBD18002B6522 /* PitScouting.m */; };
 		86CDCD29188DBFD6002B6522 /* PitMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD28188DBFD6002B6522 /* PitMap.m */; };
 		86CDCD2D188DC006002B6522 /* RecordTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD2C188DC006002B6522 /* RecordTeam.m */; };
@@ -105,6 +106,8 @@
 		86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoreDataTableViewController.m; path = ../../../Downloads/CoreDataTableViewController/CoreDataTableViewController.m; sourceTree = "<group>"; };
 		86C8C6DF18AEA2BD0056B5D8 /* FirstPickListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstPickListController.h; sourceTree = "<group>"; };
 		86C8C6E018AEA2BD0056B5D8 /* FirstPickListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstPickListController.m; sourceTree = "<group>"; };
+		86C8C6E218AEB5220056B5D8 /* SecondPickListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondPickListController.h; sourceTree = "<group>"; };
+		86C8C6E318AEB5220056B5D8 /* SecondPickListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondPickListController.m; sourceTree = "<group>"; };
 		86CDCD24188DBD18002B6522 /* PitScouting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitScouting.h; sourceTree = "<group>"; };
 		86CDCD25188DBD18002B6522 /* PitScouting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitScouting.m; sourceTree = "<group>"; };
 		86CDCD27188DBFD6002B6522 /* PitMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitMap.h; sourceTree = "<group>"; };
@@ -325,6 +328,8 @@
 				869F0A9C18AB3E450026B6EC /* RegionalPoolCDTVC.m */,
 				86C8C6DF18AEA2BD0056B5D8 /* FirstPickListController.h */,
 				86C8C6E018AEA2BD0056B5D8 /* FirstPickListController.m */,
+				86C8C6E218AEB5220056B5D8 /* SecondPickListController.h */,
+				86C8C6E318AEB5220056B5D8 /* SecondPickListController.m */,
 			);
 			name = AllianceSelection;
 			sourceTree = "<group>";
@@ -571,6 +576,7 @@
 				86F8514B18AD7671004F7A26 /* Match.m in Sources */,
 				86CDCD29188DBFD6002B6522 /* PitMap.m in Sources */,
 				869F0A9518AB2B8E0026B6EC /* AlliancePickListCell.m in Sources */,
+				86C8C6E418AEB5220056B5D8 /* SecondPickListController.m in Sources */,
 				86CDCD2D188DC006002B6522 /* RecordTeam.m in Sources */,
 				2821DE39186E0B000059CDF6 /* FSA.xcdatamodeld in Sources */,
 				285A1E1C1870E941002AA01C /* Regional+Category.m in Sources */,

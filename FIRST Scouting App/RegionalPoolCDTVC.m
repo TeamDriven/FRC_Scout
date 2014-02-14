@@ -102,8 +102,8 @@ NSManagedObjectContext *context;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     Team *teamSelected = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    if (![self.firstPickListTableView.firstPickList containsObject:teamSelected]) {
-        [self.firstPickListTableView insertNewTeamIntoFirstPickList:teamSelected];
+    if (![self.secondPickListController.secondPickList containsObject:teamSelected]) {
+        [self.secondPickListController insertNewTeamIntoSecondPickList:teamSelected];
     }
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

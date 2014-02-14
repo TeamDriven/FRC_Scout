@@ -1,22 +1,25 @@
 //
-//  FirstPickListController.m
+//  SecondPickListController.m
 //  FIRST Scouting App
 //
 //  Created by Bertoncin,Louie on 2/14/14.
 //  Copyright (c) 2014 teamDriven. All rights reserved.
 //
 
-#import "FirstPickListController.h"
+#import "SecondPickListController.h"
 
+@interface SecondPickListController ()
 
-@implementation FirstPickListController
+@end
 
-NSMutableArray *firstPickListMutable;
+@implementation SecondPickListController
 
--(void)setFirstPickList:(NSArray *)firstPickList{
-    _firstPickList = firstPickList;
+NSMutableArray *secondPickListMutable;
+
+-(void)setSecondPickList:(NSArray *)secondPickList{
+    _secondPickList = secondPickList;
     
-    firstPickListMutable = [[NSMutableArray alloc] initWithArray:_firstPickList];
+    secondPickListMutable = [[NSMutableArray alloc] initWithArray:_secondPickList];
 }
 
 #pragma mark - Table view data source
@@ -30,14 +33,14 @@ NSMutableArray *firstPickListMutable;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [firstPickListMutable count];
+    return [secondPickListMutable count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    AlliancePickListCell *cell = (AlliancePickListCell *)[tableView dequeueReusableCellWithIdentifier:@"firstPickCell"];
+    AlliancePickListCell *cell = (AlliancePickListCell *)[tableView dequeueReusableCellWithIdentifier:@"secondPickCell"];
     
-    Team *tm = [firstPickListMutable objectAtIndex:indexPath.row];
+    Team *tm = [secondPickListMutable objectAtIndex:indexPath.row];
     
     cell.teamNum.text = tm.name;
     float autoTotal = 0;
@@ -83,9 +86,9 @@ NSMutableArray *firstPickListMutable;
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [firstPickListMutable removeObjectAtIndex:indexPath.row];
+        [secondPickListMutable removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        self.firstPickList = firstPickListMutable;
+        self.secondPickList = secondPickListMutable;
     }
 }
 
@@ -93,10 +96,10 @@ NSMutableArray *firstPickListMutable;
 
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
-    Team *teamSelected = [firstPickListMutable objectAtIndex:fromIndexPath.row];
-    [firstPickListMutable removeObjectAtIndex:fromIndexPath.row];
-    [firstPickListMutable insertObject:teamSelected atIndex:toIndexPath.row];
-    self.firstPickList = firstPickListMutable;
+    Team *teamSelected = [secondPickListMutable objectAtIndex:fromIndexPath.row];
+    [secondPickListMutable removeObjectAtIndex:fromIndexPath.row];
+    [secondPickListMutable insertObject:teamSelected atIndex:toIndexPath.row];
+    self.secondPickList = secondPickListMutable;
 }
 
 
@@ -108,17 +111,16 @@ NSMutableArray *firstPickListMutable;
     return YES;
 }
 
--(void)insertNewTeamIntoFirstPickList:(Team *)team{
-    
+-(void)insertNewTeamIntoSecondPickList:(Team *)team{
     [self.tableView beginUpdates];
     
-    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[firstPickListMutable count] inSection:0]] withRowAnimation:UITableViewRowAnimationRight];
+    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[secondPickListMutable count] inSection:0]] withRowAnimation:UITableViewRowAnimationRight];
     
-    [firstPickListMutable insertObject:team atIndex:[firstPickListMutable count]];
+    [secondPickListMutable insertObject:team atIndex:[secondPickListMutable count]];
     
     [self.tableView endUpdates];
     
-    self.firstPickList = firstPickListMutable;
+    self.secondPickList = secondPickListMutable;
 }
 
 /*
