@@ -7,11 +7,14 @@
 //
 
 #import "CoreDataTableViewController.h"
+#import "AllianceSelection.h"
 
 @interface RegionalPoolCDTVC : CoreDataTableViewController
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @property (strong, nonatomic) NSString *regionalToDisplay;
+
+@property (strong, nonatomic) AllianceSelection *bigView;
 
 @end

@@ -9,6 +9,7 @@
 #import "RegionalPoolCDTVC.h"
 #import "Globals.h"
 #import "AllianceSelectionPoolCell.h"
+#import "AlliancePickListCell.h"
 #import "Team.h"
 #import "Regional.h"
 #import "Match.h"
@@ -105,17 +106,6 @@ NSManagedObjectContext *context;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     Team *teamSelected = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-//    if (!teamSelected.firstPickListRegional) {
-//        [self.managedObjectContext performBlock:^{
-//            
-//            [teamSelected.regionalIn insertObject:teamSelected inFirstPickListAtIndex:[teamSelected.regionalIn.firstPickList count]];
-//            
-//            NSLog(@"Inserted team %@ in First Pick List at Index: %ld", teamSelected.name, (long)[teamSelected.regionalIn.firstPickList count]);
-//            
-//            [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
-//        }];
-//        
-//    }
     
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

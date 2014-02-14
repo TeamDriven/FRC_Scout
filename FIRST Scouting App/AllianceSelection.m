@@ -9,8 +9,9 @@
 #import "AllianceSelection.h"
 #import "AlliancePickListCell.h"
 #import "RegionalPoolCDTVC.h"
-#import "FirstPickListCDTVC.h"
-#import "SecondPickListCDTVC.h"
+#import "Regional.h"
+#import "Team.h"
+#import "Match.h"
 
 @interface AllianceSelection ()
 
@@ -27,15 +28,12 @@ UIManagedDocument *FSAdocument;
 NSManagedObjectContext *context;
 
 NSString *regionalSelected;
+Regional *regionalObject;
 
 NSMutableArray *firstPickArray;
 NSMutableArray *secondPickArray;
 
 RegionalPoolCDTVC *regionalPoolCDTVC;
-
-FirstPickListCDTVC *firstPickListCDTVC;
-
-SecondPickListCDTVC *secondPickListCDTVC;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -55,6 +53,8 @@ SecondPickListCDTVC *secondPickListCDTVC;
     _poolTableView.layer.cornerRadius = 5;
     _poolTableView.separatorInset = UIEdgeInsetsMake(0, 3, 0, 3);
     
+    _firstPickTableView.delegate = self;
+    _firstPickTableView.dataSource = self;
     _firstPickTableView.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
     _firstPickTableView.layer.borderWidth = 1;
     _firstPickTableView.layer.cornerRadius = 5;
@@ -81,6 +81,7 @@ SecondPickListCDTVC *secondPickListCDTVC;
     regionalPoolCDTVC = [[RegionalPoolCDTVC alloc] init];
     [regionalPoolCDTVC setRegionalToDisplay:regionalSelected];
     [regionalPoolCDTVC setManagedObjectContext:context];
+    [regionalPoolCDTVC setBigView:self];
     _poolTableView.delegate = regionalPoolCDTVC;
     _poolTableView.dataSource = regionalPoolCDTVC;
     
@@ -88,19 +89,49 @@ SecondPickListCDTVC *secondPickListCDTVC;
     
     [regionalPoolCDTVC performFetch];
     
-    firstPickListCDTVC = [[FirstPickListCDTVC alloc] init];
-    [firstPickListCDTVC setRegionalToDisplay:regionalSelected];
-    [firstPickListCDTVC setManagedObjectContext:context];
-    _firstPickTableView.delegate = firstPickListCDTVC;
-    _firstPickTableView.dataSource = firstPickListCDTVC;
     
-    firstPickListCDTVC.tableView = _firstPickTableView;
+    NSFetchRequest *regionalFetch = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
+    regionalFetch.predicate = [NSPredicate predicateWithFormat:@"name = %@", regionalSelected];
     
-    [firstPickListCDTVC performFetch];
+    NSError *regionalError;
+    regionalObject = [[context executeFetchRequest:regionalFetch error:&regionalError] firstObject];
+    
+    firstPickArray = [[NSMutableArray alloc] initWithArray:[regionalObject.firstPickList array]];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([tableView isEqual:_secondPickTableView]){
+    if ([tableView isEqual:_firstPickTableView]) {
+        AlliancePickListCell *cell = (AlliancePickListCell *)[tableView dequeueReusableCellWithIdentifier:@"secondPickCell"];
+        Team *tm = [firstPickArray objectAtIndex:indexPath.row];
+        cell.teamNum.text = tm.name;
+        float autoTotal = 0;
+        float teleopTotal = 0;
+        float totalMatches = 0;
+        for (Match *mtch in tm.matches) {
+            autoTotal += [mtch.autoHighHotScore floatValue]*20;
+            autoTotal += [mtch.autoHighNotScore floatValue]*15;
+            autoTotal += [mtch.autoLowHotScore floatValue]*11;
+            autoTotal += [mtch.autoLowNotScore floatValue]*6;
+            autoTotal += [mtch.mobilityBonus floatValue]*5;
+            teleopTotal += [mtch.teleopHighMake floatValue]*10;
+            teleopTotal += [mtch.teleopLowMake floatValue];
+            teleopTotal += [mtch.teleopCatch floatValue]*10;
+            teleopTotal += [mtch.teleopOver floatValue]*10;
+            totalMatches++;
+        }
+        
+        
+        float autoAvg = 0;
+        float teleopAvg = 0;
+        autoAvg = (float)autoTotal/(float)totalMatches;
+        teleopAvg = (float)teleopTotal/(float)totalMatches;
+        
+        cell.autoAvg.text = [[NSString alloc] initWithFormat:@"%.1f", autoAvg];
+        cell.teleopAvg.text = [[NSString alloc] initWithFormat:@"%.1f", teleopAvg];
+        
+        return cell;
+    }
+    else if ([tableView isEqual:_secondPickTableView]){
         AlliancePickListCell *cell = (AlliancePickListCell *)[tableView dequeueReusableCellWithIdentifier:@"secondPickCell"];
         cell.teamNum.text = [[secondPickArray objectAtIndex:indexPath.row] objectAtIndex:0];
         cell.autoAvg.text = [[secondPickArray objectAtIndex:indexPath.row] objectAtIndex:1];
@@ -117,7 +148,15 @@ SecondPickListCDTVC *secondPickListCDTVC;
 }
 
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([tableView isEqual:_secondPickTableView]){
+    if ([tableView isEqual:_firstPickTableView]) {
+        if (indexPath.row > firstPickArray.count) {
+            return UITableViewCellEditingStyleNone;
+        }
+        else{
+            return UITableViewCellEditingStyleDelete;
+        }
+    }
+    else if ([tableView isEqual:_secondPickTableView]){
         if (indexPath.row > secondPickArray.count) {
             return UITableViewCellEditingStyleNone;
         }
@@ -131,7 +170,10 @@ SecondPickListCDTVC *secondPickListCDTVC;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if ([tableView isEqual:_secondPickTableView]){
+    if ([tableView isEqual:_firstPickTableView]) {
+        return [firstPickArray count];
+    }
+    else if ([tableView isEqual:_secondPickTableView]){
         return [secondPickArray count];
     }
     else{
@@ -140,7 +182,7 @@ SecondPickListCDTVC *secondPickListCDTVC;
 }
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([tableView isEqual:_secondPickTableView]) {
+    if ([tableView isEqual:_firstPickTableView] || [tableView isEqual:_secondPickTableView]) {
         return YES;
     }
     else{
@@ -148,6 +190,11 @@ SecondPickListCDTVC *secondPickListCDTVC;
     }
 }
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
+    if ([tableView isEqual:_firstPickTableView]) {
+        Team *tm = [firstPickArray objectAtIndex:sourceIndexPath.row];
+        [firstPickArray removeObjectAtIndex:sourceIndexPath.row];
+        [firstPickArray insertObject:tm atIndex:destinationIndexPath.row];
+    }
     if ([tableView isEqual:_secondPickTableView]){
         NSArray *teamToMove = [secondPickArray objectAtIndex:sourceIndexPath.row];
         [secondPickArray removeObjectAtIndex:sourceIndexPath.row];
@@ -156,7 +203,7 @@ SecondPickListCDTVC *secondPickListCDTVC;
 }
 
 -(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([tableView isEqual:_secondPickTableView]) {
+    if ([tableView isEqual:_firstPickTableView] || [tableView isEqual:_secondPickTableView]) {
         return YES;
     }
     else{
@@ -166,11 +213,20 @@ SecondPickListCDTVC *secondPickListCDTVC;
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        if ([tableView isEqual:_secondPickTableView]){
+        if ([tableView isEqual:_firstPickTableView]) {
+            [firstPickArray removeObjectAtIndex:indexPath.row];
+        }
+        else if ([tableView isEqual:_secondPickTableView]){
             [secondPickArray removeObjectAtIndex:indexPath.row];
         }
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
+}
+
+-(void)insertTeamIntoFirstPickList:(Team *)team{
+    [firstPickArray insertObject:team atIndex:[firstPickArray count]];
+    
+    [_firstPickTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[firstPickArray count] inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
 }
 
 - (IBAction)reorderSecondPickList:(id)sender {
