@@ -2,7 +2,7 @@
 //  Regional.m
 //  FIRST Scouting App
 //
-//  Created by Bertoncin,Louie on 2/11/14.
+//  Created by Bertoncin,Louie on 2/13/14.
 //  Copyright (c) 2014 teamDriven. All rights reserved.
 //
 
@@ -13,8 +13,8 @@
 @implementation Regional
 
 @dynamic name;
-@dynamic teams;
 @dynamic firstPickList;
 @dynamic secondPickList;
+@dynamic teams;
 
 @end

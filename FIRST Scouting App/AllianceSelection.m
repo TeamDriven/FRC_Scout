@@ -99,12 +99,6 @@ SecondPickListCDTVC *secondPickListCDTVC;
     [firstPickListCDTVC performFetch];
 }
 
--(void)viewDidAppear:(BOOL)animated{
-//    [_firstPickTableView setEditing:YES animated:YES];
-//    
-//    [_secondPickTableView setEditing:YES animated:YES];
-}
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([tableView isEqual:_secondPickTableView]){
         AlliancePickListCell *cell = (AlliancePickListCell *)[tableView dequeueReusableCellWithIdentifier:@"secondPickCell"];
@@ -188,6 +182,14 @@ SecondPickListCDTVC *secondPickListCDTVC;
     }
 }
 
+- (IBAction)reorderFirstPickList:(id)sender {
+    if (_firstPickTableView.isEditing) {
+        [_firstPickTableView setEditing:NO animated:YES];
+    }
+    else{
+        [_firstPickTableView setEditing:YES animated:YES];
+    }
+}
 
 @end
 

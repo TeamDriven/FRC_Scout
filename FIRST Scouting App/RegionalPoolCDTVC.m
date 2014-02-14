@@ -7,6 +7,7 @@
 //
 
 #import "RegionalPoolCDTVC.h"
+#import "Globals.h"
 #import "AllianceSelectionPoolCell.h"
 #import "Team.h"
 #import "Regional.h"
@@ -14,6 +15,14 @@
 #import "PitTeam.h"
 
 @implementation RegionalPoolCDTVC
+
+// Core Data Filepath
+NSFileManager *FSAfileManager;
+NSURL *FSAdocumentsDirectory;
+NSString *FSAdocumentName;
+NSURL *FSApathurl;
+UIManagedDocument *FSAdocument;
+NSManagedObjectContext *context;
 
 -(void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext{
     _managedObjectContext = managedObjectContext;
@@ -96,22 +105,37 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     Team *teamSelected = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    
-//    if (!teamSelected.regionalIn.firstPickList) {
-        NSMutableOrderedSet *firstPickList = [[NSMutableOrderedSet alloc] initWithArray:@[teamSelected]];
-        
-        [teamSelected.regionalIn addFirstPickList:firstPickList];
+//    if (!teamSelected.firstPickListRegional) {
+//        [self.managedObjectContext performBlock:^{
+//            
+//            [teamSelected.regionalIn insertObject:teamSelected inFirstPickListAtIndex:[teamSelected.regionalIn.firstPickList count]];
+//            
+//            NSLog(@"Inserted team %@ in First Pick List at Index: %ld", teamSelected.name, (long)[teamSelected.regionalIn.firstPickList count]);
+//            
+//            [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
+//        }];
+//        
 //    }
-//    else{
-//        [teamSelected.regionalIn insertObject:teamSelected inFirstPickListAtIndex:0];
-//    }
     
-    
-    
+
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
 
+
+
+
+
+
+
+
+
+
+
 @end
+
+
+
 
 
 

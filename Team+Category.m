@@ -78,4 +78,16 @@
     return team;
 }
 
+-(NSUInteger)indexInFirstPickList{
+    NSUInteger index = [self.firstPickListRegional.firstPickList indexOfObject:self];
+    
+    return index;
+}
+
+-(NSUInteger)indexInSecondPickList{
+    NSUInteger index = [self.secondPickListRegional.secondPickList indexOfObject:self];
+    
+    return index;
+}
+
 @end

@@ -2,7 +2,7 @@
 //  Regional.h
 //  FIRST Scouting App
 //
-//  Created by Bertoncin,Louie on 2/11/14.
+//  Created by Bertoncin,Louie on 2/13/14.
 //  Copyright (c) 2014 teamDriven. All rights reserved.
 //
 
@@ -14,17 +14,12 @@
 @interface Regional : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSSet *teams;
 @property (nonatomic, retain) NSOrderedSet *firstPickList;
 @property (nonatomic, retain) NSOrderedSet *secondPickList;
+@property (nonatomic, retain) NSSet *teams;
 @end
 
 @interface Regional (CoreDataGeneratedAccessors)
-
-- (void)addTeamsObject:(Team *)value;
-- (void)removeTeamsObject:(Team *)value;
-- (void)addTeams:(NSSet *)values;
-- (void)removeTeams:(NSSet *)values;
 
 - (void)insertObject:(Team *)value inFirstPickListAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromFirstPickListAtIndex:(NSUInteger)idx;
@@ -47,4 +42,10 @@
 - (void)removeSecondPickListObject:(Team *)value;
 - (void)addSecondPickList:(NSOrderedSet *)values;
 - (void)removeSecondPickList:(NSOrderedSet *)values;
+
+- (void)addTeamsObject:(Team *)value;
+- (void)removeTeamsObject:(Team *)value;
+- (void)addTeams:(NSSet *)values;
+- (void)removeTeams:(NSSet *)values;
+
 @end

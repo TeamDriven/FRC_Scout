@@ -2976,7 +2976,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="firstPickCell" id="X04-Xl-3YX" customClass="AlliancePickListCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="firstPickCell" id="X04-Xl-3YX" customClass="AlliancePickListCell">
                                         <rect key="frame" x="0.0" y="22" width="383" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="X04-Xl-3YX" id="WNJ-50-TVM">
@@ -3030,7 +3030,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="secondPickCell" id="aBM-Vz-igN" customClass="AlliancePickListCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="secondPickCell" id="aBM-Vz-igN" customClass="AlliancePickListCell">
                                         <rect key="frame" x="0.0" y="22" width="384" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aBM-Vz-igN" id="nuH-on-9j9">
@@ -3085,6 +3085,9 @@
                                 <state key="normal" title="Edit">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="reorderFirstPickList:" destination="3JD-Mc-o2Q" eventType="touchUpInside" id="c49-ZL-fQ6"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JxO-b4-d7G">
                                 <rect key="frame" x="725" y="679" width="40" height="30"/>
@@ -3101,8 +3104,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="Alliance Selection" id="9Bx-IM-kC2"/>
                     <connections>
+                        <outlet property="firstPickListEditBtn" destination="lOT-Ct-lGU" id="5OK-em-Pt7"/>
                         <outlet property="firstPickTableView" destination="3QP-48-DJx" id="W4e-YB-CCF"/>
                         <outlet property="poolTableView" destination="dyI-E7-nkz" id="Gf6-9V-DPS"/>
+                        <outlet property="secondPickListEditBtn" destination="JxO-b4-d7G" id="kKr-Rv-ZRM"/>
                         <outlet property="secondPickTableView" destination="Zjl-nI-H86" id="B9C-oN-bKF"/>
                     </connections>
                 </viewController>
