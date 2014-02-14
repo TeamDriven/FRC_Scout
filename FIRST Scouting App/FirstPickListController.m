@@ -96,6 +96,7 @@ NSMutableArray *firstPickListMutable;
     Team *teamSelected = [firstPickListMutable objectAtIndex:fromIndexPath.row];
     [firstPickListMutable removeObjectAtIndex:fromIndexPath.row];
     [firstPickListMutable insertObject:teamSelected atIndex:toIndexPath.row];
+    self.firstPickList = firstPickListMutable;
 }
 
 

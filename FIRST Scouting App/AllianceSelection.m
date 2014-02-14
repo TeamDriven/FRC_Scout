@@ -101,6 +101,18 @@ FirstPickListController *firstPickListController;
     [regionalPoolCDTVC setFirstPickListTableView:firstPickListController];
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    regionalObject.firstPickList = [NSOrderedSet orderedSetWithArray:firstPickListController.firstPickList];
+    [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+        if (success) {
+            NSLog(@"Saved correctly on exit");
+        }
+        else{
+            NSLog(@"Didn't save correctly");
+        }
+    }];
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([tableView isEqual:_secondPickTableView]){
         AlliancePickListCell *cell = (AlliancePickListCell *)[tableView dequeueReusableCellWithIdentifier:@"secondPickCell"];
