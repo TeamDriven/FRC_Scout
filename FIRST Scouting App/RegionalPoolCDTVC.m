@@ -25,6 +25,13 @@ NSURL *FSApathurl;
 UIManagedDocument *FSAdocument;
 NSManagedObjectContext *context;
 
+UIView *greayOutView;
+UIView *listSelectorView;
+UIButton *firstListBtn;
+UIButton *secondListBtn;
+
+Team *teamSelected;
+
 -(void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext{
     _managedObjectContext = managedObjectContext;
     
@@ -100,18 +107,95 @@ NSManagedObjectContext *context;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    Team *teamSelected = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    teamSelected = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    if (![self.secondPickListController.secondPickList containsObject:teamSelected]) {
-        [self.secondPickListController insertNewTeamIntoSecondPickList:teamSelected];
+    greayOutView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+    greayOutView.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+    [[[self.view superview] superview] addSubview:greayOutView];
+    
+    listSelectorView = [[UIView alloc] initWithFrame:CGRectMake(234, 400, 300, 75)];
+    listSelectorView.backgroundColor = [UIColor whiteColor];
+    listSelectorView.layer.cornerRadius = 10;
+    [greayOutView addSubview:listSelectorView];
+    
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    closeButton.frame = CGRectMake(255, 0, 40, 20);
+    [closeButton setTitle:@"Close X" forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(closeListSelectorView) forControlEvents:UIControlEventTouchUpInside];
+    closeButton.titleLabel.font = [UIFont systemFontOfSize:11];
+    
+    firstListBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    firstListBtn.frame = CGRectMake(10, 25, 135, 35);
+    [firstListBtn setTitle:@"Add to First Pick List" forState:UIControlStateNormal];
+    [firstListBtn addTarget:self action:@selector(addToFirstPickList) forControlEvents:UIControlEventTouchUpInside];
+    firstListBtn.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    firstListBtn.layer.cornerRadius = 5;
+    firstListBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+    if ([self.firstPickListController.firstPickList containsObject:teamSelected]) {
+        firstListBtn.enabled = false;
     }
+    else{
+        firstListBtn.enabled = true;
+    }
+    
+    secondListBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    secondListBtn.frame = CGRectMake(155, 25, 135, 35);
+    [secondListBtn setTitle:@"Add to Second Pick List" forState:UIControlStateNormal];
+    [secondListBtn addTarget:self action:@selector(addToSecondPickList) forControlEvents:UIControlEventTouchUpInside];
+    secondListBtn.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    secondListBtn.layer.cornerRadius = 5;
+    secondListBtn.titleLabel.font = [UIFont systemFontOfSize:11];
+    if ([self.secondPickListController.secondPickList containsObject:teamSelected]) {
+        secondListBtn.enabled = false;
+    }
+    else{
+        secondListBtn.enabled = true;
+    }
+    
+    listSelectorView.transform = CGAffineTransformMakeScale(.01, .01);
+    [UIView animateWithDuration:0.2 animations:^{
+        listSelectorView.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+        [listSelectorView addSubview:closeButton];
+        [listSelectorView addSubview:firstListBtn];
+        [listSelectorView addSubview:secondListBtn];
+    }];
+    
+//    if (![self.secondPickListController.secondPickList containsObject:teamSelected]) {
+//        [self.secondPickListController insertNewTeamIntoSecondPickList:teamSelected];
+//    }
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 }
 
+-(void)closeListSelectorView{
+    [UIView animateWithDuration:0.2 animations:^{
+        listSelectorView.transform = CGAffineTransformMakeScale(.01, .01);
+    } completion:^(BOOL finished) {
+        [listSelectorView removeFromSuperview];
+        [greayOutView removeFromSuperview];
+        teamSelected = nil;
+    }];
+}
 
+-(void)addToFirstPickList{
+    if (![self.firstPickListController.firstPickList containsObject:teamSelected]) {
+        [self.firstPickListController insertNewTeamIntoFirstPickList:teamSelected];
+        firstListBtn.enabled = false;
+    }
+}
 
+-(void)addToSecondPickList{
+    if (![self.secondPickListController.secondPickList containsObject:teamSelected]) {
+        [self.secondPickListController insertNewTeamIntoSecondPickList:teamSelected];
+        secondListBtn.enabled = false;
+    }
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [self closeListSelectorView];
+}
 
 
 

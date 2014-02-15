@@ -89,6 +89,10 @@ NSMutableArray *secondPickListMutable;
         [secondPickListMutable removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         self.secondPickList = secondPickListMutable;
+        
+        if ([secondPickListMutable count] == 0) {
+            [self.tableView setEditing:NO];
+        }
     }
 }
 

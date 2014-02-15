@@ -86,6 +86,10 @@ NSMutableArray *firstPickListMutable;
         [firstPickListMutable removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         self.firstPickList = firstPickListMutable;
+        
+        if ([firstPickListMutable count] == 0) {
+            [self.tableView setEditing:NO];
+        }
     }
 }
 

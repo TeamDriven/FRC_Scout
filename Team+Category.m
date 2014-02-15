@@ -9,6 +9,7 @@
 #import "Team+Category.h"
 #import "Regional.h"
 #import "MasterTeam.h"
+#import "Match.h"
 
 @implementation Team (Category)
 
@@ -90,4 +91,259 @@
     return index;
 }
 
+-(float)autoHighHotAvg{
+    float autoHighHotAvg = 0;
+    for (Match *mtch in self.matches) {
+        autoHighHotAvg += [mtch.autoHighHotScore floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        autoHighHotAvg = (float)autoHighHotAvg/(float)[self.matches count];
+    }
+    
+    return autoHighHotAvg;
+}
+-(float)autoHighMissAvg{
+    float autoHighMissAvg = 0;
+    for (Match *mtch in self.matches) {
+        autoHighMissAvg += [mtch.autoHighMissScore floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        autoHighMissAvg = (float)autoHighMissAvg/(float)[self.matches count];
+    }
+    
+    return autoHighMissAvg;
+}
+-(float)autoHighNotAvg{
+    float autoHighNotAvg = 0;
+    for (Match *mtch in self.matches) {
+        autoHighNotAvg += [mtch.autoHighNotScore floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        autoHighNotAvg = (float)autoHighNotAvg/(float)[self.matches count];
+    }
+    
+    return autoHighNotAvg;
+}
+-(float)autoHighHotPercentage{
+    float autoHighHotPercentage = 0;
+    
+    if (self.autoHighHotAvg+self.autoHighNotAvg > 0) {
+        autoHighHotPercentage = ((float)self.autoHighHotAvg/((float)self.autoHighHotAvg+(float)self.autoHighNotAvg))*100;
+    }
+    
+    return autoHighHotPercentage;
+}
+-(float)autoHighAccuracyPercentage{
+    float autoHighAccuracyPercentage = 0;
+    
+    if (((float)self.autoHighHotAvg+(float)self.autoHighNotAvg+(float)self.autoHighMissAvg) > 0) {
+        autoHighAccuracyPercentage = (((float)self.autoHighHotAvg+(float)self.autoHighNotAvg)/((float)self.autoHighHotAvg+(float)self.autoHighNotAvg+(float)self.autoHighMissAvg))*100;
+    }
+    
+    return autoHighAccuracyPercentage;
+}
+-(float)autoLowHotAvg{
+    float autoLowHotAvg = 0;
+    for (Match *mtch in self.matches) {
+        autoLowHotAvg += [mtch.autoLowHotScore floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        autoLowHotAvg = (float)autoLowHotAvg/(float)[self.matches count];
+    }
+    
+    return autoLowHotAvg;
+}
+-(float)autoLowMissAvg{
+    float autoLowMissAvg = 0;
+    for (Match *mtch in self.matches) {
+        autoLowMissAvg += [mtch.autoLowMissScore floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        autoLowMissAvg = (float)autoLowMissAvg/(float)[self.matches count];
+    }
+    
+    return autoLowMissAvg;
+}
+-(float)autoLowNotAvg{
+    float autoLowNotAvg = 0;
+    for (Match *mtch in self.matches) {
+        autoLowNotAvg += [mtch.autoLowMissScore floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        autoLowNotAvg = (float)autoLowNotAvg/(float)[self.matches count];
+    }
+    
+    return autoLowNotAvg;
+}
+-(float)autoLowHotPercentage{
+    float autoLowHotPercentage = 0;
+    
+    if (self.autoLowHotAvg+self.autoLowNotAvg > 0) {
+        autoLowHotPercentage = ((float)self.autoLowHotAvg/((float)self.autoLowHotAvg+(float)self.autoLowNotAvg))*100;
+    }
+    
+    return autoLowHotPercentage;
+}
+-(float)autoLowAccuracyPercentage{
+    float autoLowAccuracyPercentage = 0;
+    
+    if ((float)self.autoLowHotAvg+(float)self.autoLowNotAvg+(float)self.autoLowMissAvg > 0) {
+        autoLowAccuracyPercentage = (((float)self.autoLowHotAvg+(float)self.autoLowNotAvg)/((float)self.autoLowHotAvg+(float)self.autoLowNotAvg+(float)self.autoLowMissAvg))*100;
+    }
+    
+    return autoLowAccuracyPercentage;
+}
+-(float)autoAccuracyPercentage{
+    float autoAccuracyPercentage = 0;
+    float totalHighShotsAttempted = 0;
+    float totalLowShotsAttempted = 0;
+    
+    totalHighShotsAttempted = (float)self.autoHighHotAvg+(float)self.autoHighNotAvg+(float)self.autoHighMissAvg;
+    totalLowShotsAttempted = (float)self.autoLowHotAvg+(float)self.autoLowNotAvg+(float)self.autoLowMissAvg;
+    
+    if (totalHighShotsAttempted > 0 && totalLowShotsAttempted > 0) {
+        autoAccuracyPercentage = ((float)totalHighShotsAttempted + (float)totalLowShotsAttempted)/2;
+    }
+    else if (totalHighShotsAttempted == 0 && totalLowShotsAttempted > 0){
+        autoAccuracyPercentage = (float)totalLowShotsAttempted;
+    }
+    else if (totalLowShotsAttempted == 0 && totalHighShotsAttempted > 0){
+        autoAccuracyPercentage = (float)totalHighShotsAttempted;
+    }
+    
+    return autoAccuracyPercentage;
+}
+-(float)mobilityBonusPercentage{
+    float mobilityBonusPercentage = 0;
+    for (Match *mtch in self.matches) {
+        mobilityBonusPercentage += [mtch.mobilityBonus floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        mobilityBonusPercentage = (float)mobilityBonusPercentage/(float)[self.matches count];
+    }
+    
+    return mobilityBonusPercentage;
+}
+-(float)autonomousAvg{
+    float autonomousAvg = 0;
+    for (Match *mtch in self.matches) {
+        autonomousAvg += [mtch.autoHighHotScore floatValue]*20;
+        autonomousAvg += [mtch.autoHighNotScore floatValue]*15;
+        autonomousAvg += [mtch.autoLowHotScore floatValue]*11;
+        autonomousAvg += [mtch.autoLowNotScore floatValue]*6;
+        autonomousAvg += [mtch.mobilityBonus floatValue]*5;
+    }
+    
+    if ([self.matches count] > 0) {
+        autonomousAvg = (float)autonomousAvg/(float)[self.matches count];
+    }
+    
+    return autonomousAvg;
+}
+
+-(float)teleopHighMakeAvg{
+    float teleopHighMakeAvg = 0;
+    for (Match *mtch in self.matches) {
+        teleopHighMakeAvg += [mtch.teleopHighMake floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        teleopHighMakeAvg = (float)teleopHighMakeAvg/(float)[self.matches count];
+    }
+    
+    return teleopHighMakeAvg;
+}
+-(float)teleopHighMissAvg{
+    float teleopHighMissAvg = 0;
+    for (Match *mtch in self.matches) {
+        teleopHighMissAvg += [mtch.teleopHighMiss floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        teleopHighMissAvg = (float)teleopHighMissAvg/(float)[self.matches count];
+    }
+    
+    return teleopHighMissAvg;
+}
+-(float)teleopHighAccuracyPercentage{
+    float teleopHighAccuracyPercentage = 0;
+    
+    if (self.teleopHighMakeAvg + self.teleopHighMissAvg > 0) {
+        teleopHighAccuracyPercentage = ((float)self.teleopHighMakeAvg/((float)self.teleopHighMakeAvg+(float)self.teleopHighMissAvg))*100;
+    }
+    
+    return teleopHighAccuracyPercentage;
+}
+-(float)teleopLowMakeAvg{
+    float teleopLowMakeAvg = 0;
+    for (Match *mtch in self.matches) {
+        teleopLowMakeAvg += [mtch.teleopLowMake floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        teleopLowMakeAvg = (float)teleopLowMakeAvg/(float)[self.matches count];
+    }
+    
+    return teleopLowMakeAvg;
+}
+-(float)teleopLowMissAvg{
+    float teleopLowMissAvg = 0;
+    for (Match *mtch in self.matches) {
+        teleopLowMissAvg += [mtch.teleopLowMiss floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        teleopLowMissAvg = (float)teleopLowMissAvg/(float)[self.matches count];
+    }
+    
+    return teleopLowMissAvg;
+}
+-(float)teleopLowAccuracyPercentage{
+    float teleopLowAccuracyPercentage = 0;
+    
+    if (self.teleopLowMakeAvg + self.teleopLowMissAvg > 0) {
+        teleopLowAccuracyPercentage = ((float)self.teleopLowMakeAvg/((float)self.teleopLowMakeAvg+(float)self.teleopLowMissAvg))*100;
+    }
+    
+    return teleopLowAccuracyPercentage;
+}
+
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

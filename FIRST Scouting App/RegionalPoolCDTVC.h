@@ -16,7 +16,7 @@
 
 @property (strong, nonatomic) NSString *regionalToDisplay;
 
-@property (strong, nonatomic) FirstPickListController *firstPickListTableView;
+@property (strong, nonatomic) FirstPickListController *firstPickListController;
 
 @property (strong, nonatomic) SecondPickListController *secondPickListController;
 

@@ -12,4 +12,32 @@
 
 +(Team *)createTeamWithName:(NSString *)name inRegional:(Regional *)rgnl withManagedObjectContext:(NSManagedObjectContext *)context;
 
+-(float)autoHighHotAvg;
+-(float)autoHighMissAvg;
+-(float)autoHighNotAvg;
+-(float)autoHighHotPercentage;
+-(float)autoHighAccuracyPercentage;
+-(float)autoLowHotAvg;
+-(float)autoLowMissAvg;
+-(float)autoLowNotAvg;
+-(float)autoLowHotPercentage;
+-(float)autoLowAccuracyPercentage;
+-(float)autoAccuracyPercentage;
+-(float)mobilityBonusPercentage;
+-(float)autonomousAvg;
+
+-(float)teleopHighMakeAvg;
+-(float)teleopHighMissAvg;
+-(float)teleopHighAccuracyPercentage;
+-(float)teleopLowMakeAvg;
+-(float)teleopLowMissAvg;
+-(float)teleopLowAccuracyPercentage;
+-(float)teleopAccuracyPercentage;
+-(float)teleopCatchAvg;
+-(float)teleopOverAvg;
+-(float)teleopPassedAvg;
+-(float)teleopReceivedAvg;
+-(float)teleopPassReceiveRatio;
+-(float)teleopAvg;
+
 @end

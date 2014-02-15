@@ -95,7 +95,7 @@ SecondPickListController *secondPickListController;
     _firstPickTableView.dataSource = firstPickListController;
     firstPickListController.tableView = _firstPickTableView;
     
-    [regionalPoolCDTVC setFirstPickListTableView:firstPickListController];
+    [regionalPoolCDTVC setFirstPickListController:firstPickListController];
     
     secondPickListController = [[SecondPickListController alloc] init];
     [secondPickListController setSecondPickList:secondPickArray];
