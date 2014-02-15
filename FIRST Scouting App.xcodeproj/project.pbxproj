@@ -19,11 +19,13 @@
 		8653E0ED18A6EF890080CAC5 /* SelectedTeamView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8653E0EC18A6EF890080CAC5 /* SelectedTeamView.m */; };
 		8653E10F18A75A730080CAC5 /* ViewTeamsCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8653E10E18A75A730080CAC5 /* ViewTeamsCDTVC.m */; };
 		869A58A318A7E75E00FFCDEB /* SingleTeamMatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869A58A218A7E75E00FFCDEB /* SingleTeamMatchCell.m */; };
-		869AF67C18AF144100CD4FF3 /* PitTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF67B18AF144100CD4FF3 /* PitTeam.m */; };
-		869AF67F18AF144100CD4FF3 /* MasterTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF67E18AF144100CD4FF3 /* MasterTeam.m */; };
-		869AF68218AF144100CD4FF3 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF68118AF144100CD4FF3 /* Match.m */; };
-		869AF68518AF144100CD4FF3 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF68418AF144100CD4FF3 /* Team.m */; };
-		869AF68818AF144100CD4FF3 /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF68718AF144100CD4FF3 /* Regional.m */; };
+		869AF6A918AFEA5A00CD4FF3 /* PitTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF6A818AFEA5A00CD4FF3 /* PitTeam.m */; };
+		869AF6AC18AFEA5B00CD4FF3 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF6AB18AFEA5B00CD4FF3 /* Match.m */; };
+		869AF6AF18AFEA5B00CD4FF3 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF6AE18AFEA5B00CD4FF3 /* Team.m */; };
+		869AF6B218AFEA5B00CD4FF3 /* MasterTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF6B118AFEA5B00CD4FF3 /* MasterTeam.m */; };
+		869AF6B518AFEA5B00CD4FF3 /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF6B418AFEA5B00CD4FF3 /* Regional.m */; };
+		869AF6BB18AFF29100CD4FF3 /* PoolMatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF6BA18AFF29100CD4FF3 /* PoolMatchCell.m */; };
+		869AF6BE18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF6BD18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.m */; };
 		869F0A9518AB2B8E0026B6EC /* AlliancePickListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0A9418AB2B8E0026B6EC /* AlliancePickListCell.m */; };
 		869F0A9D18AB3E450026B6EC /* RegionalPoolCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0A9C18AB3E450026B6EC /* RegionalPoolCDTVC.m */; };
 		869F0AA618ABEBD30026B6EC /* AllianceSelectionPoolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0AA518ABEBD30026B6EC /* AllianceSelectionPoolCell.m */; };
@@ -94,16 +96,20 @@
 		8653E10E18A75A730080CAC5 /* ViewTeamsCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewTeamsCDTVC.m; sourceTree = "<group>"; };
 		869A58A118A7E75E00FFCDEB /* SingleTeamMatchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTeamMatchCell.h; sourceTree = "<group>"; };
 		869A58A218A7E75E00FFCDEB /* SingleTeamMatchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeamMatchCell.m; sourceTree = "<group>"; };
-		869AF67A18AF144100CD4FF3 /* PitTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitTeam.h; sourceTree = "<group>"; };
-		869AF67B18AF144100CD4FF3 /* PitTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitTeam.m; sourceTree = "<group>"; };
-		869AF67D18AF144100CD4FF3 /* MasterTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterTeam.h; sourceTree = "<group>"; };
-		869AF67E18AF144100CD4FF3 /* MasterTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterTeam.m; sourceTree = "<group>"; };
-		869AF68018AF144100CD4FF3 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
-		869AF68118AF144100CD4FF3 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
-		869AF68318AF144100CD4FF3 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
-		869AF68418AF144100CD4FF3 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
-		869AF68618AF144100CD4FF3 /* Regional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regional.h; sourceTree = "<group>"; };
-		869AF68718AF144100CD4FF3 /* Regional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Regional.m; sourceTree = "<group>"; };
+		869AF6A718AFEA5A00CD4FF3 /* PitTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitTeam.h; sourceTree = "<group>"; };
+		869AF6A818AFEA5A00CD4FF3 /* PitTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitTeam.m; sourceTree = "<group>"; };
+		869AF6AA18AFEA5B00CD4FF3 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
+		869AF6AB18AFEA5B00CD4FF3 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
+		869AF6AD18AFEA5B00CD4FF3 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
+		869AF6AE18AFEA5B00CD4FF3 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
+		869AF6B018AFEA5B00CD4FF3 /* MasterTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterTeam.h; sourceTree = "<group>"; };
+		869AF6B118AFEA5B00CD4FF3 /* MasterTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterTeam.m; sourceTree = "<group>"; };
+		869AF6B318AFEA5B00CD4FF3 /* Regional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regional.h; sourceTree = "<group>"; };
+		869AF6B418AFEA5B00CD4FF3 /* Regional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Regional.m; sourceTree = "<group>"; };
+		869AF6B918AFF29100CD4FF3 /* PoolMatchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PoolMatchCell.h; sourceTree = "<group>"; };
+		869AF6BA18AFF29100CD4FF3 /* PoolMatchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PoolMatchCell.m; sourceTree = "<group>"; };
+		869AF6BC18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PoolTeamMatchesCDTVC.h; sourceTree = "<group>"; };
+		869AF6BD18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PoolTeamMatchesCDTVC.m; sourceTree = "<group>"; };
 		869F0A9318AB2B8E0026B6EC /* AlliancePickListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlliancePickListCell.h; sourceTree = "<group>"; };
 		869F0A9418AB2B8E0026B6EC /* AlliancePickListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlliancePickListCell.m; sourceTree = "<group>"; };
 		869F0A9B18AB3E450026B6EC /* RegionalPoolCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegionalPoolCDTVC.h; sourceTree = "<group>"; };
@@ -215,8 +221,8 @@
 		28270E0D1871197600809047 /* Team */ = {
 			isa = PBXGroup;
 			children = (
-				869AF68318AF144100CD4FF3 /* Team.h */,
-				869AF68418AF144100CD4FF3 /* Team.m */,
+				869AF6AD18AFEA5B00CD4FF3 /* Team.h */,
+				869AF6AE18AFEA5B00CD4FF3 /* Team.m */,
 				28270E0E1871199100809047 /* Team+Category.h */,
 				28270E0F1871199100809047 /* Team+Category.m */,
 			);
@@ -226,8 +232,8 @@
 		28270E111871246D00809047 /* Match */ = {
 			isa = PBXGroup;
 			children = (
-				869AF68018AF144100CD4FF3 /* Match.h */,
-				869AF68118AF144100CD4FF3 /* Match.m */,
+				869AF6AA18AFEA5B00CD4FF3 /* Match.h */,
+				869AF6AB18AFEA5B00CD4FF3 /* Match.m */,
 				28270E121871247D00809047 /* Match+Category.h */,
 				28270E131871247D00809047 /* Match+Category.m */,
 			);
@@ -237,8 +243,8 @@
 		285A1E1D1870E9B1002AA01C /* Regional */ = {
 			isa = PBXGroup;
 			children = (
-				869AF68618AF144100CD4FF3 /* Regional.h */,
-				869AF68718AF144100CD4FF3 /* Regional.m */,
+				869AF6B318AFEA5B00CD4FF3 /* Regional.h */,
+				869AF6B418AFEA5B00CD4FF3 /* Regional.m */,
 				285A1E1A1870E941002AA01C /* Regional+Category.h */,
 				285A1E1B1870E941002AA01C /* Regional+Category.m */,
 			);
@@ -248,8 +254,8 @@
 		863B35281890E50200D5D528 /* PitTeam */ = {
 			isa = PBXGroup;
 			children = (
-				869AF67A18AF144100CD4FF3 /* PitTeam.h */,
-				869AF67B18AF144100CD4FF3 /* PitTeam.m */,
+				869AF6A718AFEA5A00CD4FF3 /* PitTeam.h */,
+				869AF6A818AFEA5A00CD4FF3 /* PitTeam.m */,
 				863B35291890E53400D5D528 /* PitTeam+Category.h */,
 				863B352A1890E53400D5D528 /* PitTeam+Category.m */,
 			);
@@ -259,8 +265,8 @@
 		8653E10C18A758740080CAC5 /* MasterTeam */ = {
 			isa = PBXGroup;
 			children = (
-				869AF67D18AF144100CD4FF3 /* MasterTeam.h */,
-				869AF67E18AF144100CD4FF3 /* MasterTeam.m */,
+				869AF6B018AFEA5B00CD4FF3 /* MasterTeam.h */,
+				869AF6B118AFEA5B00CD4FF3 /* MasterTeam.m */,
 			);
 			name = MasterTeam;
 			sourceTree = "<group>";
@@ -330,6 +336,10 @@
 				86C8C6E018AEA2BD0056B5D8 /* FirstPickListController.m */,
 				86C8C6E218AEB5220056B5D8 /* SecondPickListController.h */,
 				86C8C6E318AEB5220056B5D8 /* SecondPickListController.m */,
+				869AF6BC18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.h */,
+				869AF6BD18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.m */,
+				869AF6B918AFF29100CD4FF3 /* PoolMatchCell.h */,
+				869AF6BA18AFF29100CD4FF3 /* PoolMatchCell.m */,
 			);
 			name = AllianceSelection;
 			sourceTree = "<group>";
@@ -564,7 +574,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				869AF68818AF144100CD4FF3 /* Regional.m in Sources */,
+				869AF6B518AFEA5B00CD4FF3 /* Regional.m in Sources */,
 				86CDCD26188DBD18002B6522 /* PitScouting.m in Sources */,
 				86E8713A18A0957C00EA2663 /* WithinRegional.m in Sources */,
 				86AB8DA91893575E00D411C9 /* CoreDataTableViewController.m in Sources */,
@@ -573,7 +583,7 @@
 				8846FEDD1826D7D200B37E44 /* main.m in Sources */,
 				86E8713D18A095A200EA2663 /* NextMatch.m in Sources */,
 				8605BC4F1895A54700606B1A /* Sharing.m in Sources */,
-				869AF68218AF144100CD4FF3 /* Match.m in Sources */,
+				869AF6AC18AFEA5B00CD4FF3 /* Match.m in Sources */,
 				86CDCD29188DBFD6002B6522 /* PitMap.m in Sources */,
 				869F0A9518AB2B8E0026B6EC /* AlliancePickListCell.m in Sources */,
 				86C8C6E418AEB5220056B5D8 /* SecondPickListController.m in Sources */,
@@ -581,8 +591,10 @@
 				2821DE39186E0B000059CDF6 /* FSA.xcdatamodeld in Sources */,
 				285A1E1C1870E941002AA01C /* Regional+Category.m in Sources */,
 				86E8714018A095BB00EA2663 /* AllianceSelection.m in Sources */,
+				869AF6BB18AFF29100CD4FF3 /* PoolMatchCell.m in Sources */,
 				86E8713718A0955E00EA2663 /* Rankings.m in Sources */,
-				869AF67C18AF144100CD4FF3 /* PitTeam.m in Sources */,
+				869AF6BE18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.m in Sources */,
+				869AF6A918AFEA5A00CD4FF3 /* PitTeam.m in Sources */,
 				86E8713418A0954200EA2663 /* SingleTeam.m in Sources */,
 				2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */,
 				861F207718A7EFE500D8D561 /* SelectedTeamCDTVC.m in Sources */,
@@ -594,7 +606,7 @@
 				8846FEE11826D7D200B37E44 /* LocationsAppDelegate.m in Sources */,
 				86E8714718A0ABEB00EA2663 /* DetailsNavigationController.m in Sources */,
 				86CDCD30188DC016002B6522 /* ViewTeams.m in Sources */,
-				869AF67F18AF144100CD4FF3 /* MasterTeam.m in Sources */,
+				869AF6B218AFEA5B00CD4FF3 /* MasterTeam.m in Sources */,
 				869F0AA618ABEBD30026B6EC /* AllianceSelectionPoolCell.m in Sources */,
 				863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */,
 				869A58A318A7E75E00FFCDEB /* SingleTeamMatchCell.m in Sources */,
@@ -604,7 +616,7 @@
 				86C8C6E118AEA2BD0056B5D8 /* FirstPickListController.m in Sources */,
 				86E8715C18A6D3D000EA2663 /* SingleTeamCDTVC.m in Sources */,
 				8846FEE71826D7D200B37E44 /* Scoring.m in Sources */,
-				869AF68518AF144100CD4FF3 /* Team.m in Sources */,
+				869AF6AF18AFEA5B00CD4FF3 /* Team.m in Sources */,
 				86E8714A18A1A0AF00EA2663 /* MainTabBarController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

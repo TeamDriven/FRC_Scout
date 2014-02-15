@@ -8,6 +8,7 @@
 
 #import "Match+Category.h"
 #import "Team.h"
+#import "Team+Category.h"
 #import "Regional.h"
 #import "Scoring.h"
 
@@ -64,6 +65,8 @@
         match.uniqeID = [dict objectForKey:@"uniqueID"];
         
         [tm addMatchesObject:match];
+        
+        [tm updateTeamAveragesForTeam:tm];
         
         
         NSLog(@"Created a new match named: %@", match.matchNum);

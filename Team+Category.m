@@ -88,7 +88,7 @@
     return index;
 }
 
--(float)autoHighHotAvg{
+-(float)autoHighHotAvgCalculated{
     float autoHighHotAvg = 0;
     for (Match *mtch in self.matches) {
         autoHighHotAvg += [mtch.autoHighHotScore floatValue];
@@ -100,7 +100,7 @@
     
     return autoHighHotAvg;
 }
--(float)autoHighMissAvg{
+-(float)autoHighMissAvgCalculated{
     float autoHighMissAvg = 0;
     for (Match *mtch in self.matches) {
         autoHighMissAvg += [mtch.autoHighMissScore floatValue];
@@ -112,7 +112,7 @@
     
     return autoHighMissAvg;
 }
--(float)autoHighNotAvg{
+-(float)autoHighNotAvgCalculated{
     float autoHighNotAvg = 0;
     for (Match *mtch in self.matches) {
         autoHighNotAvg += [mtch.autoHighNotScore floatValue];
@@ -124,39 +124,39 @@
     
     return autoHighNotAvg;
 }
--(float)autoHighMakesAvg{
+-(float)autoHighMakesAvgCalculated{
     float autoHighMakesAvg = 0;
     
-    autoHighMakesAvg = (float)self.autoHighHotAvg + (float)self.autoHighNotAvg;
+    autoHighMakesAvg = (float)self.autoHighHotAvgCalculated + (float)self.autoHighNotAvgCalculated;
     
     return autoHighMakesAvg;
 }
--(float)autoHighAttemptsAvg{
+-(float)autoHighAttemptsAvgCalculated{
     float autoHighAttemptsAvg = 0;
     
-    autoHighAttemptsAvg = (float)self.autoHighHotAvg+(float)self.autoHighNotAvg+(float)self.autoHighMissAvg;
+    autoHighAttemptsAvg = (float)self.autoHighHotAvgCalculated+(float)self.autoHighNotAvgCalculated+(float)self.autoHighMissAvgCalculated;
     
     return autoHighAttemptsAvg;
 }
--(float)autoHighHotPercentage{
+-(float)autoHighHotPercentageCalculated{
     float autoHighHotPercentage = 0;
     
-    if (self.autoHighHotAvg+self.autoHighNotAvg > 0) {
-        autoHighHotPercentage = ((float)self.autoHighHotAvg/((float)self.autoHighHotAvg+(float)self.autoHighNotAvg))*100;
+    if (self.autoHighHotAvgCalculated+self.autoHighNotAvgCalculated > 0) {
+        autoHighHotPercentage = ((float)self.autoHighHotAvgCalculated/((float)self.autoHighHotAvgCalculated+(float)self.autoHighNotAvgCalculated))*100;
     }
     
     return autoHighHotPercentage;
 }
--(float)autoHighAccuracyPercentage{
+-(float)autoHighAccuracyPercentageCalculated{
     float autoHighAccuracyPercentage = 0;
     
-    if (((float)self.autoHighHotAvg+(float)self.autoHighNotAvg+(float)self.autoHighMissAvg) > 0) {
-        autoHighAccuracyPercentage = (((float)self.autoHighHotAvg+(float)self.autoHighNotAvg)/((float)self.autoHighHotAvg+(float)self.autoHighNotAvg+(float)self.autoHighMissAvg))*100;
+    if (((float)self.autoHighHotAvgCalculated+(float)self.autoHighNotAvgCalculated+(float)self.autoHighMissAvgCalculated) > 0) {
+        autoHighAccuracyPercentage = (((float)self.autoHighHotAvgCalculated+(float)self.autoHighNotAvgCalculated)/((float)self.autoHighHotAvgCalculated+(float)self.autoHighNotAvgCalculated+(float)self.autoHighMissAvgCalculated))*100;
     }
     
     return autoHighAccuracyPercentage;
 }
--(float)autoLowHotAvg{
+-(float)autoLowHotAvgCalculated{
     float autoLowHotAvg = 0;
     for (Match *mtch in self.matches) {
         autoLowHotAvg += [mtch.autoLowHotScore floatValue];
@@ -168,7 +168,7 @@
     
     return autoLowHotAvg;
 }
--(float)autoLowMissAvg{
+-(float)autoLowMissAvgCalculated{
     float autoLowMissAvg = 0;
     for (Match *mtch in self.matches) {
         autoLowMissAvg += [mtch.autoLowMissScore floatValue];
@@ -180,7 +180,7 @@
     
     return autoLowMissAvg;
 }
--(float)autoLowNotAvg{
+-(float)autoLowNotAvgCalculated{
     float autoLowNotAvg = 0;
     for (Match *mtch in self.matches) {
         autoLowNotAvg += [mtch.autoLowMissScore floatValue];
@@ -192,59 +192,59 @@
     
     return autoLowNotAvg;
 }
--(float)autoLowMakesAvg{
+-(float)autoLowMakesAvgCalculated{
     float autoLowMakesAvg = 0;
     
-    autoLowMakesAvg = (float)self.autoLowHotAvg + (float)self.autoLowNotAvg;
+    autoLowMakesAvg = (float)self.autoLowHotAvgCalculated + (float)self.autoLowNotAvgCalculated;
     
     return autoLowMakesAvg;
 }
--(float)autoLowAttemptsAvg{
+-(float)autoLowAttemptsAvgCalculated{
     float autoLowAttemptsAvg = 0;
     
-    autoLowAttemptsAvg = (float)self.autoLowHotAvg + (float)self.autoLowNotAvg + (float)self.autoLowMissAvg;
+    autoLowAttemptsAvg = (float)self.autoLowHotAvgCalculated + (float)self.autoLowNotAvgCalculated + (float)self.autoLowMissAvgCalculated;
     
     return autoLowAttemptsAvg;
 }
--(float)autoLowHotPercentage{
+-(float)autoLowHotPercentageCalculated{
     float autoLowHotPercentage = 0;
     
-    if (self.autoLowHotAvg+self.autoLowNotAvg > 0) {
-        autoLowHotPercentage = ((float)self.autoLowHotAvg/((float)self.autoLowHotAvg+(float)self.autoLowNotAvg))*100;
+    if (self.autoLowHotAvgCalculated+self.autoLowNotAvgCalculated > 0) {
+        autoLowHotPercentage = ((float)self.autoLowHotAvgCalculated/((float)self.autoLowHotAvgCalculated+(float)self.autoLowNotAvgCalculated))*100;
     }
     
     return autoLowHotPercentage;
 }
--(float)autoLowAccuracyPercentage{
+-(float)autoLowAccuracyPercentageCalculated{
     float autoLowAccuracyPercentage = 0;
     
-    if ((float)self.autoLowHotAvg+(float)self.autoLowNotAvg+(float)self.autoLowMissAvg > 0) {
-        autoLowAccuracyPercentage = (((float)self.autoLowHotAvg+(float)self.autoLowNotAvg)/((float)self.autoLowHotAvg+(float)self.autoLowNotAvg+(float)self.autoLowMissAvg))*100;
+    if ((float)self.autoLowHotAvgCalculated+(float)self.autoLowNotAvgCalculated+(float)self.autoLowMissAvgCalculated > 0) {
+        autoLowAccuracyPercentage = (((float)self.autoLowHotAvgCalculated+(float)self.autoLowNotAvgCalculated)/((float)self.autoLowHotAvgCalculated+(float)self.autoLowNotAvgCalculated+(float)self.autoLowMissAvgCalculated))*100;
     }
     
     return autoLowAccuracyPercentage;
 }
--(float)autoAccuracyPercentage{
+-(float)autoAccuracyPercentageCalculated{
     float autoAccuracyPercentage = 0;
     float totalHighShotsAttempted = 0;
     float totalLowShotsAttempted = 0;
     
-    totalHighShotsAttempted = (float)self.autoHighHotAvg+(float)self.autoHighNotAvg+(float)self.autoHighMissAvg;
-    totalLowShotsAttempted = (float)self.autoLowHotAvg+(float)self.autoLowNotAvg+(float)self.autoLowMissAvg;
+    totalHighShotsAttempted = (float)self.autoHighHotAvgCalculated+(float)self.autoHighNotAvgCalculated+(float)self.autoHighMissAvgCalculated;
+    totalLowShotsAttempted = (float)self.autoLowHotAvgCalculated+(float)self.autoLowNotAvgCalculated+(float)self.autoLowMissAvgCalculated;
     
     if (totalHighShotsAttempted > 0 && totalLowShotsAttempted > 0) {
-        autoAccuracyPercentage = (((float)self.autoHighHotAvg+(float)self.autoHighNotAvg+(float)self.autoLowHotAvg+(float)self.autoLowNotAvg)/((float)totalHighShotsAttempted+(float)totalLowShotsAttempted))*100;
+        autoAccuracyPercentage = (((float)self.autoHighHotAvgCalculated+(float)self.autoHighNotAvgCalculated+(float)self.autoLowHotAvgCalculated+(float)self.autoLowNotAvgCalculated)/((float)totalHighShotsAttempted+(float)totalLowShotsAttempted))*100;
     }
     else if (totalHighShotsAttempted == 0 && totalLowShotsAttempted > 0){
-        autoAccuracyPercentage = (float)self.autoLowAccuracyPercentage;
+        autoAccuracyPercentage = (float)self.autoLowAccuracyPercentageCalculated;
     }
     else if (totalLowShotsAttempted == 0 && totalHighShotsAttempted > 0){
-        autoAccuracyPercentage = (float)self.autoHighAccuracyPercentage;
+        autoAccuracyPercentage = (float)self.autoHighAccuracyPercentageCalculated;
     }
     
     return autoAccuracyPercentage;
 }
--(float)mobilityBonusPercentage{
+-(float)mobilityBonusPercentageCalculated{
     float mobilityBonusPercentage = 0;
     for (Match *mtch in self.matches) {
         mobilityBonusPercentage += [mtch.mobilityBonus floatValue];
@@ -256,7 +256,7 @@
     
     return mobilityBonusPercentage;
 }
--(float)autonomousAvg{
+-(float)autonomousAvgCalculated{
     float autonomousAvg = 0;
     for (Match *mtch in self.matches) {
         autonomousAvg += [mtch.autoHighHotScore floatValue]*20;
@@ -273,7 +273,7 @@
     return autonomousAvg;
 }
 
--(float)teleopHighMakeAvg{
+-(float)teleopHighMakeAvgCalculated{
     float teleopHighMakeAvg = 0;
     for (Match *mtch in self.matches) {
         teleopHighMakeAvg += [mtch.teleopHighMake floatValue];
@@ -285,7 +285,7 @@
     
     return teleopHighMakeAvg;
 }
--(float)teleopHighMissAvg{
+-(float)teleopHighMissAvgCalculated{
     float teleopHighMissAvg = 0;
     for (Match *mtch in self.matches) {
         teleopHighMissAvg += [mtch.teleopHighMiss floatValue];
@@ -297,23 +297,23 @@
     
     return teleopHighMissAvg;
 }
--(float)teleopHighAttemptsAvg{
+-(float)teleopHighAttemptsAvgCalculated{
     float teleopHighAttemptsAvg = 0;
     
-    teleopHighAttemptsAvg = (float)self.teleopHighMakeAvg+(float)self.teleopHighMissAvg;
+    teleopHighAttemptsAvg = (float)self.teleopHighMakeAvgCalculated+(float)self.teleopHighMissAvgCalculated;
     
     return teleopHighAttemptsAvg;
 }
--(float)teleopHighAccuracyPercentage{
+-(float)teleopHighAccuracyPercentageCalculated{
     float teleopHighAccuracyPercentage = 0;
     
-    if (self.teleopHighMakeAvg + self.teleopHighMissAvg > 0) {
-        teleopHighAccuracyPercentage = ((float)self.teleopHighMakeAvg/((float)self.teleopHighMakeAvg+(float)self.teleopHighMissAvg))*100;
+    if (self.teleopHighMakeAvgCalculated + self.teleopHighMissAvgCalculated > 0) {
+        teleopHighAccuracyPercentage = ((float)self.teleopHighMakeAvgCalculated/((float)self.teleopHighMakeAvgCalculated+(float)self.teleopHighMissAvgCalculated))*100;
     }
     
     return teleopHighAccuracyPercentage;
 }
--(float)teleopLowMakeAvg{
+-(float)teleopLowMakeAvgCalculated{
     float teleopLowMakeAvg = 0;
     for (Match *mtch in self.matches) {
         teleopLowMakeAvg += [mtch.teleopLowMake floatValue];
@@ -325,7 +325,7 @@
     
     return teleopLowMakeAvg;
 }
--(float)teleopLowMissAvg{
+-(float)teleopLowMissAvgCalculated{
     float teleopLowMissAvg = 0;
     for (Match *mtch in self.matches) {
         teleopLowMissAvg += [mtch.teleopLowMiss floatValue];
@@ -337,43 +337,43 @@
     
     return teleopLowMissAvg;
 }
--(float)teleopLowAttemptsAvg{
+-(float)teleopLowAttemptsAvgCalculated{
     float teleopLowAttemptsAvg = 0;
     
-    teleopLowAttemptsAvg = (float)self.teleopLowMakeAvg + (float)self.teleopLowMissAvg;
+    teleopLowAttemptsAvg = (float)self.teleopLowMakeAvgCalculated + (float)self.teleopLowMissAvgCalculated;
     
     return teleopLowAttemptsAvg;
 }
--(float)teleopLowAccuracyPercentage{
+-(float)teleopLowAccuracyPercentageCalculated{
     float teleopLowAccuracyPercentage = 0;
     
-    if (self.teleopLowMakeAvg + self.teleopLowMissAvg > 0) {
-        teleopLowAccuracyPercentage = ((float)self.teleopLowMakeAvg/((float)self.teleopLowMakeAvg+(float)self.teleopLowMissAvg))*100;
+    if (self.teleopLowMakeAvgCalculated + self.teleopLowMissAvgCalculated > 0) {
+        teleopLowAccuracyPercentage = ((float)self.teleopLowMakeAvgCalculated/((float)self.teleopLowMakeAvgCalculated+(float)self.teleopLowMissAvgCalculated))*100;
     }
     
     return teleopLowAccuracyPercentage;
 }
--(float)teleopAccuracyPercentage{
+-(float)teleopAccuracyPercentageCalculated{
     float teleopAccuracyPercentage = 0;
     float teleopHighShotsAttempted = 0;
     float teleopLowShotsAttempted = 0;
     
-    teleopHighShotsAttempted = (float)self.teleopHighMakeAvg+(float)self.teleopHighMissAvg;
-    teleopLowShotsAttempted = (float)self.teleopLowMakeAvg+(float)self.teleopLowMissAvg;
+    teleopHighShotsAttempted = (float)self.teleopHighMakeAvgCalculated+(float)self.teleopHighMissAvgCalculated;
+    teleopLowShotsAttempted = (float)self.teleopLowMakeAvgCalculated+(float)self.teleopLowMissAvgCalculated;
     if (teleopHighShotsAttempted > 0 && teleopLowShotsAttempted > 0) {
-        teleopAccuracyPercentage = (((float)self.teleopHighMakeAvg+(float)self.teleopLowMakeAvg)/((float)teleopHighShotsAttempted+(float)teleopLowShotsAttempted))*100;
+        teleopAccuracyPercentage = (((float)self.teleopHighMakeAvgCalculated+(float)self.teleopLowMakeAvgCalculated)/((float)teleopHighShotsAttempted+(float)teleopLowShotsAttempted))*100;
     }
     else if (teleopHighShotsAttempted == 0 && teleopLowShotsAttempted > 0){
-        teleopAccuracyPercentage = (float)self.teleopLowAccuracyPercentage;
+        teleopAccuracyPercentage = (float)self.teleopLowAccuracyPercentageCalculated;
     }
     else if (teleopLowShotsAttempted == 0 && teleopHighShotsAttempted > 0){
-        teleopAccuracyPercentage = (float)self.teleopHighAccuracyPercentage;
+        teleopAccuracyPercentage = (float)self.teleopHighAccuracyPercentageCalculated;
     }
     
     
     return teleopAccuracyPercentage;
 }
--(float)teleopCatchAvg{
+-(float)teleopCatchAvgCalculated{
     float teleopCatchAvg = 0;
     for (Match *mtch in self.matches) {
         teleopCatchAvg += [mtch.teleopCatch floatValue];
@@ -385,7 +385,7 @@
     
     return teleopCatchAvg;
 }
--(float)teleopOverAvg{
+-(float)teleopOverAvgCalculated{
     float teleopOverAvg = 0;
     for (Match *mtch in self.matches) {
         teleopOverAvg += [mtch.teleopOver floatValue];
@@ -397,7 +397,7 @@
     
     return teleopOverAvg;
 }
--(float)teleopPassedAvg{
+-(float)teleopPassedAvgCalculated{
     float teleopPassedAvg = 0;
     for (Match *mtch in self.matches) {
         teleopPassedAvg += [mtch.teleopPassed floatValue];
@@ -409,7 +409,7 @@
     
     return teleopPassedAvg;
 }
--(float)teleopReceivedAvg{
+-(float)teleopReceivedAvgCalculated{
     float teleopReceivedAvg = 0;
     for (Match *mtch in self.matches) {
         teleopReceivedAvg += [mtch.teleopReceived floatValue];
@@ -421,16 +421,16 @@
     
     return teleopReceivedAvg;
 }
--(float)teleopPassReceiveRatio{
+-(float)teleopPassReceiveRatioCalculated{
     float teleopPassReceiveRatio = 0;
     
     if (self.teleopReceivedAvg > 0) {
-        teleopPassReceiveRatio = (float)self.teleopPassedAvg/(float)self.teleopReceivedAvg;
+        teleopPassReceiveRatio = (float)self.teleopPassedAvgCalculated/(float)self.teleopReceivedAvgCalculated;
     }
     
     return teleopPassReceiveRatio;
 }
--(float)teleopAvg{
+-(float)teleopAvgCalculated{
     float teleopAvg = 0;
     for (Match *mtch in self.matches) {
         teleopAvg += [mtch.teleopHighMake floatValue]*10;
@@ -446,7 +446,7 @@
     return teleopAvg;
 }
 
--(float)smallPenaltyAvg{
+-(float)smallPenaltyAvgCalculated{
     float smallPenaltyAvg = 0;
     for (Match *mtch in self.matches) {
         smallPenaltyAvg += [mtch.penaltySmall floatValue];
@@ -458,7 +458,7 @@
     
     return smallPenaltyAvg;
 }
--(float)largePenaltyAvg{
+-(float)largePenaltyAvgCalculated{
     float largePenaltyAvg = 0;
     for (Match *mtch in self.matches) {
         largePenaltyAvg += [mtch.penaltyLarge floatValue];
@@ -470,15 +470,15 @@
     
     return largePenaltyAvg;
 }
--(float)penaltyTotalAvg{
+-(float)penaltyTotalAvgCalculated{
     float penaltyTotalAvg = 0;
     
-    penaltyTotalAvg = (float)self.smallPenaltyAvg+(float)self.largePenaltyAvg;
+    penaltyTotalAvg = (float)self.smallPenaltyAvgCalculated+(float)self.largePenaltyAvgCalculated;
     
     return penaltyTotalAvg;
 }
 
--(float)offensiveZonePercentage{
+-(float)offensiveZonePercentageCalculated{
     float offensiveZonePercentage = 0;
     for (Match *mtch in self.matches) {
         NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
@@ -500,7 +500,7 @@
     
     return offensiveZonePercentage;
 }
--(float)neutralZonePercentage{
+-(float)neutralZonePercentageCalculated{
     float neutralZonePercentage = 0;
     for (Match *mtch in self.matches) {
         NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
@@ -515,7 +515,7 @@
     
     return neutralZonePercentage;
 }
--(float)defensiveZonePercentage{
+-(float)defensiveZonePercentageCalculated{
     float defensiveZonePercentage = 0;
     for (Match *mtch in self.matches) {
         NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
@@ -536,6 +536,50 @@
     }
     
     return defensiveZonePercentage;
+}
+
+-(void)updateTeamAveragesForTeam:(Team *)team{
+    team.autoHighHotAvg = [NSNumber numberWithFloat:self.autoHighHotAvgCalculated];
+    team.autoHighMissAvg = [NSNumber numberWithFloat:self.autoHighMissAvgCalculated];
+    team.autoHighNotAvg = [NSNumber numberWithFloat:self.autoHighNotAvgCalculated];
+    team.autoHighMakesAvg = [NSNumber numberWithFloat:self.autoHighMakesAvgCalculated];
+    team.autoHighAttemptsAvg = [NSNumber numberWithFloat:self.autoHighAttemptsAvgCalculated];
+    team.autoHighHotPercentage = [NSNumber numberWithFloat:self.autoHighHotPercentageCalculated];
+    team.autoHighAccuracyPercentage = [NSNumber numberWithFloat:self.autoHighAccuracyPercentageCalculated];
+    team.autoLowHotAvg = [NSNumber numberWithFloat:self.autoLowHotAvgCalculated];
+    team.autoLowMissAvg = [NSNumber numberWithFloat:self.autoLowMissAvgCalculated];
+    team.autoLowNotAvg = [NSNumber numberWithFloat:self.autoLowNotAvgCalculated];
+    team.autoLowMakesAvg = [NSNumber numberWithFloat:self.autoLowMakesAvgCalculated];
+    team.autoLowAttemptsAvg = [NSNumber numberWithFloat:self.autoLowAttemptsAvgCalculated];
+    team.autoLowHotPercentage = [NSNumber numberWithFloat:self.autoLowHotPercentageCalculated];
+    team.autoLowAccuracyPercentage = [NSNumber numberWithFloat:self.autoLowAccuracyPercentageCalculated];
+    team.autoAccuracyPercentage = [NSNumber numberWithFloat:self.autoAccuracyPercentageCalculated];
+    team.mobilityBonusPercentage = [NSNumber numberWithFloat:self.mobilityBonusPercentageCalculated];
+    team.autonomousAvg = [NSNumber numberWithFloat:self.autonomousAvgCalculated];
+    
+    team.teleopHighMakeAvg = [NSNumber numberWithFloat:self.teleopHighMakeAvgCalculated];
+    team.teleopHighMissAvg = [NSNumber numberWithFloat:self.teleopHighMissAvgCalculated];
+    team.teleopHighAttemptsAvg = [NSNumber numberWithFloat:self.teleopHighAttemptsAvgCalculated];
+    team.teleopHighAccuracyPercentage = [NSNumber numberWithFloat:self.teleopHighAccuracyPercentageCalculated];
+    team.teleopLowMakeAvg = [NSNumber numberWithFloat:self.teleopLowMakeAvgCalculated];
+    team.teleopLowMissAvg = [NSNumber numberWithFloat:self.teleopLowMissAvgCalculated];
+    team.teleopLowAttemptsAvg = [NSNumber numberWithFloat:self.teleopLowAttemptsAvgCalculated];
+    team.teleopLowAccuracyPercentage = [NSNumber numberWithFloat:self.teleopLowAccuracyPercentageCalculated];
+    team.teleopAccuracyPercentage = [NSNumber numberWithFloat:self.teleopAccuracyPercentageCalculated];
+    team.teleopCatchAvg = [NSNumber numberWithFloat:self.teleopCatchAvgCalculated];
+    team.teleopOverAvg = [NSNumber numberWithFloat:self.teleopOverAvgCalculated];
+    team.teleopPassedAvg = [NSNumber numberWithFloat:self.teleopPassedAvgCalculated];
+    team.teleopReceivedAvg = [NSNumber numberWithFloat:self.teleopReceivedAvgCalculated];
+    team.teleopPassReceiveRatio = [NSNumber numberWithFloat:self.teleopPassReceiveRatioCalculated];
+    team.teleopAvg = [NSNumber numberWithFloat:self.teleopAvgCalculated];
+    
+    team.smallPenaltyAvg = [NSNumber numberWithFloat:self.smallPenaltyAvgCalculated];
+    team.largePenaltyAvg = [NSNumber numberWithFloat:self.largePenaltyAvgCalculated];
+    team.penaltyTotalAvg = [NSNumber numberWithFloat:self.penaltyTotalAvgCalculated];
+    
+    team.offensiveZonePercentage = [NSNumber numberWithFloat:self.offensiveZonePercentageCalculated];
+    team.neutralZonePercentage = [NSNumber numberWithFloat:self.neutralZonePercentageCalculated];
+    team.defensiveZonePercentage = [NSNumber numberWithFloat:self.defensiveZonePercentageCalculated];
 }
 
 

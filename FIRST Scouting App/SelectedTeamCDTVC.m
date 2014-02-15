@@ -25,7 +25,7 @@ CGRect selectedCellRect;
     _managedObjectContext = managedObjectContext;
     
     NSFetchRequest *matchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Match"];
-    matchRequest.predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"teamNum.name = %@", self.teamToDisplay]];
+    matchRequest.predicate = [NSPredicate predicateWithFormat:@"teamNum.name = %@", self.teamToDisplay];
     matchRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"teamNum.regionalIn.name" ascending:YES selector:@selector(localizedStandardCompare:)], [[NSSortDescriptor alloc] initWithKey:@"matchNum" ascending:YES selector:@selector(localizedStandardCompare:)]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc]
