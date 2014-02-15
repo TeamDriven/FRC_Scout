@@ -184,8 +184,6 @@ UILabel *blue3UpdaterLbl;
     FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
     context = FSAdocument.managedObjectContext;
     
-//    NSLog(@"\n Documents URL: %@ \n Path URL: %@ \n ", FSAdocumentsDirectory, FSApathurl);
-    
     if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
         [FSAdocument openWithCompletionHandler:^(BOOL success){
             if (success) NSLog(@"Found the document!");

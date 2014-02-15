@@ -38,7 +38,8 @@ Team *teamSelected;
     
     NSFetchRequest *poolRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
     poolRequest.predicate = [NSPredicate predicateWithFormat:@"regionalIn.name = %@", _regionalToDisplay];
-    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]];
+//    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]];
+    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"smallPenaltyAvg" ascending:YES]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:poolRequest
                                                                         managedObjectContext:self.managedObjectContext

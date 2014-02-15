@@ -7,6 +7,9 @@
 //
 
 #import "Team.h"
+#import "Regional.h"
+#import "MasterTeam.h"
+#import "Match.h"
 
 @interface Team (Category)
 
