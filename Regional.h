@@ -2,7 +2,7 @@
 //  Regional.h
 //  FIRST Scouting App
 //
-//  Created by Bertoncin,Louie on 2/13/14.
+//  Created by Bertoncin,Louie on 2/14/14.
 //  Copyright (c) 2014 teamDriven. All rights reserved.
 //
 
@@ -31,7 +31,6 @@
 - (void)removeFirstPickListObject:(Team *)value;
 - (void)addFirstPickList:(NSOrderedSet *)values;
 - (void)removeFirstPickList:(NSOrderedSet *)values;
-
 - (void)insertObject:(Team *)value inSecondPickListAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromSecondPickListAtIndex:(NSUInteger)idx;
 - (void)insertSecondPickList:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
@@ -42,7 +41,6 @@
 - (void)removeSecondPickListObject:(Team *)value;
 - (void)addSecondPickList:(NSOrderedSet *)values;
 - (void)removeSecondPickList:(NSOrderedSet *)values;
-
 - (void)addTeamsObject:(Team *)value;
 - (void)removeTeamsObject:(Team *)value;
 - (void)addTeams:(NSSet *)values;

@@ -11,6 +11,7 @@
 #import "AllianceSelectionPoolCell.h"
 #import "AlliancePickListCell.h"
 #import "Team.h"
+#import "Team+Category.h"
 #import "Regional.h"
 #import "Match.h"
 #import "PitTeam.h"
@@ -37,7 +38,7 @@ Team *teamSelected;
     
     NSFetchRequest *poolRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
     poolRequest.predicate = [NSPredicate predicateWithFormat:@"regionalIn.name = %@", _regionalToDisplay];
-    poolRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]];
+    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"smallPenaltyAvg" ascending:YES]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:poolRequest
                                                                         managedObjectContext:self.managedObjectContext
@@ -160,10 +161,6 @@ Team *teamSelected;
         [listSelectorView addSubview:firstListBtn];
         [listSelectorView addSubview:secondListBtn];
     }];
-    
-//    if (![self.secondPickListController.secondPickList containsObject:teamSelected]) {
-//        [self.secondPickListController insertNewTeamIntoSecondPickList:teamSelected];
-//    }
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
