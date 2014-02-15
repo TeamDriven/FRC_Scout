@@ -208,13 +208,13 @@
     totalLowShotsAttempted = (float)self.autoLowHotAvg+(float)self.autoLowNotAvg+(float)self.autoLowMissAvg;
     
     if (totalHighShotsAttempted > 0 && totalLowShotsAttempted > 0) {
-        autoAccuracyPercentage = ((float)totalHighShotsAttempted + (float)totalLowShotsAttempted)/2;
+        autoAccuracyPercentage = (((float)self.autoHighHotAvg+(float)self.autoHighNotAvg+(float)self.autoLowHotAvg+(float)self.autoLowNotAvg)/((float)totalHighShotsAttempted+(float)totalLowShotsAttempted))*100;
     }
     else if (totalHighShotsAttempted == 0 && totalLowShotsAttempted > 0){
-        autoAccuracyPercentage = (float)totalLowShotsAttempted;
+        autoAccuracyPercentage = (float)self.autoLowAccuracyPercentage;
     }
     else if (totalLowShotsAttempted == 0 && totalHighShotsAttempted > 0){
-        autoAccuracyPercentage = (float)totalHighShotsAttempted;
+        autoAccuracyPercentage = (float)self.autoHighAccuracyPercentage;
     }
     
     return autoAccuracyPercentage;
@@ -313,6 +313,98 @@
     }
     
     return teleopLowAccuracyPercentage;
+}
+-(float)teleopAccuracyPercentage{
+    float teleopAccuracyPercentage = 0;
+    float teleopHighShotsAttempted = 0;
+    float teleopLowShotsAttempted = 0;
+    
+    teleopHighShotsAttempted = (float)self.teleopHighMakeAvg+(float)self.teleopHighMissAvg;
+    teleopLowShotsAttempted = (float)self.teleopLowMakeAvg+(float)self.teleopLowMissAvg;
+    if (teleopHighShotsAttempted > 0 && teleopLowShotsAttempted > 0) {
+        teleopAccuracyPercentage = (((float)self.teleopHighMakeAvg+(float)self.teleopLowMakeAvg)/((float)teleopHighShotsAttempted+(float)teleopLowShotsAttempted))*100;
+    }
+    else if (teleopHighShotsAttempted == 0 && teleopLowShotsAttempted > 0){
+        teleopAccuracyPercentage = (float)self.teleopLowAccuracyPercentage;
+    }
+    else if (teleopLowShotsAttempted == 0 && teleopHighShotsAttempted > 0){
+        teleopAccuracyPercentage = (float)self.teleopHighAccuracyPercentage;
+    }
+    
+    
+    return teleopAccuracyPercentage;
+}
+-(float)teleopCatchAvg{
+    float teleopCatchAvg = 0;
+    for (Match *mtch in self.matches) {
+        teleopCatchAvg += [mtch.teleopCatch floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        teleopCatchAvg = (float)teleopCatchAvg/(float)[self.matches count];
+    }
+    
+    return teleopCatchAvg;
+}
+-(float)teleopOverAvg{
+    float teleopOverAvg = 0;
+    for (Match *mtch in self.matches) {
+        teleopOverAvg += [mtch.teleopOver floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        teleopOverAvg = (float)teleopOverAvg/(float)[self.matches count];
+    }
+    
+    return teleopOverAvg;
+}
+-(float)teleopPassedAvg{
+    float teleopPassedAvg = 0;
+    for (Match *mtch in self.matches) {
+        teleopPassedAvg += [mtch.teleopPassed floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        teleopPassedAvg = (float)teleopPassedAvg/(float)[self.matches count];
+    }
+    
+    return teleopPassedAvg;
+}
+-(float)teleopReceivedAvg{
+    float teleopReceivedAvg = 0;
+    for (Match *mtch in self.matches) {
+        teleopReceivedAvg += [mtch.teleopReceived floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        teleopReceivedAvg = (float)teleopReceivedAvg/(float)[self.matches count];
+    }
+    
+    return teleopReceivedAvg;
+}
+-(float)teleopPassReceiveRatio{
+    float teleopPassReceiveRatio = 0;
+    
+    if (self.teleopReceivedAvg > 0) {
+        teleopPassReceiveRatio = (float)self.teleopPassedAvg/(float)self.teleopReceivedAvg;
+    }
+    
+    return teleopPassReceiveRatio;
+}
+-(float)teleopAvg{
+    float teleopAvg = 0;
+    for (Match *mtch in self.matches) {
+        teleopAvg += [mtch.teleopHighMake floatValue]*10;
+        teleopAvg += [mtch.teleopLowMake floatValue];
+        teleopAvg += [mtch.teleopCatch floatValue]*10;
+        teleopAvg += [mtch.teleopOver floatValue]*10;
+    }
+    
+    if ([self.matches count] > 0) {
+        teleopAvg = (float)teleopAvg/(float)[self.matches count];
+    }
+    
+    return teleopAvg;
 }
 
 @end
