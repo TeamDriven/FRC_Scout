@@ -15,11 +15,13 @@
 -(float)autoHighHotAvg;
 -(float)autoHighMissAvg;
 -(float)autoHighNotAvg;
+-(float)autoHighAvg;
 -(float)autoHighHotPercentage;
 -(float)autoHighAccuracyPercentage;
 -(float)autoLowHotAvg;
 -(float)autoLowMissAvg;
 -(float)autoLowNotAvg;
+-(float)autoLowAvg;
 -(float)autoLowHotPercentage;
 -(float)autoLowAccuracyPercentage;
 -(float)autoAccuracyPercentage;
@@ -39,5 +41,12 @@
 -(float)teleopReceivedAvg;
 -(float)teleopPassReceiveRatio;
 -(float)teleopAvg;
+
+-(float)smallPenaltyAvg;
+-(float)largePenaltyAvg;
+
+-(float)offensiveZonePercentage;
+-(float)neutralZonePercentage;
+-(float)defensiveZonePercentage;
 
 @end

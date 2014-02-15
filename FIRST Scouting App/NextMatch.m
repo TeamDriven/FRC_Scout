@@ -11,7 +11,6 @@
 #import "WithinRegional.h"
 #import "Globals.h"
 #import "Team.h"
-#import "Team+Category.h"
 #import "PitTeam.h"
 #import "Match.h"
 
@@ -225,21 +224,21 @@ BOOL blue3IsImageLarge;
             Team *team = [red1TeamArray firstObject];
             
             
-//            float autoHighMakes = 0;
-//            float autoHighAttempts = 0;
-//            float autoHighHot = 0;
-//            float autoLowMakes = 0;
-//            float autoLowAttempts = 0;
-//            float autoLowHot = 0;
-//            float mobilityBonus = 0;
-//            float teleopHighMakes = 0;
-//            float teleopHighAttempts = 0;
-//            float teleopLowMakes = 0;
-//            float teleopLowAttempts = 0;
-//            float trussShot = 0;
-//            float trussCatch = 0;
-//            float passes = 0;
-//            float receives = 0;
+            float autoHighMakes = 0;
+            float autoHighAttempts = 0;
+            float autoHighHot = 0;
+            float autoLowMakes = 0;
+            float autoLowAttempts = 0;
+            float autoLowHot = 0;
+            float mobilityBonus = 0;
+            float teleopHighMakes = 0;
+            float teleopHighAttempts = 0;
+            float teleopLowMakes = 0;
+            float teleopLowAttempts = 0;
+            float trussShot = 0;
+            float trussCatch = 0;
+            float passes = 0;
+            float receives = 0;
             float smallPenalties = 0;
             float largePenalties = 0;
             float offensiveCount = 0;
@@ -248,21 +247,21 @@ BOOL blue3IsImageLarge;
             float matchesCount = 0;
             
             for (Match *mtch in team.matches) {
-//                autoHighMakes += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue];
-//                autoHighAttempts += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue] + [mtch.autoHighMissScore floatValue];
-//                autoHighHot += [mtch.autoHighHotScore floatValue];
-//                autoLowMakes += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue];
-//                autoLowAttempts += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue] + [mtch.autoLowMissScore floatValue];
-//                autoLowHot += [mtch.autoLowHotScore floatValue];
-//                mobilityBonus += [mtch.mobilityBonus floatValue];
-//                teleopHighMakes += [mtch.teleopHighMake floatValue];
-//                teleopHighAttempts += [mtch.teleopHighMake floatValue] + [mtch.teleopHighMiss floatValue];
-//                teleopLowMakes += [mtch.teleopLowMake floatValue];
-//                teleopLowAttempts += [mtch.teleopLowMake floatValue] + [mtch.teleopLowMiss floatValue];
-//                trussShot += [mtch.teleopOver floatValue];
-//                trussCatch += [mtch.teleopCatch floatValue];
-//                passes += [mtch.teleopPassed floatValue];
-//                receives += [mtch.teleopReceived floatValue];
+                autoHighMakes += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue];
+                autoHighAttempts += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue] + [mtch.autoHighMissScore floatValue];
+                autoHighHot += [mtch.autoHighHotScore floatValue];
+                autoLowMakes += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue];
+                autoLowAttempts += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue] + [mtch.autoLowMissScore floatValue];
+                autoLowHot += [mtch.autoLowHotScore floatValue];
+                mobilityBonus += [mtch.mobilityBonus floatValue];
+                teleopHighMakes += [mtch.teleopHighMake floatValue];
+                teleopHighAttempts += [mtch.teleopHighMake floatValue] + [mtch.teleopHighMiss floatValue];
+                teleopLowMakes += [mtch.teleopLowMake floatValue];
+                teleopLowAttempts += [mtch.teleopLowMake floatValue] + [mtch.teleopLowMiss floatValue];
+                trussShot += [mtch.teleopOver floatValue];
+                trussCatch += [mtch.teleopCatch floatValue];
+                passes += [mtch.teleopPassed floatValue];
+                receives += [mtch.teleopReceived floatValue];
                 smallPenalties += [mtch.penaltySmall floatValue];
                 largePenalties += [mtch.penaltyLarge floatValue];
                 
@@ -289,20 +288,19 @@ BOOL blue3IsImageLarge;
                 matchesCount ++;
             }
             
-//            _red1AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoHighMakes/(float)matchesCount, (float)autoHighAttempts/(float)matchesCount];
-//            if (autoHighMakes == 0) {_red1AutoHighHot.text = @"0%";}
-//            else{_red1AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoHighHot/(float)autoHighMakes*100];}
-//            _red1AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoLowMakes/(float)matchesCount, (float)autoLowAttempts/(float)matchesCount];
-//            if (autoLowMakes == 0) {_red1AutoLowHot.text = @"0%";}
-//            else{_red1AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoLowHot/(float)autoLowMakes*100];}
-//            _red1MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)mobilityBonus/(float)matchesCount*100];
-//            _red1TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopHighMakes/(float)matchesCount, (float)teleopHighAttempts/(float)matchesCount];
-//            _red1TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopLowMakes/(float)matchesCount, (float)teleopLowAttempts/(float)matchesCount];
-//            _red1TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussShot/(float)matchesCount];
-//            _red1TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussCatch/(float)matchesCount];
-//            _red1Passes.text = [[NSString alloc] initWithFormat:@"%.1f", (float)passes/(float)matchesCount];
-//            _red1Receives.text = [[NSString alloc] initWithFormat:@"%.1f", (float)receives/(float)matchesCount];
-            _red1AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoHigh]
+            _red1AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoHighMakes/(float)matchesCount, (float)autoHighAttempts/(float)matchesCount];
+            if (autoHighMakes == 0) {_red1AutoHighHot.text = @"0%";}
+            else{_red1AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoHighHot/(float)autoHighMakes*100];}
+            _red1AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoLowMakes/(float)matchesCount, (float)autoLowAttempts/(float)matchesCount];
+            if (autoLowMakes == 0) {_red1AutoLowHot.text = @"0%";}
+            else{_red1AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoLowHot/(float)autoLowMakes*100];}
+            _red1MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)mobilityBonus/(float)matchesCount*100];
+            _red1TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopHighMakes/(float)matchesCount, (float)teleopHighAttempts/(float)matchesCount];
+            _red1TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopLowMakes/(float)matchesCount, (float)teleopLowAttempts/(float)matchesCount];
+            _red1TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussShot/(float)matchesCount];
+            _red1TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussCatch/(float)matchesCount];
+            _red1Passes.text = [[NSString alloc] initWithFormat:@"%.1f", (float)passes/(float)matchesCount];
+            _red1Receives.text = [[NSString alloc] initWithFormat:@"%.1f", (float)receives/(float)matchesCount];
             _red1SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)smallPenalties/(float)matchesCount];
             _red1LargePenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)largePenalties/(float)matchesCount];
             _red1Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)offensiveCount/(float)matchesCount*100];

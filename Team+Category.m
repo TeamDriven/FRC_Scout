@@ -127,6 +127,13 @@
     
     return autoHighNotAvg;
 }
+-(float)autoHighAvg{
+    float autoHighAvg = 0;
+    
+    autoHighAvg = (float)self.autoHighHotAvg + (float)self.autoHighNotAvg;
+    
+    return autoHighAvg;
+}
 -(float)autoHighHotPercentage{
     float autoHighHotPercentage = 0;
     
@@ -181,6 +188,13 @@
     
     return autoLowNotAvg;
 }
+-(float)autoLowAvg{
+    float autoLowAvg = 0;
+    
+    autoLowAvg = (float)self.autoLowHotAvg + (float)self.autoLowNotAvg;
+    
+    return autoLowAvg;
+}
 -(float)autoLowHotPercentage{
     float autoLowHotPercentage = 0;
     
@@ -226,7 +240,7 @@
     }
     
     if ([self.matches count] > 0) {
-        mobilityBonusPercentage = (float)mobilityBonusPercentage/(float)[self.matches count];
+        mobilityBonusPercentage = ((float)mobilityBonusPercentage/(float)[self.matches count])*100;
     }
     
     return mobilityBonusPercentage;
@@ -407,9 +421,113 @@
     return teleopAvg;
 }
 
+-(float)smallPenaltyAvg{
+    float smallPenaltyAvg = 0;
+    for (Match *mtch in self.matches) {
+        smallPenaltyAvg += [mtch.penaltySmall floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        smallPenaltyAvg = (float)smallPenaltyAvg/(float)[self.matches count];
+    }
+    
+    return smallPenaltyAvg;
+}
+-(float)largePenaltyAvg{
+    float largePenaltyAvg = 0;
+    for (Match *mtch in self.matches) {
+        largePenaltyAvg += [mtch.penaltyLarge floatValue];
+    }
+    
+    if ([self.matches count] > 0) {
+        largePenaltyAvg = (float)largePenaltyAvg/(float)[self.matches count];
+    }
+    
+    return largePenaltyAvg;
+}
+
+-(float)offensiveZonePercentage{
+    float offensiveZonePercentage = 0;
+    for (Match *mtch in self.matches) {
+        NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
+        if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
+            if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
+                offensiveZonePercentage ++;
+            }
+        }
+        else{
+            if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
+                offensiveZonePercentage ++;
+            }
+        }
+    }
+    
+    if ([self.matches count] > 0) {
+        offensiveZonePercentage = ((float)offensiveZonePercentage/(float)[self.matches count])*100;
+    }
+    
+    return offensiveZonePercentage;
+}
+-(float)neutralZonePercentage{
+    float neutralZonePercentage = 0;
+    for (Match *mtch in self.matches) {
+        NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
+        if ([zoneString rangeOfString:@"White"].location != NSNotFound) {
+            neutralZonePercentage ++;
+        }
+    }
+    
+    if ([self.matches count] > 0) {
+        neutralZonePercentage = ((float)neutralZonePercentage/(float)[self.matches count])*100;
+    }
+    
+    return neutralZonePercentage;
+}
+-(float)defensiveZonePercentage{
+    float defensiveZonePercentage = 0;
+    for (Match *mtch in self.matches) {
+        NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
+        if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
+            if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
+                defensiveZonePercentage ++;
+            }
+        }
+        else{
+            if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
+                defensiveZonePercentage ++;
+            }
+        }
+    }
+    
+    if ([self.matches count] > 0) {
+        defensiveZonePercentage = ((float)defensiveZonePercentage/(float)[self.matches count])*100;
+    }
+    
+    return defensiveZonePercentage;
+}
+
+
 @end
 
-
+//NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
+//if ([zoneString rangeOfString:@"White"].location != NSNotFound) {neutralCount ++;}
+//
+//if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
+//    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
+//        defensiveCount++;
+//    }
+//    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
+//        offensiveCount++;
+//    }
+//}
+//else{
+//    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
+//        defensiveCount++;
+//    }
+//    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
+//        offensiveCount++;
+//    }
+//}
 
 
 
