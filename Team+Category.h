@@ -15,13 +15,15 @@
 -(float)autoHighHotAvg;
 -(float)autoHighMissAvg;
 -(float)autoHighNotAvg;
--(float)autoHighAvg;
+-(float)autoHighMakesAvg;
+-(float)autoHighAttemptsAvg;
 -(float)autoHighHotPercentage;
 -(float)autoHighAccuracyPercentage;
 -(float)autoLowHotAvg;
 -(float)autoLowMissAvg;
 -(float)autoLowNotAvg;
--(float)autoLowAvg;
+-(float)autoLowMakesAvg;
+-(float)autoLowAttemptsAvg;
 -(float)autoLowHotPercentage;
 -(float)autoLowAccuracyPercentage;
 -(float)autoAccuracyPercentage;
@@ -30,9 +32,11 @@
 
 -(float)teleopHighMakeAvg;
 -(float)teleopHighMissAvg;
+-(float)teleopHighAttemptsAvg;
 -(float)teleopHighAccuracyPercentage;
 -(float)teleopLowMakeAvg;
 -(float)teleopLowMissAvg;
+-(float)teleopLowAttemptsAvg;
 -(float)teleopLowAccuracyPercentage;
 -(float)teleopAccuracyPercentage;
 -(float)teleopCatchAvg;
@@ -44,6 +48,7 @@
 
 -(float)smallPenaltyAvg;
 -(float)largePenaltyAvg;
+-(float)penaltyTotalAvg;
 
 -(float)offensiveZonePercentage;
 -(float)neutralZonePercentage;

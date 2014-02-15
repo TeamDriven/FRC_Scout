@@ -127,12 +127,19 @@
     
     return autoHighNotAvg;
 }
--(float)autoHighAvg{
-    float autoHighAvg = 0;
+-(float)autoHighMakesAvg{
+    float autoHighMakesAvg = 0;
     
-    autoHighAvg = (float)self.autoHighHotAvg + (float)self.autoHighNotAvg;
+    autoHighMakesAvg = (float)self.autoHighHotAvg + (float)self.autoHighNotAvg;
     
-    return autoHighAvg;
+    return autoHighMakesAvg;
+}
+-(float)autoHighAttemptsAvg{
+    float autoHighAttemptsAvg = 0;
+    
+    autoHighAttemptsAvg = (float)self.autoHighHotAvg+(float)self.autoHighNotAvg+(float)self.autoHighMissAvg;
+    
+    return autoHighAttemptsAvg;
 }
 -(float)autoHighHotPercentage{
     float autoHighHotPercentage = 0;
@@ -188,12 +195,19 @@
     
     return autoLowNotAvg;
 }
--(float)autoLowAvg{
-    float autoLowAvg = 0;
+-(float)autoLowMakesAvg{
+    float autoLowMakesAvg = 0;
     
-    autoLowAvg = (float)self.autoLowHotAvg + (float)self.autoLowNotAvg;
+    autoLowMakesAvg = (float)self.autoLowHotAvg + (float)self.autoLowNotAvg;
     
-    return autoLowAvg;
+    return autoLowMakesAvg;
+}
+-(float)autoLowAttemptsAvg{
+    float autoLowAttemptsAvg = 0;
+    
+    autoLowAttemptsAvg = (float)self.autoLowHotAvg + (float)self.autoLowNotAvg + (float)self.autoLowMissAvg;
+    
+    return autoLowAttemptsAvg;
 }
 -(float)autoLowHotPercentage{
     float autoLowHotPercentage = 0;
@@ -286,6 +300,13 @@
     
     return teleopHighMissAvg;
 }
+-(float)teleopHighAttemptsAvg{
+    float teleopHighAttemptsAvg = 0;
+    
+    teleopHighAttemptsAvg = (float)self.teleopHighMakeAvg+(float)self.teleopHighMissAvg;
+    
+    return teleopHighAttemptsAvg;
+}
 -(float)teleopHighAccuracyPercentage{
     float teleopHighAccuracyPercentage = 0;
     
@@ -318,6 +339,13 @@
     }
     
     return teleopLowMissAvg;
+}
+-(float)teleopLowAttemptsAvg{
+    float teleopLowAttemptsAvg = 0;
+    
+    teleopLowAttemptsAvg = (float)self.teleopLowMakeAvg + (float)self.teleopLowMissAvg;
+    
+    return teleopLowAttemptsAvg;
 }
 -(float)teleopLowAccuracyPercentage{
     float teleopLowAccuracyPercentage = 0;
@@ -445,6 +473,13 @@
     
     return largePenaltyAvg;
 }
+-(float)penaltyTotalAvg{
+    float penaltyTotalAvg = 0;
+    
+    penaltyTotalAvg = (float)self.smallPenaltyAvg+(float)self.largePenaltyAvg;
+    
+    return penaltyTotalAvg;
+}
 
 -(float)offensiveZonePercentage{
     float offensiveZonePercentage = 0;
@@ -508,26 +543,6 @@
 
 
 @end
-
-//NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
-//if ([zoneString rangeOfString:@"White"].location != NSNotFound) {neutralCount ++;}
-//
-//if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
-//    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-//        defensiveCount++;
-//    }
-//    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-//        offensiveCount++;
-//    }
-//}
-//else{
-//    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-//        defensiveCount++;
-//    }
-//    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-//        offensiveCount++;
-//    }
-//}
 
 
 

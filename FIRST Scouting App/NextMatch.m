@@ -11,6 +11,7 @@
 #import "WithinRegional.h"
 #import "Globals.h"
 #import "Team.h"
+#import "Team+Category.h"
 #import "PitTeam.h"
 #import "Match.h"
 
@@ -223,89 +224,23 @@ BOOL blue3IsImageLarge;
         else{
             Team *team = [red1TeamArray firstObject];
             
+            _red1AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoHighMakesAvg, team.autoHighAttemptsAvg];
+            _red1AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoHighHotPercentage];
+            _red1AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoLowMakesAvg, team.autoLowAttemptsAvg];
+            _red1AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoLowHotPercentage];
+            _red1MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.mobilityBonusPercentage];
+            _red1TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopHighMakeAvg, team.teleopHighAttemptsAvg];
+            _red1TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopLowMakeAvg, team.teleopLowAttemptsAvg];
+            _red1TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopOverAvg];
+            _red1TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopCatchAvg];
+            _red1Passes.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopPassedAvg];
+            _red1Receives.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopReceivedAvg];
+            _red1SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.smallPenaltyAvg];
+            _red1LargePenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.largePenaltyAvg];
+            _red1Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.offensiveZonePercentage];
+            _red1Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.neutralZonePercentage];
+            _red1Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.defensiveZonePercentage];
             
-            float autoHighMakes = 0;
-            float autoHighAttempts = 0;
-            float autoHighHot = 0;
-            float autoLowMakes = 0;
-            float autoLowAttempts = 0;
-            float autoLowHot = 0;
-            float mobilityBonus = 0;
-            float teleopHighMakes = 0;
-            float teleopHighAttempts = 0;
-            float teleopLowMakes = 0;
-            float teleopLowAttempts = 0;
-            float trussShot = 0;
-            float trussCatch = 0;
-            float passes = 0;
-            float receives = 0;
-            float smallPenalties = 0;
-            float largePenalties = 0;
-            float offensiveCount = 0;
-            float neutralCount = 0;
-            float defensiveCount = 0;
-            float matchesCount = 0;
-            
-            for (Match *mtch in team.matches) {
-                autoHighMakes += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue];
-                autoHighAttempts += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue] + [mtch.autoHighMissScore floatValue];
-                autoHighHot += [mtch.autoHighHotScore floatValue];
-                autoLowMakes += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue];
-                autoLowAttempts += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue] + [mtch.autoLowMissScore floatValue];
-                autoLowHot += [mtch.autoLowHotScore floatValue];
-                mobilityBonus += [mtch.mobilityBonus floatValue];
-                teleopHighMakes += [mtch.teleopHighMake floatValue];
-                teleopHighAttempts += [mtch.teleopHighMake floatValue] + [mtch.teleopHighMiss floatValue];
-                teleopLowMakes += [mtch.teleopLowMake floatValue];
-                teleopLowAttempts += [mtch.teleopLowMake floatValue] + [mtch.teleopLowMiss floatValue];
-                trussShot += [mtch.teleopOver floatValue];
-                trussCatch += [mtch.teleopCatch floatValue];
-                passes += [mtch.teleopPassed floatValue];
-                receives += [mtch.teleopReceived floatValue];
-                smallPenalties += [mtch.penaltySmall floatValue];
-                largePenalties += [mtch.penaltyLarge floatValue];
-                
-                NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
-                if ([zoneString rangeOfString:@"White"].location != NSNotFound) {neutralCount ++;}
-                
-                if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                else{
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                
-                matchesCount ++;
-            }
-            
-            _red1AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoHighMakes/(float)matchesCount, (float)autoHighAttempts/(float)matchesCount];
-            if (autoHighMakes == 0) {_red1AutoHighHot.text = @"0%";}
-            else{_red1AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoHighHot/(float)autoHighMakes*100];}
-            _red1AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoLowMakes/(float)matchesCount, (float)autoLowAttempts/(float)matchesCount];
-            if (autoLowMakes == 0) {_red1AutoLowHot.text = @"0%";}
-            else{_red1AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoLowHot/(float)autoLowMakes*100];}
-            _red1MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)mobilityBonus/(float)matchesCount*100];
-            _red1TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopHighMakes/(float)matchesCount, (float)teleopHighAttempts/(float)matchesCount];
-            _red1TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopLowMakes/(float)matchesCount, (float)teleopLowAttempts/(float)matchesCount];
-            _red1TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussShot/(float)matchesCount];
-            _red1TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussCatch/(float)matchesCount];
-            _red1Passes.text = [[NSString alloc] initWithFormat:@"%.1f", (float)passes/(float)matchesCount];
-            _red1Receives.text = [[NSString alloc] initWithFormat:@"%.1f", (float)receives/(float)matchesCount];
-            _red1SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)smallPenalties/(float)matchesCount];
-            _red1LargePenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)largePenalties/(float)matchesCount];
-            _red1Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)offensiveCount/(float)matchesCount*100];
-            _red1Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)neutralCount/(float)matchesCount*100];
-            _red1Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)defensiveCount/(float)matchesCount*100];
             
             NSFetchRequest *red1PitRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
             red1PitRequest.predicate = [NSPredicate predicateWithFormat:@"teamNumber = %@", team.name];
@@ -641,89 +576,22 @@ BOOL blue3IsImageLarge;
         else{
             Team *team = [red2TeamArray firstObject];
             
-            
-            float autoHighMakes = 0;
-            float autoHighAttempts = 0;
-            float autoHighHot = 0;
-            float autoLowMakes = 0;
-            float autoLowAttempts = 0;
-            float autoLowHot = 0;
-            float mobilityBonus = 0;
-            float teleopHighMakes = 0;
-            float teleopHighAttempts = 0;
-            float teleopLowMakes = 0;
-            float teleopLowAttempts = 0;
-            float trussShot = 0;
-            float trussCatch = 0;
-            float passes = 0;
-            float receives = 0;
-            float smallPenalties = 0;
-            float largePenalties = 0;
-            float offensiveCount = 0;
-            float neutralCount = 0;
-            float defensiveCount = 0;
-            float matchesCount = 0;
-            
-            for (Match *mtch in team.matches) {
-                autoHighMakes += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue];
-                autoHighAttempts += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue] + [mtch.autoHighMissScore floatValue];
-                autoHighHot += [mtch.autoHighHotScore floatValue];
-                autoLowMakes += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue];
-                autoLowAttempts += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue] + [mtch.autoLowMissScore floatValue];
-                autoLowHot += [mtch.autoLowHotScore floatValue];
-                mobilityBonus += [mtch.mobilityBonus floatValue];
-                teleopHighMakes += [mtch.teleopHighMake floatValue];
-                teleopHighAttempts += [mtch.teleopHighMake floatValue] + [mtch.teleopHighMiss floatValue];
-                teleopLowMakes += [mtch.teleopLowMake floatValue];
-                teleopLowAttempts += [mtch.teleopLowMake floatValue] + [mtch.teleopLowMiss floatValue];
-                trussShot += [mtch.teleopOver floatValue];
-                trussCatch += [mtch.teleopCatch floatValue];
-                passes += [mtch.teleopPassed floatValue];
-                receives += [mtch.teleopReceived floatValue];
-                smallPenalties += [mtch.penaltySmall floatValue];
-                largePenalties += [mtch.penaltyLarge floatValue];
-                
-                NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
-                if ([zoneString rangeOfString:@"White"].location != NSNotFound) {neutralCount ++;}
-                
-                if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                else{
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                
-                matchesCount ++;
-            }
-            
-            _red2AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoHighMakes/(float)matchesCount, (float)autoHighAttempts/(float)matchesCount];
-            if (autoHighMakes == 0) {_red2AutoHighHot.text = @"0%";}
-            else{_red2AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoHighHot/(float)autoHighMakes*100];}
-            _red2AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoLowMakes/(float)matchesCount, (float)autoLowAttempts/(float)matchesCount];
-            if (autoLowMakes == 0) {_red2AutoLowHot.text = @"0%";}
-            else{_red2AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoLowHot/(float)autoLowMakes*100];}
-            _red2MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)mobilityBonus/(float)matchesCount*100];
-            _red2TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopHighMakes/(float)matchesCount, (float)teleopHighAttempts/(float)matchesCount];
-            _red2TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopLowMakes/(float)matchesCount, (float)teleopLowAttempts/(float)matchesCount];
-            _red2TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussShot/(float)matchesCount];
-            _red2TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussCatch/(float)matchesCount];
-            _red2Passes.text = [[NSString alloc] initWithFormat:@"%.1f", (float)passes/(float)matchesCount];
-            _red2Receives.text = [[NSString alloc] initWithFormat:@"%.1f", (float)receives/(float)matchesCount];
-            _red2SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)smallPenalties/(float)matchesCount];
-            _red2LargePenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)largePenalties/(float)matchesCount];
-            _red2Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)offensiveCount/(float)matchesCount*100];
-            _red2Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)neutralCount/(float)matchesCount*100];
-            _red2Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)defensiveCount/(float)matchesCount*100];
+            _red2AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoHighMakesAvg, team.autoHighAttemptsAvg];
+            _red2AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoHighHotPercentage];
+            _red2AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoLowMakesAvg, team.autoLowAttemptsAvg];
+            _red2AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoLowHotPercentage];
+            _red2MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.mobilityBonusPercentage];
+            _red2TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopHighMakeAvg, team.teleopHighAttemptsAvg];
+            _red2TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopLowMakeAvg, team.teleopLowAttemptsAvg];
+            _red2TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopOverAvg];
+            _red2TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopCatchAvg];
+            _red2Passes.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopPassedAvg];
+            _red2Receives.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopReceivedAvg];
+            _red2SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.smallPenaltyAvg];
+            _red2LargePenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.largePenaltyAvg];
+            _red2Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.offensiveZonePercentage];
+            _red2Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.neutralZonePercentage];
+            _red2Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.defensiveZonePercentage];
             
             NSFetchRequest *red2PitRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
             red2PitRequest.predicate = [NSPredicate predicateWithFormat:@"teamNumber = %@", team.name];
@@ -1058,89 +926,22 @@ BOOL blue3IsImageLarge;
         else{
             Team *team = [red3TeamArray firstObject];
             
-            
-            float autoHighMakes = 0;
-            float autoHighAttempts = 0;
-            float autoHighHot = 0;
-            float autoLowMakes = 0;
-            float autoLowAttempts = 0;
-            float autoLowHot = 0;
-            float mobilityBonus = 0;
-            float teleopHighMakes = 0;
-            float teleopHighAttempts = 0;
-            float teleopLowMakes = 0;
-            float teleopLowAttempts = 0;
-            float trussShot = 0;
-            float trussCatch = 0;
-            float passes = 0;
-            float receives = 0;
-            float smallPenalties = 0;
-            float largePenalties = 0;
-            float offensiveCount = 0;
-            float neutralCount = 0;
-            float defensiveCount = 0;
-            float matchesCount = 0;
-            
-            for (Match *mtch in team.matches) {
-                autoHighMakes += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue];
-                autoHighAttempts += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue] + [mtch.autoHighMissScore floatValue];
-                autoHighHot += [mtch.autoHighHotScore floatValue];
-                autoLowMakes += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue];
-                autoLowAttempts += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue] + [mtch.autoLowMissScore floatValue];
-                autoLowHot += [mtch.autoLowHotScore floatValue];
-                mobilityBonus += [mtch.mobilityBonus floatValue];
-                teleopHighMakes += [mtch.teleopHighMake floatValue];
-                teleopHighAttempts += [mtch.teleopHighMake floatValue] + [mtch.teleopHighMiss floatValue];
-                teleopLowMakes += [mtch.teleopLowMake floatValue];
-                teleopLowAttempts += [mtch.teleopLowMake floatValue] + [mtch.teleopLowMiss floatValue];
-                trussShot += [mtch.teleopOver floatValue];
-                trussCatch += [mtch.teleopCatch floatValue];
-                passes += [mtch.teleopPassed floatValue];
-                receives += [mtch.teleopReceived floatValue];
-                smallPenalties += [mtch.penaltySmall floatValue];
-                largePenalties += [mtch.penaltyLarge floatValue];
-                
-                NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
-                if ([zoneString rangeOfString:@"White"].location != NSNotFound) {neutralCount ++;}
-                
-                if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                else{
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                
-                matchesCount ++;
-            }
-            
-            _red3AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoHighMakes/(float)matchesCount, (float)autoHighAttempts/(float)matchesCount];
-            if (autoHighMakes == 0) {_red3AutoHighHot.text = @"0%";}
-            else{_red3AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoHighHot/(float)autoHighMakes*100];}
-            _red3AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoLowMakes/(float)matchesCount, (float)autoLowAttempts/(float)matchesCount];
-            if (autoLowMakes == 0) {_red3AutoLowHot.text = @"0%";}
-            else{_red3AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoLowHot/(float)autoLowMakes*100];}
-            _red3MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)mobilityBonus/(float)matchesCount*100];
-            _red3TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopHighMakes/(float)matchesCount, (float)teleopHighAttempts/(float)matchesCount];
-            _red3TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopLowMakes/(float)matchesCount, (float)teleopLowAttempts/(float)matchesCount];
-            _red3TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussShot/(float)matchesCount];
-            _red3TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussCatch/(float)matchesCount];
-            _red3Passes.text = [[NSString alloc] initWithFormat:@"%.1f", (float)passes/(float)matchesCount];
-            _red3Receives.text = [[NSString alloc] initWithFormat:@"%.1f", (float)receives/(float)matchesCount];
-            _red3SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)smallPenalties/(float)matchesCount];
-            _red3LargePenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)largePenalties/(float)matchesCount];
-            _red3Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)offensiveCount/(float)matchesCount*100];
-            _red3Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)neutralCount/(float)matchesCount*100];
-            _red3Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)defensiveCount/(float)matchesCount*100];
+            _red3AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoHighMakesAvg, team.autoHighAttemptsAvg];
+            _red3AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoHighHotPercentage];
+            _red3AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoLowMakesAvg, team.autoLowAttemptsAvg];
+            _red3AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoLowHotPercentage];
+            _red3MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.mobilityBonusPercentage];
+            _red3TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopHighMakeAvg, team.teleopHighAttemptsAvg];
+            _red3TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopLowMakeAvg, team.teleopLowAttemptsAvg];
+            _red3TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopOverAvg];
+            _red3TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopCatchAvg];
+            _red3Passes.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopPassedAvg];
+            _red3Receives.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopReceivedAvg];
+            _red3SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.smallPenaltyAvg];
+            _red3LargePenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.largePenaltyAvg];
+            _red3Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.offensiveZonePercentage];
+            _red3Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.neutralZonePercentage];
+            _red3Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.defensiveZonePercentage];
             
             NSFetchRequest *red3PitRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
             red3PitRequest.predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"teamNumber = %@", team.name]];
@@ -1474,89 +1275,22 @@ BOOL blue3IsImageLarge;
         else{
             Team *team = [blue1TeamArray firstObject];
             
-            
-            float autoHighMakes = 0;
-            float autoHighAttempts = 0;
-            float autoHighHot = 0;
-            float autoLowMakes = 0;
-            float autoLowAttempts = 0;
-            float autoLowHot = 0;
-            float mobilityBonus = 0;
-            float teleopHighMakes = 0;
-            float teleopHighAttempts = 0;
-            float teleopLowMakes = 0;
-            float teleopLowAttempts = 0;
-            float trussShot = 0;
-            float trussCatch = 0;
-            float passes = 0;
-            float receives = 0;
-            float smallPenalties = 0;
-            float largePenalties = 0;
-            float offensiveCount = 0;
-            float neutralCount = 0;
-            float defensiveCount = 0;
-            float matchesCount = 0;
-            
-            for (Match *mtch in team.matches) {
-                autoHighMakes += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue];
-                autoHighAttempts += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue] + [mtch.autoHighMissScore floatValue];
-                autoHighHot += [mtch.autoHighHotScore floatValue];
-                autoLowMakes += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue];
-                autoLowAttempts += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue] + [mtch.autoLowMissScore floatValue];
-                autoLowHot += [mtch.autoLowHotScore floatValue];
-                mobilityBonus += [mtch.mobilityBonus floatValue];
-                teleopHighMakes += [mtch.teleopHighMake floatValue];
-                teleopHighAttempts += [mtch.teleopHighMake floatValue] + [mtch.teleopHighMiss floatValue];
-                teleopLowMakes += [mtch.teleopLowMake floatValue];
-                teleopLowAttempts += [mtch.teleopLowMake floatValue] + [mtch.teleopLowMiss floatValue];
-                trussShot += [mtch.teleopOver floatValue];
-                trussCatch += [mtch.teleopCatch floatValue];
-                passes += [mtch.teleopPassed floatValue];
-                receives += [mtch.teleopReceived floatValue];
-                smallPenalties += [mtch.penaltySmall floatValue];
-                largePenalties += [mtch.penaltyLarge floatValue];
-                
-                NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
-                if ([zoneString rangeOfString:@"White"].location != NSNotFound) {neutralCount ++;}
-                
-                if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                else{
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                
-                matchesCount ++;
-            }
-            
-            _blue1AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoHighMakes/(float)matchesCount, (float)autoHighAttempts/(float)matchesCount];
-            if (autoHighMakes == 0) {_blue1AutoHighHot.text = @"0%";}
-            else{_blue1AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoHighHot/(float)autoHighMakes*100];}
-            _blue1AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoLowMakes/(float)matchesCount, (float)autoLowAttempts/(float)matchesCount];
-            if (autoLowMakes == 0) {_blue1AutoLowHot.text = @"0%";}
-            else{_blue1AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoLowHot/(float)autoLowMakes*100];}
-            _blue1MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)mobilityBonus/(float)matchesCount*100];
-            _blue1TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopHighMakes/(float)matchesCount, (float)teleopHighAttempts/(float)matchesCount];
-            _blue1TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopLowMakes/(float)matchesCount, (float)teleopLowAttempts/(float)matchesCount];
-            _blue1TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussShot/(float)matchesCount];
-            _blue1TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussCatch/(float)matchesCount];
-            _blue1Passes.text = [[NSString alloc] initWithFormat:@"%.1f", (float)passes/(float)matchesCount];
-            _blue1Receives.text = [[NSString alloc] initWithFormat:@"%.1f", (float)receives/(float)matchesCount];
-            _blue1SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)smallPenalties/(float)matchesCount];
-            _blue1LargePenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)largePenalties/(float)matchesCount];
-            _blue1Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)offensiveCount/(float)matchesCount*100];
-            _blue1Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)neutralCount/(float)matchesCount*100];
-            _blue1Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)defensiveCount/(float)matchesCount*100];
+            _blue1AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoHighMakesAvg, team.autoHighAttemptsAvg];
+            _blue1AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoHighHotPercentage];
+            _blue1AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoLowMakesAvg, team.autoLowAttemptsAvg];
+            _blue1AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoLowHotPercentage];
+            _blue1MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.mobilityBonusPercentage];
+            _blue1TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopHighMakeAvg, team.teleopHighAttemptsAvg];
+            _blue1TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopLowMakeAvg, team.teleopLowAttemptsAvg];
+            _blue1TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopOverAvg];
+            _blue1TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopCatchAvg];
+            _blue1Passes.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopPassedAvg];
+            _blue1Receives.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopReceivedAvg];
+            _blue1SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.smallPenaltyAvg];
+            _blue1LargePenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.largePenaltyAvg];
+            _blue1Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.offensiveZonePercentage];
+            _blue1Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.neutralZonePercentage];
+            _blue1Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.defensiveZonePercentage];
             
             NSFetchRequest *blue1PitRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
             blue1PitRequest.predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"teamNumber = %@", team.name]];
@@ -1892,89 +1626,22 @@ BOOL blue3IsImageLarge;
         else{
             Team *team = [blue2TeamArray firstObject];
             
-            
-            float autoHighMakes = 0;
-            float autoHighAttempts = 0;
-            float autoHighHot = 0;
-            float autoLowMakes = 0;
-            float autoLowAttempts = 0;
-            float autoLowHot = 0;
-            float mobilityBonus = 0;
-            float teleopHighMakes = 0;
-            float teleopHighAttempts = 0;
-            float teleopLowMakes = 0;
-            float teleopLowAttempts = 0;
-            float trussShot = 0;
-            float trussCatch = 0;
-            float passes = 0;
-            float receives = 0;
-            float smallPenalties = 0;
-            float largePenalties = 0;
-            float offensiveCount = 0;
-            float neutralCount = 0;
-            float defensiveCount = 0;
-            float matchesCount = 0;
-            
-            for (Match *mtch in team.matches) {
-                autoHighMakes += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue];
-                autoHighAttempts += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue] + [mtch.autoHighMissScore floatValue];
-                autoHighHot += [mtch.autoHighHotScore floatValue];
-                autoLowMakes += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue];
-                autoLowAttempts += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue] + [mtch.autoLowMissScore floatValue];
-                autoLowHot += [mtch.autoLowHotScore floatValue];
-                mobilityBonus += [mtch.mobilityBonus floatValue];
-                teleopHighMakes += [mtch.teleopHighMake floatValue];
-                teleopHighAttempts += [mtch.teleopHighMake floatValue] + [mtch.teleopHighMiss floatValue];
-                teleopLowMakes += [mtch.teleopLowMake floatValue];
-                teleopLowAttempts += [mtch.teleopLowMake floatValue] + [mtch.teleopLowMiss floatValue];
-                trussShot += [mtch.teleopOver floatValue];
-                trussCatch += [mtch.teleopCatch floatValue];
-                passes += [mtch.teleopPassed floatValue];
-                receives += [mtch.teleopReceived floatValue];
-                smallPenalties += [mtch.penaltySmall floatValue];
-                largePenalties += [mtch.penaltyLarge floatValue];
-                
-                NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
-                if ([zoneString rangeOfString:@"White"].location != NSNotFound) {neutralCount ++;}
-                
-                if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                else{
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                
-                matchesCount ++;
-            }
-            
-            _blue2AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoHighMakes/(float)matchesCount, (float)autoHighAttempts/(float)matchesCount];
-            if (autoHighMakes == 0) {_blue2AutoHighHot.text = @"0%";}
-            else{_blue2AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoHighHot/(float)autoHighMakes*100];}
-            _blue2AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoLowMakes/(float)matchesCount, (float)autoLowAttempts/(float)matchesCount];
-            if (autoLowMakes == 0) {_blue2AutoLowHot.text = @"0%";}
-            else{_blue2AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoLowHot/(float)autoLowMakes*100];}
-            _blue2MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)mobilityBonus/(float)matchesCount*100];
-            _blue2TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopHighMakes/(float)matchesCount, (float)teleopHighAttempts/(float)matchesCount];
-            _blue2TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopLowMakes/(float)matchesCount, (float)teleopLowAttempts/(float)matchesCount];
-            _blue2TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussShot/(float)matchesCount];
-            _blue2TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussCatch/(float)matchesCount];
-            _blue2Passes.text = [[NSString alloc] initWithFormat:@"%.1f", (float)passes/(float)matchesCount];
-            _blue2Receives.text = [[NSString alloc] initWithFormat:@"%.1f", (float)receives/(float)matchesCount];
-            _blue2SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)smallPenalties/(float)matchesCount];
-            _blue2LargePenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)largePenalties/(float)matchesCount];
-            _blue2Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)offensiveCount/(float)matchesCount*100];
-            _blue2Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)neutralCount/(float)matchesCount*100];
-            _blue2Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)defensiveCount/(float)matchesCount*100];
+            _blue2AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoHighMakesAvg, team.autoHighAttemptsAvg];
+            _blue2AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoHighHotPercentage];
+            _blue2AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoLowMakesAvg, team.autoLowAttemptsAvg];
+            _blue2AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoLowHotPercentage];
+            _blue2MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.mobilityBonusPercentage];
+            _blue2TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopHighMakeAvg, team.teleopHighAttemptsAvg];
+            _blue2TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopLowMakeAvg, team.teleopLowAttemptsAvg];
+            _blue2TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopOverAvg];
+            _blue2TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopCatchAvg];
+            _blue2Passes.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopPassedAvg];
+            _blue2Receives.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopReceivedAvg];
+            _blue2SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.smallPenaltyAvg];
+            _blue2LargePenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.largePenaltyAvg];
+            _blue2Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.offensiveZonePercentage];
+            _blue2Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.neutralZonePercentage];
+            _blue2Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.defensiveZonePercentage];
             
             NSFetchRequest *blue2PitRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
             blue2PitRequest.predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"teamNumber = %@", team.name]];
@@ -2310,89 +1977,22 @@ BOOL blue3IsImageLarge;
         else{
             Team *team = [blue3TeamArray firstObject];
             
-            
-            float autoHighMakes = 0;
-            float autoHighAttempts = 0;
-            float autoHighHot = 0;
-            float autoLowMakes = 0;
-            float autoLowAttempts = 0;
-            float autoLowHot = 0;
-            float mobilityBonus = 0;
-            float teleopHighMakes = 0;
-            float teleopHighAttempts = 0;
-            float teleopLowMakes = 0;
-            float teleopLowAttempts = 0;
-            float trussShot = 0;
-            float trussCatch = 0;
-            float passes = 0;
-            float receives = 0;
-            float smallPenalties = 0;
-            float largePenalties = 0;
-            float offensiveCount = 0;
-            float neutralCount = 0;
-            float defensiveCount = 0;
-            float matchesCount = 0;
-            
-            for (Match *mtch in team.matches) {
-                autoHighMakes += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue];
-                autoHighAttempts += [mtch.autoHighHotScore floatValue] + [mtch.autoHighNotScore floatValue] + [mtch.autoHighMissScore floatValue];
-                autoHighHot += [mtch.autoHighHotScore floatValue];
-                autoLowMakes += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue];
-                autoLowAttempts += [mtch.autoLowHotScore floatValue] + [mtch.autoLowNotScore floatValue] + [mtch.autoLowMissScore floatValue];
-                autoLowHot += [mtch.autoLowHotScore floatValue];
-                mobilityBonus += [mtch.mobilityBonus floatValue];
-                teleopHighMakes += [mtch.teleopHighMake floatValue];
-                teleopHighAttempts += [mtch.teleopHighMake floatValue] + [mtch.teleopHighMiss floatValue];
-                teleopLowMakes += [mtch.teleopLowMake floatValue];
-                teleopLowAttempts += [mtch.teleopLowMake floatValue] + [mtch.teleopLowMiss floatValue];
-                trussShot += [mtch.teleopOver floatValue];
-                trussCatch += [mtch.teleopCatch floatValue];
-                passes += [mtch.teleopPassed floatValue];
-                receives += [mtch.teleopReceived floatValue];
-                smallPenalties += [mtch.penaltySmall floatValue];
-                largePenalties += [mtch.penaltyLarge floatValue];
-                
-                NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
-                if ([zoneString rangeOfString:@"White"].location != NSNotFound) {neutralCount ++;}
-                
-                if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                else{
-                    if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
-                        defensiveCount++;
-                    }
-                    if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
-                        offensiveCount++;
-                    }
-                }
-                
-                matchesCount ++;
-            }
-            
-            _blue3AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoHighMakes/(float)matchesCount, (float)autoHighAttempts/(float)matchesCount];
-            if (autoHighMakes == 0) {_blue3AutoHighHot.text = @"0%";}
-            else{_blue3AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoHighHot/(float)autoHighMakes*100];}
-            _blue3AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)autoLowMakes/(float)matchesCount, (float)autoLowAttempts/(float)matchesCount];
-            if (autoLowMakes == 0) {_blue3AutoLowHot.text = @"0%";}
-            else{_blue3AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)autoLowHot/(float)autoLowMakes*100];}
-            _blue3MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)mobilityBonus/(float)matchesCount*100];
-            _blue3TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopHighMakes/(float)matchesCount, (float)teleopHighAttempts/(float)matchesCount];
-            _blue3TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", (float)teleopLowMakes/(float)matchesCount, (float)teleopLowAttempts/(float)matchesCount];
-            _blue3TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussShot/(float)matchesCount];
-            _blue3TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", (float)trussCatch/(float)matchesCount];
-            _blue3Passes.text = [[NSString alloc] initWithFormat:@"%.1f", (float)passes/(float)matchesCount];
-            _blue3Receives.text = [[NSString alloc] initWithFormat:@"%.1f", (float)receives/(float)matchesCount];
-            _blue3SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)smallPenalties/(float)matchesCount];
-            _blue3LargePenalty.text = [[NSString alloc] initWithFormat:@"%.1f", (float)largePenalties/(float)matchesCount];
-            _blue3Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)offensiveCount/(float)matchesCount*100];
-            _blue3Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)neutralCount/(float)matchesCount*100];
-            _blue3Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", (float)defensiveCount/(float)matchesCount*100];
+            _blue3AutoHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoHighMakesAvg, team.autoHighAttemptsAvg];
+            _blue3AutoHighHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoHighHotPercentage];
+            _blue3AutoLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.autoLowMakesAvg, team.autoLowAttemptsAvg];
+            _blue3AutoLowHot.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.autoLowHotPercentage];
+            _blue3MobilityPercentage.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.mobilityBonusPercentage];
+            _blue3TeleopHighMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopHighMakeAvg, team.teleopHighAttemptsAvg];
+            _blue3TeleopLowMakes.text = [[NSString alloc] initWithFormat:@"%.0f/%.0f", team.teleopLowMakeAvg, team.teleopLowAttemptsAvg];
+            _blue3TrussShot.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopOverAvg];
+            _blue3TrussCatch.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopCatchAvg];
+            _blue3Passes.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopPassedAvg];
+            _blue3Receives.text = [[NSString alloc] initWithFormat:@"%.1f", team.teleopReceivedAvg];
+            _blue3SmallPenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.smallPenaltyAvg];
+            _blue3LargePenalty.text = [[NSString alloc] initWithFormat:@"%.0f", team.largePenaltyAvg];
+            _blue3Offensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.offensiveZonePercentage];
+            _blue3Neutral.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.neutralZonePercentage];
+            _blue3Defensive.text = [[NSString alloc] initWithFormat:@"%.0f%%", team.defensiveZonePercentage];
             
             NSFetchRequest *blue3PitRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
             blue3PitRequest.predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"teamNumber = %@", team.name]];
