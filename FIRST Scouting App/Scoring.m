@@ -124,10 +124,36 @@ UIControl *whiteZone;
 BOOL inWhiteZone;
 UIControl *blueZone;
 BOOL inBlueZone;
-UIControl *goodDefense;
-BOOL didGoodDefense;
+UIControl *greatDefense;
+BOOL didGreatDefense;
+UIControl *badDefense;
+BOOL didBadDefense;
 UIControl *didntMove;
 BOOL didDidntMove;
+UIControl *fastMovement;
+BOOL didFastMovement;
+UIControl *slowMovement;
+BOOL didSlowMovement;
+UIControl *greatBallPickup;
+BOOL didGreatBallPickup;
+UIControl *badBallPickup;
+BOOL didBadBallPickup;
+UIControl *greatHumanPlayer;
+BOOL didGreatHumanPlayer;
+UIControl *badHumanPlayer;
+BOOL didBadHumanPlayer;
+UIControl *brokeDownInMatch;
+BOOL didBrokeDownInMatch;
+UIControl *greatDriver;
+BOOL didGreatDriver;
+UIControl *averageDriver;
+BOOL didAverageDriver;
+UIControl *badDriver;
+BOOL didBadDriver;
+UIControl *greatCooperation;
+BOOL didGreatCooperation;
+UIControl *badCooperation;
+BOOL didBadCooperation;
 
 
 // Regional Arrays
@@ -1644,7 +1670,7 @@ float startY;
     inRedZone = false;
     inWhiteZone = false;
     inBlueZone = false;
-    didGoodDefense = false;
+    didGreatDefense = false;
     didDidntMove = false;
     
     greyOut = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
@@ -1747,6 +1773,16 @@ float startY;
         redZone.layer.mask = rightMaskLayer;
     }
     
+    // **************************************************
+    
+    // **************************************************
+    
+    // ************** QUICK NOTES ***********************
+    
+    // **************************************************
+    
+    // **************************************************
+    
     UILabel *quickNotesLbl = [[UILabel alloc] initWithFrame:CGRectMake(175, 130, 100, 13)];
     quickNotesLbl.text = @"Quick Notes (tap)";
     quickNotesLbl.textAlignment = NSTextAlignmentCenter;
@@ -1754,29 +1790,186 @@ float startY;
     quickNotesLbl.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
     [notesScreen addSubview:quickNotesLbl];
     
-    goodDefense = [[UIControl alloc] initWithFrame:CGRectMake(40, 150, 130, 30)];
-    goodDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-    [goodDefense addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
-    goodDefense.layer.cornerRadius = 5;
-    UILabel *goodDefenseLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 125, 30)];
-    goodDefenseLbl.text = @"Good Defense";
-    goodDefenseLbl.textAlignment = NSTextAlignmentCenter;
-    goodDefenseLbl.textColor = [UIColor whiteColor];
-    goodDefenseLbl.font = [UIFont systemFontOfSize:15];
-    [goodDefense addSubview:goodDefenseLbl];
-    [notesScreen addSubview:goodDefense];
+    greatDefense = [[UIControl alloc] initWithFrame:CGRectMake(55, 150, 110, 30)];
+    greatDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [greatDefense addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    greatDefense.layer.cornerRadius = 5;
+    UILabel *greatDefenseLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 110, 30)];
+    greatDefenseLbl.text = @"Great Defense";
+    greatDefenseLbl.textAlignment = NSTextAlignmentCenter;
+    greatDefenseLbl.textColor = [UIColor whiteColor];
+    greatDefenseLbl.font = [UIFont systemFontOfSize:14];
+    [greatDefense addSubview:greatDefenseLbl];
+    [notesScreen addSubview:greatDefense];
     
-    didntMove = [[UIControl alloc] initWithFrame:CGRectMake(180, 150, 110, 30)];
+    badDefense = [[UIControl alloc] initWithFrame:CGRectMake(180, 150, 100, 30)];
+    badDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [badDefense addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    badDefense.layer.cornerRadius = 5;
+    UILabel *badDefenseLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
+    badDefenseLbl.text = @"Bad Defense";
+    badDefenseLbl.textAlignment = NSTextAlignmentCenter;
+    badDefenseLbl.textColor = [UIColor whiteColor];
+    badDefenseLbl.font = [UIFont systemFontOfSize:14];
+    [badDefense addSubview:badDefenseLbl];
+    [notesScreen addSubview:badDefense];
+    
+    didntMove = [[UIControl alloc] initWithFrame:CGRectMake(295, 150, 100, 30)];
     didntMove.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
     [didntMove addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
     didntMove.layer.cornerRadius = 5;
-    UILabel *didntMoveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 110, 30)];
+    UILabel *didntMoveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
     didntMoveLbl.text = @"Didn't Move";
     didntMoveLbl.textAlignment = NSTextAlignmentCenter;
     didntMoveLbl.textColor = [UIColor whiteColor];
-    didntMoveLbl.font = [UIFont systemFontOfSize:15];
+    didntMoveLbl.font = [UIFont systemFontOfSize:14];
     [didntMove addSubview:didntMoveLbl];
     [notesScreen addSubview:didntMove];
+    
+    slowMovement = [[UIControl alloc] initWithFrame:CGRectMake(15, 190, 120, 30)];
+    slowMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [slowMovement addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    slowMovement.layer.cornerRadius = 5;
+    UILabel *slowMovementLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 30)];
+    slowMovementLbl.text = @"Slow Movement";
+    slowMovementLbl.textAlignment = NSTextAlignmentCenter;
+    slowMovementLbl.textColor = [UIColor whiteColor];
+    slowMovementLbl.font = [UIFont systemFontOfSize:14];
+    [slowMovement addSubview:slowMovementLbl];
+    [notesScreen addSubview:slowMovement];
+    
+    fastMovement = [[UIControl alloc] initWithFrame:CGRectMake(150, 190, 120, 30)];
+    fastMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [fastMovement addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    fastMovement.layer.cornerRadius = 5;
+    UILabel *fastMovementLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 30)];
+    fastMovementLbl.text = @"Fast Movement";
+    fastMovementLbl.textAlignment = NSTextAlignmentCenter;
+    fastMovementLbl.textColor = [UIColor whiteColor];
+    fastMovementLbl.font = [UIFont systemFontOfSize:14];
+    [fastMovement addSubview:fastMovementLbl];
+    [notesScreen addSubview:fastMovement];
+    
+    brokeDownInMatch = [[UIControl alloc] initWithFrame:CGRectMake(285, 190, 150, 30)];
+    brokeDownInMatch.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [brokeDownInMatch addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    brokeDownInMatch.layer.cornerRadius = 5;
+    UILabel *brokeDownInMatchLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 30)];
+    brokeDownInMatchLbl.text = @"Broke Down in Match";
+    brokeDownInMatchLbl.textAlignment = NSTextAlignmentCenter;
+    brokeDownInMatchLbl.textColor = [UIColor whiteColor];
+    brokeDownInMatchLbl.font = [UIFont systemFontOfSize:14];
+    [brokeDownInMatch addSubview:brokeDownInMatchLbl];
+    [notesScreen addSubview:brokeDownInMatch];
+    
+    greatBallPickup = [[UIControl alloc] initWithFrame:CGRectMake(15, 230, 128, 30)];
+    greatBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [greatBallPickup addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    greatBallPickup.layer.cornerRadius = 5;
+    UILabel *greatBallPickupLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 128, 30)];
+    greatBallPickupLbl.text = @"Great Ball Pickup";
+    greatBallPickupLbl.textAlignment = NSTextAlignmentCenter;
+    greatBallPickupLbl.textColor = [UIColor whiteColor];
+    greatBallPickupLbl.font = [UIFont systemFontOfSize:14];
+    [greatBallPickup addSubview:greatBallPickupLbl];
+    [notesScreen addSubview:greatBallPickup];
+    
+    badBallPickup = [[UIControl alloc] initWithFrame:CGRectMake(158, 230, 122, 30)];
+    badBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [badBallPickup addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    badBallPickup.layer.cornerRadius = 5;
+    UILabel *badBallPickupLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 122, 30)];
+    badBallPickupLbl.text = @"Bad Ball Pickup";
+    badBallPickupLbl.textAlignment = NSTextAlignmentCenter;
+    badBallPickupLbl.textColor = [UIColor whiteColor];
+    badBallPickupLbl.font = [UIFont systemFontOfSize:14];
+    [badBallPickup addSubview:badBallPickupLbl];
+    [notesScreen addSubview:badBallPickup];
+    
+    greatCooperation = [[UIControl alloc] initWithFrame:CGRectMake(295, 230, 140, 30)];
+    greatCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [greatCooperation addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    greatCooperation.layer.cornerRadius = 5;
+    UILabel *greatCooperationLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 140, 30)];
+    greatCooperationLbl.text = @"Great Cooperation";
+    greatCooperationLbl.textAlignment = NSTextAlignmentCenter;
+    greatCooperationLbl.textColor = [UIColor whiteColor];
+    greatCooperationLbl.font = [UIFont systemFontOfSize:14];
+    [greatCooperation addSubview:greatCooperationLbl];
+    [notesScreen addSubview:greatCooperation];
+    
+    badCooperation = [[UIControl alloc] initWithFrame:CGRectMake(10, 270, 125, 30)];
+    badCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [badCooperation addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    badCooperation.layer.cornerRadius = 5;
+    UILabel *badCooperationLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 125, 30)];
+    badCooperationLbl.text = @"Bad Cooperation";
+    badCooperationLbl.textAlignment = NSTextAlignmentCenter;
+    badCooperationLbl.textColor = [UIColor whiteColor];
+    badCooperationLbl.font = [UIFont systemFontOfSize:13];
+    [badCooperation addSubview:badCooperationLbl];
+    [notesScreen addSubview:badCooperation];
+    
+    greatHumanPlayer = [[UIControl alloc] initWithFrame:CGRectMake(150, 270, 140, 30)];
+    greatHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [greatHumanPlayer addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    greatHumanPlayer.layer.cornerRadius = 5;
+    UILabel *greatHumanPlayerLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 140, 30)];
+    greatHumanPlayerLbl.text = @"Great Human Player";
+    greatHumanPlayerLbl.textAlignment = NSTextAlignmentCenter;
+    greatHumanPlayerLbl.textColor = [UIColor whiteColor];
+    greatHumanPlayerLbl.font = [UIFont systemFontOfSize:13];
+    [greatHumanPlayer addSubview:greatHumanPlayerLbl];
+    [notesScreen addSubview:greatHumanPlayer];
+    
+    badHumanPlayer = [[UIControl alloc] initWithFrame:CGRectMake(305, 270, 135, 30)];
+    badHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [badHumanPlayer addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    badHumanPlayer.layer.cornerRadius = 5;
+    UILabel *badHumanPlayerLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 135, 30)];
+    badHumanPlayerLbl.text = @"Bad Human Player";
+    badHumanPlayerLbl.textAlignment = NSTextAlignmentCenter;
+    badHumanPlayerLbl.textColor = [UIColor whiteColor];
+    badHumanPlayerLbl.font = [UIFont systemFontOfSize:13];
+    [badHumanPlayer addSubview:badHumanPlayerLbl];
+    [notesScreen addSubview:badHumanPlayer];
+    
+    greatDriver = [[UIControl alloc] initWithFrame:CGRectMake(55, 310, 100, 30)];
+    greatDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [greatDriver addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    greatDriver.layer.cornerRadius = 5;
+    UILabel *greatDriverLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
+    greatDriverLbl.text = @"Great Driver";
+    greatDriverLbl.textAlignment = NSTextAlignmentCenter;
+    greatDriverLbl.textColor = [UIColor whiteColor];
+    greatDriverLbl.font = [UIFont systemFontOfSize:14];
+    [greatDriver addSubview:greatDriverLbl];
+    [notesScreen addSubview:greatDriver];
+    
+    averageDriver = [[UIControl alloc] initWithFrame:CGRectMake(170, 310, 110, 30)];
+    averageDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [averageDriver addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    averageDriver.layer.cornerRadius = 5;
+    UILabel *averageDriverLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 110, 30)];
+    averageDriverLbl.text = @"Average Driver";
+    averageDriverLbl.textAlignment = NSTextAlignmentCenter;
+    averageDriverLbl.textColor = [UIColor whiteColor];
+    averageDriverLbl.font = [UIFont systemFontOfSize:14];
+    [averageDriver addSubview:averageDriverLbl];
+    [notesScreen addSubview:averageDriver];
+    
+    badDriver = [[UIControl alloc] initWithFrame:CGRectMake(295, 310, 90, 30)];
+    badDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [badDriver addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    badDriver.layer.cornerRadius = 5;
+    UILabel *badDriverLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 90, 30)];
+    badDriverLbl.text = @"Bad Driver";
+    badDriverLbl.textAlignment = NSTextAlignmentCenter;
+    badDriverLbl.textColor = [UIColor whiteColor];
+    badDriverLbl.font = [UIFont systemFontOfSize:14];
+    [badDriver addSubview:badDriverLbl];
+    [notesScreen addSubview:badDriver];
+
     
     notesTextField = [[UITextView alloc] initWithFrame:CGRectMake(75, 350, 300, 100)];
     notesTextField.textAlignment = NSTextAlignmentCenter;
@@ -1856,18 +2049,36 @@ float startY;
             inBlueZone = true;
         }
     }
-    else if ([controlView isEqual:goodDefense]){
-        if (didGoodDefense) {
+    else if ([controlView isEqual:greatDefense]){
+        if (didGreatDefense) {
             [UIView animateWithDuration:0.2 animations:^{
-                goodDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                greatDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
-            didGoodDefense = false;
+            didGreatDefense = false;
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                goodDefense.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                greatDefense.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                badDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
-            didGoodDefense = true;
+            didGreatDefense = true;
+            didBadDefense = false;
+        }
+    }
+    else if ([controlView isEqual:badDefense]){
+        if (didBadDefense) {
+            [UIView animateWithDuration:0.2 animations:^{
+                badDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadDefense = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                badDefense.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                greatDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadDefense = true;
+            didGreatDefense = false;
         }
     }
     else if ([controlView isEqual:didntMove]){
@@ -1882,6 +2093,201 @@ float startY;
                 didntMove.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
             }];
             didDidntMove = true;
+        }
+    }
+    else if ([controlView isEqual:slowMovement]){
+        if (didSlowMovement) {
+            [UIView animateWithDuration:0.2 animations:^{
+                slowMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didSlowMovement = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                slowMovement.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                fastMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didSlowMovement = true;
+            didFastMovement = false;
+        }
+    }
+    else if ([controlView isEqual:fastMovement]){
+        if (didFastMovement) {
+            [UIView animateWithDuration:0.2 animations:^{
+                fastMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didFastMovement = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                fastMovement.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                slowMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didFastMovement = true;
+            didSlowMovement = false;
+        }
+    }
+    else if ([controlView isEqual:brokeDownInMatch]){
+        if (didBrokeDownInMatch) {
+            [UIView animateWithDuration:0.2 animations:^{
+                brokeDownInMatch.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBrokeDownInMatch = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                brokeDownInMatch.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+            }];
+            didBrokeDownInMatch = true;
+        }
+    }
+    else if ([controlView isEqual:greatBallPickup]){
+        if (didGreatBallPickup) {
+            [UIView animateWithDuration:0.2 animations:^{
+                greatBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatBallPickup = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatBallPickup.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                badBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatBallPickup = true;
+            didBadBallPickup = false;
+        }
+    }
+    else if ([controlView isEqual:badBallPickup]){
+        if (didBadBallPickup) {
+            [UIView animateWithDuration:0.2 animations:^{
+                badBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadBallPickup = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                badBallPickup.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                greatBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadBallPickup = true;
+            didGreatBallPickup = false;
+        }
+    }
+    else if ([controlView isEqual:greatCooperation]){
+        if (didGreatCooperation) {
+            [UIView animateWithDuration:0.2 animations:^{
+                greatCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatCooperation = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatCooperation.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                badCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatCooperation = true;
+            didBadCooperation = false;
+        }
+    }
+    else if ([controlView isEqual:badCooperation]){
+        if (didBadCooperation) {
+            [UIView animateWithDuration:0.2 animations:^{
+                badCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadCooperation = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                badCooperation.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                greatCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadCooperation = true;
+            didGreatCooperation = false;
+        }
+    }
+    else if ([controlView isEqual:greatHumanPlayer]){
+        if (didGreatHumanPlayer) {
+            [UIView animateWithDuration:0.2 animations:^{
+                greatHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatHumanPlayer = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatHumanPlayer.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                badHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatHumanPlayer = true;
+            didBadHumanPlayer = false;
+        }
+    }
+    else if ([controlView isEqual:badHumanPlayer]){
+        if (didBadHumanPlayer) {
+            [UIView animateWithDuration:0.2 animations:^{
+                badHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadHumanPlayer = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                badHumanPlayer.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                greatHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadHumanPlayer = true;
+            didGreatHumanPlayer = false;
+        }
+    }
+    else if ([controlView isEqual:greatDriver]){
+        if (didGreatDriver) {
+            [UIView animateWithDuration:0.2 animations:^{
+                greatDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatDriver = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatDriver.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                averageDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                badDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatDriver = true;
+            didAverageDriver = false;
+            didBadDriver = false;
+        }
+    }
+    else if ([controlView isEqual:averageDriver]){
+        if (didAverageDriver) {
+            [UIView animateWithDuration:0.2 animations:^{
+                averageDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didAverageDriver = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                averageDriver.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                badDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatDriver = false;
+            didAverageDriver = true;
+            didBadDriver = false;
+        }
+    }else if ([controlView isEqual:badDriver]){
+        if (didBadDriver) {
+            [UIView animateWithDuration:0.2 animations:^{
+                badDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadDriver = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                averageDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                badDriver.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+            }];
+            didGreatDriver = false;
+            didAverageDriver = false;
+            didBadDriver = true;
         }
     }
 }
@@ -1921,8 +2327,8 @@ float startY;
     [notes appendString:@"{} "];
     
     NSMutableString *realNotes = [[NSMutableString alloc] initWithString:@""];
-    if (didGoodDefense) {
-        [realNotes appendString:@"Did Good Defense, "];
+    if (didGreatDefense) {
+        [realNotes appendString:@"Did Great Defense, "];
     }
     if (didDidntMove) {
         [realNotes appendString:@"Didn't Move, "];
@@ -1936,7 +2342,7 @@ float startY;
         }
     }
     else {
-        if (didGoodDefense || didDidntMove) {
+        if (didGreatDefense || didDidntMove) {
             [realNotes deleteCharactersInRange:NSMakeRange(notes.length-2, 2)];
         }
     }
@@ -2113,7 +2519,7 @@ float startY;
     inRedZone = false;
     inWhiteZone = false;
     inBlueZone = false;
-    didGoodDefense = false;
+    didGreatDefense = false;
     didDidntMove = false;
     
     // Increment match number by 1
