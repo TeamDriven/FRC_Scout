@@ -446,6 +446,14 @@
     return teleopAvg;
 }
 
+-(float)totalPointsAvgCalculated{
+    float totalPointsAvgCalculated = 0;
+    
+    totalPointsAvgCalculated = (float)self.autonomousAvgCalculated + (float)self.teleopAvgCalculated;
+    
+    return totalPointsAvgCalculated;
+}
+
 -(float)smallPenaltyAvgCalculated{
     float smallPenaltyAvg = 0;
     for (Match *mtch in self.matches) {
@@ -572,6 +580,8 @@
     team.teleopReceivedAvg = [NSNumber numberWithFloat:self.teleopReceivedAvgCalculated];
     team.teleopPassReceiveRatio = [NSNumber numberWithFloat:self.teleopPassReceiveRatioCalculated];
     team.teleopAvg = [NSNumber numberWithFloat:self.teleopAvgCalculated];
+    
+    team.totalPointsAvg = [NSNumber numberWithFloat:self.totalPointsAvgCalculated];
     
     team.smallPenaltyAvg = [NSNumber numberWithFloat:self.smallPenaltyAvgCalculated];
     team.largePenaltyAvg = [NSNumber numberWithFloat:self.largePenaltyAvgCalculated];

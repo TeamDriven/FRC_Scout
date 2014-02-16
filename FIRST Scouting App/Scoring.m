@@ -2669,6 +2669,8 @@ float startY;
         
         NSInteger randomTeamNum = arc4random() % 4000;
         currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
+        currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
+        [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
         
         NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
         NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %ld", randomTeamNum];
@@ -2679,12 +2681,6 @@ float startY;
         _robotPic.alpha = 0;
         UIImage *image = [UIImage imageWithData:[pt valueForKey:@"image"]];
         _robotPic.image = image;
-        
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^(void){
-            _movementRobot.center = CGPointMake(_movementRobot.center.x, _movementLine.center.y + 50);
-            _swipeUpArrow.alpha = 1;
-            _robotPic.alpha = 1;
-        }completion:^(BOOL finished) {}];
     }
     else{
         if ([currentMatchNum isEqualToString:@"Q1.1"]) {
@@ -2785,6 +2781,11 @@ float startY;
         _matchNumField.text = @"";
     }
     
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^(void){
+        _movementRobot.center = CGPointMake(_movementRobot.center.x, _movementLine.center.y + 50);
+        _swipeUpArrow.alpha = 1;
+        _robotPic.alpha = 1;
+    }completion:^(BOOL finished) {}];
     
     // Turns autonomous mode on
     [self autoOn];

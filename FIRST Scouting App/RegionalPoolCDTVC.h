@@ -20,4 +20,10 @@
 
 @property (strong, nonatomic) SecondPickListController *secondPickListController;
 
+@property (strong, nonatomic) NSString *sortAttribute;
+
+-(void)sortOrderLargeFirst;
+
+-(void)sortOrderSmallFirst;
+
 @end

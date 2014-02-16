@@ -28,4 +28,10 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *secondPickListEditBtn;
 
+@property (weak, nonatomic) IBOutlet UIButton *sortUpArrow;
+@property (weak, nonatomic) IBOutlet UIButton *sortDownArrow;
+
+@property (weak, nonatomic) IBOutlet UIButton *sortProperty;
+
+
 @end

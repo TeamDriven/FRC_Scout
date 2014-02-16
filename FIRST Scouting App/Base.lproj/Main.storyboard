@@ -2870,13 +2870,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="All Teams in Regional" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4A4-E9-oCa">
-                                <rect key="frame" x="300" y="85" width="168" height="21"/>
+                                <rect key="frame" x="286" y="90" width="196" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="dyI-E7-nkz">
-                                <rect key="frame" x="0.0" y="114" width="777" height="552"/>
+                                <rect key="frame" x="0.0" y="137" width="777" height="529"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -3100,24 +3100,44 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EG1-BF-bdD">
-                                <rect key="frame" x="568" y="81" width="118" height="30"/>
+                                <rect key="frame" x="569" y="87" width="130" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Autonomous Avg">
+                                <state key="normal" title="Total Points Avg">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="sortChange:" destination="3JD-Mc-o2Q" eventType="touchUpInside" id="Y1Y-9N-Zi2"/>
+                                </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sort By:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aYn-fw-yuI">
-                                <rect key="frame" x="503" y="85" width="62" height="21"/>
+                                <rect key="frame" x="505" y="91" width="62" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9kp-a3-k6R">
-                                <rect key="frame" x="689" y="76" width="46" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9kp-a3-k6R">
+                                <rect key="frame" x="689" y="62" width="50" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button">
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <inset key="contentEdgeInsets" minX="5" minY="10" maxX="5" maxY="-5"/>
+                                <state key="normal" title="Button" image="SortArrowUp">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="sortUp:" destination="3JD-Mc-o2Q" eventType="touchUpInside" id="KRd-Wf-zoN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LnB-fB-1Hz">
+                                <rect key="frame" x="689" y="102" width="50" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <inset key="contentEdgeInsets" minX="5" minY="-5" maxX="5" maxY="10"/>
+                                <state key="normal" title="Button" image="SortArrowDown">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="sortDown:" destination="3JD-Mc-o2Q" eventType="touchUpInside" id="yl7-XQ-baE"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -3129,6 +3149,9 @@
                         <outlet property="poolTableView" destination="dyI-E7-nkz" id="Gf6-9V-DPS"/>
                         <outlet property="secondPickListEditBtn" destination="JxO-b4-d7G" id="kKr-Rv-ZRM"/>
                         <outlet property="secondPickTableView" destination="Zjl-nI-H86" id="B9C-oN-bKF"/>
+                        <outlet property="sortDownArrow" destination="LnB-fB-1Hz" id="Bud-gI-DEM"/>
+                        <outlet property="sortProperty" destination="EG1-BF-bdD" id="jDv-GW-y4e"/>
+                        <outlet property="sortUpArrow" destination="9kp-a3-k6R" id="zYW-Mh-vZj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="am6-sp-p29" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3195,6 +3218,8 @@
         <image name="PitScoutingIcon" width="30" height="30"/>
         <image name="RedRobot" width="300" height="200"/>
         <image name="SlideArrow" width="36" height="86"/>
+        <image name="SortArrowDown" width="125" height="110"/>
+        <image name="SortArrowUp" width="125" height="110"/>
         <image name="TeleopMinusDown" width="200" height="100"/>
         <image name="TeleopMinusUp" width="200" height="100"/>
         <image name="TeleopPlusDown" width="200" height="100"/>

@@ -58,12 +58,37 @@ Team *teamSelected;
     NSFetchRequest *poolRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
     poolRequest.predicate = [NSPredicate predicateWithFormat:@"regionalIn.name = %@", _regionalToDisplay];
 //    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]];
-    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"autonomousAvg" ascending:NO]];
+    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:_sortAttribute ascending:NO]];
     
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:poolRequest
-                                                                        managedObjectContext:self.managedObjectContext
-                                                                          sectionNameKeyPath:nil
-                                                                                   cacheName:nil];
+    self.fetchedResultsController = [[NSFetchedResultsController alloc]
+                                     initWithFetchRequest:poolRequest
+                                     managedObjectContext:self.managedObjectContext
+                                     sectionNameKeyPath:nil
+                                     cacheName:nil];
+}
+
+-(void)sortOrderLargeFirst{
+    NSFetchRequest *poolRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
+    poolRequest.predicate = [NSPredicate predicateWithFormat:@"regionalIn.name = %@", _regionalToDisplay];
+    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:_sortAttribute ascending:NO]];
+    
+    self.fetchedResultsController = [[NSFetchedResultsController alloc]
+                                     initWithFetchRequest:poolRequest
+                                     managedObjectContext:self.managedObjectContext
+                                     sectionNameKeyPath:nil
+                                     cacheName:nil];
+}
+
+-(void)sortOrderSmallFirst{
+    NSFetchRequest *poolRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
+    poolRequest.predicate = [NSPredicate predicateWithFormat:@"regionalIn.name = %@", _regionalToDisplay];
+    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:_sortAttribute ascending:YES]];
+    
+    self.fetchedResultsController = [[NSFetchedResultsController alloc]
+                                     initWithFetchRequest:poolRequest
+                                     managedObjectContext:self.managedObjectContext
+                                     sectionNameKeyPath:nil
+                                     cacheName:nil];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -584,6 +609,7 @@ Team *teamSelected;
         isImageLarge = false;
     }
 }
+
 -(void)grayOutShrinkPic{
     if (isImageLarge) {
         [UIView animateWithDuration:0.3 animations:^{

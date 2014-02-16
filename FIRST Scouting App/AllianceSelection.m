@@ -26,7 +26,50 @@ NSManagedObjectContext *context;
 NSString *regionalSelected;
 Regional *regionalObject;
 
-NSMutableArray *secondPickArray;
+UIView *grieayOutView;
+UIView *sortersView;
+
+UIButton *autoHighHotAvg;
+UIButton *autoHighMissAvg;
+UIButton *autoHighNotAvg;
+UIButton *autoHighMakesAvg;
+UIButton *autoHighAttemptsAvg;
+UIButton *autoHighHotPercentage;
+UIButton *autoHighAccuracyPercentage;
+UIButton *autoLowHotAvg;
+UIButton *autoLowMissAvg;
+UIButton *autoLowNotAvg;
+UIButton *autoLowMakesAvg;
+UIButton *autoLowAttemptsAvg;
+UIButton *autoLowHotPercentage;
+UIButton *autoLowAccuracyPercentage;
+UIButton *autoAccuracyPercentage;
+UIButton *mobilityBonusPercentage;
+UIButton *autonomousAvg;
+
+UIButton *teleopHighMakeAvg;
+UIButton *teleopHighMissAvg;
+UIButton *teleopHighAttemptsAvg;
+UIButton *teleopHighAccuracyPercentage;
+UIButton *teleopLowMakeAvg;
+UIButton *teleopLowMissAvg;
+UIButton *teleopLowAttemptsAvg;
+UIButton *teleopLowAccuracyPercentage;
+UIButton *teleopAccuracyPercentage;
+UIButton *teleopCatchAvg;
+UIButton *teleopOverAvg;
+UIButton *teleopPassedAvg;
+UIButton *teleopReceivedAvg;
+UIButton *teleopPassReceiveRatio;
+UIButton *teleopAvg;
+
+UIButton *smallPenaltyAvg;
+UIButton *largePenaltyAvg;
+UIButton *penaltyTotalAvg;
+
+UIButton *offensiveZonePercentage;
+UIButton *neutralZonePercentage;
+UIButton *defensiveZonePercentage;
 
 RegionalPoolCDTVC *regionalPoolCDTVC;
 
@@ -46,8 +89,7 @@ SecondPickListController *secondPickListController;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     _poolTableView.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
@@ -64,12 +106,17 @@ SecondPickListController *secondPickListController;
     _secondPickTableView.layer.borderWidth = 1;
     _secondPickTableView.layer.cornerRadius = 5;
     _secondPickTableView.separatorInset = UIEdgeInsetsMake(0, 3, 0, 3);
+    
+    _sortDownArrow.alpha = 0.3;
+    
+    _sortProperty.titleLabel.numberOfLines = 1;
+    _sortProperty.titleLabel.adjustsFontSizeToFitWidth = YES;
+    _sortProperty.titleLabel.lineBreakMode = NSLineBreakByClipping;
 }
-
-
 
 -(void)viewWillAppear:(BOOL)animated{
     regionalPoolCDTVC = [[RegionalPoolCDTVC alloc] init];
+    [regionalPoolCDTVC setSortAttribute:@"totalPointsAvg"];
     [regionalPoolCDTVC setRegionalToDisplay:regionalSelected];
     [regionalPoolCDTVC setManagedObjectContext:context];
     _poolTableView.delegate = regionalPoolCDTVC;
@@ -138,7 +185,195 @@ SecondPickListController *secondPickListController;
     }
 }
 
+- (IBAction)sortChange:(id)sender {
+    grieayOutView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+    grieayOutView.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+    [self.view addSubview:grieayOutView];
+    
+    sortersView = [[UIView alloc] initWithFrame:CGRectMake(159, 150, 450, 600)];
+    sortersView.backgroundColor = [UIColor whiteColor];
+    sortersView.layer.cornerRadius = 10;
+    [grieayOutView addSubview:sortersView];
+    
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    closeButton.frame = CGRectMake(390, 0, 55, 30);
+    [closeButton setTitle:@"Close X" forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(closeSorterView) forControlEvents:UIControlEventTouchUpInside];
+    closeButton.titleLabel.font = [UIFont systemFontOfSize:13];
+    
+    UIView *autonomousBox = [[UIView alloc] initWithFrame:CGRectMake(15, 40, 210, 200)];
+    autonomousBox.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:127.0/255.0 blue:0.0/255.0 alpha:0.3];
+    autonomousBox.layer.cornerRadius = 5;
+    
+//    autoHighHotAvg = [UIButton buttonWithType:UIButtonTypeSystem];
+//    autoHighHotAvg.frame = CGRectMake(15, 30, <#CGFloat width#>, <#CGFloat height#>)
+    
+    UIView *teleopBox = [[UIView alloc] initWithFrame:CGRectMake(15, 260, 210, 320)];
+    teleopBox.backgroundColor = [UIColor colorWithRed:153.0/255.0 green:102.0/255.0 blue:51.0/255.0 alpha:0.3];
+    teleopBox.layer.cornerRadius = 5;
+    
+    
+    
+    sortersView.frame = CGRectMake(_sortProperty.center.x, _sortProperty.center.y, 1, 1);
+    [UIView animateWithDuration:0.2 animations:^{
+        sortersView.frame = CGRectMake(159, 150, 450, 600);
+    } completion:^(BOOL finished) {
+        [sortersView addSubview:closeButton];
+        [sortersView addSubview:autonomousBox];
+        [sortersView addSubview:teleopBox];
+    }];
+}
+
+-(void)closeSorterView{
+    for (UIView *v in sortersView.subviews) {
+        [v removeFromSuperview];
+    }
+    [UIView animateWithDuration:0.2 animations:^{
+        sortersView.frame = CGRectMake(_sortProperty.center.x, _sortProperty.center.y, 1, 1);
+    } completion:^(BOOL finished) {
+        [sortersView removeFromSuperview];
+        [grieayOutView removeFromSuperview];
+    }];
+}
+
+- (IBAction)sortUp:(id)sender {
+    _sortUpArrow.alpha = 1;
+    _sortDownArrow.alpha = 0.3;
+    [regionalPoolCDTVC sortOrderLargeFirst];
+}
+
+- (IBAction)sortDown:(id)sender {
+    _sortUpArrow.alpha = 0.3;
+    _sortDownArrow.alpha = 1;
+    [regionalPoolCDTVC sortOrderSmallFirst];
+}
+
+-(void)sortAutoHighHotAvg{
+    
+}
+-(void)sortAutoHighMissAvg{
+    
+}
+-(void)sortAutoHighNotAvg{
+    
+}
+-(void)sortAutoHighMakesAvg{
+    
+}
+-(void)sortAutoHighAttemptsAvg{
+    
+}
+-(void)sortAutoHighHotPercentage{
+    
+}
+-(void)sortAutoHighAccuracyPercentage{
+    
+}
+-(void)sortAutoLowHotAvg{
+    
+}
+-(void)sortAutoLowMissAvg{
+    
+}
+-(void)sortAutoLowNotAvg{
+    
+}
+-(void)sortAutoLowMakesAvg{
+    
+}
+-(void)sortAutoLowAttemptsAvg{
+    
+}
+-(void)sortAutoLowHotPercentage{
+    
+}
+-(void)sortAutoLowAccuracyPercentage{
+    
+}
+-(void)sortAutoAccuracyPercentage{
+    
+}
+-(void)sortMobilityBonusPercentage{
+    
+}
+-(void)sortAutonomousAvg{
+    
+}
+
+-(void)sortTeleopHighMakeAvg{
+    
+}
+-(void)sortTeleopHighMissAvg{
+    
+}
+-(void)sortTeleopHighAttemptsAvg{
+    
+}
+-(void)sortTeleopHighAccuracyPercentage{
+    
+}
+-(void)sortTeleopLowMakeAvg{
+    
+}
+-(void)sortTeleopLowMissAvg{
+    
+}
+-(void)sortTeleopLowAttemptsAvg{
+    
+}
+-(void)sortTeleopLowAccuracyPercentage{
+    
+}
+-(void)sortTeleopAccuracyPercentage{
+    
+}
+-(void)sortTeleopCatchAvg{
+    
+}
+-(void)sortTeleopOverAvg{
+    
+}
+-(void)sortTeleopPassedAvg{
+    
+}
+-(void)sortTeleopReceivedAvg{
+    
+}
+-(void)sortTeleopPassReceiveRatio{
+    
+}
+-(void)sortTeleopAvg{
+    
+}
+
+-(void)sortsmallPenaltyAvg{
+    
+}
+-(void)sortlargePenaltyAvg{
+    
+}
+-(void)sortpenaltyTotalAvg{
+    
+}
+
+-(void)sortoffensiveZonePercentage{
+    
+}
+-(void)sortneutralZonePercentage{
+    
+}
+-(void)sortdefensiveZonePercentage{
+    
+}
+
 @end
+
+
+
+
+
+
+
 
 
 

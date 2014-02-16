@@ -64,7 +64,9 @@ NSString *regionalSelected;
         [_regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelected] indexOfObject:regionalSelected] inComponent:0 animated:YES];
     }
     
-    regionalSelected = [regionalNames firstObject];
+    if (!regionalSelected) {
+        regionalSelected = [regionalNames firstObject];
+    }
     
 }
 
@@ -86,6 +88,10 @@ NSString *regionalSelected;
     }
     
     weekSelected = weekSelector.selectedSegmentIndex;
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+
 }
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{

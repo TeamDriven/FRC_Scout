@@ -96,6 +96,7 @@
         <attribute name="teleopPassedAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="teleopPassReceiveRatio" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="teleopReceivedAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="totalPointsAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <relationship name="firstPickListRegional" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Regional" inverseName="firstPickList" inverseEntity="Regional" syncable="YES"/>
         <relationship name="master" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MasterTeam" inverseName="teamsWithin" inverseEntity="MasterTeam" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamNum" inverseEntity="Match" syncable="YES"/>
@@ -103,10 +104,10 @@
         <relationship name="secondPickListRegional" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Regional" inverseName="secondPickList" inverseEntity="Regional" syncable="YES"/>
     </entity>
     <elements>
-        <element name="MasterTeam" positionX="754" positionY="-76" width="128" height="88"/>
-        <element name="Match" positionX="0" positionY="0" width="128" height="420"/>
-        <element name="PitTeam" positionX="547" positionY="-360" width="128" height="283"/>
-        <element name="Regional" positionX="171" positionY="90" width="128" height="103"/>
-        <element name="Team" positionX="504" positionY="54" width="128" height="688"/>
+        <element name="MasterTeam" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Match" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="PitTeam" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Regional" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Team" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>
