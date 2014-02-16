@@ -379,7 +379,7 @@ CGRect selectedCellRect;
     [largePenaltyCountLbl sizeToFit];
     [teleopStatBox addSubview:largePenaltyCountLbl];
     
-    NSArray *splitNotes = [matchSelected.notes componentsSeparatedByString:@":"];
+    NSArray *splitNotes = [matchSelected.notes componentsSeparatedByString:@"{}"];
     
     UILabel *notesLbl = [[UILabel alloc] initWithFrame:CGRectMake(140, 443, 70, 15)];
     notesLbl.text = @"Notes";

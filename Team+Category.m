@@ -481,7 +481,7 @@
 -(float)offensiveZonePercentageCalculated{
     float offensiveZonePercentage = 0;
     for (Match *mtch in self.matches) {
-        NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
+        NSString *zoneString = [[mtch.notes componentsSeparatedByString:@"{}"] firstObject];
         if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
             if ([zoneString rangeOfString:@"Blue"].location != NSNotFound) {
                 offensiveZonePercentage ++;
@@ -503,7 +503,7 @@
 -(float)neutralZonePercentageCalculated{
     float neutralZonePercentage = 0;
     for (Match *mtch in self.matches) {
-        NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
+        NSString *zoneString = [[mtch.notes componentsSeparatedByString:@"{}"] firstObject];
         if ([zoneString rangeOfString:@"White"].location != NSNotFound) {
             neutralZonePercentage ++;
         }
@@ -518,7 +518,7 @@
 -(float)defensiveZonePercentageCalculated{
     float defensiveZonePercentage = 0;
     for (Match *mtch in self.matches) {
-        NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
+        NSString *zoneString = [[mtch.notes componentsSeparatedByString:@"{}"] firstObject];
         if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {
             if ([zoneString rangeOfString:@"Red"].location != NSNotFound) {
                 defensiveZonePercentage ++;

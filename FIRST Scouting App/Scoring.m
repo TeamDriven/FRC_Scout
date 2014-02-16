@@ -1918,7 +1918,7 @@ float startY;
     if (inBlueZone) {
         [notes appendString:@"Blue "];
     }
-    [notes appendString:@": "];
+    [notes appendString:@"{} "];
     
     NSMutableString *realNotes = [[NSMutableString alloc] initWithString:@""];
     if (didGoodDefense) {

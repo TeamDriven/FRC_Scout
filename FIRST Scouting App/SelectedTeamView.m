@@ -126,7 +126,7 @@ BOOL isImageLarge;
             overTrussTotal += [mtch.teleopOver floatValue];
             catchTotal += [mtch.teleopCatch floatValue];
             
-            NSString *zoneString = [[mtch.notes componentsSeparatedByString:@":"] firstObject];
+            NSString *zoneString = [[mtch.notes componentsSeparatedByString:@"{}"] firstObject];
             if ([zoneString rangeOfString:@"White"].location != NSNotFound) {neutralZoneCount ++;}
             
             if ([[mtch.red1Pos substringToIndex:1] isEqualToString:@"R"]) {

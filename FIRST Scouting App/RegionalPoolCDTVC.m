@@ -31,11 +31,17 @@ NSManagedObjectContext *context;
 // TeamDetailView
 UIView *greayOutView;
 UIView *listSelectorView;
+UIButton *closeButton;
 UIButton *pitDataBtn;
+UILabel *tableViewLbl;
 UITableView *matchesTableView;
 PoolTeamMatchesCDTVC *teamMatchesCDTVC;
 UIButton *firstListBtn;
 UIButton *secondListBtn;
+CGRect selectedCellRect;
+UILabel *titleLbl;
+UIView *averagesBox;
+UIImageView *robotPic;
 
 // PitData View
 UIControl *grayOutview;
@@ -85,6 +91,8 @@ Team *teamSelected;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     teamSelected = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    selectedCellRect = [self.tableView convertRect:[self.tableView rectForRowAtIndexPath:indexPath] toView:[[self.tableView superview] superview]];
+
     
     greayOutView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
     greayOutView.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
@@ -95,18 +103,18 @@ Team *teamSelected;
     listSelectorView.layer.cornerRadius = 10;
     [greayOutView addSubview:listSelectorView];
     
-    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
     closeButton.frame = CGRectMake(545, 0, 50, 30);
     [closeButton setTitle:@"Close X" forState:UIControlStateNormal];
     [closeButton addTarget:self action:@selector(closeListSelectorView) forControlEvents:UIControlEventTouchUpInside];
     closeButton.titleLabel.font = [UIFont systemFontOfSize:12];
     
-    UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(250, 15, 100, 30)];
+    titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(250, 15, 100, 30)];
     titleLbl.textAlignment = NSTextAlignmentCenter;
     titleLbl.font = [UIFont fontWithName:@"Futura-CondensedExtraBold" size:24];
     titleLbl.text = teamSelected.name;
     
-    UIView *averagesBox = [[UIView alloc] initWithFrame:CGRectMake(355, 50, 180, 160)];
+    averagesBox = [[UIView alloc] initWithFrame:CGRectMake(355, 50, 180, 160)];
     averagesBox.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     averagesBox.layer.cornerRadius = 10;
     
@@ -215,7 +223,7 @@ Team *teamSelected;
     pitDataBtn.enabled = true;
     pitDataBtn.hidden = false;
     
-    UIImageView *robotPic = [[UIImageView alloc] initWithFrame:CGRectMake(80, 50, 160, 160)];
+    robotPic = [[UIImageView alloc] initWithFrame:CGRectMake(80, 50, 160, 160)];
     robotPic.image = [UIImage imageWithData:teamSelected.master.pitTeam.image];
     if (robotPic.image == nil) {
         robotPic.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
@@ -230,7 +238,7 @@ Team *teamSelected;
     
     
     
-    UILabel *tableViewLbl = [[UILabel alloc] initWithFrame:CGRectMake(250, 230, 100, 15)];
+    tableViewLbl = [[UILabel alloc] initWithFrame:CGRectMake(250, 230, 100, 15)];
     tableViewLbl.text = @"Matches";
     tableViewLbl.font = [UIFont boldSystemFontOfSize:17];
     tableViewLbl.textAlignment = NSTextAlignmentCenter;
@@ -278,9 +286,9 @@ Team *teamSelected;
         secondListBtn.enabled = true;
     }
     
-    listSelectorView.transform = CGAffineTransformMakeScale(.01, .01);
+    listSelectorView.frame = CGRectMake(selectedCellRect.origin.x + selectedCellRect.size.width/2, selectedCellRect.origin.y + selectedCellRect.size.height/2, 1, 1);
     [UIView animateWithDuration:0.2 animations:^{
-        listSelectorView.transform = CGAffineTransformIdentity;
+        listSelectorView.frame = CGRectMake(84, 175, 600, 600);
     } completion:^(BOOL finished) {
         [listSelectorView addSubview:closeButton];
         [listSelectorView addSubview:titleLbl];
@@ -298,8 +306,17 @@ Team *teamSelected;
 }
 
 -(void)closeListSelectorView{
+    [closeButton removeFromSuperview];
+    [titleLbl removeFromSuperview];
+    [averagesBox removeFromSuperview];
+    [robotPic removeFromSuperview];
+    [pitDataBtn removeFromSuperview];
+    [tableViewLbl removeFromSuperview];
+    [matchesTableView removeFromSuperview];
+    [firstListBtn removeFromSuperview];
+    [secondListBtn removeFromSuperview];
     [UIView animateWithDuration:0.2 animations:^{
-        listSelectorView.transform = CGAffineTransformMakeScale(.01, .01);
+        listSelectorView.frame = CGRectMake(selectedCellRect.origin.x + selectedCellRect.size.width/2, selectedCellRect.origin.y + selectedCellRect.size.height/2, 1, 1);
     } completion:^(BOOL finished) {
         [listSelectorView removeFromSuperview];
         [greayOutView removeFromSuperview];
