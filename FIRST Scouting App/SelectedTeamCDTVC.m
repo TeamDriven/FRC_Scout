@@ -171,7 +171,7 @@ CGRect selectedCellRect;
     [autoStatBox addSubview:autoHighHotLbl];
     
     UILabel *autoHighHotCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(106, 30, 30, 25)];
-    autoHighHotCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoHighHotScore];
+    autoHighHotCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.autoHighHotScore integerValue]];
     autoHighHotCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [autoStatBox addSubview:autoHighHotCountLbl];
     
@@ -181,7 +181,7 @@ CGRect selectedCellRect;
     [autoStatBox addSubview:autoHighNotLbl];
     
     UILabel *autoHighNotCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(106, 57, 30, 25)];
-    autoHighNotCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoHighNotScore];
+    autoHighNotCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.autoHighNotScore integerValue]];
     autoHighNotCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [autoStatBox addSubview:autoHighNotCountLbl];
     
@@ -191,7 +191,7 @@ CGRect selectedCellRect;
     [autoStatBox addSubview:autoHighMissedLbl];
     
     UILabel *autoHighMissedCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(133, 84, 30, 25)];
-    autoHighMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoHighMissScore];
+    autoHighMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.autoHighMissScore integerValue]];
     autoHighMissedCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [autoStatBox addSubview:autoHighMissedCountLbl];
     
@@ -201,7 +201,7 @@ CGRect selectedCellRect;
     [autoStatBox addSubview:autoLowHotLbl];
     
     UILabel *autoLowHotCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(388, 30, 30, 25)];
-    autoLowHotCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoLowHotScore];
+    autoLowHotCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.autoLowHotScore integerValue]];
     autoLowHotCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [autoStatBox addSubview:autoLowHotCountLbl];
     
@@ -211,7 +211,7 @@ CGRect selectedCellRect;
     [autoStatBox addSubview:autoLowNotLbl];
     
     UILabel *autoLowNotCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(388, 57, 30, 25)];
-    autoLowNotCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoLowNotScore];
+    autoLowNotCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.autoLowNotScore integerValue]];
     autoLowNotCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [autoStatBox addSubview:autoLowNotCountLbl];
     
@@ -221,7 +221,7 @@ CGRect selectedCellRect;
     [autoStatBox addSubview:autoLowMissedLbl];
     
     UILabel *autoLowMissedCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(414, 84, 30, 25)];
-    autoLowMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.autoLowMissScore];
+    autoLowMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.autoLowMissScore integerValue]];
     autoLowMissedCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [autoStatBox addSubview:autoLowMissedCountLbl];
     
@@ -264,7 +264,7 @@ CGRect selectedCellRect;
     [teleopStatBox addSubview:teleopHighMadeLbl];
     
     UILabel *teleopHighMadeCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopHighMadeLbl.center.x + teleopHighMadeLbl.frame.size.width/2 + 2, 30, 30, 25)];
-    teleopHighMadeCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopHighMake];
+    teleopHighMadeCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.teleopHighMake integerValue]];
     teleopHighMadeCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [teleopHighMadeCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopHighMadeCountLbl];
@@ -276,7 +276,7 @@ CGRect selectedCellRect;
     [teleopStatBox addSubview:teleopHighMissedLbl];
     
     UILabel *teleopHighMissedCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopHighMissedLbl.center.x + teleopHighMissedLbl.frame.size.width/2 + 2, 59, 30, 25)];
-    teleopHighMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopHighMiss];
+    teleopHighMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.teleopHighMiss integerValue]];
     teleopHighMissedCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [teleopHighMissedCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopHighMissedCountLbl];
@@ -288,7 +288,7 @@ CGRect selectedCellRect;
     [teleopStatBox addSubview:teleopOverLbl];
     
     UILabel *teleopOverCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopOverLbl.center.x + teleopOverLbl.frame.size.width/2 + 2, 99, 30, 25)];
-    teleopOverCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopOver];
+    teleopOverCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.teleopOver integerValue]];
     teleopOverCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [teleopOverCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopOverCountLbl];
@@ -300,7 +300,7 @@ CGRect selectedCellRect;
     [teleopStatBox addSubview:teleopCatchLbl];
     
     UILabel *teleopCatchCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopCatchLbl.center.x + teleopCatchLbl.frame.size.width/2 + 2, 129, 30, 25)];
-    teleopCatchCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopCatch];
+    teleopCatchCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.teleopCatch integerValue]];
     teleopCatchCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [teleopCatchCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopCatchCountLbl];
@@ -312,7 +312,7 @@ CGRect selectedCellRect;
     [teleopStatBox addSubview:teleopLowMadeLbl];
     
     UILabel *teleopLowMadeCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopLowMadeLbl.center.x + teleopLowMadeLbl.frame.size.width/2 + 2, 30, 30, 25)];
-    teleopLowMadeCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopLowMake];
+    teleopLowMadeCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.teleopLowMake integerValue]];
     teleopLowMadeCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [teleopLowMadeCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopLowMadeCountLbl];
@@ -324,7 +324,7 @@ CGRect selectedCellRect;
     [teleopStatBox addSubview:teleopLowMissedLbl];
     
     UILabel *teleopLowMissedCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopLowMissedLbl.center.x + teleopLowMissedLbl.frame.size.width/2 + 2, 59, 30, 25)];
-    teleopLowMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopLowMiss];
+    teleopLowMissedCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.teleopLowMiss integerValue]];
     teleopLowMissedCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [teleopLowMissedCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopLowMissedCountLbl];
@@ -336,7 +336,7 @@ CGRect selectedCellRect;
     [teleopStatBox addSubview:teleopPassLbl];
     
     UILabel *teleopPassCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopPassLbl.center.x + teleopPassLbl.frame.size.width/2 + 2, 99, 30, 25)];
-    teleopPassCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopPassed];
+    teleopPassCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.teleopPassed integerValue]];
     teleopPassCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [teleopPassCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopPassCountLbl];
@@ -348,7 +348,7 @@ CGRect selectedCellRect;
     [teleopStatBox addSubview:teleopReceivedLbl];
     
     UILabel *teleopReceivedCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(teleopReceivedLbl.center.x + teleopReceivedLbl.frame.size.width/2 + 2, 129, 30, 25)];
-    teleopReceivedCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.teleopReceived];
+    teleopReceivedCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.teleopReceived integerValue]];
     teleopReceivedCountLbl.font = [UIFont boldSystemFontOfSize:19];
     [teleopReceivedCountLbl sizeToFit];
     [teleopStatBox addSubview:teleopReceivedCountLbl];
@@ -360,7 +360,7 @@ CGRect selectedCellRect;
     [teleopStatBox addSubview:smallPenaltyLbl];
     
     UILabel *smallPenaltyCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(smallPenaltyLbl.center.x + smallPenaltyLbl.frame.size.width/2 + 2, 169, 30, 25)];
-    smallPenaltyCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.penaltySmall];
+    smallPenaltyCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.penaltySmall integerValue]];
     smallPenaltyCountLbl.font = [UIFont boldSystemFontOfSize:19];
     smallPenaltyCountLbl.textColor = [UIColor redColor];
     [smallPenaltyCountLbl sizeToFit];
@@ -373,7 +373,7 @@ CGRect selectedCellRect;
     [teleopStatBox addSubview:largePenaltyLbl];
     
     UILabel *largePenaltyCountLbl = [[UILabel alloc] initWithFrame:CGRectMake(largePenaltyLbl.center.x + largePenaltyLbl.frame.size.width/2 + 2, 169, 30, 25)];
-    largePenaltyCountLbl.text = [[NSString alloc] initWithFormat:@"%@", matchSelected.penaltyLarge];
+    largePenaltyCountLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)[matchSelected.penaltyLarge integerValue]];
     largePenaltyCountLbl.font = [UIFont boldSystemFontOfSize:19];
     largePenaltyCountLbl.textColor = [UIColor redColor];
     [largePenaltyCountLbl sizeToFit];
