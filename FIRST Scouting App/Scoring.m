@@ -533,6 +533,7 @@ UILabel *blue3UpdaterLbl;
         [currentMatchNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
         [currentMatchNumField setTextAlignment:NSTextAlignmentCenter];
         [currentMatchNumField setDelegate:self];
+        currentMatchNumField.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
         [setUpView addSubview:currentMatchNumField];
         
         // Select either Qual or Elim match type (for data storage purposes)
@@ -541,7 +542,15 @@ UILabel *blue3UpdaterLbl;
         matchTypeSelector.frame = matchTypeSelectorRect;
         [matchTypeSelector addTarget:self action:@selector(changeMatchType) forControlEvents:UIControlEventValueChanged];
         [setUpView addSubview:matchTypeSelector];
-        matchTypeSelector.selectedSegmentIndex = 0;
+        if ([currentMatchType isEqualToString:@"Q"]) {
+            matchTypeSelector.selectedSegmentIndex = 0;
+            currentMatchNumField.keyboardType = UIKeyboardTypeDecimalPad;
+        }
+        else{
+            matchTypeSelector.selectedSegmentIndex = 1;
+            currentMatchNumField.keyboardType = UIKeyboardTypeAlphabet;
+        }
+        
         matchTypeSelector.transform = CGAffineTransformMakeScale(0.8, 0.8);
         
         // Title for week selector UISegmentedControl
@@ -626,9 +635,28 @@ UILabel *blue3UpdaterLbl;
     // Creates a random team number for the scout to watch to simulate a loaded match schedule
     NSInteger randomTeamNum = arc4random() % 4000;
     
-    currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
+    if ([currentMatchType isEqualToString:@"Q"]) {
+        currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
+    }
+    else{
+        currentTeamNum = @"";
+    }
     currentMatchNum = currentMatchNumField.text;
     currentRegional = [[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
+    
+    BOOL badMatchFormat = true;
+    if ([currentMatchType isEqualToString:@"E"]){
+        if (currentMatchNum.length == 4) {
+            if ([[currentMatchNum substringToIndex:2] isEqualToString:@"Q1"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q2"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q3"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q4"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"S1"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"S2"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"F1"]) {
+                if ([[currentMatchNum substringWithRange:NSMakeRange(3, 1)] integerValue] > 0) {
+                    badMatchFormat = false;
+                }
+            }
+        }
+    }
+    else{
+        badMatchFormat = false;
+    }
     
     // Checks for the correct number of initials
     if (!initials || initials.length != 3) {
@@ -666,6 +694,13 @@ UILabel *blue3UpdaterLbl;
                                              otherButtonTitles:nil];
         [alert show];
     }
+    else if (badMatchFormat){
+        UIAlertView *badMatchFormatAlert = [[UIAlertView alloc] initWithTitle:@"Bad Match Format!"
+                                                                      message:@"Remember to follow the format: \n Quarterfinal Match -> Q1.1, Q1.2, etc. \n Semifinal Match -> S1.1, S1.2, etc. \n Final Match -> F1.1, F1.2, etc."
+                                                                     delegate:nil
+                                                            cancelButtonTitle:@"My Bad" otherButtonTitles: nil];
+        [badMatchFormatAlert show];
+    }
     // If all tests pass, then the screen closes with a zoom small animation
     else{
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
@@ -682,9 +717,18 @@ UILabel *blue3UpdaterLbl;
                              [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
                              _matchNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
                              
-                             currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
-                             [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
-                             _teamNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
+                             if ([currentMatchType isEqualToString:@"Q"]) {
+                                 currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
+                                 [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
+                                 _teamNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
+                             }
+                             else{
+                                 _teamNumField.enabled = true;
+                                 _teamNumField.hidden = false;
+                                 _teamNumEdit.enabled = false;
+                                 _teamNumEdit.hidden = true;
+                                 _teamNumField.text = @"";
+                             }
                              
                              // Shows the initials of the scout
                              _initialsLbl.text = [[NSString alloc] initWithFormat:@"Your Initials: %@", initials];
@@ -943,9 +987,18 @@ UILabel *blue3UpdaterLbl;
 -(void)changeMatchType{
     if (matchTypeSelector.selectedSegmentIndex == 0) {
         currentMatchType = @"Q";
+        currentMatchNumField.keyboardType = UIKeyboardTypeDecimalPad;
     }
     else{
         currentMatchType = @"E";
+        UIAlertView *elimMatchTypeAlert = [[UIAlertView alloc] initWithTitle:@"Just a heads up..."
+                                                                     message:@"If you choose Elimination Match type, you must abide by the following format: \n Quarterfinal Match -> Q1.1, Q1.2, Q2.1, etc. \n Semifinal Match -> S1.1, S1.2, S2.1, etc. \n Finals Match -> F1.1, F1.2, F1.3, etc."
+                                                                    delegate:nil
+                                                           cancelButtonTitle:@"Affirmative."
+                                                           otherButtonTitles: nil];
+        [elimMatchTypeAlert show];
+        currentMatchNumField.keyboardType = UIKeyboardTypeAlphabet;
+        currentMatchNumField.text = @"Q1.1";
     }
 }
 // Called by the weekSelector UISegmentedControl
@@ -983,18 +1036,20 @@ UILabel *blue3UpdaterLbl;
         }
     }
     if (currentMatchNumField.isEditing) {
-        NSMutableString *txt2 = [[NSMutableString alloc] initWithString:currentMatchNumField.text];
-        for (unsigned int i = 0; i < [txt2 length]; i++) {
-            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt2 characterAtIndex:i]];
-            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
-                                                               message: @"Please only enter numbers in the \"Current Match Number\" text field"
-                                                              delegate: nil
-                                                     cancelButtonTitle:@"Sorry..."
-                                                     otherButtonTitles:nil];
-                [alert show];
-                [txt2 deleteCharactersInRange:NSMakeRange(i, 1)];
-                currentMatchNumField.text = [[NSString alloc] initWithString:txt2];
+        if ([currentMatchType isEqualToString:@"Q"]) {
+            NSMutableString *txt2 = [[NSMutableString alloc] initWithString:currentMatchNumField.text];
+            for (unsigned int i = 0; i < [txt2 length]; i++) {
+                NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt2 characterAtIndex:i]];
+                if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
+                                                                   message: @"Please only enter numbers in the \"Current Match Number\" text field"
+                                                                  delegate: nil
+                                                         cancelButtonTitle:@"Sorry..."
+                                                         otherButtonTitles:nil];
+                    [alert show];
+                    [txt2 deleteCharactersInRange:NSMakeRange(i, 1)];
+                    currentMatchNumField.text = [[NSString alloc] initWithString:txt2];
+                }
             }
         }
     }
@@ -1490,7 +1545,6 @@ float startY;
 }
 
 
-
 - (IBAction)teleopMakeHighPlus:(id)sender {
     teleopHighMake++;
     _teleopMakeHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)teleopHighMake];
@@ -1642,18 +1696,34 @@ float startY;
     }
     
     // If for some reason there was no match number (Shouldn't occur, but just in case)
-    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""] || [currentMatchNum integerValue] < 1) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO MATCH NUMBER"
-                                                       message: @"Please enter a match number for this match."
+    BOOL badMatchNumber = true;
+    if ([currentMatchType isEqualToString:@"Q"]) {
+        if ([currentMatchNum integerValue] > 0) {
+            badMatchNumber = false;
+        }
+    }
+    else{
+        if ([[currentMatchNum substringToIndex:2] isEqualToString:@"Q1"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q2"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q3"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q4"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"S1"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"S2"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"F1"]) {
+            if ([[currentMatchNum substringWithRange:NSMakeRange(3, 1)] integerValue] > 0) {
+                if (currentMatchNum.length == 4) {
+                    badMatchNumber = false;
+                }
+            }
+        }
+    }
+    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""] ||[[currentMatchNum substringToIndex:1] isEqualToString:@"0"] || badMatchNumber) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"INVALID MATCH NUMBER"
+                                                       message: @"Please enter a valid match number for this match."
                                                       delegate: nil
                                              cancelButtonTitle:@"OK"
                                              otherButtonTitles:nil];
+        
         [alert show];
     }
     // Another unlikely case: No team number. Also shouldn't happen, but a good safety net
-    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""] || [currentTeamNum integerValue] < 1) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO TEAM NUMBER"
-                                                       message: @"Please enter a team number for this match."
+    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""] || [currentTeamNum integerValue] < 1 || [[currentTeamNum substringToIndex:1] isEqualToString:@"0"]) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"INVALID TEAM NUMBER"
+                                                       message: @"Please enter a valid team number for this match."
                                                       delegate: nil
                                              cancelButtonTitle:@"OK"
                                              otherButtonTitles:nil];
@@ -1671,7 +1741,20 @@ float startY;
     inWhiteZone = false;
     inBlueZone = false;
     didGreatDefense = false;
+    didBadDefense = false;
     didDidntMove = false;
+    didSlowMovement = false;
+    didFastMovement = false;
+    didBrokeDownInMatch = false;
+    didGreatBallPickup = false;
+    didBadBallPickup = false;
+    didGreatCooperation = false;
+    didBadCooperation = false;
+    didGreatHumanPlayer = false;
+    didBadHumanPlayer = false;
+    didGreatDriver = false;
+    didAverageDriver = false;
+    didBadDriver = false;
     
     greyOut = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
     [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
@@ -2272,7 +2355,8 @@ float startY;
             didAverageDriver = true;
             didBadDriver = false;
         }
-    }else if ([controlView isEqual:badDriver]){
+    }
+    else if ([controlView isEqual:badDriver]){
         if (didBadDriver) {
             [UIView animateWithDuration:0.2 animations:^{
                 badDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
@@ -2326,27 +2410,67 @@ float startY;
     }
     [notes appendString:@"{} "];
     
-    NSMutableString *realNotes = [[NSMutableString alloc] initWithString:@""];
+    NSMutableString *quickNotes = [[NSMutableString alloc] initWithString:@""];
     if (didGreatDefense) {
-        [realNotes appendString:@"Did Great Defense, "];
+        [quickNotes appendString:@"Did Great Defense, "];
+    }
+    if (didBadDefense) {
+        [quickNotes appendString:@"Did Bad Defense, "];
     }
     if (didDidntMove) {
-        [realNotes appendString:@"Didn't Move, "];
+        [quickNotes appendString:@"Didn't Move, "];
+    }
+    if (didSlowMovement) {
+        [quickNotes appendString:@"Moved Slow, "];
+    }
+    if (didFastMovement) {
+        [quickNotes appendString:@"Moved Fast, "];
+    }
+    if (didBrokeDownInMatch) {
+        [quickNotes appendString:@"Broke Down in Match, "];
+    }
+    if (didGreatBallPickup) {
+        [quickNotes appendString:@"Had Great Ball Pick Up Skills, "];
+    }
+    if (didBadBallPickup) {
+        [quickNotes appendString:@"Had Bad Ball Pick Up Skills, "];
+    }
+    if (didGreatCooperation) {
+        [quickNotes appendString:@"Great Cooperation, "];
+    }
+    if (didBadCooperation) {
+        [quickNotes appendString:@"Bad Cooperation, "];
+    }
+    if (didGreatHumanPlayer) {
+        [quickNotes appendString:@"Great Human Player, "];
+    }
+    if (didBadHumanPlayer) {
+        [quickNotes appendString:@"Bad Human Player, "];
+    }
+    if (didGreatDriver) {
+        [quickNotes appendString:@"Great Driver, "];
+    }
+    if (didAverageDriver) {
+        [quickNotes appendString:@"Average Driver, "];
+    }
+    if (didBadDriver) {
+        [quickNotes appendString:@"Bad Driver, "];
+    }
+    if (quickNotes.length > 0) {
+        [quickNotes deleteCharactersInRange:NSMakeRange(quickNotes.length-2, 2)];
     }
     if (notesTextField.text.length > 0) {
-        if (realNotes.length == 0) {
-            [realNotes appendString:notesTextField.text];
+        if (quickNotes.length == 0) {
+            [notes appendString:notesTextField.text];
         }
         else{
-            [realNotes appendString: [[NSString alloc] initWithFormat:@"\n%@", notesTextField.text]];
+            [notes appendString: quickNotes];
+            [notes appendString: [[NSString alloc] initWithFormat:@"\n \n%@", notesTextField.text]];
         }
     }
-    else {
-        if (didGreatDefense || didDidntMove) {
-            [realNotes deleteCharactersInRange:NSMakeRange(notes.length-2, 2)];
-        }
+    else{
+        [notes appendString:quickNotes];
     }
-    [notes appendString:realNotes];
     [UIView animateWithDuration:0.3 animations:^{
         notesScreen.center = CGPointMake(notesScreen.center.x, 1524);
     } completion:^(BOOL finished) {
@@ -2464,12 +2588,12 @@ float startY;
         NSError *error;
         [self.mySession sendData:dataToSend toPeers:[self.mySession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
     }
-    if (red1Pos == 0) {red1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 1 : %@", currentMatchNum];}
-    else if (red1Pos == 1){red2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 2 : %@", currentMatchNum];}
-    else if (red1Pos == 2){red3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 3 : %@", currentMatchNum];}
-    else if (red1Pos == 3){blue1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 1 : %@", currentMatchNum];}
-    else if (red1Pos == 4){blue2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 2 : %@", currentMatchNum];}
-    else if (red1Pos == 5){blue3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 3 : %@", currentMatchNum];}
+    if (red1Pos == 0) {red1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 1 : %@", currentMatchNum]; red1UpdaterLbl.adjustsFontSizeToFitWidth = true;}
+    else if (red1Pos == 1){red2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 2 : %@", currentMatchNum]; red2UpdaterLbl.adjustsFontSizeToFitWidth = true;}
+    else if (red1Pos == 2){red3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 3 : %@", currentMatchNum]; red3UpdaterLbl.adjustsFontSizeToFitWidth = true;}
+    else if (red1Pos == 3){blue1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 1 : %@", currentMatchNum]; blue1UpdaterLbl.adjustsFontSizeToFitWidth = true;}
+    else if (red1Pos == 4){blue2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 2 : %@", currentMatchNum]; blue2UpdaterLbl.adjustsFontSizeToFitWidth = true;}
+    else if (red1Pos == 5){blue3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 3 : %@", currentMatchNum]; blue3UpdaterLbl.adjustsFontSizeToFitWidth = true;}
     
     // Reset all the scores and labels
     autoHighHotScore = 0;
@@ -2520,20 +2644,121 @@ float startY;
     inWhiteZone = false;
     inBlueZone = false;
     didGreatDefense = false;
+    didBadDefense = false;
     didDidntMove = false;
+    didSlowMovement = false;
+    didFastMovement = false;
+    didBrokeDownInMatch = false;
+    didGreatBallPickup = false;
+    didBadBallPickup = false;
+    didGreatCooperation = false;
+    didBadCooperation = false;
+    didGreatHumanPlayer = false;
+    didBadHumanPlayer = false;
+    didGreatDriver = false;
+    didAverageDriver = false;
+    didBadDriver = false;
     
-    // Increment match number by 1
-    NSInteger matchNumTranslator = [currentMatchNum integerValue];
-    matchNumTranslator++;
-    currentMatchNum = [[NSString alloc] initWithFormat:@"%ld", (long)matchNumTranslator];
+    // Increment match number by 1 & Generate a random team number to simulate a loaded schedule if it's a qual match
+    if ([currentMatchType isEqualToString:@"Q"]) {
+        NSInteger matchNumTranslator = [currentMatchNum integerValue];
+        matchNumTranslator++;
+        currentMatchNum = [[NSString alloc] initWithFormat:@"%ld", (long)matchNumTranslator];
+        currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
+        [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
+        
+        NSInteger randomTeamNum = arc4random() % 4000;
+        currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
+        
+        NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+        NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %ld", randomTeamNum];
+        roboPicRequest.predicate = roboPicPredicate;
+        NSError *roboPicError = nil;
+        NSArray *roboPics = [context executeFetchRequest:roboPicRequest error:&roboPicError];
+        PitTeam *pt = [roboPics firstObject];
+        _robotPic.alpha = 0;
+        UIImage *image = [UIImage imageWithData:[pt valueForKey:@"image"]];
+        _robotPic.image = image;
+        
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^(void){
+            _movementRobot.center = CGPointMake(_movementRobot.center.x, _movementLine.center.y + 50);
+            _swipeUpArrow.alpha = 1;
+            _robotPic.alpha = 1;
+        }completion:^(BOOL finished) {}];
+    }
+    else{
+        if ([currentMatchNum isEqualToString:@"Q1.1"]) {
+            currentMatchNum = @"Q2.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q2.1"]){
+            currentMatchNum = @"Q3.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q3.1"]){
+            currentMatchNum = @"Q4.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q4.1"]){
+            currentMatchNum = @"Q1.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q1.2"]){
+            currentMatchNum = @"Q2.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q2.2"]){
+            currentMatchNum = @"Q3.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q3.2"]){
+            currentMatchNum = @"Q4.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q4.2"]){
+            currentMatchNum = @"Q1.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q1.3"]){
+            currentMatchNum = @"Q2.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q2.3"]){
+            currentMatchNum = @"Q3.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q3.3"]){
+            currentMatchNum = @"Q4.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q4.3"]){
+            currentMatchNum = @"S1.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"S1.1"]){
+            currentMatchNum = @"S2.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"S2.1"]){
+            currentMatchNum = @"S1.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"S1.2"]){
+            currentMatchNum = @"S2.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"S2.2"]){
+            currentMatchNum = @"S1.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"S1.3"]){
+            currentMatchNum = @"S2.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"S2.3"]){
+            currentMatchNum = @"F1.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"F1.1"]){
+            currentMatchNum = @"F1.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"F1.2"]){
+            currentMatchNum = @"F1.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"F1.3"]){
+            currentMatchNum = @"F1.4";
+        }
+        else if ([currentMatchNum isEqualToString:@"F1.4"]){
+            currentMatchNum = @"";
+        }
+        
+        _teamNumField.text = @"";
+    }
+    
     currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
     [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
-    
-    // Generate a random team number to simulate a loaded schedule
-    NSInteger randomTeamNum = arc4random() % 4000;
-    currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
-    currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
-    [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
     
     // Reset editability of match and team numbers
     if (_matchNumEdit.hidden) {
@@ -2543,27 +2768,23 @@ float startY;
         _matchNumEdit.hidden = false;
     }
     if (_teamNumEdit.hidden) {
-        _teamNumField.enabled = false;
-        _teamNumField.hidden = true;
-        _teamNumEdit.enabled = true;
-        _teamNumEdit.hidden = false;
+        if ([currentMatchType isEqualToString:@"Q"]) {
+            _teamNumField.enabled = false;
+            _teamNumField.hidden = true;
+            _teamNumEdit.enabled = true;
+            _teamNumEdit.hidden = false;
+        }
     }
     
-    NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
-    NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %ld", randomTeamNum];
-    roboPicRequest.predicate = roboPicPredicate;
-    NSError *roboPicError = nil;
-    NSArray *roboPics = [context executeFetchRequest:roboPicRequest error:&roboPicError];
-    PitTeam *pt = [roboPics firstObject];
-    _robotPic.alpha = 0;
-    UIImage *image = [UIImage imageWithData:[pt valueForKey:@"image"]];
-    _robotPic.image = image;
+    if (currentMatchNum.length == 0) {
+        _matchNumField.enabled = true;
+        _matchNumField.hidden = false;
+        _matchNumEdit.enabled = false;
+        _matchNumEdit.hidden = true;
+        
+        _matchNumField.text = @"";
+    }
     
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^(void){
-        _movementRobot.center = CGPointMake(_movementRobot.center.x, _movementLine.center.y + 50);
-        _swipeUpArrow.alpha = 1;
-        _robotPic.alpha = 1;
-    }completion:^(BOOL finished) {}];
     
     // Turns autonomous mode on
     [self autoOn];
