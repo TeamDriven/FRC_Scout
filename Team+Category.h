@@ -82,6 +82,8 @@
 -(float)teleopAvgCalculated;
 
 
+-(float)totalPointsAvgCalculated;
+
 
 -(float)smallPenaltyAvgCalculated;
 

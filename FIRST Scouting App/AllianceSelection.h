@@ -33,5 +33,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *sortProperty;
 
+@property (weak, nonatomic) IBOutlet UIView *sortBox;
 
 @end

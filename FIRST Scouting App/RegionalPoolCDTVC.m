@@ -58,7 +58,7 @@ Team *teamSelected;
     NSFetchRequest *poolRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
     poolRequest.predicate = [NSPredicate predicateWithFormat:@"regionalIn.name = %@", _regionalToDisplay];
 //    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)]];
-    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:_sortAttribute ascending:NO]];
+    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:_sortAttribute ascending:NO], [NSSortDescriptor sortDescriptorWithKey:@"totalPointsAvg" ascending:NO]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc]
                                      initWithFetchRequest:poolRequest
@@ -70,7 +70,7 @@ Team *teamSelected;
 -(void)sortOrderLargeFirst{
     NSFetchRequest *poolRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
     poolRequest.predicate = [NSPredicate predicateWithFormat:@"regionalIn.name = %@", _regionalToDisplay];
-    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:_sortAttribute ascending:NO]];
+    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:_sortAttribute ascending:NO], [NSSortDescriptor sortDescriptorWithKey:@"totalPointsAvg" ascending:NO]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc]
                                      initWithFetchRequest:poolRequest
@@ -82,7 +82,7 @@ Team *teamSelected;
 -(void)sortOrderSmallFirst{
     NSFetchRequest *poolRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
     poolRequest.predicate = [NSPredicate predicateWithFormat:@"regionalIn.name = %@", _regionalToDisplay];
-    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:_sortAttribute ascending:YES]];
+    poolRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:_sortAttribute ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"totalPointsAvg" ascending:NO]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc]
                                      initWithFetchRequest:poolRequest

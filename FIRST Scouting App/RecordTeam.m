@@ -680,6 +680,8 @@ UIAlertView *overWriteAlert;
 -(void)getAnImage{
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
     NSInteger cancelButtonY;
     NSInteger popUpViewY;
     
@@ -960,6 +962,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)shooterSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:shooterNone]){
@@ -1033,6 +1037,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)preferredGoalSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:preferredHigh]){
@@ -1073,6 +1079,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)goalieArmSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:goalieArmYes]){
@@ -1113,6 +1121,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)floorCollectorSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:floorCollectorYes]){
@@ -1153,6 +1163,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)autonomousSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:autonomousYes]){
@@ -1193,6 +1205,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)autoStartingPositionSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:startLeft]){
@@ -1253,6 +1267,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)hotGoalTrackingSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:hotGoalYes]){
@@ -1293,6 +1309,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)catchingMechanismSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:catchingYes]){
@@ -1333,6 +1351,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)bumperQualitySelectionTapped:(UIControl *)controller{
     if ([controller isEqual:bumperPoor]){
@@ -1397,6 +1417,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 
 

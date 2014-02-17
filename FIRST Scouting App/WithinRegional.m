@@ -15,7 +15,7 @@
 @implementation WithinRegional
 
 UISegmentedControl *weekSelector;
-NSInteger weekSelected;
+NSInteger weekSelectedData;
 NSString *regionalSelected;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
@@ -47,12 +47,12 @@ NSString *regionalSelected;
             }
         }
     }
-    if (weekSelected) {
-        weekSelector.selectedSegmentIndex = weekSelected;
+    if (weekSelectedData) {
+        weekSelector.selectedSegmentIndex = weekSelectedData;
     }
     else{
         weekSelector.selectedSegmentIndex = 0;
-        weekSelected = 0;
+        weekSelectedData = 0;
     }
     
     
@@ -61,7 +61,7 @@ NSString *regionalSelected;
     _regionalPicker.layer.cornerRadius = 5;
     _regionalPicker.backgroundColor = [UIColor colorWithWhite:0.9 alpha:0.5];
     if (regionalSelected) {
-        [_regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelected] indexOfObject:regionalSelected] inComponent:0 animated:YES];
+        [_regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelectedData] indexOfObject:regionalSelected] inComponent:0 animated:NO];
     }
     
     if (!regionalSelected) {
@@ -77,8 +77,8 @@ NSString *regionalSelected;
 
 // Called by the weekSelector UISegmentedControl
 -(void)changeWeek{
-    if ([[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]containsObject:[[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[_regionalPicker selectedRowInComponent:0]]]) {
-        NSString *regional = [[allWeekRegionals objectAtIndex:weekSelected] objectAtIndex:[_regionalPicker selectedRowInComponent:0]];
+    if ([[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]containsObject:[[allWeekRegionals objectAtIndex:weekSelectedData] objectAtIndex:[_regionalPicker selectedRowInComponent:0]]]) {
+        NSString *regional = [[allWeekRegionals objectAtIndex:weekSelectedData] objectAtIndex:[_regionalPicker selectedRowInComponent:0]];
         [_regionalPicker reloadAllComponents];
         [_regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex]indexOfObject:regional] inComponent:0 animated:YES];
     }
@@ -87,11 +87,7 @@ NSString *regionalSelected;
         [_regionalPicker selectRow:0 inComponent:0 animated:YES];
     }
     
-    weekSelected = weekSelector.selectedSegmentIndex;
-}
-
--(void)viewDidAppear:(BOOL)animated{
-
+    weekSelectedData = weekSelector.selectedSegmentIndex;
 }
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{

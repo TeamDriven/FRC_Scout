@@ -66,7 +66,9 @@ NSMutableArray *secondPickListMutable;
     teleopAvg = (float)teleopTotal/(float)totalMatches;
     
     cell.autoAvg.text = [[NSString alloc] initWithFormat:@"%.1f", autoAvg];
+    cell.autoAvg.adjustsFontSizeToFitWidth = true;
     cell.teleopAvg.text = [[NSString alloc] initWithFormat:@"%.1f", teleopAvg];
+    cell.teleopAvg.adjustsFontSizeToFitWidth = true;
     
     return cell;
 }
