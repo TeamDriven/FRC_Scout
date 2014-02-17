@@ -24,6 +24,8 @@
 		869F0A9518AB2B8E0026B6EC /* AlliancePickListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0A9418AB2B8E0026B6EC /* AlliancePickListCell.m */; };
 		869F0A9D18AB3E450026B6EC /* RegionalPoolCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0A9C18AB3E450026B6EC /* RegionalPoolCDTVC.m */; };
 		869F0AA618ABEBD30026B6EC /* AllianceSelectionPoolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0AA518ABEBD30026B6EC /* AllianceSelectionPoolCell.m */; };
+		86A37DA418B1A59500170595 /* RankingsCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A37DA318B1A59500170595 /* RankingsCDTVC.m */; };
+		86A37DA718B1A5AD00170595 /* RankingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A37DA618B1A5AD00170595 /* RankingsCell.m */; };
 		86A5551C18B087D500BA2C4E /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A5551B18B087D500BA2C4E /* Match.m */; };
 		86A5551F18B087D600BA2C4E /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A5551E18B087D600BA2C4E /* Team.m */; };
 		86A5552218B087D600BA2C4E /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A5552118B087D600BA2C4E /* Regional.m */; };
@@ -106,6 +108,10 @@
 		869F0A9C18AB3E450026B6EC /* RegionalPoolCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegionalPoolCDTVC.m; sourceTree = "<group>"; };
 		869F0AA418ABEBD30026B6EC /* AllianceSelectionPoolCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllianceSelectionPoolCell.h; sourceTree = "<group>"; };
 		869F0AA518ABEBD30026B6EC /* AllianceSelectionPoolCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllianceSelectionPoolCell.m; sourceTree = "<group>"; };
+		86A37DA218B1A59500170595 /* RankingsCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingsCDTVC.h; sourceTree = "<group>"; };
+		86A37DA318B1A59500170595 /* RankingsCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingsCDTVC.m; sourceTree = "<group>"; };
+		86A37DA518B1A5AD00170595 /* RankingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingsCell.h; sourceTree = "<group>"; };
+		86A37DA618B1A5AD00170595 /* RankingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingsCell.m; sourceTree = "<group>"; };
 		86A5551A18B087D500BA2C4E /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
 		86A5551B18B087D500BA2C4E /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
 		86A5551D18B087D600BA2C4E /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
@@ -344,6 +350,19 @@
 			name = AllianceSelection;
 			sourceTree = "<group>";
 		};
+		86A37DA118B1A40100170595 /* Rankings */ = {
+			isa = PBXGroup;
+			children = (
+				86E8713518A0955E00EA2663 /* Rankings.h */,
+				86E8713618A0955E00EA2663 /* Rankings.m */,
+				86A37DA218B1A59500170595 /* RankingsCDTVC.h */,
+				86A37DA318B1A59500170595 /* RankingsCDTVC.m */,
+				86A37DA518B1A5AD00170595 /* RankingsCell.h */,
+				86A37DA618B1A5AD00170595 /* RankingsCell.m */,
+			);
+			name = Rankings;
+			sourceTree = "<group>";
+		};
 		86CDCD2A188DBFE5002B6522 /* Pit Scouting */ = {
 			isa = PBXGroup;
 			children = (
@@ -367,8 +386,6 @@
 				88ED27F71829FE58008F3FDF /* Data.m */,
 				869F0A9818AB3D9E0026B6EC /* SingleTeam */,
 				869F0A9918AB3DC20026B6EC /* SelectedTeam */,
-				86E8713818A0957C00EA2663 /* WithinRegional.h */,
-				86E8713918A0957C00EA2663 /* WithinRegional.m */,
 				86E8714118A095DA00EA2663 /* Within Regional */,
 			);
 			name = "Data Pages";
@@ -377,8 +394,9 @@
 		86E8714118A095DA00EA2663 /* Within Regional */ = {
 			isa = PBXGroup;
 			children = (
-				86E8713518A0955E00EA2663 /* Rankings.h */,
-				86E8713618A0955E00EA2663 /* Rankings.m */,
+				86E8713818A0957C00EA2663 /* WithinRegional.h */,
+				86E8713918A0957C00EA2663 /* WithinRegional.m */,
+				86A37DA118B1A40100170595 /* Rankings */,
 				86E8713B18A095A200EA2663 /* NextMatch.h */,
 				86E8713C18A095A200EA2663 /* NextMatch.m */,
 				869F0A9A18AB3E040026B6EC /* AllianceSelection */,
@@ -605,8 +623,10 @@
 				86E8713018A038CD00EA2663 /* PeerCell.m in Sources */,
 				8846FEE11826D7D200B37E44 /* LocationsAppDelegate.m in Sources */,
 				86E8714718A0ABEB00EA2663 /* DetailsNavigationController.m in Sources */,
+				86A37DA418B1A59500170595 /* RankingsCDTVC.m in Sources */,
 				86CDCD30188DC016002B6522 /* ViewTeams.m in Sources */,
 				869F0AA618ABEBD30026B6EC /* AllianceSelectionPoolCell.m in Sources */,
+				86A37DA718B1A5AD00170595 /* RankingsCell.m in Sources */,
 				863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */,
 				869A58A318A7E75E00FFCDEB /* SingleTeamMatchCell.m in Sources */,
 				869F0A9D18AB3E450026B6EC /* RegionalPoolCDTVC.m in Sources */,
