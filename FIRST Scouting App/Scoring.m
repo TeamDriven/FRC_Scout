@@ -931,7 +931,7 @@ UILabel *blue3UpdaterLbl;
                          visibleSwitchLbl.hidden = false;
                          visibleSwitch.hidden = false;
                          visibleSwitch.enabled = true;
-                         [visibleSwitch setOn:true animated:YES];
+                         [visibleSwitch setOn:visible animated:YES];
                          inviteMoreBtn.enabled = host;
                          inviteMoreBtn.hidden = !host;
                          doneButton.hidden = false;
@@ -1248,6 +1248,13 @@ UILabel *blue3UpdaterLbl;
             else if ([updatedPeerString isEqualToString:@"Blue 1"]){[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor blueColor]];}
             else if ([updatedPeerString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor blueColor]];}
             else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor blueColor]];}
+            
+            UIAlertView *connectedSuccessfullyAlert = [[UIAlertView alloc] initWithTitle:@"Woot Woot!"
+                                                                                 message:[[NSString alloc] initWithFormat:@"You successfully connected to %@ on Insta-Share!", [peerID displayName]]
+                                                                                delegate:nil
+                                                                       cancelButtonTitle:@"Great Odin's Raven!"
+                                                                       otherButtonTitles: nil];
+            [connectedSuccessfullyAlert show];
         });
         
         if ([updatedPeerString isEqualToString:pos]) {
@@ -1265,15 +1272,18 @@ UILabel *blue3UpdaterLbl;
         NSLog(@"Disconnected");
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([updatedPeerString isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
-            else if ([updatedPeerString isEqualToString:@"Red 2"]){[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Red 2"]){
+                NSLog(@"Red 2");
+                [[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+            }
             else if ([updatedPeerString isEqualToString:@"Red 3"]){[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Blue 1"]){[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             UIAlertView *disconnectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh no!"
-                                                                        message:[[NSString alloc] initWithFormat:@"You disconnected with %@!", updatedPeerString]
+                                                                        message:[[NSString alloc] initWithFormat:@"You disconnected with %@ in Insta-Share!", updatedPeerString]
                                                                        delegate:nil
-                                                              cancelButtonTitle:@"Aw man!"
+                                                              cancelButtonTitle:@"Son of a bee sting!"
                                                               otherButtonTitles:nil];
             [disconnectedAlert show];
         });
@@ -1721,7 +1731,7 @@ float startY;
         [alert show];
     }
     // Another unlikely case: No team number. Also shouldn't happen, but a good safety net
-    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""] || [currentTeamNum integerValue] < 1 || [[currentTeamNum substringToIndex:1] isEqualToString:@"0"]) {
+    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""] || [currentTeamNum integerValue] < 1 || [[currentTeamNum substringToIndex:1] isEqualToString:@"0"] || currentTeamNum.length > 4) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"INVALID TEAM NUMBER"
                                                        message: @"Please enter a valid team number for this match."
                                                       delegate: nil

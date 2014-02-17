@@ -147,6 +147,7 @@ SecondPickListController *secondPickListController;
     
     firstPickListController = [[FirstPickListController alloc] init];
     [firstPickListController setFirstPickList:firstPickArray];
+    [firstPickListController setManagedObjectContext:context];
     _firstPickTableView.delegate = firstPickListController;
     _firstPickTableView.dataSource = firstPickListController;
     firstPickListController.tableView = _firstPickTableView;
@@ -155,6 +156,7 @@ SecondPickListController *secondPickListController;
     
     secondPickListController = [[SecondPickListController alloc] init];
     [secondPickListController setSecondPickList:secondPickArray];
+    [secondPickListController setManagedObjectContext:context];
     _secondPickTableView.delegate = secondPickListController;
     _secondPickTableView.dataSource = secondPickListController;
     secondPickListController.tableView = _secondPickTableView;

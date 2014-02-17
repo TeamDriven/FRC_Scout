@@ -76,6 +76,8 @@ PeerCell *selectedCell;
 BOOL isSending;
 PeerCell *receivingCell;
 BOOL isReceiving;
+UISegmentedControl *whichToSend;
+NSString *whichDataToSend;
 
 -(void)viewDidLoad{
     [super viewDidLoad];
@@ -241,9 +243,18 @@ BOOL isReceiving;
     [self.view addSubview:self.visibleSwitch];
     [self.visibleSwitch setOn:true animated:YES];
 
+    whichToSend = [[UISegmentedControl alloc] initWithItems:@[@"All", @"Matches Only", @"Pit Data Only"]];
+    whichToSend.frame = CGRectMake(234, 195, 300, 25);
+    [whichToSend addTarget:self action:@selector(changeDataToSend:) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:whichToSend];
+    whichToSend.enabled = false;
+    whichToSend.alpha = 0;
+    whichToSend.selectedSegmentIndex = 0;
+    whichDataToSend = @"All";
+    
     self.sendMessageBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.sendMessageBtn setTitle:@"Send" forState:UIControlStateNormal];
-    self.sendMessageBtn.frame = CGRectMake(330, 200, 100, 50);
+    self.sendMessageBtn.frame = CGRectMake(334, 230, 100, 50);
     self.sendMessageBtn.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     self.sendMessageBtn.layer.cornerRadius = 5;
     [self.sendMessageBtn addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
@@ -252,23 +263,36 @@ BOOL isReceiving;
     self.sendMessageBtn.alpha = 0;
     
     self.progressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-    self.progressBar.frame = CGRectMake(309, 260, 150, 2);
+    self.progressBar.frame = CGRectMake(309, 285, 150, 2);
     [self.view addSubview:self.progressBar];
     self.progressBar.alpha = 0;
     
-    overWriteLbl = [[UILabel alloc] initWithFrame:CGRectMake(324, 270, 120, 20)];
+    overWriteLbl = [[UILabel alloc] initWithFrame:CGRectMake(324, 290, 120, 20)];
     overWriteLbl.text = @"Allow Overwriting";
     overWriteLbl.textAlignment = NSTextAlignmentCenter;
     overWriteLbl.font = [UIFont systemFontOfSize:14];
     [self.view addSubview:overWriteLbl];
     overWriteLbl.alpha = 0;
     
-    self.overWriteSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(359, 290, 49, 31)];
+    self.overWriteSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(359, 310, 49, 31)];
     [self.overWriteSwitch addTarget:self action:@selector(overWriteOption) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.overWriteSwitch];
     self.overWriteSwitch.hidden = true;
     self.overWriteSwitch.enabled = false;
 
+}
+
+-(void)changeDataToSend:(UISegmentedControl *)control{
+    if (control.selectedSegmentIndex == 0) {
+        whichDataToSend = @"All";
+    }
+    else if (control.selectedSegmentIndex == 1){
+        whichDataToSend = @"Matches Only";
+    }
+    else{
+        whichDataToSend = @"Pit Data Only";
+    }
+    NSLog(@"%@", whichDataToSend);
 }
 
 -(void)setUpMultipeer{
@@ -327,62 +351,67 @@ BOOL isReceiving;
         NSFetchRequest *regionalRequest = [NSFetchRequest fetchRequestWithEntityName:@"Regional"];
         NSError *regionalError;
         
-        NSArray *regionals = [context executeFetchRequest:regionalRequest error:&regionalError];
-        for (Regional *rgnl in regionals) {
-            [regionalsDict setObject:[[NSMutableDictionary alloc] init] forKey:rgnl.name];
-            for (Team *tm in rgnl.teams) {
-                [[regionalsDict objectForKey:rgnl.name] setObject:[[NSMutableDictionary alloc] init] forKey:tm.name];
-                for (Match *mtch in tm.matches) {
-                    [[[regionalsDict objectForKey:rgnl.name] objectForKey:tm.name]
-                     setObject:[[NSDictionary alloc]
-                                initWithObjectsAndKeys:
-                                [NSNumber numberWithInteger:[mtch.autoHighHotScore integerValue]], @"autoHighHotScore",
-                                [NSNumber numberWithInteger:[mtch.autoHighNotScore integerValue]], @"autoHighNotScore",
-                                [NSNumber numberWithInteger:[mtch.autoHighMissScore integerValue]], @"autoHighMissScore",
-                                [NSNumber numberWithInteger:[mtch.autoLowHotScore integerValue]], @"autoLowHotScore",
-                                [NSNumber numberWithInteger:[mtch.autoLowNotScore integerValue]], @"autoLowNotScore",
-                                [NSNumber numberWithInteger:[mtch.autoLowMissScore integerValue]], @"autoLowMissScore",
-                                [NSNumber numberWithInteger:[mtch.mobilityBonus integerValue]], @"mobilityBonus",
-                                [NSNumber numberWithInteger:[mtch.teleopHighMake integerValue]], @"teleopHighMake",
-                                [NSNumber numberWithInteger:[mtch.teleopHighMiss integerValue]], @"teleopHighMiss",
-                                [NSNumber numberWithInteger:[mtch.teleopLowMake integerValue]], @"teleopLowMake",
-                                [NSNumber numberWithInteger:[mtch.teleopLowMiss integerValue]], @"teleopLowMiss",
-                                [NSNumber numberWithInteger:[mtch.teleopOver integerValue]], @"teleopOver",
-                                [NSNumber numberWithInteger:[mtch.teleopPassed integerValue]], @"teleopPassed",
-                                [NSNumber numberWithInteger:[mtch.penaltyLarge integerValue]], @"penaltyLarge",
-                                [NSNumber numberWithInteger:[mtch.penaltySmall integerValue]], @"penaltySmall",
-                                [NSString stringWithString:mtch.notes], @"notes",
-                                [NSString stringWithString:mtch.red1Pos], @"red1Pos",
-                                [NSString stringWithString:mtch.recordingTeam], @"recordingTeam",
-                                [NSString stringWithString:mtch.scoutInitials], @"scoutInitials",
-                                [NSString stringWithString:mtch.matchType], @"matchType",
-                                [NSString stringWithString:mtch.matchNum], @"matchNum",
-                                [NSNumber numberWithInteger:[mtch.uniqeID integerValue]], @"uniqueID",nil] forKey:mtch.matchNum];
+        if ([whichDataToSend isEqualToString:@"All"] || [whichDataToSend isEqualToString:@"Matches Only"]) {
+            NSArray *regionals = [context executeFetchRequest:regionalRequest error:&regionalError];
+            for (Regional *rgnl in regionals) {
+                [regionalsDict setObject:[[NSMutableDictionary alloc] init] forKey:rgnl.name];
+                for (Team *tm in rgnl.teams) {
+                    [[regionalsDict objectForKey:rgnl.name] setObject:[[NSMutableDictionary alloc] init] forKey:tm.name];
+                    for (Match *mtch in tm.matches) {
+                        [[[regionalsDict objectForKey:rgnl.name] objectForKey:tm.name]
+                         setObject:[[NSDictionary alloc]
+                                    initWithObjectsAndKeys:
+                                    [NSNumber numberWithInteger:[mtch.autoHighHotScore integerValue]], @"autoHighHotScore",
+                                    [NSNumber numberWithInteger:[mtch.autoHighNotScore integerValue]], @"autoHighNotScore",
+                                    [NSNumber numberWithInteger:[mtch.autoHighMissScore integerValue]], @"autoHighMissScore",
+                                    [NSNumber numberWithInteger:[mtch.autoLowHotScore integerValue]], @"autoLowHotScore",
+                                    [NSNumber numberWithInteger:[mtch.autoLowNotScore integerValue]], @"autoLowNotScore",
+                                    [NSNumber numberWithInteger:[mtch.autoLowMissScore integerValue]], @"autoLowMissScore",
+                                    [NSNumber numberWithInteger:[mtch.mobilityBonus integerValue]], @"mobilityBonus",
+                                    [NSNumber numberWithInteger:[mtch.teleopHighMake integerValue]], @"teleopHighMake",
+                                    [NSNumber numberWithInteger:[mtch.teleopHighMiss integerValue]], @"teleopHighMiss",
+                                    [NSNumber numberWithInteger:[mtch.teleopLowMake integerValue]], @"teleopLowMake",
+                                    [NSNumber numberWithInteger:[mtch.teleopLowMiss integerValue]], @"teleopLowMiss",
+                                    [NSNumber numberWithInteger:[mtch.teleopOver integerValue]], @"teleopOver",
+                                    [NSNumber numberWithInteger:[mtch.teleopPassed integerValue]], @"teleopPassed",
+                                    [NSNumber numberWithInteger:[mtch.penaltyLarge integerValue]], @"penaltyLarge",
+                                    [NSNumber numberWithInteger:[mtch.penaltySmall integerValue]], @"penaltySmall",
+                                    [NSString stringWithString:mtch.notes], @"notes",
+                                    [NSString stringWithString:mtch.red1Pos], @"red1Pos",
+                                    [NSString stringWithString:mtch.recordingTeam], @"recordingTeam",
+                                    [NSString stringWithString:mtch.scoutInitials], @"scoutInitials",
+                                    [NSString stringWithString:mtch.matchType], @"matchType",
+                                    [NSString stringWithString:mtch.matchNum], @"matchNum",
+                                    [NSNumber numberWithInteger:[mtch.uniqeID integerValue]], @"uniqueID",nil] forKey:mtch.matchNum];
+                    }
                 }
             }
         }
-        
-        NSFetchRequest *pitTeamsRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
-        NSError *pitTeamError;
-        NSArray *pitTeams = [context executeFetchRequest:pitTeamsRequest error:&pitTeamError];
-        for (PitTeam *pt in pitTeams) {
-            [pitTeamsDict setObject:[[NSDictionary alloc] initWithObjectsAndKeys:
-                                     [NSString stringWithString:pt.driveTrain], @"driveTrain",
-                                     [NSString stringWithString:pt.shooter], @"shooter",
-                                     [NSString stringWithString:pt.preferredGoal], @"preferredGoal",
-                                     [NSString stringWithString:pt.goalieArm], @"goalieArm",
-                                     [NSString stringWithString:pt.floorCollector], @"floorCollector",
-                                     [NSString stringWithString:pt.autonomous], @"autonomous",
-                                     [NSString stringWithString:pt.autoStartingPosition], @"autoStartingPosition",
-                                     [NSString stringWithString:pt.hotGoalTracking], @"hotGoalTracking",
-                                     [NSString stringWithString:pt.catchingMechanism], @"catchingMechanism",
-                                     [NSString stringWithString:pt.bumperQuality], @"bumperQuality",
-                                     [NSData dataWithData:pt.image], @"image",
-                                     [NSString stringWithString:pt.teamNumber], @"teamNumber",
-                                     [NSString stringWithString:pt.teamName], @"teamName",
-                                     [NSString stringWithString:pt.notes], @"notes",
-                                     [NSNumber numberWithInteger:[pt.uniqueID integerValue]], @"uniqueID", nil] forKey:pt.teamNumber];
+        if ([whichDataToSend isEqualToString:@"All"] || [whichDataToSend isEqualToString:@"Pit Data Only"]) {
+            NSFetchRequest *pitTeamsRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+            NSError *pitTeamError;
+            NSArray *pitTeams = [context executeFetchRequest:pitTeamsRequest error:&pitTeamError];
+            for (PitTeam *pt in pitTeams) {
+                [pitTeamsDict setObject:[[NSDictionary alloc] initWithObjectsAndKeys:
+                                         [NSString stringWithString:pt.driveTrain], @"driveTrain",
+                                         [NSString stringWithString:pt.shooter], @"shooter",
+                                         [NSString stringWithString:pt.preferredGoal], @"preferredGoal",
+                                         [NSString stringWithString:pt.goalieArm], @"goalieArm",
+                                         [NSString stringWithString:pt.floorCollector], @"floorCollector",
+                                         [NSString stringWithString:pt.autonomous], @"autonomous",
+                                         [NSString stringWithString:pt.autoStartingPosition], @"autoStartingPosition",
+                                         [NSString stringWithString:pt.hotGoalTracking], @"hotGoalTracking",
+                                         [NSString stringWithString:pt.catchingMechanism], @"catchingMechanism",
+                                         [NSString stringWithString:pt.bumperQuality], @"bumperQuality",
+                                         [NSData dataWithData:pt.image], @"image",
+                                         [NSString stringWithString:pt.teamNumber], @"teamNumber",
+                                         [NSString stringWithString:pt.teamName], @"teamName",
+                                         [NSString stringWithString:pt.notes], @"notes",
+                                         [NSNumber numberWithInteger:[pt.uniqueID integerValue]], @"uniqueID", nil] forKey:pt.teamNumber];
+            }
         }
+        
+        
         
         [dictToSend setObject:regionalsDict forKey:@"Regionals"];
         [dictToSend setObject:pitTeamsDict forKey:@"PitTeams"];
@@ -432,7 +461,7 @@ BOOL isReceiving;
         [syncViewCloseBtn addTarget:self action:@selector(closeSyncView) forControlEvents:UIControlEventTouchUpInside];
         [syncView addSubview:syncViewCloseBtn];
         
-        UILabel *syncViewLbl = [[UILabel alloc] initWithFrame:CGRectMake(50, 25, 300, 60)];
+        UILabel *syncViewLbl = [[UILabel alloc] initWithFrame:CGRectMake(50, 40, 300, 60)];
         syncViewLbl.text = @"Select someone to send to";
         syncViewLbl.textAlignment = NSTextAlignmentCenter;
         syncViewLbl.font = [UIFont systemFontOfSize:20];
@@ -448,11 +477,20 @@ BOOL isReceiving;
         peersTable.separatorInset = UIEdgeInsetsMake(0, 3, 0, 3);
         [syncView addSubview:peersTable];
         
+        UISegmentedControl *whichToSend2 = [[UISegmentedControl alloc] initWithItems:@[@"All", @"Matches Only", @"Pit Data Only"]];
+        [whichToSend2 addTarget:self action:@selector(changeDataToSend:) forControlEvents:UIControlEventValueChanged];
+        whichToSend2.frame = CGRectMake(50, 35, 300, 20);
+        [syncView addSubview:whichToSend2];
+        whichToSend2.enabled = true;
+        whichToSend2.alpha = 1;
+        whichToSend2.selectedSegmentIndex = whichToSend.selectedSegmentIndex;
+        
         [grayOUT addSubview:syncView];
         
         syncView.center = CGPointMake(syncView.center.x, 1424);
         [UIView animateWithDuration:0.3 animations:^{
             syncView.center = CGPointMake(syncView.center.x, 500);
+            whichToSend.alpha = 0;
         } completion:^(BOOL finished) {
             [peersTable reloadData];
         }];
@@ -461,12 +499,25 @@ BOOL isReceiving;
 }
 
 -(void)closeSyncView{
+    [whichToSend removeFromSuperview];
+    whichToSend.alpha = 0;
+    [self.view addSubview:whichToSend];
     [UIView animateWithDuration:0.3 animations:^{
         syncView.center = CGPointMake(syncView.center.x, 1424);
+        whichToSend.alpha = 1;
     } completion:^(BOOL finished) {
         [syncView removeFromSuperview];
         [grayOUT removeFromSuperview];
         self.sendMessageBtn.enabled = true;
+        if ([whichDataToSend isEqualToString:@"All"]) {
+            whichToSend.selectedSegmentIndex = 0;
+        }
+        else if ([whichDataToSend isEqualToString:@"Matches Only"]){
+            whichToSend.selectedSegmentIndex = 1;
+        }
+        else{
+            whichToSend.selectedSegmentIndex = 2;
+        }
     }];
 }
 
@@ -704,10 +755,12 @@ BOOL isReceiving;
                 self.sendMessageBtn.alpha = 1;
                 self.overWriteSwitch.alpha = 1;
                 overWriteLbl.alpha = 1;
+                whichToSend.alpha = 1;
             } completion:^(BOOL finished) {
                 self.sendMessageBtn.enabled = true;
                 self.overWriteSwitch.hidden = false;
                 self.overWriteSwitch.enabled = true;
+                whichToSend.enabled = true;
 //                [self.overWriteSwitch setOn:false animated:YES];
             }];
         });
@@ -716,7 +769,7 @@ BOOL isReceiving;
         NSLog(@"Disconnected");
         dispatch_async(dispatch_get_main_queue(), ^{
             UIAlertView *disConnectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!"
-                                                                     message:[[NSString alloc] initWithFormat:@"You disconnected from %@", peerID.displayName]
+                                                                     message:[[NSString alloc] initWithFormat:@"You disconnected from %@ on the Sharing Screen!", peerID.displayName]
                                                                     delegate:nil
                                                            cancelButtonTitle:@"Dang it!"
                                                            otherButtonTitles:nil];
@@ -725,10 +778,12 @@ BOOL isReceiving;
                 [UIView animateWithDuration:0.2 animations:^{
                     self.sendMessageBtn.alpha = 0;
                     overWriteLbl.alpha = 0;
+                    whichToSend.alpha = 0;
                 } completion:^(BOOL finished) {
                     self.sendMessageBtn.enabled = false;
                     self.overWriteSwitch.hidden = true;
                     self.overWriteSwitch.enabled = false;
+                    whichToSend.enabled = false;
                 }];
             };
         });

@@ -15,6 +15,8 @@
 
 @property (strong, nonatomic) NSArray *secondPickList;
 
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 -(void)insertNewTeamIntoSecondPickList:(Team *)team;
 
 @end
