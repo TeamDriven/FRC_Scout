@@ -158,14 +158,14 @@
 		86E8715818A6D1A800EA2663 /* SingleTeamCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeamCell.m; sourceTree = "<group>"; };
 		86E8715A18A6D3D000EA2663 /* SingleTeamCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTeamCDTVC.h; sourceTree = "<group>"; };
 		86E8715B18A6D3D000EA2663 /* SingleTeamCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeamCDTVC.m; sourceTree = "<group>"; };
-		8846FECD1826D7D100B37E44 /* FIRST Scouting App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIRST Scouting App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8846FECD1826D7D100B37E44 /* FIRST Scout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIRST Scout.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8846FED01826D7D100B37E44 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8846FED21826D7D100B37E44 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		8846FED41826D7D100B37E44 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		8846FED81826D7D100B37E44 /* FIRST Scouting App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FIRST Scouting App-Info.plist"; sourceTree = "<group>"; };
+		8846FED81826D7D100B37E44 /* FIRST Scout-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FIRST Scout-Info.plist"; sourceTree = "<group>"; };
 		8846FEDA1826D7D100B37E44 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8846FEDC1826D7D200B37E44 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		8846FEDE1826D7D200B37E44 /* FIRST Scouting App-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FIRST Scouting App-Prefix.pch"; sourceTree = "<group>"; };
+		8846FEDE1826D7D200B37E44 /* FIRST Scout-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FIRST Scout-Prefix.pch"; sourceTree = "<group>"; };
 		8846FEDF1826D7D200B37E44 /* LocationsAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationsAppDelegate.h; sourceTree = "<group>"; };
 		8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationsAppDelegate.m; sourceTree = "<group>"; };
 		8846FEE31826D7D200B37E44 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -173,9 +173,9 @@
 		8846FEE61826D7D200B37E44 /* Scoring.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Scoring.m; sourceTree = "<group>"; };
 		8846FEE81826D7D200B37E44 /* Sharing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sharing.h; sourceTree = "<group>"; };
 		8846FEE91826D7D200B37E44 /* Sharing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sharing.m; sourceTree = "<group>"; };
-		8846FEF11826D7D200B37E44 /* FIRST Scouting AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FIRST Scouting AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8846FEF11826D7D200B37E44 /* FIRST ScoutTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FIRST ScoutTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8846FEF21826D7D200B37E44 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		8846FEFA1826D7D200B37E44 /* FIRST Scouting AppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FIRST Scouting AppTests-Info.plist"; sourceTree = "<group>"; };
+		8846FEFA1826D7D200B37E44 /* FIRST ScoutTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FIRST ScoutTests-Info.plist"; sourceTree = "<group>"; };
 		8846FEFC1826D7D200B37E44 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8846FEFE1826D7D200B37E44 /* FIRST_Scouting_AppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FIRST_Scouting_AppTests.m; sourceTree = "<group>"; };
 		8846FF081826D80F00B37E44 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
@@ -418,8 +418,8 @@
 		8846FECE1826D7D100B37E44 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8846FECD1826D7D100B37E44 /* FIRST Scouting App.app */,
-				8846FEF11826D7D200B37E44 /* FIRST Scouting AppTests.xctest */,
+				8846FECD1826D7D100B37E44 /* FIRST Scout.app */,
+				8846FEF11826D7D200B37E44 /* FIRST ScoutTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -463,10 +463,10 @@
 				86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */,
 				8846FEDF1826D7D200B37E44 /* LocationsAppDelegate.h */,
 				8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */,
-				8846FED81826D7D100B37E44 /* FIRST Scouting App-Info.plist */,
+				8846FED81826D7D100B37E44 /* FIRST Scout-Info.plist */,
 				8846FED91826D7D100B37E44 /* InfoPlist.strings */,
 				8846FEDC1826D7D200B37E44 /* main.m */,
-				8846FEDE1826D7D200B37E44 /* FIRST Scouting App-Prefix.pch */,
+				8846FEDE1826D7D200B37E44 /* FIRST Scout-Prefix.pch */,
 				2893226A187E637B00A225EE /* UIAlertView+Blocks.h */,
 				2893226B187E637B00A225EE /* UIAlertView+Blocks.m */,
 			);
@@ -485,7 +485,7 @@
 		8846FEF91826D7D200B37E44 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8846FEFA1826D7D200B37E44 /* FIRST Scouting AppTests-Info.plist */,
+				8846FEFA1826D7D200B37E44 /* FIRST ScoutTests-Info.plist */,
 				8846FEFB1826D7D200B37E44 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -494,9 +494,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8846FECC1826D7D100B37E44 /* FIRST Scouting App */ = {
+		8846FECC1826D7D100B37E44 /* FIRST Scout */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8846FF021826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST Scouting App" */;
+			buildConfigurationList = 8846FF021826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST Scout" */;
 			buildPhases = (
 				8846FEC91826D7D100B37E44 /* Sources */,
 				8846FECA1826D7D100B37E44 /* Frameworks */,
@@ -506,14 +506,14 @@
 			);
 			dependencies = (
 			);
-			name = "FIRST Scouting App";
+			name = "FIRST Scout";
 			productName = "FIRST Scouting App";
-			productReference = 8846FECD1826D7D100B37E44 /* FIRST Scouting App.app */;
+			productReference = 8846FECD1826D7D100B37E44 /* FIRST Scout.app */;
 			productType = "com.apple.product-type.application";
 		};
-		8846FEF01826D7D200B37E44 /* FIRST Scouting AppTests */ = {
+		8846FEF01826D7D200B37E44 /* FIRST ScoutTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8846FF051826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST Scouting AppTests" */;
+			buildConfigurationList = 8846FF051826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST ScoutTests" */;
 			buildPhases = (
 				8846FEED1826D7D200B37E44 /* Sources */,
 				8846FEEE1826D7D200B37E44 /* Frameworks */,
@@ -524,9 +524,9 @@
 			dependencies = (
 				8846FEF71826D7D200B37E44 /* PBXTargetDependency */,
 			);
-			name = "FIRST Scouting AppTests";
+			name = "FIRST ScoutTests";
 			productName = "FIRST Scouting AppTests";
-			productReference = 8846FEF11826D7D200B37E44 /* FIRST Scouting AppTests.xctest */;
+			productReference = 8846FEF11826D7D200B37E44 /* FIRST ScoutTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -547,7 +547,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 8846FEC81826D7D100B37E44 /* Build configuration list for PBXProject "FIRST Scouting App" */;
+			buildConfigurationList = 8846FEC81826D7D100B37E44 /* Build configuration list for PBXProject "FIRST Scout" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -560,8 +560,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8846FECC1826D7D100B37E44 /* FIRST Scouting App */,
-				8846FEF01826D7D200B37E44 /* FIRST Scouting AppTests */,
+				8846FECC1826D7D100B37E44 /* FIRST Scout */,
+				8846FEF01826D7D200B37E44 /* FIRST ScoutTests */,
 			);
 		};
 /* End PBXProject section */
@@ -654,7 +654,7 @@
 /* Begin PBXTargetDependency section */
 		8846FEF71826D7D200B37E44 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8846FECC1826D7D100B37E44 /* FIRST Scouting App */;
+			target = 8846FECC1826D7D100B37E44 /* FIRST Scout */;
 			targetProxy = 8846FEF61826D7D200B37E44 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -769,9 +769,9 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FIRST Scouting App/FIRST Scouting App-Prefix.pch";
-				INFOPLIST_FILE = "FIRST Scouting App/FIRST Scouting App-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "FIRST Scouting App/FIRST Scout-Prefix.pch";
+				INFOPLIST_FILE = "FIRST Scouting App/FIRST Scout-Info.plist";
+				PRODUCT_NAME = "FIRST Scout";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -785,9 +785,9 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FIRST Scouting App/FIRST Scouting App-Prefix.pch";
-				INFOPLIST_FILE = "FIRST Scouting App/FIRST Scouting App-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "FIRST Scouting App/FIRST Scout-Prefix.pch";
+				INFOPLIST_FILE = "FIRST Scouting App/FIRST Scout-Info.plist";
+				PRODUCT_NAME = "FIRST Scout";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -809,8 +809,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "FIRST Scouting AppTests/FIRST Scouting AppTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "FIRST Scouting AppTests/FIRST ScoutTests-Info.plist";
+				PRODUCT_NAME = "FIRST ScoutTests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -828,8 +828,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FIRST Scouting App/FIRST Scouting App-Prefix.pch";
-				INFOPLIST_FILE = "FIRST Scouting AppTests/FIRST Scouting AppTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "FIRST Scouting AppTests/FIRST ScoutTests-Info.plist";
+				PRODUCT_NAME = "FIRST ScoutTests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -838,7 +838,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8846FEC81826D7D100B37E44 /* Build configuration list for PBXProject "FIRST Scouting App" */ = {
+		8846FEC81826D7D100B37E44 /* Build configuration list for PBXProject "FIRST Scout" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8846FF001826D7D200B37E44 /* Debug */,
@@ -847,7 +847,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8846FF021826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST Scouting App" */ = {
+		8846FF021826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST Scout" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8846FF031826D7D200B37E44 /* Debug */,
@@ -856,7 +856,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8846FF051826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST Scouting AppTests" */ = {
+		8846FF051826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST ScoutTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8846FF061826D7D200B37E44 /* Debug */,
