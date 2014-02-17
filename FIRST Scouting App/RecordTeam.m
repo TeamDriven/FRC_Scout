@@ -824,7 +824,7 @@ UIAlertView *overWriteAlert;
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     robotImageControl.layer.borderColor = [[UIColor clearColor] CGColor];
     
     UIImage * image = [info objectForKey:UIImagePickerControllerEditedImage];
@@ -1463,7 +1463,7 @@ UIAlertView *overWriteAlert;
     }
 }
 
-- (IBAction)teamNumberFieldEndedEditing:(id)sender {
+-(IBAction)teamNumberFieldEndedEditing:(id)sender {
     NSFetchRequest *pitTeamRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
     pitTeamRequest.predicate = [NSPredicate predicateWithFormat:@"teamNumber = %@", _teamNumberField.text];
     

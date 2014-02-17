@@ -7,6 +7,8 @@
 //
 
 #import "SecondPickListController.h"
+#import "Regional.h"
+#import "Globals.h"
 
 @interface SecondPickListController ()
 
@@ -15,6 +17,14 @@
 @implementation SecondPickListController
 
 NSMutableArray *secondPickListMutable;
+
+// Core Data Filepath
+NSFileManager *FSAfileManager;
+NSURL *FSAdocumentsDirectory;
+NSString *FSAdocumentName;
+NSURL *FSApathurl;
+UIManagedDocument *FSAdocument;
+NSManagedObjectContext *context;
 
 -(void)setSecondPickList:(NSArray *)secondPickList{
     _secondPickList = secondPickList;
@@ -87,6 +97,8 @@ NSMutableArray *secondPickListMutable;
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        Team *teamDeleted = [secondPickListMutable objectAtIndex:indexPath.row];
+        
         // Delete the row from the data source
         [secondPickListMutable removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -95,6 +107,16 @@ NSMutableArray *secondPickListMutable;
         if ([secondPickListMutable count] == 0) {
             [self.tableView setEditing:NO];
         }
+        
+        teamDeleted.regionalIn.secondPickList = [NSOrderedSet orderedSetWithArray:self.secondPickList];
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+            if (success) {
+                NSLog(@"Saved Correctly After Delete");
+            }
+            else{
+                NSLog(@"Didn't save after delete");
+            }
+        }];
     }
 }
 
@@ -106,6 +128,16 @@ NSMutableArray *secondPickListMutable;
     [secondPickListMutable removeObjectAtIndex:fromIndexPath.row];
     [secondPickListMutable insertObject:teamSelected atIndex:toIndexPath.row];
     self.secondPickList = secondPickListMutable;
+    
+    teamSelected.regionalIn.secondPickList = [NSOrderedSet orderedSetWithArray:self.secondPickList];
+    [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+        if (success) {
+            NSLog(@"Saved Correctly After Move");
+        }
+        else{
+            NSLog(@"Didn't save after move");
+        }
+    }];
 }
 
 
@@ -127,6 +159,16 @@ NSMutableArray *secondPickListMutable;
     [self.tableView endUpdates];
     
     self.secondPickList = secondPickListMutable;
+    
+    team.regionalIn.secondPickList = [NSOrderedSet orderedSetWithArray:self.secondPickList];
+    [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+        if (success) {
+            NSLog(@"Saved Correctly After Insertion");
+        }
+        else{
+            NSLog(@"Didn't save after insertion");
+        }
+    }];
 }
 
 /*

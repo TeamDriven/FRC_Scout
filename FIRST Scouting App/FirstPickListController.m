@@ -7,11 +7,21 @@
 //
 
 #import "FirstPickListController.h"
+#import "Regional.h"
+#import "Globals.h"
 
 
 @implementation FirstPickListController
 
 NSMutableArray *firstPickListMutable;
+
+// Core Data Filepath
+NSFileManager *FSAfileManager;
+NSURL *FSAdocumentsDirectory;
+NSString *FSAdocumentName;
+NSURL *FSApathurl;
+UIManagedDocument *FSAdocument;
+NSManagedObjectContext *context;
 
 -(void)setFirstPickList:(NSArray *)firstPickList{
     _firstPickList = firstPickList;
@@ -85,6 +95,8 @@ NSMutableArray *firstPickListMutable;
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
+        Team *teamRemoved = [firstPickListMutable objectAtIndex:indexPath.row];
+        
         [firstPickListMutable removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         self.firstPickList = firstPickListMutable;
@@ -92,6 +104,16 @@ NSMutableArray *firstPickListMutable;
         if ([firstPickListMutable count] == 0) {
             [self.tableView setEditing:NO];
         }
+        
+        teamRemoved.regionalIn.firstPickList = [NSOrderedSet orderedSetWithArray:self.firstPickList];
+        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+            if (success) {
+                NSLog(@"Saved Correctly After Delete");
+            }
+            else{
+                NSLog(@"Didn't Save Correctly After Delete");
+            }
+        }];
     }
 }
 
@@ -103,6 +125,16 @@ NSMutableArray *firstPickListMutable;
     [firstPickListMutable removeObjectAtIndex:fromIndexPath.row];
     [firstPickListMutable insertObject:teamSelected atIndex:toIndexPath.row];
     self.firstPickList = firstPickListMutable;
+    
+    teamSelected.regionalIn.firstPickList = [NSOrderedSet orderedSetWithArray:self.firstPickList];
+    [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+        if (success) {
+            NSLog(@"Saved Correctly After Move");
+        }
+        else{
+            NSLog(@"Didn't save after move");
+        }
+    }];
 }
 
 
@@ -125,6 +157,16 @@ NSMutableArray *firstPickListMutable;
     [self.tableView endUpdates];
     
     self.firstPickList = firstPickListMutable;
+    
+    team.regionalIn.firstPickList = [NSOrderedSet orderedSetWithArray:self.firstPickList];
+    [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+        if (success) {
+            NSLog(@"Saved Correctly After Insertion");
+        }
+        else{
+            NSLog(@"Didn't save after insertion");
+        }
+    }];
 }
 
 /*

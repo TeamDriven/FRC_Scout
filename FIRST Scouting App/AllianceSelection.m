@@ -399,7 +399,7 @@ SecondPickListController *secondPickListController;
     [teleopHighMakeAvg setTitle:@"High Make Avg" forState:UIControlStateNormal];
     teleopHighMakeAvg.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopHighMakeAvg addTarget:self action:@selector(sortTeleopHighMakeAvg) forControlEvents:UIControlEventTouchUpInside];
-    teleopHighMakeAvg.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopHighMakeAvg.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopHighMakeAvg.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopHighMakeAvg];
     
@@ -408,7 +408,7 @@ SecondPickListController *secondPickListController;
     [teleopHighMissAvg setTitle:@"High Miss Avg" forState:UIControlStateNormal];
     teleopHighMissAvg.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopHighMissAvg addTarget:self action:@selector(sortTeleopHighMissAvg) forControlEvents:UIControlEventTouchUpInside];
-    teleopHighMissAvg.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopHighMissAvg.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopHighMissAvg.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopHighMissAvg];
     
@@ -417,7 +417,7 @@ SecondPickListController *secondPickListController;
     [teleopHighAttemptsAvg setTitle:@"High Attempts Avg" forState:UIControlStateNormal];
     teleopHighAttemptsAvg.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopHighAttemptsAvg addTarget:self action:@selector(sortTeleopHighAttemptsAvg) forControlEvents:UIControlEventTouchUpInside];
-    teleopHighAttemptsAvg.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopHighAttemptsAvg.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopHighAttemptsAvg.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopHighAttemptsAvg];
     
@@ -426,7 +426,7 @@ SecondPickListController *secondPickListController;
     [teleopHighAccuracyPercentage setTitle:@"High Accuracy Percent" forState:UIControlStateNormal];
     teleopHighAccuracyPercentage.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopHighAccuracyPercentage addTarget:self action:@selector(sortTeleopHighAccuracyPercentage) forControlEvents:UIControlEventTouchUpInside];
-    teleopHighAccuracyPercentage.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopHighAccuracyPercentage.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopHighAccuracyPercentage.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopHighAccuracyPercentage];
     
@@ -435,7 +435,7 @@ SecondPickListController *secondPickListController;
     [teleopLowMakeAvg setTitle:@"Low Make Avg" forState:UIControlStateNormal];
     teleopLowMakeAvg.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopLowMakeAvg addTarget:self action:@selector(sortTeleopLowMakeAvg) forControlEvents:UIControlEventTouchUpInside];
-    teleopLowMakeAvg.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopLowMakeAvg.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopLowMakeAvg.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopLowMakeAvg];
     
@@ -444,7 +444,7 @@ SecondPickListController *secondPickListController;
     [teleopLowMissAvg setTitle:@"Low Miss Avg" forState:UIControlStateNormal];
     teleopLowMissAvg.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopLowMissAvg addTarget:self action:@selector(sortTeleopLowMissAvg) forControlEvents:UIControlEventTouchUpInside];
-    teleopLowMissAvg.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopLowMissAvg.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopLowMissAvg.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopLowMissAvg];
     
@@ -453,7 +453,7 @@ SecondPickListController *secondPickListController;
     [teleopLowAttemptsAvg setTitle:@"Low Attempts Avg" forState:UIControlStateNormal];
     teleopLowAttemptsAvg.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopLowAttemptsAvg addTarget:self action:@selector(sortTeleopLowAttemptsAvg) forControlEvents:UIControlEventTouchUpInside];
-    teleopLowAttemptsAvg.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopLowAttemptsAvg.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopLowAttemptsAvg.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopLowAttemptsAvg];
     
@@ -462,7 +462,7 @@ SecondPickListController *secondPickListController;
     [teleopLowAccuracyPercentage setTitle:@"Low Accuracy Percent" forState:UIControlStateNormal];
     teleopLowAccuracyPercentage.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopLowAccuracyPercentage addTarget:self action:@selector(sortTeleopLowAccuracyPercentage) forControlEvents:UIControlEventTouchUpInside];
-    teleopLowAccuracyPercentage.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopLowAccuracyPercentage.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopLowAccuracyPercentage.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopLowAccuracyPercentage];
     
@@ -471,7 +471,7 @@ SecondPickListController *secondPickListController;
     [teleopAccuracyPercentage setTitle:@"Total Accuracy Percent" forState:UIControlStateNormal];
     teleopAccuracyPercentage.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopAccuracyPercentage addTarget:self action:@selector(sortTeleopAccuracyPercentage) forControlEvents:UIControlEventTouchUpInside];
-    teleopAccuracyPercentage.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopAccuracyPercentage.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopAccuracyPercentage.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopAccuracyPercentage];
     
@@ -480,7 +480,7 @@ SecondPickListController *secondPickListController;
     [teleopCatchAvg setTitle:@"Catch Avg" forState:UIControlStateNormal];
     teleopCatchAvg.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopCatchAvg addTarget:self action:@selector(sortTeleopCatchAvg) forControlEvents:UIControlEventTouchUpInside];
-    teleopCatchAvg.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopCatchAvg.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopCatchAvg.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopCatchAvg];
     
@@ -489,7 +489,7 @@ SecondPickListController *secondPickListController;
     [teleopOverAvg setTitle:@"Over Truss Avg" forState:UIControlStateNormal];
     teleopOverAvg.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopOverAvg addTarget:self action:@selector(sortTeleopOverAvg) forControlEvents:UIControlEventTouchUpInside];
-    teleopOverAvg.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopOverAvg.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopOverAvg.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopOverAvg];
     
@@ -498,7 +498,7 @@ SecondPickListController *secondPickListController;
     [teleopPassedAvg setTitle:@"Pass Avg" forState:UIControlStateNormal];
     teleopPassedAvg.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopPassedAvg addTarget:self action:@selector(sortTeleopPassedAvg) forControlEvents:UIControlEventTouchUpInside];
-    teleopPassedAvg.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopPassedAvg.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopPassedAvg.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopPassedAvg];
     
@@ -507,7 +507,7 @@ SecondPickListController *secondPickListController;
     [teleopReceivedAvg setTitle:@"Receive Avg" forState:UIControlStateNormal];
     teleopReceivedAvg.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopReceivedAvg addTarget:self action:@selector(sortTeleopReceivedAvg) forControlEvents:UIControlEventTouchUpInside];
-    teleopReceivedAvg.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopReceivedAvg.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopReceivedAvg.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopReceivedAvg];
     
@@ -516,7 +516,7 @@ SecondPickListController *secondPickListController;
     [teleopPassReceiveRatio setTitle:@"Pass/Receive Ratio" forState:UIControlStateNormal];
     teleopPassReceiveRatio.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopPassReceiveRatio addTarget:self action:@selector(sortTeleopPassReceiveRatio) forControlEvents:UIControlEventTouchUpInside];
-    teleopPassReceiveRatio.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopPassReceiveRatio.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopPassReceiveRatio.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopPassReceiveRatio];
     
@@ -525,7 +525,7 @@ SecondPickListController *secondPickListController;
     [teleopAvg setTitle:@"Total Avg" forState:UIControlStateNormal];
     teleopAvg.titleLabel.font = [UIFont systemFontOfSize:13];
     [teleopAvg addTarget:self action:@selector(sortTeleopAvg) forControlEvents:UIControlEventTouchUpInside];
-    teleopAvg.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
+    teleopAvg.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.5];
     teleopAvg.layer.cornerRadius = 5;
     [teleopBox addSubview:teleopAvg];
     
