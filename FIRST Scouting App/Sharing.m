@@ -79,6 +79,17 @@ BOOL isReceiving;
 UISegmentedControl *whichToSend;
 NSString *whichDataToSend;
 
+// Schedule Stuff
+NSArray *schedulePaths;
+NSString *scheduleDirectory;
+NSString *schedulePath;
+NSMutableDictionary *dataDict;
+NSURLRequest *aRequest;
+NSURLConnection *aConnection;
+NSMutableData *receivedData;
+
+UIAlertView *doubleCheckDeleteAlert;
+
 -(void)viewDidLoad{
     [super viewDidLoad];
 	// Do any additional setup after loading the view, t ypically from a nib.
@@ -213,18 +224,24 @@ NSString *whichDataToSend;
 }
 
 -(void)setUpUI{
-    UILabel *browserSwitchLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 100, 100, 20)];
+    UILabel *sharingLbl = [[UILabel alloc] initWithFrame:CGRectMake(284, 100, 200, 25)];
+    sharingLbl.text = @"Sharing";
+    sharingLbl.font = [UIFont boldSystemFontOfSize:20];
+    sharingLbl.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:sharingLbl];
+    
+    UILabel *browserSwitchLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 140, 100, 20)];
     browserSwitchLbl.text = @"Host";
     browserSwitchLbl.font = [UIFont systemFontOfSize:16];
     browserSwitchLbl.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:browserSwitchLbl];
     
-    self.browserSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(259, 120, 49, 31)];
+    self.browserSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(259, 160, 49, 31)];
     [self.browserSwitch addTarget:self action:@selector(showBrowserVC) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.browserSwitch];
     
     self.inviteMoreBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.inviteMoreBtn.frame = CGRectMake(244, 160, 80, 30);
+    self.inviteMoreBtn.frame = CGRectMake(244, 200, 80, 30);
     [self.inviteMoreBtn addTarget:self action:@selector(showBrowserVC) forControlEvents:UIControlEventTouchUpInside];
     [self.inviteMoreBtn setTitle:@"Invite More" forState:UIControlStateNormal];
     self.inviteMoreBtn.titleLabel.font = [UIFont systemFontOfSize:12];
@@ -232,29 +249,29 @@ NSString *whichDataToSend;
     self.inviteMoreBtn.enabled = false;
     self.inviteMoreBtn.alpha = 0;
     
-    UILabel *visibleSwitchLbl = [[UILabel alloc] initWithFrame:CGRectMake(434, 100, 100, 20)];
+    UILabel *visibleSwitchLbl = [[UILabel alloc] initWithFrame:CGRectMake(434, 140, 100, 20)];
     visibleSwitchLbl.text = @"Visible";
     visibleSwitchLbl.font = [UIFont systemFontOfSize:16];
     visibleSwitchLbl.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:visibleSwitchLbl];
     
-    self.visibleSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(459, 120, 49, 31)];
+    self.visibleSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(459, 160, 49, 31)];
     [self.visibleSwitch addTarget:self action:@selector(visibleSwitchChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.visibleSwitch];
     [self.visibleSwitch setOn:true animated:YES];
 
     whichToSend = [[UISegmentedControl alloc] initWithItems:@[@"All", @"Matches Only", @"Pit Data Only"]];
-    whichToSend.frame = CGRectMake(234, 195, 300, 25);
+    whichToSend.frame = CGRectMake(234, 235, 300, 25);
     [whichToSend addTarget:self action:@selector(changeDataToSend:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:whichToSend];
     whichToSend.enabled = false;
-    whichToSend.alpha = 0;
+    whichToSend.hidden = true;
     whichToSend.selectedSegmentIndex = 0;
     whichDataToSend = @"All";
     
     self.sendMessageBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.sendMessageBtn setTitle:@"Send" forState:UIControlStateNormal];
-    self.sendMessageBtn.frame = CGRectMake(334, 230, 100, 50);
+    self.sendMessageBtn.frame = CGRectMake(334, 270, 100, 50);
     self.sendMessageBtn.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     self.sendMessageBtn.layer.cornerRadius = 5;
     [self.sendMessageBtn addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
@@ -263,23 +280,31 @@ NSString *whichDataToSend;
     self.sendMessageBtn.alpha = 0;
     
     self.progressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-    self.progressBar.frame = CGRectMake(309, 285, 150, 2);
+    self.progressBar.frame = CGRectMake(309, 325, 150, 2);
     [self.view addSubview:self.progressBar];
     self.progressBar.alpha = 0;
     
-    overWriteLbl = [[UILabel alloc] initWithFrame:CGRectMake(324, 290, 120, 20)];
+    overWriteLbl = [[UILabel alloc] initWithFrame:CGRectMake(324, 330, 120, 20)];
     overWriteLbl.text = @"Allow Overwriting";
     overWriteLbl.textAlignment = NSTextAlignmentCenter;
     overWriteLbl.font = [UIFont systemFontOfSize:14];
     [self.view addSubview:overWriteLbl];
     overWriteLbl.alpha = 0;
     
-    self.overWriteSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(359, 310, 49, 31)];
+    self.overWriteSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(359, 350, 49, 31)];
     [self.overWriteSwitch addTarget:self action:@selector(overWriteOption) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.overWriteSwitch];
     self.overWriteSwitch.hidden = true;
     self.overWriteSwitch.enabled = false;
+    
+    _matchScheduleBtn.layer.cornerRadius = 5;
+    _updatedLbl.layer.cornerRadius = 5;
+    
+    _deleteDatabaseBtn.layer.cornerRadius = 5;
+}
 
+-(void)viewDidAppear:(BOOL)animated{
+    _updatedLbl.alpha = 0;
 }
 
 -(void)changeDataToSend:(UISegmentedControl *)control{
@@ -315,10 +340,15 @@ NSString *whichDataToSend;
 -(void)visibleSwitchChanged{
     if (self.visibleSwitch.on) {
         [self setUpMultipeer];
+        self.browserSwitch.enabled = true;
     }
     else{
         [self.mySession disconnect];
         [self.advertiser stop];
+        [self.browserSwitch setOn:NO animated:YES];
+        self.browserSwitch.enabled = false;
+        self.inviteMoreBtn.enabled = false;
+        self.inviteMoreBtn.alpha = 0;
     }
 }
 
@@ -487,10 +517,11 @@ NSString *whichDataToSend;
         
         [grayOUT addSubview:syncView];
         
+        whichToSend.hidden = true;
         syncView.center = CGPointMake(syncView.center.x, 1424);
         [UIView animateWithDuration:0.3 animations:^{
             syncView.center = CGPointMake(syncView.center.x, 500);
-            whichToSend.alpha = 0;
+            
         } completion:^(BOOL finished) {
             [peersTable reloadData];
         }];
@@ -500,11 +531,9 @@ NSString *whichDataToSend;
 
 -(void)closeSyncView{
     [whichToSend removeFromSuperview];
-    whichToSend.alpha = 0;
     [self.view addSubview:whichToSend];
     [UIView animateWithDuration:0.3 animations:^{
         syncView.center = CGPointMake(syncView.center.x, 1424);
-        whichToSend.alpha = 1;
     } completion:^(BOOL finished) {
         [syncView removeFromSuperview];
         [grayOUT removeFromSuperview];
@@ -518,6 +547,7 @@ NSString *whichDataToSend;
         else{
             whichToSend.selectedSegmentIndex = 2;
         }
+        whichToSend.hidden = false;
     }];
 }
 
@@ -755,12 +785,12 @@ NSString *whichDataToSend;
                 self.sendMessageBtn.alpha = 1;
                 self.overWriteSwitch.alpha = 1;
                 overWriteLbl.alpha = 1;
-                whichToSend.alpha = 1;
             } completion:^(BOOL finished) {
                 self.sendMessageBtn.enabled = true;
                 self.overWriteSwitch.hidden = false;
                 self.overWriteSwitch.enabled = true;
                 whichToSend.enabled = true;
+                whichToSend.hidden = false;
 //                [self.overWriteSwitch setOn:false animated:YES];
             }];
         });
@@ -778,12 +808,12 @@ NSString *whichDataToSend;
                 [UIView animateWithDuration:0.2 animations:^{
                     self.sendMessageBtn.alpha = 0;
                     overWriteLbl.alpha = 0;
-                    whichToSend.alpha = 0;
                 } completion:^(BOOL finished) {
                     self.sendMessageBtn.enabled = false;
                     self.overWriteSwitch.hidden = true;
                     self.overWriteSwitch.enabled = false;
                     whichToSend.enabled = false;
+                    whichToSend.hidden = true;
                 }];
             };
         });
@@ -948,7 +978,138 @@ NSString *whichDataToSend;
 
 }
 
+
+// Lower half of the page
+
+- (IBAction)downloadMatchSchedules:(id)sender {
+    aRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://jrl.teamdriven.us/source/scripts/MatchData.txt"] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:15.0];
+    if (aRequest) {
+        aConnection = [[NSURLConnection alloc] initWithRequest:aRequest delegate:self];
+    }
+    _matchScheduleBtn.enabled = false;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
+    // Prevents data from repeating itself
+    if(aConnection){
+        receivedData = [NSMutableData data];
+    }
+    else{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Connection!!" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        
+        [alert show];
+    }
+    
+    [receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
+    [receivedData appendData: data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
+    dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:schedulePath];
+    if ([[error localizedDescription] isEqualToString:@"The Internet connection appears to be offline."]) {
+        UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Is your Internet on?"
+                                                         message:@"If not, you cannot download the match schedules. Sorry, but that's just how the world works bud."
+                                                        delegate:self
+                                               cancelButtonTitle:@"Continue"
+                                               otherButtonTitles: nil];
+        
+        [alert1 show];
+    }
+    else{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Connection Failed" message:@"Your match schedule data may not be current" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        
+        [alert show];
+    }
+    
+    NSLog(@"Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+    //NSLog(@"%@", dataDict);
+}
+
+
+-(void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    
+    NSLog(@"Success! Received %d bits of data", [receivedData length]);
+    
+    // Must allocate and initialize all mutable arrays before changing them
+    
+    dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:schedulePath];
+    
+    // The error is created and can be referred to if the code screws up (example in the "if(dict)" loop)
+    
+    NSError *error;
+    dataDict = [NSJSONSerialization JSONObjectWithData:receivedData options:NSJSONReadingMutableLeaves error:&error];
+    
+    // If the dictionary "dict" gets filled with data...
+    
+    NSLog(@"%@", dataDict);
+    
+    [dataDict writeToFile:schedulePath atomically:YES];
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        _updatedLbl.alpha = 1;
+    }];
+    
+    _matchScheduleBtn.enabled = true;
+    
+//    if (dataDict) {
+//        
+//        
+//        // Now uses data storage so that the user only needs to initially connect to the internet and then they can keep the schedule afterwords
+//        
+//        
+//        
+//        NSLog(@"DATA DICT: %@", dataDict);
+//    }
+//    else{
+//        NSLog(@"%@", error);
+//    }
+    
+}
+
+- (IBAction)deleteAllData:(id)sender {
+    doubleCheckDeleteAlert = [[UIAlertView alloc] initWithTitle:@"Bro, you sure?"
+                                                        message:@"There's absolutely no turning back after this. All of your scouted data (both Pit and Matches) will be erased"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Yes, I'm sure"
+                                              otherButtonTitles:@"Don't Delete", nil];
+    [doubleCheckDeleteAlert show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if ([alertView isEqual:doubleCheckDeleteAlert]) {
+        if (buttonIndex == 0) {
+            NSArray *itemsArray = @[@"MasterTeam", @"Regional", @"Team", @"Match", @"PitTeam"];
+            for (NSString *st in itemsArray) {
+                NSFetchRequest *deleteRequest = [NSFetchRequest fetchRequestWithEntityName:st];
+                NSError *deleteError;
+                NSArray *deleteObjectsArray = [context executeFetchRequest:deleteRequest error:&deleteError];
+                
+                for (NSManagedObject *item in deleteObjectsArray) {
+                    [context deleteObject:item];
+                    NSLog(@"Deleted a %@", st);
+                }
+            }
+            [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+                if (success) {
+                    NSLog(@"Saved the delete successfully");
+                }
+                else{
+                    NSLog(@"Didn't save delete successfully");
+                }
+            }];
+        }
+    }
+}
+
 @end
+
+
+
+
+
 
 
 

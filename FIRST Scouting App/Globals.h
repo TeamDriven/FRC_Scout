@@ -41,4 +41,9 @@ extern NSURL *FSApathurl;
 extern UIManagedDocument *FSAdocument;
 extern NSManagedObjectContext *context;
 
+// Match Schedule Filepath
+extern NSArray *schedulePaths;
+extern NSString *scheduleDirectory;
+extern NSString *schedulePath;
+
 @end

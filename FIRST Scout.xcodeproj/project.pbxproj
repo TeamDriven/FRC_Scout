@@ -26,6 +26,7 @@
 		869F0AA618ABEBD30026B6EC /* AllianceSelectionPoolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0AA518ABEBD30026B6EC /* AllianceSelectionPoolCell.m */; };
 		86A37DA418B1A59500170595 /* RankingsCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A37DA318B1A59500170595 /* RankingsCDTVC.m */; };
 		86A37DA718B1A5AD00170595 /* RankingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A37DA618B1A5AD00170595 /* RankingsCell.m */; };
+		86A37DAA18B2AD7300170595 /* plistData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86A37DA918B2AD7300170595 /* plistData.plist */; };
 		86A5551C18B087D500BA2C4E /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A5551B18B087D500BA2C4E /* Match.m */; };
 		86A5551F18B087D600BA2C4E /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A5551E18B087D600BA2C4E /* Team.m */; };
 		86A5552218B087D600BA2C4E /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A5552118B087D600BA2C4E /* Regional.m */; };
@@ -112,6 +113,7 @@
 		86A37DA318B1A59500170595 /* RankingsCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingsCDTVC.m; sourceTree = "<group>"; };
 		86A37DA518B1A5AD00170595 /* RankingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingsCell.h; sourceTree = "<group>"; };
 		86A37DA618B1A5AD00170595 /* RankingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingsCell.m; sourceTree = "<group>"; };
+		86A37DA918B2AD7300170595 /* plistData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = plistData.plist; sourceTree = "<group>"; };
 		86A5551A18B087D500BA2C4E /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
 		86A5551B18B087D500BA2C4E /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
 		86A5551D18B087D600BA2C4E /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
@@ -469,6 +471,7 @@
 				8846FEDE1826D7D200B37E44 /* FIRST Scout-Prefix.pch */,
 				2893226A187E637B00A225EE /* UIAlertView+Blocks.h */,
 				2893226B187E637B00A225EE /* UIAlertView+Blocks.m */,
+				86A37DA918B2AD7300170595 /* plistData.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -574,6 +577,7 @@
 				2862D6A81854D4F900DC460F /* Images.xcassets in Resources */,
 				8846FEDB1826D7D100B37E44 /* InfoPlist.strings in Resources */,
 				8846FEE41826D7D200B37E44 /* Main.storyboard in Resources */,
+				86A37DAA18B2AD7300170595 /* plistData.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
