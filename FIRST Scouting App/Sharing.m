@@ -1028,19 +1028,24 @@ UIAlertView *doubleCheckDeleteAlert;
     //NSLog(@"%@", dataDict);
 }
 
-
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
     
-    NSLog(@"Success! Received %d bits of data", [receivedData length]);
+    NSLog(@"Success! Received %ld bits of data", (long)[receivedData length]);
     
     // Must allocate and initialize all mutable arrays before changing them
     
     dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:schedulePath];
     
+    BOOL firstUse = [dataDict objectForKey:@"FirstOpening"];
+    
     // The error is created and can be referred to if the code screws up (example in the "if(dict)" loop)
     
     NSError *error;
     dataDict = [NSJSONSerialization JSONObjectWithData:receivedData options:NSJSONReadingMutableLeaves error:&error];
+    
+    if (![dataDict objectForKey:@"FirstOpening"]) {
+        [dataDict setObject:[NSNumber numberWithBool:firstUse] forKey:@"FirstOpening"];
+    }
     
     // If the dictionary "dict" gets filled with data...
     
@@ -1068,6 +1073,7 @@ UIAlertView *doubleCheckDeleteAlert;
 //    }
     
 }
+
 
 - (IBAction)deleteAllData:(id)sender {
     doubleCheckDeleteAlert = [[UIAlertView alloc] initWithTitle:@"Bro, you sure?"
