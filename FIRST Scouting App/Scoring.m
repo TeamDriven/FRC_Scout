@@ -195,7 +195,7 @@ NSManagedObjectContext *context;
 NSArray *schedulePaths;
 NSString *scheduleDirectory;
 NSString *schedulePath;
-NSDictionary *scheduleDictionary;
+NSMutableDictionary *scheduleDictionary;
 
 
 // Tutorial Items
@@ -331,7 +331,7 @@ NSInteger tutorialStep;
         [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"plistData" ofType:@"plist"] toPath:schedulePath error:nil];
     }
     // *** Done Mapping to Schedule plist ***
-    scheduleDictionary = [[NSDictionary alloc] initWithContentsOfFile:schedulePath];
+    scheduleDictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:schedulePath];
     
     NSLog(@"%@", scheduleDictionary);
 }
@@ -990,8 +990,9 @@ NSInteger tutorialStep;
                                                  sleep(1.0);
                                                  [UIView animateWithDuration:0.3 animations:^{
                                                      tapToContinueLbl.alpha = 1;
+                                                 } completion:^(BOOL finished) {
+                                                     tutorialStep = 1;
                                                  }];
-                                                 tutorialStep = 1;
                                              }];
                                          }];
                                      }];
@@ -1011,7 +1012,7 @@ NSInteger tutorialStep;
             }
         } completion:^(BOOL finished) {
             UILabel *moreThanOneScoutLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 250, 300, 70)];
-            moreThanOneScoutLbl.text = @"If you have more than one scout sitting nearby...";
+            moreThanOneScoutLbl.text = @"If you have other scouts sitting nearby...";
             moreThanOneScoutLbl.font = [UIFont boldSystemFontOfSize:22];
             moreThanOneScoutLbl.numberOfLines = 2;
             moreThanOneScoutLbl.lineBreakMode = NSLineBreakByWordWrapping;
@@ -1021,7 +1022,7 @@ NSInteger tutorialStep;
             moreThanOneScoutLbl.alpha = 0;
             
             UIImageView *arrowImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
-            arrowImage.frame = CGRectMake(120, 55, 53, 120);
+            arrowImage.frame = CGRectMake(100, 35, 53, 120);
             arrowImage.transform = CGAffineTransformMakeRotation(-M_PI/4);
             arrowImage.alpha = 0;
             [gruyOutview addSubview:arrowImage];
@@ -1036,7 +1037,7 @@ NSInteger tutorialStep;
             useInstaShareLbl.alpha = 0;
             [gruyOutview addSubview:useInstaShareLbl];
             
-            UILabel *instaShareExplain = [[UILabel alloc] initWithFrame:CGRectMake(224, 600, 320, 100)];
+            UILabel *instaShareExplain = [[UILabel alloc] initWithFrame:CGRectMake(224, 550, 320, 100)];
             instaShareExplain.text = @"After connecting to other scouts, the labels at the bottom will update as you receive their matches";
             instaShareExplain.textAlignment = NSTextAlignmentCenter;
             instaShareExplain.font = [UIFont boldSystemFontOfSize:19];
@@ -1070,6 +1071,7 @@ NSInteger tutorialStep;
                         sleep(3.0);
                         [UIView animateWithDuration:0.3 animations:^{
                             tapToContinueLbl.alpha = 1;
+                        } completion:^(BOOL finished) {
                             tutorialStep = 2;
                         }];
                     }];
@@ -1100,16 +1102,537 @@ NSInteger tutorialStep;
             answerLbl.textAlignment = NSTextAlignmentCenter;
             [gruyOutview addSubview:answerLbl];
             
+            UILabel *regionalLbl = [[UILabel alloc] initWithFrame:CGRectMake(40, 100, 140, 30)];
+            regionalLbl.text = @"Your Regional";
+            regionalLbl.textColor = [UIColor whiteColor];
+            regionalLbl.font = [UIFont boldSystemFontOfSize:18];
+            regionalLbl.textAlignment = NSTextAlignmentCenter;
+            regionalLbl.alpha = 0;
+            [gruyOutview addSubview:regionalLbl];
+            
+            UILabel *initialsLbl = [[UILabel alloc] initWithFrame:CGRectMake(600, 100, 140, 30)];
+            initialsLbl.text = @"Your Initials";
+            initialsLbl.textColor = [UIColor whiteColor];
+            initialsLbl.font = [UIFont boldSystemFontOfSize:18];
+            initialsLbl.textAlignment = NSTextAlignmentCenter;
+            initialsLbl.alpha = 0;
+            [gruyOutview addSubview:initialsLbl];
+            
+            UILabel *positionLbl = [[UILabel alloc] initWithFrame:CGRectMake(284, 170, 200, 30)];
+            positionLbl.text = @"Your Scouting Position";
+            positionLbl.textColor = [UIColor whiteColor];
+            positionLbl.font = [UIFont boldSystemFontOfSize:18];
+            positionLbl.textAlignment = NSTextAlignmentCenter;
+            positionLbl.alpha = 0;
+            [gruyOutview addSubview:positionLbl];
+            
+            UILabel *currentMatchNumber = [[UILabel alloc] initWithFrame:CGRectMake(180, 250, 200, 30)];
+            currentMatchNumber.text = @"Current Match Number";
+            currentMatchNumber.textColor = [UIColor whiteColor];
+            currentMatchNumber.font = [UIFont boldSystemFontOfSize:16];
+            currentMatchNumber.textAlignment = NSTextAlignmentCenter;
+            currentMatchNumber.alpha = 0;
+            [gruyOutview addSubview:currentMatchNumber];
+            
+            UILabel *matchNubmerEditable = [[UILabel alloc] initWithFrame:CGRectMake(180, 280, 200, 30)];
+            matchNubmerEditable.text = @"(editable in case there's a mistake)";
+            matchNubmerEditable.textColor = [UIColor whiteColor];
+            matchNubmerEditable.font = [UIFont boldSystemFontOfSize:12];
+            matchNubmerEditable.textAlignment = NSTextAlignmentCenter;
+            matchNubmerEditable.alpha = 0;
+            [gruyOutview addSubview:matchNubmerEditable];
+            
+            UILabel *currentTeamNumber = [[UILabel alloc] initWithFrame:CGRectMake(400, 250, 200, 30)];
+            currentTeamNumber.text = @"Current Team Number";
+            currentTeamNumber.textColor = [UIColor whiteColor];
+            currentTeamNumber.font = [UIFont boldSystemFontOfSize:16];
+            currentTeamNumber.textAlignment = NSTextAlignmentCenter;
+            currentTeamNumber.alpha = 0;
+            [gruyOutview addSubview:currentTeamNumber];
+            
+            UILabel *teamNumberEditable = [[UILabel alloc] initWithFrame:CGRectMake(400, 275, 200, 40)];
+            teamNumberEditable.text = @"(editable and updates if a match schedule is loaded for the regional)";
+            teamNumberEditable.textColor = [UIColor whiteColor];
+            teamNumberEditable.font = [UIFont boldSystemFontOfSize:12];
+            teamNumberEditable.textAlignment = NSTextAlignmentCenter;
+            teamNumberEditable.alpha = 0;
+            teamNumberEditable.numberOfLines = 2;
+            teamNumberEditable.lineBreakMode = NSLineBreakByWordWrapping;
+            [gruyOutview addSubview:teamNumberEditable];
+            
+            UILabel *saveMatchLbl = [[UILabel alloc] initWithFrame:CGRectMake(284, 850, 200, 30)];
+            saveMatchLbl.text = @"Save Match Button";
+            saveMatchLbl.textColor = [UIColor whiteColor];
+            saveMatchLbl.textAlignment = NSTextAlignmentCenter;
+            saveMatchLbl.font = [UIFont boldSystemFontOfSize:18];
+            saveMatchLbl.alpha = 0;
+            [gruyOutview addSubview:saveMatchLbl];
+            
+            UILabel *selfExplanitory = [[UILabel alloc] initWithFrame:CGRectMake(284, 880, 200, 30)];
+            selfExplanitory.text = @"(kinda self explanatory)";
+            selfExplanitory.textColor = [UIColor whiteColor];
+            selfExplanitory.textAlignment = NSTextAlignmentCenter;
+            selfExplanitory.font = [UIFont boldSystemFontOfSize:15];
+            selfExplanitory.alpha = 0;
+            [gruyOutview addSubview:selfExplanitory];
+            
+            UILabel *tapToContinueLbl = [[UILabel alloc] initWithFrame:CGRectMake(284, 650, 200, 20)];
+            tapToContinueLbl.text = @"Tap to Continue";
+            tapToContinueLbl.textColor = [UIColor whiteColor];
+            tapToContinueLbl.font = [UIFont boldSystemFontOfSize:17];
+            tapToContinueLbl.alpha = 0;
+            tapToContinueLbl.textAlignment = NSTextAlignmentCenter;
+            [gruyOutview addSubview:tapToContinueLbl];
+            
             [UIView animateWithDuration:0.3 animations:^{
                 sarcasticQuestionLbl.alpha = 1;
             } completion:^(BOOL finished) {
-                sleep(2.0);
+                sleep(1.8);
                 [UIView animateWithDuration:0.3 animations:^{
                     answerLbl.alpha = 1;
+                } completion:^(BOOL finished) {
+                    sleep(2.0);
+                    [UIView animateWithDuration:0.3 animations:^{
+                        regionalLbl.alpha = 1;
+                    } completion:^(BOOL finished) {
+                        sleep(1.5);
+                        [UIView animateWithDuration:0.3 animations:^{
+                            initialsLbl.alpha = 1;
+                        } completion:^(BOOL finished) {
+                            sleep(1.5);
+                            [UIView animateWithDuration:0.3 animations:^{
+                                positionLbl.alpha = 1;
+                            } completion:^(BOOL finished) {
+                                sleep(1.5);
+                                [UIView animateWithDuration:0.3 animations:^{
+                                    currentMatchNumber.alpha = 1;
+                                    matchNubmerEditable.alpha = 1;
+                                } completion:^(BOOL finished) {
+                                    sleep(1.8);
+                                    [UIView animateWithDuration:0.3 animations:^{
+                                        currentTeamNumber.alpha = 1;
+                                        teamNumberEditable.alpha = 1;
+                                    } completion:^(BOOL finished) {
+                                        sleep(2.0);
+                                        [UIView animateWithDuration:0.3 animations:^{
+                                            saveMatchLbl.alpha = 1;
+                                            selfExplanitory.alpha = 1;
+                                        } completion:^(BOOL finished) {
+                                            sleep(2.0);
+                                            [UIView animateWithDuration:0.3 animations:^{
+                                                tapToContinueLbl.alpha = 1;
+                                            } completion:^(BOOL finished) {
+                                                tutorialStep = 3;
+                                            }];
+                                        }];
+                                    }];
+                                }];
+                            }];
+                        }];
+                    }];
                 }];
             }];
         }];
         
+    }
+    else if (tutorialStep == 3){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *changeSignIn = [[UILabel alloc] initWithFrame:CGRectMake(500, 150, 200, 60)];
+            changeSignIn.text = @"If you need to change scouts/regionals/etc.";
+            changeSignIn.textColor = [UIColor whiteColor];
+            changeSignIn.textAlignment = NSTextAlignmentCenter;
+            changeSignIn.font = [UIFont boldSystemFontOfSize:18];
+            changeSignIn.alpha = 0;
+            changeSignIn.numberOfLines = 2;
+            changeSignIn.lineBreakMode = NSLineBreakByWordWrapping;
+            [gruyOutview addSubview:changeSignIn];
+            
+            UIImageView *arrowImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            arrowImage.frame = CGRectMake(550, 25, 53, 120);
+            arrowImage.transform = CGAffineTransformMakeRotation(M_PI/4);
+            arrowImage.alpha = 0;
+            [gruyOutview addSubview:arrowImage];
+            
+            UILabel *nowForPageExplanations = [[UILabel alloc] initWithFrame:CGRectMake(209, 400, 350, 30)];
+            nowForPageExplanations.text = @"Now for Page Explanations!";
+            nowForPageExplanations.textColor = [UIColor whiteColor];
+            nowForPageExplanations.textAlignment = NSTextAlignmentCenter;
+            nowForPageExplanations.font = [UIFont boldSystemFontOfSize:24];
+            nowForPageExplanations.alpha = 0;
+            [gruyOutview addSubview:nowForPageExplanations];
+            
+            UILabel *holdTightLbl = [[UILabel alloc] initWithFrame:CGRectMake(209, 440, 350, 20)];
+            holdTightLbl.text = @"(Almost done, just hold tight a little longer)";
+            holdTightLbl.textColor = [UIColor whiteColor];
+            holdTightLbl.textAlignment = NSTextAlignmentCenter;
+            holdTightLbl.font = [UIFont boldSystemFontOfSize:16];
+            holdTightLbl.alpha = 0;
+            [gruyOutview addSubview:holdTightLbl];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 550, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:16];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                changeSignIn.alpha = 1;
+                arrowImage.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(3.0);
+                [UIView animateWithDuration:0.3 animations:^{
+                    nowForPageExplanations.alpha = 1;
+                    holdTightLbl.alpha = 1;
+                } completion:^(BOOL finished) {
+                    sleep(2.0);
+                    [UIView animateWithDuration:0.3 animations:^{
+                        tapToContinue.alpha = 1;
+                    } completion:^(BOOL finished) {
+                        tutorialStep = 4;
+                    }];
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 4){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *pitViewDetail = [[UILabel alloc] initWithFrame:CGRectMake(210, 790, 240, 30)];
+            pitViewDetail.text = @"The Pit Scouting View";
+            pitViewDetail.textColor = [UIColor whiteColor];
+            pitViewDetail.textAlignment = NSTextAlignmentCenter;
+            pitViewDetail.font = [UIFont boldSystemFontOfSize:20];
+            pitViewDetail.alpha = 0;
+            [gruyOutview addSubview:pitViewDetail];
+            
+            UILabel *detailPit = [[UILabel alloc] initWithFrame:CGRectMake(230, 820, 200, 30)];
+            detailPit.text = @"For all you Pit Scouting needs";
+            detailPit.textAlignment = NSTextAlignmentCenter;
+            detailPit.textColor = [UIColor whiteColor];
+            detailPit.font = [UIFont boldSystemFontOfSize:14];
+            detailPit.alpha = 0;
+            [gruyOutview addSubview:detailPit];
+            
+            UIImageView *downArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            downArrow.frame = CGRectMake(303, 850, 53, 120);
+            downArrow.alpha = 0;
+            downArrow.transform = CGAffineTransformMakeRotation(M_PI);
+            [gruyOutview addSubview:downArrow];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 600, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:18];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                pitViewDetail.alpha = 1;
+                detailPit.alpha = 1;
+                downArrow.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(2.0);
+                [UIView animateWithDuration:0.3 animations:^{
+                    tapToContinue.alpha = 1;
+                } completion:^(BOOL finished) {
+                    tutorialStep = 5;
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 5){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *dataViewDetail = [[UILabel alloc] initWithFrame:CGRectMake(325, 790, 240, 30)];
+            dataViewDetail.text = @"The Data View";
+            dataViewDetail.textColor = [UIColor whiteColor];
+            dataViewDetail.textAlignment = NSTextAlignmentCenter;
+            dataViewDetail.font = [UIFont boldSystemFontOfSize:20];
+            dataViewDetail.alpha = 0;
+            [gruyOutview addSubview:dataViewDetail];
+            
+            UILabel *detailDataView = [[UILabel alloc] initWithFrame:CGRectMake(325, 820, 240, 40)];
+            detailDataView.text = @"Where you can view and analyze all recorded data";
+            detailDataView.textAlignment = NSTextAlignmentCenter;
+            detailDataView.textColor = [UIColor whiteColor];
+            detailDataView.font = [UIFont boldSystemFontOfSize:14];
+            detailDataView.alpha = 0;
+            detailDataView.numberOfLines = 2;
+            detailDataView.lineBreakMode = NSLineBreakByWordWrapping;
+            [gruyOutview addSubview:detailDataView];
+            
+            UIImageView *downArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            downArrow.frame = CGRectMake(413, 850, 53, 120);
+            downArrow.alpha = 0;
+            downArrow.transform = CGAffineTransformMakeRotation(M_PI);
+            [gruyOutview addSubview:downArrow];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 600, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:18];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                dataViewDetail.alpha = 1;
+                detailDataView.alpha = 1;
+                downArrow.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(2.0);
+                [UIView animateWithDuration:0.3 animations:^{
+                    tapToContinue.alpha = 1;
+                } completion:^(BOOL finished) {
+                    tutorialStep = 6;
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 6){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *moreViewDetail = [[UILabel alloc] initWithFrame:CGRectMake(430, 790, 240, 30)];
+            moreViewDetail.text = @"The More View";
+            moreViewDetail.textColor = [UIColor whiteColor];
+            moreViewDetail.textAlignment = NSTextAlignmentCenter;
+            moreViewDetail.font = [UIFont boldSystemFontOfSize:20];
+            moreViewDetail.alpha = 0;
+            [gruyOutview addSubview:moreViewDetail];
+            
+            UILabel *detailMoreView = [[UILabel alloc] initWithFrame:CGRectMake(440, 810, 220, 60)];
+            detailMoreView.text = @"Where you can sync with others, get match schedules, and more (hence the name)";
+            detailMoreView.textAlignment = NSTextAlignmentCenter;
+            detailMoreView.textColor = [UIColor whiteColor];
+            detailMoreView.font = [UIFont boldSystemFontOfSize:14];
+            detailMoreView.alpha = 0;
+            detailMoreView.numberOfLines = 3;
+            detailMoreView.lineBreakMode = NSLineBreakByWordWrapping;
+            [gruyOutview addSubview:detailMoreView];
+            
+            UIImageView *downArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            downArrow.frame = CGRectMake(523, 850, 53, 120);
+            downArrow.alpha = 0;
+            downArrow.transform = CGAffineTransformMakeRotation(M_PI);
+            [gruyOutview addSubview:downArrow];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 600, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:18];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                moreViewDetail.alpha = 1;
+                detailMoreView.alpha = 1;
+                downArrow.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(2.0);
+                [UIView animateWithDuration:0.3 animations:^{
+                    tapToContinue.alpha = 1;
+                } completion:^(BOOL finished) {
+                    tutorialStep = 7;
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 7){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *oneMoreThingLbl = [[UILabel alloc] initWithFrame:CGRectMake(420, 400, 300, 30)];
+            oneMoreThingLbl.text = @"Oh, and one more thing...";
+            oneMoreThingLbl.textColor = [UIColor whiteColor];
+            oneMoreThingLbl.textAlignment = NSTextAlignmentCenter;
+            oneMoreThingLbl.font = [UIFont boldSystemFontOfSize:24];
+            oneMoreThingLbl.alpha = 0;
+            [gruyOutview addSubview:oneMoreThingLbl];
+            
+            UILabel *passLbl = [[UILabel alloc] initWithFrame:CGRectMake(200, 620, 80, 30)];
+            passLbl.text = @"Passes";
+            passLbl.textAlignment = NSTextAlignmentRight;
+            passLbl.textColor = [UIColor whiteColor];
+            passLbl.font = [UIFont boldSystemFontOfSize:18];
+            passLbl.alpha = 0;
+            [gruyOutview addSubview:passLbl];
+            
+            UIImageView *passArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            passArrow.frame = CGRectMake(300, 575, 53, 120);
+            passArrow.alpha = 0;
+            passArrow.transform = CGAffineTransformMakeRotation(M_PI/2);
+            [gruyOutview addSubview:passArrow];
+            
+            UILabel *receiveLbl = [[UILabel alloc] initWithFrame:CGRectMake(200, 680, 80, 30)];
+            receiveLbl.text = @"Receives";
+            receiveLbl.textAlignment = NSTextAlignmentRight;
+            receiveLbl.textColor = [UIColor whiteColor];
+            receiveLbl.font = [UIFont boldSystemFontOfSize:18];
+            receiveLbl.alpha = 0;
+            [gruyOutview addSubview:receiveLbl];
+            
+            UIImageView *receiveArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            receiveArrow.frame = CGRectMake(300, 635, 53, 120);
+            receiveArrow.alpha = 0;
+            receiveArrow.transform = CGAffineTransformMakeRotation(M_PI/2);
+            [gruyOutview addSubview:receiveArrow];
+            
+            UILabel *dontWorryLbl = [[UILabel alloc] initWithFrame:CGRectMake(420, 770, 300, 80)];
+            dontWorryLbl.text = @"Don't worry about assist bonuses, just record when the robot passes and receives the ball";
+            dontWorryLbl.textColor = [UIColor whiteColor];
+            dontWorryLbl.textAlignment = NSTextAlignmentCenter;
+            dontWorryLbl.font = [UIFont boldSystemFontOfSize:18];
+            dontWorryLbl.numberOfLines = 3;
+            dontWorryLbl.lineBreakMode = NSLineBreakByWordWrapping;
+            dontWorryLbl.alpha = 0;
+            [gruyOutview addSubview:dontWorryLbl];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 450, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:18];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                oneMoreThingLbl.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(1.5);
+                [self autoOff];
+                [UIView animateWithDuration:0.4 animations:^{
+                    oneMoreThingLbl.center = CGPointMake(oneMoreThingLbl.center.x, oneMoreThingLbl.center.y + 150);
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:0.3 animations:^{
+                        passLbl.alpha = 1;
+                        passLbl.center = CGPointMake(passLbl.center.x + 50, passLbl.center.y);
+                        passArrow.alpha = 1;
+                        passArrow.center = CGPointMake(passArrow.center.x + 50, passArrow.center.y);
+                        receiveLbl.alpha = 1;
+                        receiveLbl.center = CGPointMake(receiveLbl.center.x + 50, receiveLbl.center.y);
+                        receiveArrow.alpha = 1;
+                        receiveArrow.center = CGPointMake(receiveArrow.center.x + 50, receiveArrow.center.y);
+                    } completion:^(BOOL finished) {
+                        [UIView animateWithDuration:0.3 animations:^{
+                            dontWorryLbl.alpha = 1;
+                            dontWorryLbl.center = CGPointMake(dontWorryLbl.center.x, dontWorryLbl.center.y - 50);
+                        } completion:^(BOOL finished) {
+                            sleep(2.5);
+                            [UIView animateWithDuration:0.3 animations:^{
+                                tapToContinue.alpha = 1;
+                            } completion:^(BOOL finished) {
+                                tutorialStep = 8;
+                            }];
+                        }];
+                    }];
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 8){
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *finallyLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 300, 300, 30)];
+            finallyLbl.text = @"And Finally...";
+            finallyLbl.textAlignment = NSTextAlignmentCenter;
+            finallyLbl.textColor = [UIColor whiteColor];
+            finallyLbl.font = [UIFont boldSystemFontOfSize:24];
+            finallyLbl.alpha = 0;
+            [gruyOutview addSubview:finallyLbl];
+            
+            UILabel *fromAllOfTDLbl = [[UILabel alloc] initWithFrame:CGRectMake(134, 380, 500, 30)];
+            fromAllOfTDLbl.text = @"For all of us here on Team Driven 1730,";
+            fromAllOfTDLbl.textColor = [UIColor whiteColor];
+            fromAllOfTDLbl.textAlignment = NSTextAlignmentCenter;
+            fromAllOfTDLbl.font = [UIFont boldSystemFontOfSize:24];
+            fromAllOfTDLbl.alpha = 0;
+            [gruyOutview addSubview:fromAllOfTDLbl];
+            
+            UILabel *stayClassyLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 460, 300, 30)];
+            stayClassyLbl.text = @"Stay classy FRC Scouts.";
+            stayClassyLbl.textColor = [UIColor whiteColor];
+            stayClassyLbl.textAlignment = NSTextAlignmentCenter;
+            stayClassyLbl.font = [UIFont boldSystemFontOfSize:26];
+            stayClassyLbl.alpha = 0;
+            [gruyOutview addSubview:stayClassyLbl];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 600, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:18];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                finallyLbl.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(2.0);
+                [UIView animateWithDuration:0.3 animations:^{
+                    fromAllOfTDLbl.alpha = 1;
+                } completion:^(BOOL finished) {
+                    sleep(2.0);
+                    [UIView animateWithDuration:0.3 animations:^{
+                        stayClassyLbl.alpha = 1;
+                    } completion:^(BOOL finished) {
+                        sleep(1.5);
+                        tutorialStep = 9;
+                        [UIView animateWithDuration:0.3 delay:3.0 options:UIViewAnimationOptionTransitionNone animations:^{
+                            tapToContinue.alpha = 1;
+                        } completion:^(BOOL finished) {
+                            
+                        }];
+                    }];
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 9){
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            [self autoOn];
+            [UIView animateWithDuration:0.3 animations:^{
+                gruyOutview.alpha = 0;
+            } completion:^(BOOL finished) {
+                [gruyOutview removeFromSuperview];
+                [scheduleDictionary setValue:[NSNumber numberWithBool:NO] forKey:@"FirstOpening"];
+                [scheduleDictionary writeToFile:schedulePath atomically:YES];
+                for (UIBarButtonItem *item in self.tabBarController.tabBar.items) {
+                    item.enabled = true;
+                }
+                twoFingerDown.enabled = true;
+            }];
+        }];
     }
 }
 
@@ -1350,6 +1873,10 @@ NSInteger tutorialStep;
                 scoutTeamNumField.text = [[NSString alloc] initWithString:txt1];
             }
         }
+        if ([txt1 length] > 4) {
+            [txt1 deleteCharactersInRange:NSMakeRange(4, 1)];
+            scoutTeamNumField.text = [[NSString alloc] initWithString:txt1];
+        }
     }
     if (currentMatchNumField.isEditing) {
         if ([currentMatchType isEqualToString:@"Q"]) {
@@ -1519,11 +2046,15 @@ NSInteger tutorialStep;
     if (visibleSwitch.on) {
         [self setUpMultiPeer];
         visible = true;
+        hostSwitch.enabled = true;
     }
     else{
         [self.mySession disconnect];
         [self.advertiser stop];
         visible = false;
+        [hostSwitch setOn:NO animated:YES];
+        hostSwitch.enabled = false;
+        host = false;
     }
 }
 
@@ -1686,8 +2217,10 @@ NSInteger tutorialStep;
 // Activated by two finger swipe up (changes to auto UI)
 -(void)autoOn{
     autoYN = true;
-    twoFingerUp.enabled = false;
-    twoFingerDown.enabled = true;
+    if ([[self.tabBarController.tabBar.items firstObject] isEnabled]) {
+        twoFingerUp.enabled = false;
+        twoFingerDown.enabled = true;
+    }
     for (UIView *v in autoScreenObjects) {
         if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
             v.userInteractionEnabled = YES;
@@ -1726,8 +2259,10 @@ NSInteger tutorialStep;
 // Activated by two finger swipe down (changes to telop UI)
 -(void)autoOff{
     autoYN = false;
-    twoFingerUp.enabled = true;
-    twoFingerDown.enabled = false;
+    if ([[self.tabBarController.tabBar.items firstObject] isEnabled]) {
+        twoFingerUp.enabled = true;
+        twoFingerDown.enabled = false;
+    }
     
     for (UIView *v in teleopScreenObjects) {
         if ([v isKindOfClass:[UIResponder class]]) {

@@ -16,5 +16,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *updatedLbl;
 
 @property (weak, nonatomic) IBOutlet UIButton *deleteDatabaseBtn;
+@property (weak, nonatomic) IBOutlet UILabel *deletedLbl;
+
+@property (weak, nonatomic) IBOutlet UIButton *enableTutorialBtn;
+@property (weak, nonatomic) IBOutlet UILabel *tutorialLblDone;
+
 
 @end

@@ -301,10 +301,16 @@ UIAlertView *doubleCheckDeleteAlert;
     _updatedLbl.layer.cornerRadius = 5;
     
     _deleteDatabaseBtn.layer.cornerRadius = 5;
+    _deletedLbl.layer.cornerRadius = 5;
+    
+    _enableTutorialBtn.layer.cornerRadius = 5;
+    _tutorialLblDone.layer.cornerRadius = 5;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     _updatedLbl.alpha = 0;
+    _deletedLbl.alpha = 0;
+    _tutorialLblDone.alpha = 0;
 }
 
 -(void)changeDataToSend:(UISegmentedControl *)control{
@@ -1036,41 +1042,31 @@ UIAlertView *doubleCheckDeleteAlert;
     
     dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:schedulePath];
     
-    BOOL firstUse = [dataDict objectForKey:@"FirstOpening"];
+    NSNumber *firstUse = [dataDict objectForKey:@"FirstOpening"];
     
     // The error is created and can be referred to if the code screws up (example in the "if(dict)" loop)
     
     NSError *error;
     dataDict = [NSJSONSerialization JSONObjectWithData:receivedData options:NSJSONReadingMutableLeaves error:&error];
     
-    if (![dataDict objectForKey:@"FirstOpening"]) {
-        [dataDict setObject:[NSNumber numberWithBool:firstUse] forKey:@"FirstOpening"];
-    }
-    
     // If the dictionary "dict" gets filled with data...
     
-    NSLog(@"%@", dataDict);
     
     [dataDict writeToFile:schedulePath atomically:YES];
+    
+    NSMutableDictionary *newDataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:schedulePath];
+    [newDataDict setObject:[NSNumber numberWithBool:[firstUse boolValue]] forKey:@"FirstOpening"];
+    
+    NSLog(@"%@", newDataDict);
+    
+    [newDataDict writeToFile:schedulePath atomically:YES];
+
     
     [UIView animateWithDuration:0.2 animations:^{
         _updatedLbl.alpha = 1;
     }];
     
     _matchScheduleBtn.enabled = true;
-    
-//    if (dataDict) {
-//        
-//        
-//        // Now uses data storage so that the user only needs to initially connect to the internet and then they can keep the schedule afterwords
-//        
-//        
-//        
-//        NSLog(@"DATA DICT: %@", dataDict);
-//    }
-//    else{
-//        NSLog(@"%@", error);
-//    }
     
 }
 
@@ -1101,6 +1097,9 @@ UIAlertView *doubleCheckDeleteAlert;
             [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
                 if (success) {
                     NSLog(@"Saved the delete successfully");
+                    [UIView animateWithDuration:0.3 animations:^{
+                        _deletedLbl.alpha = 1;
+                    }];
                 }
                 else{
                     NSLog(@"Didn't save delete successfully");
@@ -1108,6 +1107,18 @@ UIAlertView *doubleCheckDeleteAlert;
             }];
         }
     }
+}
+
+- (IBAction)reEnableTutorial:(id)sender {
+    dataDict = [[NSMutableDictionary alloc] initWithContentsOfFile:schedulePath];
+    
+    [dataDict setValue:[NSNumber numberWithBool:YES] forKey:@"FirstOpening"];
+    
+    [dataDict writeToFile:schedulePath atomically:YES];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        _tutorialLblDone.alpha = 1;
+    }];
 }
 
 @end
