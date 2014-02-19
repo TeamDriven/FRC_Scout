@@ -911,8 +911,6 @@ NSInteger tutorialStep;
                                  twoFingerDown.enabled = false;
                                  twoFingerUp.enabled = false;
                                  
-                                 NSLog(@"entered first opening");
-                                 
                                  gruyOutview = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
                                  gruyOutview.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.7];
                                  [gruyOutview addTarget:self action:@selector(nextStepInTutorial) forControlEvents:UIControlEventTouchUpInside];
