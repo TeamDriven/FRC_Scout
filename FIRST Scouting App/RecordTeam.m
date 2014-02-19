@@ -9,6 +9,7 @@
 #import "RecordTeam.h"
 #import "PitTeam.h"
 #import "PitTeam+Category.h"
+#import "Globals.h"
 
 @interface RecordTeam ()
 
@@ -37,7 +38,7 @@ UIControl *sixEightWheelDrop;
 BOOL isSixEightWheelDrop;
 UIControl *fourWheelDrive;
 BOOL isFourWheelDrive;
-UIControl *Mecanum;
+UIControl *mecanum;
 BOOL isMecanum;
 UIControl *swerveCrab;
 BOOL isSwerveCrab;
@@ -142,28 +143,6 @@ UIAlertView *overWriteAlert;
 
 -(void)viewDidLoad{
     [super viewDidLoad];
-    
-    // *** Map to Core Data ***
-    FSAfileManager = [NSFileManager defaultManager];
-    FSAdocumentsDirectory = [[FSAfileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
-    FSAdocumentName = @"FSA";
-    FSApathurl = [FSAdocumentsDirectory URLByAppendingPathComponent:FSAdocumentName];
-    FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
-    context = FSAdocument.managedObjectContext;
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
-        [FSAdocument openWithCompletionHandler:^(BOOL success){
-            if (success) NSLog(@"Found the document!");
-            if (!success) NSLog(@"Couldn't find the document at path: %@", FSApathurl);
-        }];
-    }
-    else{
-        [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
-            if (success) NSLog(@"Created the document!");
-            if (!success) NSLog(@"Couldn't create the document at path: %@", FSApathurl);
-        }];
-    }
-    // *** Done Mapping to Core Data **
     
     robotImageLbl = [[UILabel alloc] initWithFrame:CGRectMake(40, 75, 125, 15)];
     robotImageLbl.text = @"Tap to Capture Image";
@@ -294,19 +273,19 @@ UIAlertView *overWriteAlert;
     [fourWheelDrive addSubview:fourWheelDriveLbl];
     [self.view addSubview:fourWheelDrive];
     
-    Mecanum = [[UIControl alloc] initWithFrame:CGRectMake(435, 245, 75, 30)];
-    [Mecanum addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
-    Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-    Mecanum.layer.cornerRadius = 5;
-    Mecanum.center = CGPointMake(Mecanum.center.x, _driveTrainLbl.center.y);
+    mecanum = [[UIControl alloc] initWithFrame:CGRectMake(435, 245, 75, 30)];
+    [mecanum addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
+    mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+    mecanum.layer.cornerRadius = 5;
+    mecanum.center = CGPointMake(mecanum.center.x, _driveTrainLbl.center.y);
     UILabel *mecanumLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
     mecanumLbl.text = @"Mecanum";
     mecanumLbl.textColor = [UIColor whiteColor];
     mecanumLbl.textAlignment = NSTextAlignmentCenter;
     mecanumLbl.font = [UIFont boldSystemFontOfSize:12];
     mecanumLbl.backgroundColor = [UIColor clearColor];
-    [Mecanum addSubview:mecanumLbl];
-    [self.view addSubview:Mecanum];
+    [mecanum addSubview:mecanumLbl];
+    [self.view addSubview:mecanum];
     
     swerveCrab = [[UIControl alloc] initWithFrame:CGRectMake(520, 245, 85, 30)];
     [swerveCrab addTarget:self action:@selector(driveTrainSelectionTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -331,6 +310,7 @@ UIAlertView *overWriteAlert;
     otherDriveTrain.returnKeyType = UIReturnKeyDone;
     otherDriveTrain.delegate = self;
     [otherDriveTrain addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    otherDriveTrain.autocapitalizationType = UITextAutocapitalizationTypeWords;
     [self.view addSubview:otherDriveTrain];
 }
 -(void)shooterRowSetUp{
@@ -385,6 +365,7 @@ UIAlertView *overWriteAlert;
     otherShooter.returnKeyType = UIReturnKeyDone;
     otherShooter.delegate = self;
     [otherShooter addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    otherShooter.autocapitalizationType = UITextAutocapitalizationTypeWords;
     [self.view addSubview:otherShooter];
 }
 -(void)preferredGoalRowSetUp{
@@ -699,6 +680,8 @@ UIAlertView *overWriteAlert;
 -(void)getAnImage{
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
     NSInteger cancelButtonY;
     NSInteger popUpViewY;
     
@@ -841,7 +824,7 @@ UIAlertView *overWriteAlert;
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     robotImageControl.layer.borderColor = [[UIColor clearColor] CGColor];
     
     UIImage * image = [info objectForKey:UIImagePickerControllerEditedImage];
@@ -889,7 +872,7 @@ UIAlertView *overWriteAlert;
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
                 fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = true;
@@ -914,7 +897,7 @@ UIAlertView *overWriteAlert;
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 fourWheelDrive.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
-                Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = false;
@@ -927,10 +910,10 @@ UIAlertView *overWriteAlert;
             driveTrainString = @"Four Wheel Drive";
         }
     }
-    else if ([controller isEqual:Mecanum]){
+    else if ([controller isEqual:mecanum]){
         if (isMecanum) {
             [UIView animateWithDuration:0.2 animations:^{
-                Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isMecanum = false;
             driveTrainString = @"";
@@ -939,7 +922,7 @@ UIAlertView *overWriteAlert;
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                Mecanum.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
+                mecanum.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
                 swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = false;
@@ -964,7 +947,7 @@ UIAlertView *overWriteAlert;
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 swerveCrab.backgroundColor = [UIColor colorWithRed:51.0/255.0 green:153.0/255.0 blue:255.0/255.0 alpha:1.0];
             }];
             isSixEightWheelDrop = false;
@@ -979,6 +962,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)shooterSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:shooterNone]){
@@ -1052,6 +1037,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)preferredGoalSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:preferredHigh]){
@@ -1092,6 +1079,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)goalieArmSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:goalieArmYes]){
@@ -1132,6 +1121,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)floorCollectorSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:floorCollectorYes]){
@@ -1172,6 +1163,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)autonomousSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:autonomousYes]){
@@ -1212,6 +1205,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)autoStartingPositionSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:startLeft]){
@@ -1272,6 +1267,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)hotGoalTrackingSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:hotGoalYes]){
@@ -1312,6 +1309,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)catchingMechanismSelectionTapped:(UIControl *)controller{
     if ([controller isEqual:catchingYes]){
@@ -1352,6 +1351,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 -(void)bumperQualitySelectionTapped:(UIControl *)controller{
     if ([controller isEqual:bumperPoor]){
@@ -1416,6 +1417,8 @@ UIAlertView *overWriteAlert;
     }
     [_teamNameField resignFirstResponder];
     [_teamNumberField resignFirstResponder];
+    [otherDriveTrain resignFirstResponder];
+    [otherShooter resignFirstResponder];
 }
 
 
@@ -1425,7 +1428,7 @@ UIAlertView *overWriteAlert;
             [UIView animateWithDuration:0.2 animations:^{
                 sixEightWheelDrop.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 fourWheelDrive.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
-                Mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
+                mecanum.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
                 swerveCrab.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.8];
             }];
             isSixEightWheelDrop = false;
@@ -1450,6 +1453,7 @@ UIAlertView *overWriteAlert;
             isShooterNone = false;
             isShooterCatapult = false;
             isShooterPuncher = false;
+            isOtherShooter = true;
             shooterString = otherShooter.text;
         }
         else{
@@ -1459,6 +1463,233 @@ UIAlertView *overWriteAlert;
     }
 }
 
+-(IBAction)teamNumberFieldEndedEditing:(id)sender {
+    NSFetchRequest *pitTeamRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+    pitTeamRequest.predicate = [NSPredicate predicateWithFormat:@"teamNumber = %@", _teamNumberField.text];
+    
+    NSError *pitTeamError;
+    PitTeam *pitTeamFound = [[context executeFetchRequest:pitTeamRequest error:&pitTeamError] firstObject];
+    
+    if (pitTeamFound) {
+        _teamNameField.text = pitTeamFound.teamName;
+        
+        if (pitTeamFound.image) {
+            robotImage.alpha = 0;
+            robotImage.image = [UIImage imageWithData:pitTeamFound.image];
+            
+            [UIView animateWithDuration:0.2 animations:^{
+                robotImage.alpha = 1;
+            }];
+        }
+        
+        if ([pitTeamFound.driveTrain isEqualToString:@"6 or 8 Wheel Drop"]) {
+            [self driveTrainSelectionTapped:sixEightWheelDrop];
+        }
+        else if ([pitTeamFound.driveTrain isEqualToString:@"4 Wheel Drive"]){
+            [self driveTrainSelectionTapped:fourWheelDrive];
+        }
+        else if ([pitTeamFound.driveTrain isEqualToString:@"Mecanum"]){
+            [self driveTrainSelectionTapped:mecanum];
+        }
+        else if ([pitTeamFound.driveTrain isEqualToString:@"Swerve/Crab"]){
+            [self driveTrainSelectionTapped:swerveCrab];
+        }
+        else{
+            otherDriveTrain.text = pitTeamFound.driveTrain;
+            [self textFieldDidChange:otherDriveTrain];
+        }
+        
+        if ([pitTeamFound.shooter isEqualToString:@"None"]) {
+            [self shooterSelectionTapped:shooterNone];
+        }
+        else if ([pitTeamFound.shooter isEqualToString:@"Catapult"]){
+            [self shooterSelectionTapped:shooterCatapult];
+        }
+        else if ([pitTeamFound.shooter isEqualToString:@"Puncher"]){
+            [self shooterSelectionTapped:shooterPuncher];
+        }
+        else{
+            otherShooter.text = pitTeamFound.shooter;
+            [self textFieldDidChange:otherShooter];
+        }
+        
+        if ([pitTeamFound.preferredGoal isEqualToString:@"High"]) {
+            [self preferredGoalSelectionTapped:preferredHigh];
+        }
+        else{
+            [self preferredGoalSelectionTapped:preferredLow];
+        }
+        
+        if ([pitTeamFound.goalieArm isEqualToString:@"Yes"]) {
+            [self goalieArmSelectionTapped:goalieArmYes];
+        }
+        else{
+            [self goalieArmSelectionTapped:goalieArmNo];
+        }
+        
+        if ([pitTeamFound.floorCollector isEqualToString:@"Yes"]) {
+            [self floorCollectorSelectionTapped:floorCollectorYes];
+        }
+        else{
+            [self floorCollectorSelectionTapped:floorCollectorNo];
+        }
+        
+        if ([pitTeamFound.autonomous isEqualToString:@"Yes"]) {
+            [self autonomousSelectionTapped:autonomousYes];
+        }
+        else{
+            [self autonomousSelectionTapped:autonomousNo];
+        }
+        
+        if ([pitTeamFound.autoStartingPosition rangeOfString:@"Left"].location != NSNotFound) {
+            [self autoStartingPositionSelectionTapped:startLeft];
+        }
+        if ([pitTeamFound.autoStartingPosition rangeOfString:@"Middle"].location != NSNotFound) {
+            [self autoStartingPositionSelectionTapped:startMiddle];
+        }
+        if ([pitTeamFound.autoStartingPosition rangeOfString:@"Right"].location != NSNotFound) {
+            [self autoStartingPositionSelectionTapped:startRight];
+        }
+        if ([pitTeamFound.autoStartingPosition rangeOfString:@"Goalie"].location != NSNotFound) {
+            [self autoStartingPositionSelectionTapped:startGoalie];
+        }
+        
+        if ([pitTeamFound.hotGoalTracking isEqualToString:@"Yes"]) {
+            [self hotGoalTrackingSelectionTapped:hotGoalYes];
+        }
+        else{
+            [self hotGoalTrackingSelectionTapped:hotGoalNo];
+        }
+        
+        if ([pitTeamFound.catchingMechanism isEqualToString:@"Yes"]) {
+            [self catchingMechanismSelectionTapped:catchingYes];
+        }
+        else{
+            [self catchingMechanismSelectionTapped:catchingNo];
+        }
+        
+        if ([pitTeamFound.bumperQuality isEqualToString:@"Poor"]) {
+            [self bumperQualitySelectionTapped:bumperPoor];
+        }
+        else if ([pitTeamFound.bumperQuality isEqualToString:@"Good"]){
+            [self bumperQualitySelectionTapped:bumperGood];
+        }
+        else{
+            [self bumperQualitySelectionTapped:bumperGreat];
+        }
+        
+        if (pitTeamFound.notes.length > 0) {
+            _additionalNotesTxtField.text = pitTeamFound.notes;
+            _additionalNotesTxtField.textColor = [UIColor blackColor];
+        }
+    }
+    else if (_teamNumberField.text.length == 0){
+        robotImage.image = nil;
+        robotImageControl.layer.borderColor = [[UIColor colorWithWhite:0.5 alpha:0.5] CGColor];
+        robotImageControl.layer.borderWidth = 1;
+        
+        _teamNameField.text = @"";
+        
+        if (isSixEightWheelDrop) {
+            [self driveTrainSelectionTapped:sixEightWheelDrop];
+        }
+        else if (isFourWheelDrive){
+            [self driveTrainSelectionTapped:fourWheelDrive];
+        }
+        else if (isMecanum){
+            [self driveTrainSelectionTapped:mecanum];
+        }
+        else if (isSwerveCrab){
+            [self driveTrainSelectionTapped:swerveCrab];
+        }
+        else if (isOtherDriveTrain){
+            otherDriveTrain.text = @"";
+            [self textFieldDidChange:otherDriveTrain];
+        }
+        
+        if (isShooterNone) {
+            [self shooterSelectionTapped:shooterNone];
+        }
+        else if (isShooterCatapult){
+            [self shooterSelectionTapped:shooterCatapult];
+        }
+        else if (isShooterPuncher){
+            [self shooterSelectionTapped:shooterPuncher];
+        }
+        else if (isOtherShooter){
+            otherShooter.text = @"";
+            [self textFieldDidChange:otherShooter];
+        }
+        
+        if (isPreferredHigh) {
+            [self preferredGoalSelectionTapped:preferredHigh];
+        }
+        else if (isPreferredLow){
+            [self preferredGoalSelectionTapped:preferredLow];
+        }
+        
+        if (isGoalieArmYes) {
+            [self goalieArmSelectionTapped:goalieArmYes];
+        }
+        else if (isGoalieArmNo){
+            [self goalieArmSelectionTapped:goalieArmNo];
+        }
+        
+        if (isFloorCollectorYes) {
+            [self floorCollectorSelectionTapped:floorCollectorYes];
+        }
+        else if (isFloorCollectorNo){
+            [self floorCollectorSelectionTapped:floorCollectorNo];
+        }
+        
+        if (isAutonomousYes) {
+            [self autonomousSelectionTapped:autonomousYes];
+        }
+        else if (isAutonomousNo){
+            [self autonomousSelectionTapped:autonomousNo];
+        }
+        
+        if (isStartLeft) {
+            [self autoStartingPositionSelectionTapped:startLeft];
+        }
+        if (isStartMiddle) {
+            [self autoStartingPositionSelectionTapped:startMiddle];
+        }
+        if (isStartRight) {
+            [self autoStartingPositionSelectionTapped:startRight];
+        }
+        if (isStartGoalie) {
+            [self autoStartingPositionSelectionTapped:startGoalie];
+        }
+        
+        if (isHotGoalYes) {
+            [self hotGoalTrackingSelectionTapped:hotGoalYes];
+        }
+        else if (isHotGoalNo){
+            [self hotGoalTrackingSelectionTapped:hotGoalNo];
+        }
+        
+        if (isCatchingYes) {
+            [self catchingMechanismSelectionTapped:catchingYes];
+        }
+        else if (isCatchingNo){
+            [self catchingMechanismSelectionTapped:catchingNo];
+        }
+        
+        if (isBumperPoor) {
+            [self bumperQualitySelectionTapped:bumperPoor];
+        }
+        else if (isBumperGood){
+            [self bumperQualitySelectionTapped:bumperGood];
+        }
+        else if (isBumperGreat){
+            [self bumperQualitySelectionTapped:bumperGreat];
+        }
+        
+        _additionalNotesTxtField.text = @"Additional Notes";
+        _additionalNotesTxtField.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    }
+}
 
 -(void)textViewDidBeginEditing:(UITextView *)textView{
     if ([textView isEqual:_additionalNotesTxtField]) {
@@ -1508,9 +1739,17 @@ UIAlertView *overWriteAlert;
         UIAlertView *somethingNotSelectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh No!" message:@"Not every row has something selected in it! Please fix this!" delegate:nil cancelButtonTitle:@"Will do" otherButtonTitles:nil];
         [somethingNotSelectedAlert show];
     }
-    else if (_teamNumberField.text.length == 0) {
-        UIAlertView *noTeamNumAlert = [[UIAlertView alloc] initWithTitle:@"Bad Scout! No!" message:@"Please enter a team number in the top center text field. Thanks! (You're really not a bad scout, I just needed to get your attention)" delegate:nil cancelButtonTitle:@"Whoops!" otherButtonTitles:nil];
+    else if (_teamNumberField.text.length == 0 || [[_teamNumberField.text substringToIndex:1] isEqualToString:@"0"] || [_teamNumberField.text integerValue] == 0) {
+        UIAlertView *noTeamNumAlert = [[UIAlertView alloc] initWithTitle:@"Bad Scout! No!" message:@"Please enter a valid team number in the top center text field. Thanks! (You're really not a bad scout, I just needed to get your attention)" delegate:nil cancelButtonTitle:@"Whoops!" otherButtonTitles:nil];
         [noTeamNumAlert show];
+    }
+    else if (_teamNameField.text.length == 0){
+        UIAlertView *noTeamNameAlert = [[UIAlertView alloc] initWithTitle:@"Whoa There!"
+                                                                  message:@"You should enter the team name for these guys! (trust me, you'll find it useful)"
+                                                                 delegate:nil
+                                                        cancelButtonTitle:@"Alright, my bad..."
+                                                        otherButtonTitles: nil];
+        [noTeamNameAlert show];
     }
     else{
         NSData *imageData;
@@ -1601,6 +1840,7 @@ UIAlertView *overWriteAlert;
 }
 
 -(void)somethingSelectedInEveryRowValidator{
+    autoStartingPositionString = [[NSMutableString alloc] initWithString:@""];
     if (isStartLeft == true) {
         [autoStartingPositionString appendString:@"Left, "];
     }

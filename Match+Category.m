@@ -8,6 +8,8 @@
 
 #import "Match+Category.h"
 #import "Team.h"
+#import "Team+Category.h"
+#import "Regional.h"
 #import "Scoring.h"
 
 @implementation Match (Category)
@@ -17,7 +19,7 @@
     Match *match = nil;
     
     NSFetchRequest *matchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Match"];
-    NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum = %@) AND (teamNum.name = %@)", [dict objectForKey:@"matchNum"], tm.name];
+    NSPredicate *matchPredicate = [NSPredicate predicateWithFormat:@"(matchNum = %@) AND (teamNum.name = %@) AND (teamNum.regionalIn.name = %@)", [dict objectForKey:@"matchNum"], tm.name, tm.regionalIn.name];
     matchRequest.predicate = matchPredicate;
     
     NSError *matchError;
@@ -64,6 +66,8 @@
         
         [tm addMatchesObject:match];
         
+        [tm updateTeamAveragesForTeam:tm];
+        
         
         NSLog(@"Created a new match named: %@", match.matchNum);
         
@@ -72,5 +76,7 @@
     
     return match;
 }
+
+
 
 @end

@@ -1,0 +1,888 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2821DE39186E0B000059CDF6 /* FSA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2821DE37186E0B000059CDF6 /* FSA.xcdatamodeld */; };
+		28270E101871199100809047 /* Team+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E0F1871199100809047 /* Team+Category.m */; };
+		28270E141871247D00809047 /* Match+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 28270E131871247D00809047 /* Match+Category.m */; };
+		285A1E1C1870E941002AA01C /* Regional+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 285A1E1B1870E941002AA01C /* Regional+Category.m */; };
+		2862D6A81854D4F900DC460F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2862D6A71854D4F900DC460F /* Images.xcassets */; };
+		2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2893226B187E637B00A225EE /* UIAlertView+Blocks.m */; };
+		8605BC4F1895A54700606B1A /* Sharing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEE91826D7D200B37E44 /* Sharing.m */; };
+		861F207718A7EFE500D8D561 /* SelectedTeamCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 861F207618A7EFE500D8D561 /* SelectedTeamCDTVC.m */; };
+		863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 863B352A1890E53400D5D528 /* PitTeam+Category.m */; };
+		8653E0ED18A6EF890080CAC5 /* SelectedTeamView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8653E0EC18A6EF890080CAC5 /* SelectedTeamView.m */; };
+		8653E10F18A75A730080CAC5 /* ViewTeamsCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8653E10E18A75A730080CAC5 /* ViewTeamsCDTVC.m */; };
+		869A58A318A7E75E00FFCDEB /* SingleTeamMatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869A58A218A7E75E00FFCDEB /* SingleTeamMatchCell.m */; };
+		869AF6BB18AFF29100CD4FF3 /* PoolMatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF6BA18AFF29100CD4FF3 /* PoolMatchCell.m */; };
+		869AF6BE18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 869AF6BD18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.m */; };
+		869F0A9518AB2B8E0026B6EC /* AlliancePickListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0A9418AB2B8E0026B6EC /* AlliancePickListCell.m */; };
+		869F0A9D18AB3E450026B6EC /* RegionalPoolCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0A9C18AB3E450026B6EC /* RegionalPoolCDTVC.m */; };
+		869F0AA618ABEBD30026B6EC /* AllianceSelectionPoolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 869F0AA518ABEBD30026B6EC /* AllianceSelectionPoolCell.m */; };
+		86A37DA418B1A59500170595 /* RankingsCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A37DA318B1A59500170595 /* RankingsCDTVC.m */; };
+		86A37DA718B1A5AD00170595 /* RankingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A37DA618B1A5AD00170595 /* RankingsCell.m */; };
+		86A37DAA18B2AD7300170595 /* plistData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86A37DA918B2AD7300170595 /* plistData.plist */; };
+		86A5551C18B087D500BA2C4E /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A5551B18B087D500BA2C4E /* Match.m */; };
+		86A5551F18B087D600BA2C4E /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A5551E18B087D600BA2C4E /* Team.m */; };
+		86A5552218B087D600BA2C4E /* Regional.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A5552118B087D600BA2C4E /* Regional.m */; };
+		86A5552518B087D600BA2C4E /* PitTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A5552418B087D600BA2C4E /* PitTeam.m */; };
+		86A5552818B087D600BA2C4E /* MasterTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A5552718B087D600BA2C4E /* MasterTeam.m */; };
+		86AB8DA6189342D200D411C9 /* PitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB8DA5189342D200D411C9 /* PitCell.m */; };
+		86AB8DA91893575E00D411C9 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */; };
+		86C8C6E118AEA2BD0056B5D8 /* FirstPickListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C8C6E018AEA2BD0056B5D8 /* FirstPickListController.m */; };
+		86C8C6E418AEB5220056B5D8 /* SecondPickListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C8C6E318AEB5220056B5D8 /* SecondPickListController.m */; };
+		86CDCD26188DBD18002B6522 /* PitScouting.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD25188DBD18002B6522 /* PitScouting.m */; };
+		86CDCD29188DBFD6002B6522 /* PitMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD28188DBFD6002B6522 /* PitMap.m */; };
+		86CDCD2D188DC006002B6522 /* RecordTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD2C188DC006002B6522 /* RecordTeam.m */; };
+		86CDCD30188DC016002B6522 /* ViewTeams.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CDCD2F188DC016002B6522 /* ViewTeams.m */; };
+		86E8713018A038CD00EA2663 /* PeerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8712F18A038CD00EA2663 /* PeerCell.m */; };
+		86E8713418A0954200EA2663 /* SingleTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8713318A0954200EA2663 /* SingleTeam.m */; };
+		86E8713718A0955E00EA2663 /* Rankings.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8713618A0955E00EA2663 /* Rankings.m */; };
+		86E8713A18A0957C00EA2663 /* WithinRegional.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8713918A0957C00EA2663 /* WithinRegional.m */; };
+		86E8713D18A095A200EA2663 /* NextMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8713C18A095A200EA2663 /* NextMatch.m */; };
+		86E8714018A095BB00EA2663 /* AllianceSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8713F18A095BB00EA2663 /* AllianceSelection.m */; };
+		86E8714718A0ABEB00EA2663 /* DetailsNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8714618A0ABEB00EA2663 /* DetailsNavigationController.m */; };
+		86E8714A18A1A0AF00EA2663 /* MainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8714918A1A0AF00EA2663 /* MainTabBarController.m */; };
+		86E8715918A6D1A800EA2663 /* SingleTeamCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8715818A6D1A800EA2663 /* SingleTeamCell.m */; };
+		86E8715C18A6D3D000EA2663 /* SingleTeamCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E8715B18A6D3D000EA2663 /* SingleTeamCDTVC.m */; };
+		8846FED11826D7D100B37E44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED01826D7D100B37E44 /* Foundation.framework */; };
+		8846FED31826D7D100B37E44 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED21826D7D100B37E44 /* CoreGraphics.framework */; };
+		8846FED51826D7D100B37E44 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED41826D7D100B37E44 /* UIKit.framework */; };
+		8846FEDB1826D7D100B37E44 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8846FED91826D7D100B37E44 /* InfoPlist.strings */; };
+		8846FEDD1826D7D200B37E44 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEDC1826D7D200B37E44 /* main.m */; };
+		8846FEE11826D7D200B37E44 /* LocationsAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */; };
+		8846FEE41826D7D200B37E44 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8846FEE21826D7D200B37E44 /* Main.storyboard */; };
+		8846FEE71826D7D200B37E44 /* Scoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEE61826D7D200B37E44 /* Scoring.m */; };
+		8846FEF31826D7D200B37E44 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FEF21826D7D200B37E44 /* XCTest.framework */; };
+		8846FEF41826D7D200B37E44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED01826D7D100B37E44 /* Foundation.framework */; };
+		8846FEF51826D7D200B37E44 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FED41826D7D100B37E44 /* UIKit.framework */; };
+		8846FEFD1826D7D200B37E44 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8846FEFB1826D7D200B37E44 /* InfoPlist.strings */; };
+		8846FEFF1826D7D200B37E44 /* FIRST_Scouting_AppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8846FEFE1826D7D200B37E44 /* FIRST_Scouting_AppTests.m */; };
+		8846FF151826FC6200B37E44 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8846FF141826FC6200B37E44 /* MultipeerConnectivity.framework */; };
+		888F0EF81850177F00412022 /* Globals.m in Sources */ = {isa = PBXBuildFile; fileRef = 888F0EF71850177F00412022 /* Globals.m */; };
+		88ED27F81829FE58008F3FDF /* Data.m in Sources */ = {isa = PBXBuildFile; fileRef = 88ED27F71829FE58008F3FDF /* Data.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8846FEF61826D7D200B37E44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8846FEC51826D7D100B37E44 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8846FECC1826D7D100B37E44;
+			remoteInfo = "FIRST Scouting App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2821DE38186E0B000059CDF6 /* FSA.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FSA.xcdatamodel; sourceTree = "<group>"; };
+		28270E0E1871199100809047 /* Team+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Team+Category.h"; sourceTree = "<group>"; };
+		28270E0F1871199100809047 /* Team+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+Category.m"; sourceTree = "<group>"; };
+		28270E121871247D00809047 /* Match+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Match+Category.h"; sourceTree = "<group>"; };
+		28270E131871247D00809047 /* Match+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Match+Category.m"; sourceTree = "<group>"; };
+		285A1E1A1870E941002AA01C /* Regional+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Regional+Category.h"; sourceTree = "<group>"; };
+		285A1E1B1870E941002AA01C /* Regional+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Regional+Category.m"; sourceTree = "<group>"; };
+		2862D6A71854D4F900DC460F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		2893226A187E637B00A225EE /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
+		2893226B187E637B00A225EE /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
+		861F207518A7EFE500D8D561 /* SelectedTeamCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedTeamCDTVC.h; sourceTree = "<group>"; };
+		861F207618A7EFE500D8D561 /* SelectedTeamCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectedTeamCDTVC.m; sourceTree = "<group>"; };
+		863B35291890E53400D5D528 /* PitTeam+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PitTeam+Category.h"; sourceTree = "<group>"; };
+		863B352A1890E53400D5D528 /* PitTeam+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PitTeam+Category.m"; sourceTree = "<group>"; };
+		8653E0EB18A6EF890080CAC5 /* SelectedTeamView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedTeamView.h; sourceTree = "<group>"; };
+		8653E0EC18A6EF890080CAC5 /* SelectedTeamView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectedTeamView.m; sourceTree = "<group>"; };
+		8653E10D18A75A730080CAC5 /* ViewTeamsCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewTeamsCDTVC.h; sourceTree = "<group>"; };
+		8653E10E18A75A730080CAC5 /* ViewTeamsCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewTeamsCDTVC.m; sourceTree = "<group>"; };
+		869A58A118A7E75E00FFCDEB /* SingleTeamMatchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTeamMatchCell.h; sourceTree = "<group>"; };
+		869A58A218A7E75E00FFCDEB /* SingleTeamMatchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeamMatchCell.m; sourceTree = "<group>"; };
+		869AF6B918AFF29100CD4FF3 /* PoolMatchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PoolMatchCell.h; sourceTree = "<group>"; };
+		869AF6BA18AFF29100CD4FF3 /* PoolMatchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PoolMatchCell.m; sourceTree = "<group>"; };
+		869AF6BC18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PoolTeamMatchesCDTVC.h; sourceTree = "<group>"; };
+		869AF6BD18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PoolTeamMatchesCDTVC.m; sourceTree = "<group>"; };
+		869F0A9318AB2B8E0026B6EC /* AlliancePickListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlliancePickListCell.h; sourceTree = "<group>"; };
+		869F0A9418AB2B8E0026B6EC /* AlliancePickListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlliancePickListCell.m; sourceTree = "<group>"; };
+		869F0A9B18AB3E450026B6EC /* RegionalPoolCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegionalPoolCDTVC.h; sourceTree = "<group>"; };
+		869F0A9C18AB3E450026B6EC /* RegionalPoolCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegionalPoolCDTVC.m; sourceTree = "<group>"; };
+		869F0AA418ABEBD30026B6EC /* AllianceSelectionPoolCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllianceSelectionPoolCell.h; sourceTree = "<group>"; };
+		869F0AA518ABEBD30026B6EC /* AllianceSelectionPoolCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllianceSelectionPoolCell.m; sourceTree = "<group>"; };
+		86A37DA218B1A59500170595 /* RankingsCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingsCDTVC.h; sourceTree = "<group>"; };
+		86A37DA318B1A59500170595 /* RankingsCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingsCDTVC.m; sourceTree = "<group>"; };
+		86A37DA518B1A5AD00170595 /* RankingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingsCell.h; sourceTree = "<group>"; };
+		86A37DA618B1A5AD00170595 /* RankingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingsCell.m; sourceTree = "<group>"; };
+		86A37DA918B2AD7300170595 /* plistData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = plistData.plist; sourceTree = "<group>"; };
+		86A5551A18B087D500BA2C4E /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
+		86A5551B18B087D500BA2C4E /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
+		86A5551D18B087D600BA2C4E /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
+		86A5551E18B087D600BA2C4E /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
+		86A5552018B087D600BA2C4E /* Regional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Regional.h; sourceTree = "<group>"; };
+		86A5552118B087D600BA2C4E /* Regional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Regional.m; sourceTree = "<group>"; };
+		86A5552318B087D600BA2C4E /* PitTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitTeam.h; sourceTree = "<group>"; };
+		86A5552418B087D600BA2C4E /* PitTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitTeam.m; sourceTree = "<group>"; };
+		86A5552618B087D600BA2C4E /* MasterTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterTeam.h; sourceTree = "<group>"; };
+		86A5552718B087D600BA2C4E /* MasterTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterTeam.m; sourceTree = "<group>"; };
+		86AB8DA4189342D200D411C9 /* PitCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitCell.h; sourceTree = "<group>"; };
+		86AB8DA5189342D200D411C9 /* PitCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitCell.m; sourceTree = "<group>"; };
+		86AB8DA71893575600D411C9 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoreDataTableViewController.h; path = ../../../Downloads/CoreDataTableViewController/CoreDataTableViewController.h; sourceTree = "<group>"; };
+		86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoreDataTableViewController.m; path = ../../../Downloads/CoreDataTableViewController/CoreDataTableViewController.m; sourceTree = "<group>"; };
+		86C8C6DF18AEA2BD0056B5D8 /* FirstPickListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstPickListController.h; sourceTree = "<group>"; };
+		86C8C6E018AEA2BD0056B5D8 /* FirstPickListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstPickListController.m; sourceTree = "<group>"; };
+		86C8C6E218AEB5220056B5D8 /* SecondPickListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondPickListController.h; sourceTree = "<group>"; };
+		86C8C6E318AEB5220056B5D8 /* SecondPickListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondPickListController.m; sourceTree = "<group>"; };
+		86CDCD24188DBD18002B6522 /* PitScouting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitScouting.h; sourceTree = "<group>"; };
+		86CDCD25188DBD18002B6522 /* PitScouting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitScouting.m; sourceTree = "<group>"; };
+		86CDCD27188DBFD6002B6522 /* PitMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitMap.h; sourceTree = "<group>"; };
+		86CDCD28188DBFD6002B6522 /* PitMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitMap.m; sourceTree = "<group>"; };
+		86CDCD2B188DC006002B6522 /* RecordTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordTeam.h; sourceTree = "<group>"; };
+		86CDCD2C188DC006002B6522 /* RecordTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordTeam.m; sourceTree = "<group>"; };
+		86CDCD2E188DC016002B6522 /* ViewTeams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewTeams.h; sourceTree = "<group>"; };
+		86CDCD2F188DC016002B6522 /* ViewTeams.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewTeams.m; sourceTree = "<group>"; };
+		86E8712E18A038CD00EA2663 /* PeerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerCell.h; sourceTree = "<group>"; };
+		86E8712F18A038CD00EA2663 /* PeerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerCell.m; sourceTree = "<group>"; };
+		86E8713218A0954200EA2663 /* SingleTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTeam.h; sourceTree = "<group>"; };
+		86E8713318A0954200EA2663 /* SingleTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeam.m; sourceTree = "<group>"; };
+		86E8713518A0955E00EA2663 /* Rankings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rankings.h; sourceTree = "<group>"; };
+		86E8713618A0955E00EA2663 /* Rankings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rankings.m; sourceTree = "<group>"; };
+		86E8713818A0957C00EA2663 /* WithinRegional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WithinRegional.h; sourceTree = "<group>"; };
+		86E8713918A0957C00EA2663 /* WithinRegional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WithinRegional.m; sourceTree = "<group>"; };
+		86E8713B18A095A200EA2663 /* NextMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NextMatch.h; sourceTree = "<group>"; };
+		86E8713C18A095A200EA2663 /* NextMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NextMatch.m; sourceTree = "<group>"; };
+		86E8713E18A095BB00EA2663 /* AllianceSelection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllianceSelection.h; sourceTree = "<group>"; };
+		86E8713F18A095BB00EA2663 /* AllianceSelection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllianceSelection.m; sourceTree = "<group>"; };
+		86E8714518A0ABEB00EA2663 /* DetailsNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailsNavigationController.h; sourceTree = "<group>"; };
+		86E8714618A0ABEB00EA2663 /* DetailsNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailsNavigationController.m; sourceTree = "<group>"; };
+		86E8714818A1A0AF00EA2663 /* MainTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabBarController.h; sourceTree = "<group>"; };
+		86E8714918A1A0AF00EA2663 /* MainTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBarController.m; sourceTree = "<group>"; };
+		86E8715718A6D1A800EA2663 /* SingleTeamCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTeamCell.h; sourceTree = "<group>"; };
+		86E8715818A6D1A800EA2663 /* SingleTeamCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeamCell.m; sourceTree = "<group>"; };
+		86E8715A18A6D3D000EA2663 /* SingleTeamCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTeamCDTVC.h; sourceTree = "<group>"; };
+		86E8715B18A6D3D000EA2663 /* SingleTeamCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeamCDTVC.m; sourceTree = "<group>"; };
+		8846FECD1826D7D100B37E44 /* FIRST Scout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIRST Scout.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8846FED01826D7D100B37E44 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		8846FED21826D7D100B37E44 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		8846FED41826D7D100B37E44 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		8846FED81826D7D100B37E44 /* FIRST Scout-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FIRST Scout-Info.plist"; sourceTree = "<group>"; };
+		8846FEDA1826D7D100B37E44 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8846FEDC1826D7D200B37E44 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8846FEDE1826D7D200B37E44 /* FIRST Scout-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FIRST Scout-Prefix.pch"; sourceTree = "<group>"; };
+		8846FEDF1826D7D200B37E44 /* LocationsAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationsAppDelegate.h; sourceTree = "<group>"; };
+		8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationsAppDelegate.m; sourceTree = "<group>"; };
+		8846FEE31826D7D200B37E44 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8846FEE51826D7D200B37E44 /* Scoring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scoring.h; sourceTree = "<group>"; };
+		8846FEE61826D7D200B37E44 /* Scoring.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Scoring.m; sourceTree = "<group>"; };
+		8846FEE81826D7D200B37E44 /* Sharing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sharing.h; sourceTree = "<group>"; };
+		8846FEE91826D7D200B37E44 /* Sharing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sharing.m; sourceTree = "<group>"; };
+		8846FEF11826D7D200B37E44 /* FIRST ScoutTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FIRST ScoutTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8846FEF21826D7D200B37E44 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		8846FEFA1826D7D200B37E44 /* FIRST ScoutTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FIRST ScoutTests-Info.plist"; sourceTree = "<group>"; };
+		8846FEFC1826D7D200B37E44 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8846FEFE1826D7D200B37E44 /* FIRST_Scouting_AppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FIRST_Scouting_AppTests.m; sourceTree = "<group>"; };
+		8846FF081826D80F00B37E44 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		8846FF141826FC6200B37E44 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
+		888F0EF61850177F00412022 /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
+		888F0EF71850177F00412022 /* Globals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Globals.m; sourceTree = "<group>"; };
+		88ED27F61829FE58008F3FDF /* Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Data.h; sourceTree = "<group>"; };
+		88ED27F71829FE58008F3FDF /* Data.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Data.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8846FECA1826D7D100B37E44 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8846FF151826FC6200B37E44 /* MultipeerConnectivity.framework in Frameworks */,
+				8846FED31826D7D100B37E44 /* CoreGraphics.framework in Frameworks */,
+				8846FED51826D7D100B37E44 /* UIKit.framework in Frameworks */,
+				8846FED11826D7D100B37E44 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8846FEEE1826D7D200B37E44 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8846FEF31826D7D200B37E44 /* XCTest.framework in Frameworks */,
+				8846FEF51826D7D200B37E44 /* UIKit.framework in Frameworks */,
+				8846FEF41826D7D200B37E44 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2821DE46186E146C0059CDF6 /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				2821DE37186E0B000059CDF6 /* FSA.xcdatamodeld */,
+				8653E10C18A758740080CAC5 /* MasterTeam */,
+				285A1E1D1870E9B1002AA01C /* Regional */,
+				28270E0D1871197600809047 /* Team */,
+				28270E111871246D00809047 /* Match */,
+				863B35281890E50200D5D528 /* PitTeam */,
+			);
+			name = DataModel;
+			sourceTree = "<group>";
+		};
+		28270E0D1871197600809047 /* Team */ = {
+			isa = PBXGroup;
+			children = (
+				86A5551D18B087D600BA2C4E /* Team.h */,
+				86A5551E18B087D600BA2C4E /* Team.m */,
+				28270E0E1871199100809047 /* Team+Category.h */,
+				28270E0F1871199100809047 /* Team+Category.m */,
+			);
+			name = Team;
+			sourceTree = "<group>";
+		};
+		28270E111871246D00809047 /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				86A5551A18B087D500BA2C4E /* Match.h */,
+				86A5551B18B087D500BA2C4E /* Match.m */,
+				28270E121871247D00809047 /* Match+Category.h */,
+				28270E131871247D00809047 /* Match+Category.m */,
+			);
+			name = Match;
+			sourceTree = "<group>";
+		};
+		285A1E1D1870E9B1002AA01C /* Regional */ = {
+			isa = PBXGroup;
+			children = (
+				86A5552018B087D600BA2C4E /* Regional.h */,
+				86A5552118B087D600BA2C4E /* Regional.m */,
+				285A1E1A1870E941002AA01C /* Regional+Category.h */,
+				285A1E1B1870E941002AA01C /* Regional+Category.m */,
+			);
+			name = Regional;
+			sourceTree = "<group>";
+		};
+		863B35281890E50200D5D528 /* PitTeam */ = {
+			isa = PBXGroup;
+			children = (
+				86A5552318B087D600BA2C4E /* PitTeam.h */,
+				86A5552418B087D600BA2C4E /* PitTeam.m */,
+				863B35291890E53400D5D528 /* PitTeam+Category.h */,
+				863B352A1890E53400D5D528 /* PitTeam+Category.m */,
+			);
+			name = PitTeam;
+			sourceTree = "<group>";
+		};
+		8653E10C18A758740080CAC5 /* MasterTeam */ = {
+			isa = PBXGroup;
+			children = (
+				86A5552618B087D600BA2C4E /* MasterTeam.h */,
+				86A5552718B087D600BA2C4E /* MasterTeam.m */,
+			);
+			name = MasterTeam;
+			sourceTree = "<group>";
+		};
+		869F0A9618AB3D270026B6EC /* ViewTeams */ = {
+			isa = PBXGroup;
+			children = (
+				86CDCD2E188DC016002B6522 /* ViewTeams.h */,
+				86CDCD2F188DC016002B6522 /* ViewTeams.m */,
+				86AB8DA4189342D200D411C9 /* PitCell.h */,
+				86AB8DA5189342D200D411C9 /* PitCell.m */,
+				8653E10D18A75A730080CAC5 /* ViewTeamsCDTVC.h */,
+				8653E10E18A75A730080CAC5 /* ViewTeamsCDTVC.m */,
+			);
+			name = ViewTeams;
+			sourceTree = "<group>";
+		};
+		869F0A9718AB3D880026B6EC /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				8846FEE81826D7D200B37E44 /* Sharing.h */,
+				8846FEE91826D7D200B37E44 /* Sharing.m */,
+				86E8712E18A038CD00EA2663 /* PeerCell.h */,
+				86E8712F18A038CD00EA2663 /* PeerCell.m */,
+			);
+			name = Sharing;
+			sourceTree = "<group>";
+		};
+		869F0A9818AB3D9E0026B6EC /* SingleTeam */ = {
+			isa = PBXGroup;
+			children = (
+				86E8713218A0954200EA2663 /* SingleTeam.h */,
+				86E8713318A0954200EA2663 /* SingleTeam.m */,
+				86E8715718A6D1A800EA2663 /* SingleTeamCell.h */,
+				86E8715818A6D1A800EA2663 /* SingleTeamCell.m */,
+				86E8715A18A6D3D000EA2663 /* SingleTeamCDTVC.h */,
+				86E8715B18A6D3D000EA2663 /* SingleTeamCDTVC.m */,
+			);
+			name = SingleTeam;
+			sourceTree = "<group>";
+		};
+		869F0A9918AB3DC20026B6EC /* SelectedTeam */ = {
+			isa = PBXGroup;
+			children = (
+				8653E0EB18A6EF890080CAC5 /* SelectedTeamView.h */,
+				8653E0EC18A6EF890080CAC5 /* SelectedTeamView.m */,
+				869A58A118A7E75E00FFCDEB /* SingleTeamMatchCell.h */,
+				869A58A218A7E75E00FFCDEB /* SingleTeamMatchCell.m */,
+				861F207518A7EFE500D8D561 /* SelectedTeamCDTVC.h */,
+				861F207618A7EFE500D8D561 /* SelectedTeamCDTVC.m */,
+			);
+			name = SelectedTeam;
+			sourceTree = "<group>";
+		};
+		869F0A9A18AB3E040026B6EC /* AllianceSelection */ = {
+			isa = PBXGroup;
+			children = (
+				86E8713E18A095BB00EA2663 /* AllianceSelection.h */,
+				86E8713F18A095BB00EA2663 /* AllianceSelection.m */,
+				869F0A9318AB2B8E0026B6EC /* AlliancePickListCell.h */,
+				869F0A9418AB2B8E0026B6EC /* AlliancePickListCell.m */,
+				869F0AA418ABEBD30026B6EC /* AllianceSelectionPoolCell.h */,
+				869F0AA518ABEBD30026B6EC /* AllianceSelectionPoolCell.m */,
+				869F0A9B18AB3E450026B6EC /* RegionalPoolCDTVC.h */,
+				869F0A9C18AB3E450026B6EC /* RegionalPoolCDTVC.m */,
+				86C8C6DF18AEA2BD0056B5D8 /* FirstPickListController.h */,
+				86C8C6E018AEA2BD0056B5D8 /* FirstPickListController.m */,
+				86C8C6E218AEB5220056B5D8 /* SecondPickListController.h */,
+				86C8C6E318AEB5220056B5D8 /* SecondPickListController.m */,
+				869AF6BC18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.h */,
+				869AF6BD18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.m */,
+				869AF6B918AFF29100CD4FF3 /* PoolMatchCell.h */,
+				869AF6BA18AFF29100CD4FF3 /* PoolMatchCell.m */,
+			);
+			name = AllianceSelection;
+			sourceTree = "<group>";
+		};
+		86A37DA118B1A40100170595 /* Rankings */ = {
+			isa = PBXGroup;
+			children = (
+				86E8713518A0955E00EA2663 /* Rankings.h */,
+				86E8713618A0955E00EA2663 /* Rankings.m */,
+				86A37DA218B1A59500170595 /* RankingsCDTVC.h */,
+				86A37DA318B1A59500170595 /* RankingsCDTVC.m */,
+				86A37DA518B1A5AD00170595 /* RankingsCell.h */,
+				86A37DA618B1A5AD00170595 /* RankingsCell.m */,
+			);
+			name = Rankings;
+			sourceTree = "<group>";
+		};
+		86CDCD2A188DBFE5002B6522 /* Pit Scouting */ = {
+			isa = PBXGroup;
+			children = (
+				86CDCD24188DBD18002B6522 /* PitScouting.h */,
+				86CDCD25188DBD18002B6522 /* PitScouting.m */,
+				86CDCD27188DBFD6002B6522 /* PitMap.h */,
+				86CDCD28188DBFD6002B6522 /* PitMap.m */,
+				86CDCD2B188DC006002B6522 /* RecordTeam.h */,
+				86CDCD2C188DC006002B6522 /* RecordTeam.m */,
+				869F0A9618AB3D270026B6EC /* ViewTeams */,
+			);
+			name = "Pit Scouting";
+			sourceTree = "<group>";
+		};
+		86E8713118A0948F00EA2663 /* Data Pages */ = {
+			isa = PBXGroup;
+			children = (
+				86E8714518A0ABEB00EA2663 /* DetailsNavigationController.h */,
+				86E8714618A0ABEB00EA2663 /* DetailsNavigationController.m */,
+				88ED27F61829FE58008F3FDF /* Data.h */,
+				88ED27F71829FE58008F3FDF /* Data.m */,
+				869F0A9818AB3D9E0026B6EC /* SingleTeam */,
+				869F0A9918AB3DC20026B6EC /* SelectedTeam */,
+				86E8714118A095DA00EA2663 /* Within Regional */,
+			);
+			name = "Data Pages";
+			sourceTree = "<group>";
+		};
+		86E8714118A095DA00EA2663 /* Within Regional */ = {
+			isa = PBXGroup;
+			children = (
+				86E8713818A0957C00EA2663 /* WithinRegional.h */,
+				86E8713918A0957C00EA2663 /* WithinRegional.m */,
+				86A37DA118B1A40100170595 /* Rankings */,
+				86E8713B18A095A200EA2663 /* NextMatch.h */,
+				86E8713C18A095A200EA2663 /* NextMatch.m */,
+				869F0A9A18AB3E040026B6EC /* AllianceSelection */,
+			);
+			name = "Within Regional";
+			sourceTree = "<group>";
+		};
+		8846FEC41826D7D100B37E44 = {
+			isa = PBXGroup;
+			children = (
+				2821DE46186E146C0059CDF6 /* DataModel */,
+				8846FED61826D7D100B37E44 /* FIRST Scouting App */,
+				8846FEF81826D7D200B37E44 /* FIRST Scouting AppTests */,
+				8846FECF1826D7D100B37E44 /* Frameworks */,
+				8846FECE1826D7D100B37E44 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8846FECE1826D7D100B37E44 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8846FECD1826D7D100B37E44 /* FIRST Scout.app */,
+				8846FEF11826D7D200B37E44 /* FIRST ScoutTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8846FECF1826D7D100B37E44 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8846FF141826FC6200B37E44 /* MultipeerConnectivity.framework */,
+				8846FF081826D80F00B37E44 /* GameKit.framework */,
+				8846FED01826D7D100B37E44 /* Foundation.framework */,
+				8846FED21826D7D100B37E44 /* CoreGraphics.framework */,
+				8846FED41826D7D100B37E44 /* UIKit.framework */,
+				8846FEF21826D7D200B37E44 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8846FED61826D7D100B37E44 /* FIRST Scouting App */ = {
+			isa = PBXGroup;
+			children = (
+				8846FEE21826D7D200B37E44 /* Main.storyboard */,
+				86E8714818A1A0AF00EA2663 /* MainTabBarController.h */,
+				86E8714918A1A0AF00EA2663 /* MainTabBarController.m */,
+				888F0EF61850177F00412022 /* Globals.h */,
+				888F0EF71850177F00412022 /* Globals.m */,
+				8846FEE51826D7D200B37E44 /* Scoring.h */,
+				8846FEE61826D7D200B37E44 /* Scoring.m */,
+				869F0A9718AB3D880026B6EC /* Sharing */,
+				86E8713118A0948F00EA2663 /* Data Pages */,
+				86CDCD2A188DBFE5002B6522 /* Pit Scouting */,
+				2862D6A71854D4F900DC460F /* Images.xcassets */,
+				8846FED71826D7D100B37E44 /* Supporting Files */,
+			);
+			path = "FIRST Scouting App";
+			sourceTree = "<group>";
+		};
+		8846FED71826D7D100B37E44 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				86AB8DA71893575600D411C9 /* CoreDataTableViewController.h */,
+				86AB8DA81893575E00D411C9 /* CoreDataTableViewController.m */,
+				8846FEDF1826D7D200B37E44 /* LocationsAppDelegate.h */,
+				8846FEE01826D7D200B37E44 /* LocationsAppDelegate.m */,
+				8846FED81826D7D100B37E44 /* FIRST Scout-Info.plist */,
+				8846FED91826D7D100B37E44 /* InfoPlist.strings */,
+				8846FEDC1826D7D200B37E44 /* main.m */,
+				8846FEDE1826D7D200B37E44 /* FIRST Scout-Prefix.pch */,
+				2893226A187E637B00A225EE /* UIAlertView+Blocks.h */,
+				2893226B187E637B00A225EE /* UIAlertView+Blocks.m */,
+				86A37DA918B2AD7300170595 /* plistData.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8846FEF81826D7D200B37E44 /* FIRST Scouting AppTests */ = {
+			isa = PBXGroup;
+			children = (
+				8846FEFE1826D7D200B37E44 /* FIRST_Scouting_AppTests.m */,
+				8846FEF91826D7D200B37E44 /* Supporting Files */,
+			);
+			path = "FIRST Scouting AppTests";
+			sourceTree = "<group>";
+		};
+		8846FEF91826D7D200B37E44 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				8846FEFA1826D7D200B37E44 /* FIRST ScoutTests-Info.plist */,
+				8846FEFB1826D7D200B37E44 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8846FECC1826D7D100B37E44 /* FIRST Scout */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8846FF021826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST Scout" */;
+			buildPhases = (
+				8846FEC91826D7D100B37E44 /* Sources */,
+				8846FECA1826D7D100B37E44 /* Frameworks */,
+				8846FECB1826D7D100B37E44 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "FIRST Scout";
+			productName = "FIRST Scouting App";
+			productReference = 8846FECD1826D7D100B37E44 /* FIRST Scout.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8846FEF01826D7D200B37E44 /* FIRST ScoutTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8846FF051826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST ScoutTests" */;
+			buildPhases = (
+				8846FEED1826D7D200B37E44 /* Sources */,
+				8846FEEE1826D7D200B37E44 /* Frameworks */,
+				8846FEEF1826D7D200B37E44 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8846FEF71826D7D200B37E44 /* PBXTargetDependency */,
+			);
+			name = "FIRST ScoutTests";
+			productName = "FIRST Scouting AppTests";
+			productReference = 8846FEF11826D7D200B37E44 /* FIRST ScoutTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8846FEC51826D7D100B37E44 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = Locations;
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = teamDriven;
+				TargetAttributes = {
+					8846FECC1826D7D100B37E44 = {
+						DevelopmentTeam = 44423KM89M;
+					};
+					8846FEF01826D7D200B37E44 = {
+						TestTargetID = 8846FECC1826D7D100B37E44;
+					};
+				};
+			};
+			buildConfigurationList = 8846FEC81826D7D100B37E44 /* Build configuration list for PBXProject "FIRST Scout" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8846FEC41826D7D100B37E44;
+			productRefGroup = 8846FECE1826D7D100B37E44 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8846FECC1826D7D100B37E44 /* FIRST Scout */,
+				8846FEF01826D7D200B37E44 /* FIRST ScoutTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8846FECB1826D7D100B37E44 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2862D6A81854D4F900DC460F /* Images.xcassets in Resources */,
+				8846FEDB1826D7D100B37E44 /* InfoPlist.strings in Resources */,
+				8846FEE41826D7D200B37E44 /* Main.storyboard in Resources */,
+				86A37DAA18B2AD7300170595 /* plistData.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8846FEEF1826D7D200B37E44 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8846FEFD1826D7D200B37E44 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8846FEC91826D7D100B37E44 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86A5551F18B087D600BA2C4E /* Team.m in Sources */,
+				86CDCD26188DBD18002B6522 /* PitScouting.m in Sources */,
+				86E8713A18A0957C00EA2663 /* WithinRegional.m in Sources */,
+				86AB8DA91893575E00D411C9 /* CoreDataTableViewController.m in Sources */,
+				8653E10F18A75A730080CAC5 /* ViewTeamsCDTVC.m in Sources */,
+				88ED27F81829FE58008F3FDF /* Data.m in Sources */,
+				8846FEDD1826D7D200B37E44 /* main.m in Sources */,
+				86E8713D18A095A200EA2663 /* NextMatch.m in Sources */,
+				8605BC4F1895A54700606B1A /* Sharing.m in Sources */,
+				86CDCD29188DBFD6002B6522 /* PitMap.m in Sources */,
+				869F0A9518AB2B8E0026B6EC /* AlliancePickListCell.m in Sources */,
+				86C8C6E418AEB5220056B5D8 /* SecondPickListController.m in Sources */,
+				86CDCD2D188DC006002B6522 /* RecordTeam.m in Sources */,
+				2821DE39186E0B000059CDF6 /* FSA.xcdatamodeld in Sources */,
+				285A1E1C1870E941002AA01C /* Regional+Category.m in Sources */,
+				86E8714018A095BB00EA2663 /* AllianceSelection.m in Sources */,
+				869AF6BB18AFF29100CD4FF3 /* PoolMatchCell.m in Sources */,
+				86E8713718A0955E00EA2663 /* Rankings.m in Sources */,
+				86A5552818B087D600BA2C4E /* MasterTeam.m in Sources */,
+				869AF6BE18AFF2DE00CD4FF3 /* PoolTeamMatchesCDTVC.m in Sources */,
+				86E8713418A0954200EA2663 /* SingleTeam.m in Sources */,
+				2893226C187E637B00A225EE /* UIAlertView+Blocks.m in Sources */,
+				861F207718A7EFE500D8D561 /* SelectedTeamCDTVC.m in Sources */,
+				86A5551C18B087D500BA2C4E /* Match.m in Sources */,
+				28270E141871247D00809047 /* Match+Category.m in Sources */,
+				28270E101871199100809047 /* Team+Category.m in Sources */,
+				86E8715918A6D1A800EA2663 /* SingleTeamCell.m in Sources */,
+				86AB8DA6189342D200D411C9 /* PitCell.m in Sources */,
+				86E8713018A038CD00EA2663 /* PeerCell.m in Sources */,
+				8846FEE11826D7D200B37E44 /* LocationsAppDelegate.m in Sources */,
+				86E8714718A0ABEB00EA2663 /* DetailsNavigationController.m in Sources */,
+				86A37DA418B1A59500170595 /* RankingsCDTVC.m in Sources */,
+				86CDCD30188DC016002B6522 /* ViewTeams.m in Sources */,
+				869F0AA618ABEBD30026B6EC /* AllianceSelectionPoolCell.m in Sources */,
+				86A37DA718B1A5AD00170595 /* RankingsCell.m in Sources */,
+				863B352B1890E53400D5D528 /* PitTeam+Category.m in Sources */,
+				869A58A318A7E75E00FFCDEB /* SingleTeamMatchCell.m in Sources */,
+				869F0A9D18AB3E450026B6EC /* RegionalPoolCDTVC.m in Sources */,
+				86A5552518B087D600BA2C4E /* PitTeam.m in Sources */,
+				888F0EF81850177F00412022 /* Globals.m in Sources */,
+				86A5552218B087D600BA2C4E /* Regional.m in Sources */,
+				8653E0ED18A6EF890080CAC5 /* SelectedTeamView.m in Sources */,
+				86C8C6E118AEA2BD0056B5D8 /* FirstPickListController.m in Sources */,
+				86E8715C18A6D3D000EA2663 /* SingleTeamCDTVC.m in Sources */,
+				8846FEE71826D7D200B37E44 /* Scoring.m in Sources */,
+				86E8714A18A1A0AF00EA2663 /* MainTabBarController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8846FEED1826D7D200B37E44 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8846FEFF1826D7D200B37E44 /* FIRST_Scouting_AppTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8846FEF71826D7D200B37E44 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8846FECC1826D7D100B37E44 /* FIRST Scout */;
+			targetProxy = 8846FEF61826D7D200B37E44 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		8846FED91826D7D100B37E44 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8846FEDA1826D7D100B37E44 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		8846FEE21826D7D200B37E44 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8846FEE31826D7D200B37E44 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		8846FEFB1826D7D200B37E44 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8846FEFC1826D7D200B37E44 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8846FF001826D7D200B37E44 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		8846FF011826D7D200B37E44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8846FF031826D7D200B37E44 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FIRST Scouting App/FIRST Scout-Prefix.pch";
+				INFOPLIST_FILE = "FIRST Scouting App/FIRST Scout-Info.plist";
+				PRODUCT_NAME = "FIRST Scout";
+				PROVISIONING_PROFILE = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		8846FF041826D7D200B37E44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FIRST Scouting App/FIRST Scout-Prefix.pch";
+				INFOPLIST_FILE = "FIRST Scouting App/FIRST Scout-Info.plist";
+				PRODUCT_NAME = "FIRST Scout";
+				PROVISIONING_PROFILE = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		8846FF061826D7D200B37E44 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FIRST Scouting App.app/FIRST Scouting App";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FIRST Scouting App/FIRST Scouting App-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "FIRST Scouting AppTests/FIRST ScoutTests-Info.plist";
+				PRODUCT_NAME = "FIRST ScoutTests";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		8846FF071826D7D200B37E44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FIRST Scouting App.app/FIRST Scouting App";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FIRST Scouting App/FIRST Scouting App-Prefix.pch";
+				INFOPLIST_FILE = "FIRST Scouting AppTests/FIRST ScoutTests-Info.plist";
+				PRODUCT_NAME = "FIRST ScoutTests";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8846FEC81826D7D100B37E44 /* Build configuration list for PBXProject "FIRST Scout" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8846FF001826D7D200B37E44 /* Debug */,
+				8846FF011826D7D200B37E44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8846FF021826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST Scout" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8846FF031826D7D200B37E44 /* Debug */,
+				8846FF041826D7D200B37E44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8846FF051826D7D200B37E44 /* Build configuration list for PBXNativeTarget "FIRST ScoutTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8846FF061826D7D200B37E44 /* Debug */,
+				8846FF071826D7D200B37E44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		2821DE37186E0B000059CDF6 /* FSA.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2821DE38186E0B000059CDF6 /* FSA.xcdatamodel */,
+			);
+			currentVersion = 2821DE38186E0B000059CDF6 /* FSA.xcdatamodel */;
+			path = FSA.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 8846FEC51826D7D100B37E44 /* Project object */;
+}

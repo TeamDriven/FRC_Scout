@@ -2,13 +2,14 @@
 //  PitTeam.h
 //  FIRST Scouting App
 //
-//  Created by Bertoncin,Louie on 1/23/14.
+//  Created by Bertoncin,Louie on 2/15/14.
 //  Copyright (c) 2014 teamDriven. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class MasterTeam;
 
 @interface PitTeam : NSManagedObject
 
@@ -27,5 +28,6 @@
 @property (nonatomic, retain) NSString * teamName;
 @property (nonatomic, retain) NSString * teamNumber;
 @property (nonatomic, retain) NSNumber * uniqueID;
+@property (nonatomic, retain) MasterTeam *master;
 
 @end

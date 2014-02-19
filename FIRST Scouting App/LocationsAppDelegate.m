@@ -7,6 +7,7 @@
 //
 
 #import "LocationsAppDelegate.h"
+#import "Globals.h"
 
 @implementation LocationsAppDelegate
 
@@ -26,6 +27,15 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    [FSAdocument saveToURL:FSApathurl forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+        if (success) {
+            NSLog(@"Saved on background");
+        }
+        else{
+            NSLog(@"Didn't save on background");
+        }
+    }];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

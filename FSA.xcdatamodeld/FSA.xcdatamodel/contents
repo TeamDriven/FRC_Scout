@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A3028" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="MasterTeam" representedClassName="MasterTeam" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="pitTeam" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PitTeam" inverseName="master" inverseEntity="PitTeam" syncable="YES"/>
+        <relationship name="teamsWithin" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="master" inverseEntity="Team" syncable="YES"/>
+    </entity>
     <entity name="Match" representedClassName="Match" syncable="YES">
         <attribute name="autoHighHotScore" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="autoHighMissScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -43,17 +48,63 @@
         <attribute name="teamName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="teamNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="master" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MasterTeam" inverseName="pitTeam" inverseEntity="MasterTeam" syncable="YES"/>
     </entity>
     <entity name="Regional" representedClassName="Regional" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="firstPickList" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="firstPickListRegional" inverseEntity="Team" syncable="YES"/>
+        <relationship name="secondPickList" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="secondPickListRegional" inverseEntity="Team" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="regionalIn" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES">
+        <attribute name="autoAccuracyPercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoHighAccuracyPercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoHighAttemptsAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoHighHotAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoHighHotPercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoHighMakesAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoHighMissAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoHighNotAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoLowAccuracyPercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoLowAttemptsAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoLowHotAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoLowHotPercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoLowMakesAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoLowMissAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autoLowNotAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="autonomousAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="defensiveZonePercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="largePenaltyAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="mobilityBonusPercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="neutralZonePercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="offensiveZonePercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="penaltyTotalAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="smallPenaltyAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopAccuracyPercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopCatchAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopHighAccuracyPercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopHighAttemptsAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopHighMakeAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopHighMissAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopLowAccuracyPercentage" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopLowAttemptsAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopLowMakeAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopLowMissAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopOverAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopPassedAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopPassReceiveRatio" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="teleopReceivedAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="totalPointsAvg" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="firstPickListRegional" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Regional" inverseName="firstPickList" inverseEntity="Regional" syncable="YES"/>
+        <relationship name="master" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MasterTeam" inverseName="teamsWithin" inverseEntity="MasterTeam" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamNum" inverseEntity="Match" syncable="YES"/>
         <relationship name="regionalIn" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Regional" inverseName="teams" inverseEntity="Regional" syncable="YES"/>
+        <relationship name="secondPickListRegional" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Regional" inverseName="secondPickList" inverseEntity="Regional" syncable="YES"/>
     </entity>
     <elements>
+        <element name="MasterTeam" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Match" positionX="0" positionY="0" width="0" height="0"/>
         <element name="PitTeam" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Regional" positionX="0" positionY="0" width="0" height="0"/>

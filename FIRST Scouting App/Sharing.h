@@ -12,14 +12,14 @@
 
 @interface LocationsSecondViewController : UIViewController
 
-//@property (nonatomic, strong) MCBrowserViewController *browserVC;
-//@property (nonatomic, strong) MCAdvertiserAssistant *advertiser;
-//@property (nonatomic, strong) MCSession *mySession;
-//@property (nonatomic, strong) MCPeerID *myPeerID;
-//
-//@property (weak, nonatomic) IBOutlet UISwitch *advertiseSwitcher;
-//@property (weak, nonatomic) IBOutlet UISwitch *overWriteSwitch;
-//
-//@property (weak, nonatomic) IBOutlet UIButton *sendMatchesBtn;
+@property (weak, nonatomic) IBOutlet UIButton *matchScheduleBtn;
+@property (weak, nonatomic) IBOutlet UILabel *updatedLbl;
+
+@property (weak, nonatomic) IBOutlet UIButton *deleteDatabaseBtn;
+@property (weak, nonatomic) IBOutlet UILabel *deletedLbl;
+
+@property (weak, nonatomic) IBOutlet UIButton *enableTutorialBtn;
+@property (weak, nonatomic) IBOutlet UILabel *tutorialLblDone;
+
 
 @end

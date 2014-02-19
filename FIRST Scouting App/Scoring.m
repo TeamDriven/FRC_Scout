@@ -51,7 +51,7 @@ NSInteger teleopReceived;
 NSInteger smallPenaltyTally;
 NSInteger largePenaltyTally;
 
-NSString *notes;
+NSMutableString *notes;
 
 
 // Match Defining Variables
@@ -64,13 +64,7 @@ NSString *pos;
 NSString *currentMatchType;
 
 
-// Core Data Filepath
-NSFileManager *FSAfileManager;
-NSURL *FSAdocumentsDirectory;
-NSString *FSAdocumentName;
-NSURL *FSApathurl;
-UIManagedDocument *FSAdocument;
-NSManagedObjectContext *context;
+
 
 
 // Finger Swipes
@@ -124,10 +118,36 @@ UIControl *whiteZone;
 BOOL inWhiteZone;
 UIControl *blueZone;
 BOOL inBlueZone;
-UIControl *goodDefense;
-BOOL didGoodDefense;
+UIControl *greatDefense;
+BOOL didGreatDefense;
+UIControl *badDefense;
+BOOL didBadDefense;
 UIControl *didntMove;
 BOOL didDidntMove;
+UIControl *fastMovement;
+BOOL didFastMovement;
+UIControl *slowMovement;
+BOOL didSlowMovement;
+UIControl *greatBallPickup;
+BOOL didGreatBallPickup;
+UIControl *badBallPickup;
+BOOL didBadBallPickup;
+UIControl *greatHumanPlayer;
+BOOL didGreatHumanPlayer;
+UIControl *badHumanPlayer;
+BOOL didBadHumanPlayer;
+UIControl *brokeDownInMatch;
+BOOL didBrokeDownInMatch;
+UIControl *greatDriver;
+BOOL didGreatDriver;
+UIControl *averageDriver;
+BOOL didAverageDriver;
+UIControl *badDriver;
+BOOL didBadDriver;
+UIControl *greatCooperation;
+BOOL didGreatCooperation;
+UIControl *badCooperation;
+BOOL didBadCooperation;
 
 
 // Regional Arrays
@@ -163,7 +183,25 @@ UILabel *blue2UpdaterLbl;
 UIView *blue3Updater;
 UILabel *blue3UpdaterLbl;
 
+// Core Data Filepath
+NSFileManager *FSAfileManager;
+NSURL *FSAdocumentsDirectory;
+NSString *FSAdocumentName;
+NSURL *FSApathurl;
+UIManagedDocument *FSAdocument;
+NSManagedObjectContext *context;
 
+// Match Schedule Filepath
+NSArray *schedulePaths;
+NSString *scheduleDirectory;
+NSString *schedulePath;
+NSMutableDictionary *scheduleDictionary;
+
+
+// Tutorial Items
+UIControl *gruyOutview;
+UILabel *starterLbl;
+NSInteger tutorialStep;
 
 /***********************************
  ************ Set Up ***************
@@ -184,8 +222,6 @@ UILabel *blue3UpdaterLbl;
     FSAdocument = [[UIManagedDocument alloc] initWithFileURL:FSApathurl];
     context = FSAdocument.managedObjectContext;
     
-//    NSLog(@"\n Documents URL: %@ \n Path URL: %@ \n ", FSAdocumentsDirectory, FSApathurl);
-    
     if ([[NSFileManager defaultManager] fileExistsAtPath:[FSApathurl path]]) {
         [FSAdocument openWithCompletionHandler:^(BOOL success){
             if (success) NSLog(@"Found the document!");
@@ -199,7 +235,6 @@ UILabel *blue3UpdaterLbl;
         }];
     }
     // *** Done Mapping to Core Data **
-    
     
     // Helps prepare for keyboard to appear/disappear (on storyboard UI)
     self.matchNumField.delegate = self;
@@ -283,7 +318,22 @@ UILabel *blue3UpdaterLbl;
         v.hidden = true;
     }
     
-    notes = @"";
+    notes = [[NSMutableString alloc] initWithString:@""];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    // *** Map to Schedule plist ***
+    schedulePaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    scheduleDirectory = [schedulePaths objectAtIndex:0];
+    schedulePath = [scheduleDirectory stringByAppendingPathComponent:@"plistData.plist"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:schedulePath]) {
+        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"plistData" ofType:@"plist"] toPath:schedulePath error:nil];
+    }
+    // *** Done Mapping to Schedule plist ***
+    scheduleDictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:schedulePath];
+    
+    NSLog(@"%@", scheduleDictionary);
 }
 
 -(void)didReceiveMemoryWarning{
@@ -291,16 +341,13 @@ UILabel *blue3UpdaterLbl;
     // Dispose of any resources that can be recreated.
 }
 
-// Sets up UI and setUpView. Recreates setUpView if it already exists (fixes crash when switching pages before interaction)
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    [NSThread sleepForTimeInterval:0.3];
+-(void)viewWillAppear:(BOOL)animated{
     if (setUpView) {
         [setUpView removeFromSuperview];
         [greyOut removeFromSuperview];
     }
     [self setUpScreen];
-//    [self autoOn];
+    //    [self autoOn];
     
     _movementRobot.userInteractionEnabled = YES;
     
@@ -512,7 +559,77 @@ UILabel *blue3UpdaterLbl;
         [currentMatchNumField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
         [currentMatchNumField setTextAlignment:NSTextAlignmentCenter];
         [currentMatchNumField setDelegate:self];
+        currentMatchNumField.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
         [setUpView addSubview:currentMatchNumField];
+        if (![currentMatchType isEqualToString:@"Q"]) {
+            if ([currentMatchNum isEqualToString:@"Q1.1"]) {
+                currentMatchNum = @"Q2.1";
+            }
+            else if ([currentMatchNum isEqualToString:@"Q2.1"]){
+                currentMatchNum = @"Q3.1";
+            }
+            else if ([currentMatchNum isEqualToString:@"Q3.1"]){
+                currentMatchNum = @"Q4.1";
+            }
+            else if ([currentMatchNum isEqualToString:@"Q4.1"]){
+                currentMatchNum = @"Q1.2";
+            }
+            else if ([currentMatchNum isEqualToString:@"Q1.2"]){
+                currentMatchNum = @"Q2.2";
+            }
+            else if ([currentMatchNum isEqualToString:@"Q2.2"]){
+                currentMatchNum = @"Q3.2";
+            }
+            else if ([currentMatchNum isEqualToString:@"Q3.2"]){
+                currentMatchNum = @"Q4.2";
+            }
+            else if ([currentMatchNum isEqualToString:@"Q4.2"]){
+                currentMatchNum = @"Q1.3";
+            }
+            else if ([currentMatchNum isEqualToString:@"Q1.3"]){
+                currentMatchNum = @"Q2.3";
+            }
+            else if ([currentMatchNum isEqualToString:@"Q2.3"]){
+                currentMatchNum = @"Q3.3";
+            }
+            else if ([currentMatchNum isEqualToString:@"Q3.3"]){
+                currentMatchNum = @"Q4.3";
+            }
+            else if ([currentMatchNum isEqualToString:@"Q4.3"]){
+                currentMatchNum = @"S1.1";
+            }
+            else if ([currentMatchNum isEqualToString:@"S1.1"]){
+                currentMatchNum = @"S2.1";
+            }
+            else if ([currentMatchNum isEqualToString:@"S2.1"]){
+                currentMatchNum = @"S1.2";
+            }
+            else if ([currentMatchNum isEqualToString:@"S1.2"]){
+                currentMatchNum = @"S2.2";
+            }
+            else if ([currentMatchNum isEqualToString:@"S2.2"]){
+                currentMatchNum = @"S1.3";
+            }
+            else if ([currentMatchNum isEqualToString:@"S1.3"]){
+                currentMatchNum = @"S2.3";
+            }
+            else if ([currentMatchNum isEqualToString:@"S2.3"]){
+                currentMatchNum = @"F1.1";
+            }
+            else if ([currentMatchNum isEqualToString:@"F1.1"]){
+                currentMatchNum = @"F1.2";
+            }
+            else if ([currentMatchNum isEqualToString:@"F1.2"]){
+                currentMatchNum = @"F1.3";
+            }
+            else if ([currentMatchNum isEqualToString:@"F1.3"]){
+                currentMatchNum = @"F1.4";
+            }
+            else if ([currentMatchNum isEqualToString:@"F1.4"]){
+                currentMatchNum = @"";
+            }
+            currentMatchNumField.text = currentMatchNum;
+        }
         
         // Select either Qual or Elim match type (for data storage purposes)
         CGRect matchTypeSelectorRect = CGRectMake(364, 255, 170, 30);
@@ -520,7 +637,15 @@ UILabel *blue3UpdaterLbl;
         matchTypeSelector.frame = matchTypeSelectorRect;
         [matchTypeSelector addTarget:self action:@selector(changeMatchType) forControlEvents:UIControlEventValueChanged];
         [setUpView addSubview:matchTypeSelector];
-        matchTypeSelector.selectedSegmentIndex = 0;
+        if ([currentMatchType isEqualToString:@"Q"]) {
+            matchTypeSelector.selectedSegmentIndex = 0;
+            currentMatchNumField.keyboardType = UIKeyboardTypeDecimalPad;
+        }
+        else{
+            matchTypeSelector.selectedSegmentIndex = 1;
+            currentMatchNumField.keyboardType = UIKeyboardTypeAlphabet;
+        }
+        
         matchTypeSelector.transform = CGAffineTransformMakeScale(0.8, 0.8);
         
         // Title for week selector UISegmentedControl
@@ -603,11 +728,44 @@ UILabel *blue3UpdaterLbl;
     scoutTeamNum = scoutTeamNumField.text;
     
     // Creates a random team number for the scout to watch to simulate a loaded match schedule
-    NSInteger randomTeamNum = arc4random() % 4000;
+//    NSInteger randomTeamNum = arc4random() % 4000;
     
-    currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
+    
     currentMatchNum = currentMatchNumField.text;
     currentRegional = [[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex] objectAtIndex:[regionalPicker selectedRowInComponent:0]];
+    
+    BOOL validMatchNumber = true;
+    
+    if ([currentMatchType isEqualToString:@"Q"]) {
+        if ([scheduleDictionary objectForKey:currentRegional]) {
+            if ([[[scheduleDictionary objectForKey:currentRegional] objectForKey:pos] objectForKey:currentMatchNum]) {
+                currentTeamNum = [[[scheduleDictionary objectForKey:currentRegional] objectForKey:pos] objectForKey:currentMatchNum];
+            }
+            else{
+                validMatchNumber = false;
+            }
+        }
+        else{
+            currentTeamNum = @"";
+        }
+    }
+    else{
+        currentTeamNum = @"";
+    }
+    
+    BOOL badMatchFormat = true;
+    if ([currentMatchType isEqualToString:@"E"]){
+        if (currentMatchNum.length == 4) {
+            if ([[currentMatchNum substringToIndex:2] isEqualToString:@"Q1"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q2"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q3"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q4"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"S1"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"S2"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"F1"]) {
+                if ([[currentMatchNum substringWithRange:NSMakeRange(3, 1)] integerValue] > 0) {
+                    badMatchFormat = false;
+                }
+            }
+        }
+    }
+    else{
+        badMatchFormat = false;
+    }
     
     // Checks for the correct number of initials
     if (!initials || initials.length != 3) {
@@ -627,15 +785,6 @@ UILabel *blue3UpdaterLbl;
                                              otherButtonTitles:nil];
         [alert show];
     }
-    // Checks for the current match number to have something entered in it
-    else if (!currentMatchNum || currentMatchNumField.text.length == 0){
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"No match number!!"
-                                                       message: @"What you tryin' to get away with?!? Please enter the match number you're about to scout"
-                                                      delegate: nil
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
     // Checks to make sure that the user selected a scouting position
     else if(!pos){
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"You did not select which position you're scouting!"
@@ -645,6 +794,22 @@ UILabel *blue3UpdaterLbl;
                                              otherButtonTitles:nil];
         [alert show];
     }
+    // Checks for the current match number to have something entered in it
+    else if (!currentMatchNum || currentMatchNumField.text.length == 0 || !validMatchNumber){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Invalid Match Number!!"
+                                                       message: @"What you tryin' to get away with?!? Please enter the match number you're about to scout"
+                                                      delegate: nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
+    else if (badMatchFormat){
+        UIAlertView *badMatchFormatAlert = [[UIAlertView alloc] initWithTitle:@"Bad Match Format!"
+                                                                      message:@"Remember to follow the format: \n Quarterfinal Match -> Q1.1, Q1.2, etc. \n Semifinal Match -> S1.1, S1.2, etc. \n Final Match -> F1.1, F1.2, etc."
+                                                                     delegate:nil
+                                                            cancelButtonTitle:@"My Bad" otherButtonTitles: nil];
+        [badMatchFormatAlert show];
+    }
     // If all tests pass, then the screen closes with a zoom small animation
     else{
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut
@@ -652,6 +817,7 @@ UILabel *blue3UpdaterLbl;
                              setUpView.transform = CGAffineTransformMakeScale(0.01, 0.01);
                          }
                          completion:^(BOOL finished){
+                             
                              
                              [setUpView removeFromSuperview];
                              [greyOut removeFromSuperview];
@@ -661,6 +827,13 @@ UILabel *blue3UpdaterLbl;
                              [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
                              _matchNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
                              
+                             if (currentTeamNum.length == 0) {
+                                 _teamNumField.enabled = true;
+                                 _teamNumField.hidden = false;
+                                 _teamNumEdit.enabled = false;
+                                 _teamNumEdit.hidden = true;
+                                 _teamNumField.text = @"";
+                             }
                              currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
                              [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
                              _teamNumEdit.titleLabel.font = [UIFont systemFontOfSize:25];
@@ -703,7 +876,7 @@ UILabel *blue3UpdaterLbl;
                              red1Pos = red1Selector.selectedSegmentIndex;
                              
                              NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
-                             NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %ld", randomTeamNum];
+                             NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %@", currentTeamNum];
                              roboPicRequest.predicate = roboPicPredicate;
                              NSError *roboPicError = nil;
                              NSArray *roboPics = [context executeFetchRequest:roboPicRequest error:&roboPicError];
@@ -728,35 +901,740 @@ UILabel *blue3UpdaterLbl;
                              }
                              _movementLine.alpha = 1;
                              [self autoOn];
-//                             [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-//                                 for (UIView *v in autoScreenObjects) {
-//                                     if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
-//                                         v.userInteractionEnabled = YES;
-//                                     }
-//                                     v.alpha = 1;
-//                                 }
-//                                 for (UIView *v in teleopScreenObjects) {
-//                                     v.alpha = 0;
-//                                 }
-//                                 _mobilityBonusLbl.backgroundColor = [UIColor whiteColor];
-//                                 _mobilityBonusLbl.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1.0] CGColor];
-//                                 _mobilityBonusLbl.layer.borderWidth = 1;
-//                             } completion:^(BOOL finished) {}];
-
-//                             self.myPeerIDS = [[MCPeerID alloc] initWithDisplayName:pos];
-//                             [self.browserSession disconnect];
-//                             self.browserSession = nil;
-//                             if (visible) {
-//                                 visible = false;
-//                                 [self.advertiserS stop];
-//                             }
-//                             else if (host){
-//                                 host = false;
-//                             }
+                             
+                             
+                             if ([[scheduleDictionary objectForKey:@"FirstOpening"] boolValue] == true) {
+                                 for(UITabBarItem *item in self.tabBarController.tabBar.items){
+                                     item.enabled = false;
+                                 }
+                                 
+                                 twoFingerDown.enabled = false;
+                                 twoFingerUp.enabled = false;
+                                 
+                                 gruyOutview = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
+                                 gruyOutview.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.7];
+                                 [gruyOutview addTarget:self action:@selector(nextStepInTutorial) forControlEvents:UIControlEventTouchUpInside];
+                                 [self.view addSubview:gruyOutview];
+                                 
+                                 tutorialStep = 0;
+                                 
+                                 starterLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 160, 300, 70)];
+                                 starterLbl.text = @"A few things before you get going...";
+                                 starterLbl.numberOfLines = 2;
+                                 starterLbl.font = [UIFont boldSystemFontOfSize:22];
+                                 starterLbl.textAlignment = NSTextAlignmentCenter;
+                                 starterLbl.textColor = [UIColor whiteColor];
+                                 starterLbl.alpha = 0;
+                                 starterLbl.lineBreakMode = NSLineBreakByWordWrapping;
+                                 [gruyOutview addSubview:starterLbl];
+                                 
+                                 UIImageView *twoFingerTouch = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"twoFinger"]];
+                                 twoFingerTouch.frame = CGRectMake(450, 300, 120, 120);
+                                 twoFingerTouch.alpha = 0;
+                                 [gruyOutview addSubview:twoFingerTouch];
+                                 
+                                 UILabel *twoFingerTouchLbl = [[UILabel alloc] initWithFrame:CGRectMake(100, 350, 250, 30)];
+                                 twoFingerTouchLbl.text = @"The two finger slide.";
+                                 twoFingerTouchLbl.textColor = [UIColor whiteColor];
+                                 twoFingerTouchLbl.alpha = 0;
+                                 twoFingerTouchLbl.font = [UIFont boldSystemFontOfSize:22];
+                                 [gruyOutview addSubview:twoFingerTouchLbl];
+                                 
+                                 UILabel *teleopModeLbl = [[UILabel alloc] initWithFrame:CGRectMake(100, 500, 250, 40)];
+                                 teleopModeLbl.text = @"Teleop Scoring";
+                                 teleopModeLbl.textColor = [UIColor whiteColor];
+                                 teleopModeLbl.alpha = 0;
+                                 teleopModeLbl.font = [UIFont boldSystemFontOfSize:35];
+                                 [gruyOutview addSubview:teleopModeLbl];
+                                 
+                                 UILabel *autonomousModeLbl = [[UILabel alloc] initWithFrame:CGRectMake(100, 500, 300, 40)];
+                                 autonomousModeLbl.text = @"Autonomous Scoring";
+                                 autonomousModeLbl.textColor = [UIColor whiteColor];
+                                 autonomousModeLbl.alpha = 0;
+                                 autonomousModeLbl.font = [UIFont boldSystemFontOfSize:30];
+                                 [gruyOutview addSubview:autonomousModeLbl];
+                                 
+                                 UILabel *tapToContinueLbl = [[UILabel alloc] initWithFrame:CGRectMake(284, 650, 200, 20)];
+                                 tapToContinueLbl.text = @"Tap to Continue";
+                                 tapToContinueLbl.textColor = [UIColor whiteColor];
+                                 tapToContinueLbl.font = [UIFont boldSystemFontOfSize:18];
+                                 tapToContinueLbl.alpha = 0;
+                                 tapToContinueLbl.textAlignment = NSTextAlignmentCenter;
+                                 [gruyOutview addSubview:tapToContinueLbl];
+                                 
+                                 
+                                 [UIView animateWithDuration:0.3 animations:^{
+                                     starterLbl.alpha = 1;
+                                 } completion:^(BOOL finished) {
+                                     sleep(3.0);
+                                     [UIView animateWithDuration:0.3 animations:^{
+                                         twoFingerTouchLbl.alpha = 1;
+                                         twoFingerTouch.alpha = 1;
+                                         starterLbl.alpha = 0;
+                                     } completion:^(BOOL finished) {
+                                         sleep(2.0);
+                                         [self autoOff];
+                                         [UIView animateWithDuration:0.5 animations:^{
+                                             twoFingerTouch.center = CGPointMake(twoFingerTouch.center.x, twoFingerTouch.center.y + 150);
+                                             teleopModeLbl.alpha = 1;
+                                         } completion:^(BOOL finished) {
+                                             sleep(2.5);
+                                             teleopModeLbl.alpha = 0;
+                                             [self autoOn];
+                                             [UIView animateWithDuration:0.5 animations:^{
+                                                 autonomousModeLbl.alpha = 1;
+                                                 twoFingerTouch.center = CGPointMake(twoFingerTouch.center.x, twoFingerTouch.center.y - 150);
+                                             } completion:^(BOOL finished) {
+                                                 sleep(1.0);
+                                                 [UIView animateWithDuration:0.3 animations:^{
+                                                     tapToContinueLbl.alpha = 1;
+                                                 } completion:^(BOOL finished) {
+                                                     tutorialStep = 1;
+                                                 }];
+                                             }];
+                                         }];
+                                     }];
+                                 }];
+                             }
                          }];
         NSLog(@"\n Position: %@ \n Initials: %@ \n Scout Team Number: %@ \n Regional Title: %@ \n Match Number: %@", pos, initials, scoutTeamNum, currentRegional, currentMatchNum);
     }
 }
+
+-(void)nextStepInTutorial{
+    if (tutorialStep == 1) {
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *moreThanOneScoutLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 250, 300, 70)];
+            moreThanOneScoutLbl.text = @"If you have other scouts sitting nearby...";
+            moreThanOneScoutLbl.font = [UIFont boldSystemFontOfSize:22];
+            moreThanOneScoutLbl.numberOfLines = 2;
+            moreThanOneScoutLbl.lineBreakMode = NSLineBreakByWordWrapping;
+            moreThanOneScoutLbl.textAlignment = NSTextAlignmentCenter;
+            moreThanOneScoutLbl.textColor = [UIColor whiteColor];
+            [gruyOutview addSubview:moreThanOneScoutLbl];
+            moreThanOneScoutLbl.alpha = 0;
+            
+            UIImageView *arrowImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            arrowImage.frame = CGRectMake(100, 35, 53, 120);
+            arrowImage.transform = CGAffineTransformMakeRotation(-M_PI/4);
+            arrowImage.alpha = 0;
+            [gruyOutview addSubview:arrowImage];
+            
+            UILabel *useInstaShareLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 400, 300, 100)];
+            useInstaShareLbl.text = @"You should check out Bluetooth Sharing with the Insta-Share feature";
+            useInstaShareLbl.textAlignment = NSTextAlignmentCenter;
+            useInstaShareLbl.font = [UIFont boldSystemFontOfSize:24];
+            useInstaShareLbl.numberOfLines = 3;
+            useInstaShareLbl.lineBreakMode = NSLineBreakByWordWrapping;
+            useInstaShareLbl.textColor = [UIColor whiteColor];
+            useInstaShareLbl.alpha = 0;
+            [gruyOutview addSubview:useInstaShareLbl];
+            
+            UILabel *instaShareExplain = [[UILabel alloc] initWithFrame:CGRectMake(224, 550, 320, 100)];
+            instaShareExplain.text = @"After connecting to other scouts, the labels at the bottom will update as you receive their matches";
+            instaShareExplain.textAlignment = NSTextAlignmentCenter;
+            instaShareExplain.font = [UIFont boldSystemFontOfSize:19];
+            instaShareExplain.numberOfLines = 3;
+            instaShareExplain.lineBreakMode = NSLineBreakByWordWrapping;
+            instaShareExplain.textColor = [UIColor whiteColor];
+            instaShareExplain.alpha = 0;
+            [gruyOutview addSubview:instaShareExplain];
+            
+            UILabel *tapToContinueLbl = [[UILabel alloc] initWithFrame:CGRectMake(284, 750, 200, 20)];
+            tapToContinueLbl.text = @"Tap to Continue";
+            tapToContinueLbl.textColor = [UIColor whiteColor];
+            tapToContinueLbl.font = [UIFont boldSystemFontOfSize:17];
+            tapToContinueLbl.alpha = 0;
+            tapToContinueLbl.textAlignment = NSTextAlignmentCenter;
+            [gruyOutview addSubview:tapToContinueLbl];
+            
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                moreThanOneScoutLbl.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(2.0);
+                [UIView animateWithDuration:0.3 animations:^{
+                    arrowImage.alpha = 1;
+                    useInstaShareLbl.alpha = 1;
+                } completion:^(BOOL finished) {
+                    sleep(3.0);
+                    [UIView animateWithDuration:0.3 animations:^{
+                        instaShareExplain.alpha = 1;
+                    } completion:^(BOOL finished) {
+                        sleep(3.0);
+                        [UIView animateWithDuration:0.3 animations:^{
+                            tapToContinueLbl.alpha = 1;
+                        } completion:^(BOOL finished) {
+                            tutorialStep = 2;
+                        }];
+                    }];
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep ==2){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *sarcasticQuestionLbl = [[UILabel alloc] initWithFrame:CGRectMake(184, 80, 400, 30)];
+            sarcasticQuestionLbl.text = @"You: \"What else is at my fingertips?\"";
+            sarcasticQuestionLbl.textColor = [UIColor whiteColor];
+            sarcasticQuestionLbl.font = [UIFont boldSystemFontOfSize:24];
+            sarcasticQuestionLbl.alpha = 0;
+            sarcasticQuestionLbl.textAlignment = NSTextAlignmentCenter;
+            [gruyOutview addSubview:sarcasticQuestionLbl];
+            
+            UILabel *answerLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 110, 300, 30)];
+            answerLbl.text = @"Me: \"Glad you asked!\"";
+            answerLbl.textColor = [UIColor whiteColor];
+            answerLbl.font = [UIFont boldSystemFontOfSize:24];
+            answerLbl.alpha = 0;
+            answerLbl.textAlignment = NSTextAlignmentCenter;
+            [gruyOutview addSubview:answerLbl];
+            
+            UILabel *regionalLbl = [[UILabel alloc] initWithFrame:CGRectMake(40, 100, 140, 30)];
+            regionalLbl.text = @"Your Regional";
+            regionalLbl.textColor = [UIColor whiteColor];
+            regionalLbl.font = [UIFont boldSystemFontOfSize:18];
+            regionalLbl.textAlignment = NSTextAlignmentCenter;
+            regionalLbl.alpha = 0;
+            [gruyOutview addSubview:regionalLbl];
+            
+            UILabel *initialsLbl = [[UILabel alloc] initWithFrame:CGRectMake(600, 100, 140, 30)];
+            initialsLbl.text = @"Your Initials";
+            initialsLbl.textColor = [UIColor whiteColor];
+            initialsLbl.font = [UIFont boldSystemFontOfSize:18];
+            initialsLbl.textAlignment = NSTextAlignmentCenter;
+            initialsLbl.alpha = 0;
+            [gruyOutview addSubview:initialsLbl];
+            
+            UILabel *positionLbl = [[UILabel alloc] initWithFrame:CGRectMake(284, 170, 200, 30)];
+            positionLbl.text = @"Your Scouting Position";
+            positionLbl.textColor = [UIColor whiteColor];
+            positionLbl.font = [UIFont boldSystemFontOfSize:18];
+            positionLbl.textAlignment = NSTextAlignmentCenter;
+            positionLbl.alpha = 0;
+            [gruyOutview addSubview:positionLbl];
+            
+            UILabel *currentMatchNumber = [[UILabel alloc] initWithFrame:CGRectMake(180, 250, 200, 30)];
+            currentMatchNumber.text = @"Current Match Number";
+            currentMatchNumber.textColor = [UIColor whiteColor];
+            currentMatchNumber.font = [UIFont boldSystemFontOfSize:16];
+            currentMatchNumber.textAlignment = NSTextAlignmentCenter;
+            currentMatchNumber.alpha = 0;
+            [gruyOutview addSubview:currentMatchNumber];
+            
+            UILabel *matchNubmerEditable = [[UILabel alloc] initWithFrame:CGRectMake(180, 280, 200, 30)];
+            matchNubmerEditable.text = @"(editable in case there's a mistake)";
+            matchNubmerEditable.textColor = [UIColor whiteColor];
+            matchNubmerEditable.font = [UIFont boldSystemFontOfSize:12];
+            matchNubmerEditable.textAlignment = NSTextAlignmentCenter;
+            matchNubmerEditable.alpha = 0;
+            [gruyOutview addSubview:matchNubmerEditable];
+            
+            UILabel *currentTeamNumber = [[UILabel alloc] initWithFrame:CGRectMake(400, 250, 200, 30)];
+            currentTeamNumber.text = @"Current Team Number";
+            currentTeamNumber.textColor = [UIColor whiteColor];
+            currentTeamNumber.font = [UIFont boldSystemFontOfSize:16];
+            currentTeamNumber.textAlignment = NSTextAlignmentCenter;
+            currentTeamNumber.alpha = 0;
+            [gruyOutview addSubview:currentTeamNumber];
+            
+            UILabel *teamNumberEditable = [[UILabel alloc] initWithFrame:CGRectMake(400, 275, 200, 40)];
+            teamNumberEditable.text = @"(editable and updates if a match schedule is loaded for the regional)";
+            teamNumberEditable.textColor = [UIColor whiteColor];
+            teamNumberEditable.font = [UIFont boldSystemFontOfSize:12];
+            teamNumberEditable.textAlignment = NSTextAlignmentCenter;
+            teamNumberEditable.alpha = 0;
+            teamNumberEditable.numberOfLines = 2;
+            teamNumberEditable.lineBreakMode = NSLineBreakByWordWrapping;
+            [gruyOutview addSubview:teamNumberEditable];
+            
+            UILabel *saveMatchLbl = [[UILabel alloc] initWithFrame:CGRectMake(284, 850, 200, 30)];
+            saveMatchLbl.text = @"Save Match Button";
+            saveMatchLbl.textColor = [UIColor whiteColor];
+            saveMatchLbl.textAlignment = NSTextAlignmentCenter;
+            saveMatchLbl.font = [UIFont boldSystemFontOfSize:18];
+            saveMatchLbl.alpha = 0;
+            [gruyOutview addSubview:saveMatchLbl];
+            
+            UILabel *selfExplanitory = [[UILabel alloc] initWithFrame:CGRectMake(284, 880, 200, 30)];
+            selfExplanitory.text = @"(kinda self explanatory)";
+            selfExplanitory.textColor = [UIColor whiteColor];
+            selfExplanitory.textAlignment = NSTextAlignmentCenter;
+            selfExplanitory.font = [UIFont boldSystemFontOfSize:15];
+            selfExplanitory.alpha = 0;
+            [gruyOutview addSubview:selfExplanitory];
+            
+            UILabel *tapToContinueLbl = [[UILabel alloc] initWithFrame:CGRectMake(284, 650, 200, 20)];
+            tapToContinueLbl.text = @"Tap to Continue";
+            tapToContinueLbl.textColor = [UIColor whiteColor];
+            tapToContinueLbl.font = [UIFont boldSystemFontOfSize:17];
+            tapToContinueLbl.alpha = 0;
+            tapToContinueLbl.textAlignment = NSTextAlignmentCenter;
+            [gruyOutview addSubview:tapToContinueLbl];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                sarcasticQuestionLbl.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(1.8);
+                [UIView animateWithDuration:0.3 animations:^{
+                    answerLbl.alpha = 1;
+                } completion:^(BOOL finished) {
+                    sleep(2.0);
+                    [UIView animateWithDuration:0.3 animations:^{
+                        regionalLbl.alpha = 1;
+                    } completion:^(BOOL finished) {
+                        sleep(1.5);
+                        [UIView animateWithDuration:0.3 animations:^{
+                            initialsLbl.alpha = 1;
+                        } completion:^(BOOL finished) {
+                            sleep(1.5);
+                            [UIView animateWithDuration:0.3 animations:^{
+                                positionLbl.alpha = 1;
+                            } completion:^(BOOL finished) {
+                                sleep(1.5);
+                                [UIView animateWithDuration:0.3 animations:^{
+                                    currentMatchNumber.alpha = 1;
+                                    matchNubmerEditable.alpha = 1;
+                                } completion:^(BOOL finished) {
+                                    sleep(1.8);
+                                    [UIView animateWithDuration:0.3 animations:^{
+                                        currentTeamNumber.alpha = 1;
+                                        teamNumberEditable.alpha = 1;
+                                    } completion:^(BOOL finished) {
+                                        sleep(2.0);
+                                        [UIView animateWithDuration:0.3 animations:^{
+                                            saveMatchLbl.alpha = 1;
+                                            selfExplanitory.alpha = 1;
+                                        } completion:^(BOOL finished) {
+                                            sleep(2.0);
+                                            [UIView animateWithDuration:0.3 animations:^{
+                                                tapToContinueLbl.alpha = 1;
+                                            } completion:^(BOOL finished) {
+                                                tutorialStep = 3;
+                                            }];
+                                        }];
+                                    }];
+                                }];
+                            }];
+                        }];
+                    }];
+                }];
+            }];
+        }];
+        
+    }
+    else if (tutorialStep == 3){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *changeSignIn = [[UILabel alloc] initWithFrame:CGRectMake(500, 150, 200, 60)];
+            changeSignIn.text = @"If you need to change scouts/regionals/etc.";
+            changeSignIn.textColor = [UIColor whiteColor];
+            changeSignIn.textAlignment = NSTextAlignmentCenter;
+            changeSignIn.font = [UIFont boldSystemFontOfSize:18];
+            changeSignIn.alpha = 0;
+            changeSignIn.numberOfLines = 2;
+            changeSignIn.lineBreakMode = NSLineBreakByWordWrapping;
+            [gruyOutview addSubview:changeSignIn];
+            
+            UIImageView *arrowImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            arrowImage.frame = CGRectMake(550, 25, 53, 120);
+            arrowImage.transform = CGAffineTransformMakeRotation(M_PI/4);
+            arrowImage.alpha = 0;
+            [gruyOutview addSubview:arrowImage];
+            
+            UILabel *nowForPageExplanations = [[UILabel alloc] initWithFrame:CGRectMake(209, 400, 350, 30)];
+            nowForPageExplanations.text = @"Now for Page Explanations!";
+            nowForPageExplanations.textColor = [UIColor whiteColor];
+            nowForPageExplanations.textAlignment = NSTextAlignmentCenter;
+            nowForPageExplanations.font = [UIFont boldSystemFontOfSize:24];
+            nowForPageExplanations.alpha = 0;
+            [gruyOutview addSubview:nowForPageExplanations];
+            
+            UILabel *holdTightLbl = [[UILabel alloc] initWithFrame:CGRectMake(209, 440, 350, 20)];
+            holdTightLbl.text = @"(Almost done, just hold tight a little longer)";
+            holdTightLbl.textColor = [UIColor whiteColor];
+            holdTightLbl.textAlignment = NSTextAlignmentCenter;
+            holdTightLbl.font = [UIFont boldSystemFontOfSize:16];
+            holdTightLbl.alpha = 0;
+            [gruyOutview addSubview:holdTightLbl];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 550, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:16];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                changeSignIn.alpha = 1;
+                arrowImage.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(3.0);
+                [UIView animateWithDuration:0.3 animations:^{
+                    nowForPageExplanations.alpha = 1;
+                    holdTightLbl.alpha = 1;
+                } completion:^(BOOL finished) {
+                    sleep(2.0);
+                    [UIView animateWithDuration:0.3 animations:^{
+                        tapToContinue.alpha = 1;
+                    } completion:^(BOOL finished) {
+                        tutorialStep = 4;
+                    }];
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 4){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *pitViewDetail = [[UILabel alloc] initWithFrame:CGRectMake(210, 790, 240, 30)];
+            pitViewDetail.text = @"The Pit Scouting View";
+            pitViewDetail.textColor = [UIColor whiteColor];
+            pitViewDetail.textAlignment = NSTextAlignmentCenter;
+            pitViewDetail.font = [UIFont boldSystemFontOfSize:20];
+            pitViewDetail.alpha = 0;
+            [gruyOutview addSubview:pitViewDetail];
+            
+            UILabel *detailPit = [[UILabel alloc] initWithFrame:CGRectMake(220, 820, 220, 30)];
+            detailPit.text = @"For all your Pit Scouting needs";
+            detailPit.textAlignment = NSTextAlignmentCenter;
+            detailPit.textColor = [UIColor whiteColor];
+            detailPit.font = [UIFont boldSystemFontOfSize:14];
+            detailPit.alpha = 0;
+            [gruyOutview addSubview:detailPit];
+            
+            UIImageView *downArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            downArrow.frame = CGRectMake(303, 850, 53, 120);
+            downArrow.alpha = 0;
+            downArrow.transform = CGAffineTransformMakeRotation(M_PI);
+            [gruyOutview addSubview:downArrow];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 600, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:18];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                pitViewDetail.alpha = 1;
+                detailPit.alpha = 1;
+                downArrow.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(2.0);
+                [UIView animateWithDuration:0.3 animations:^{
+                    tapToContinue.alpha = 1;
+                } completion:^(BOOL finished) {
+                    tutorialStep = 5;
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 5){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *dataViewDetail = [[UILabel alloc] initWithFrame:CGRectMake(325, 790, 240, 30)];
+            dataViewDetail.text = @"The Data View";
+            dataViewDetail.textColor = [UIColor whiteColor];
+            dataViewDetail.textAlignment = NSTextAlignmentCenter;
+            dataViewDetail.font = [UIFont boldSystemFontOfSize:20];
+            dataViewDetail.alpha = 0;
+            [gruyOutview addSubview:dataViewDetail];
+            
+            UILabel *detailDataView = [[UILabel alloc] initWithFrame:CGRectMake(325, 820, 240, 40)];
+            detailDataView.text = @"Where you can view and analyze all recorded data";
+            detailDataView.textAlignment = NSTextAlignmentCenter;
+            detailDataView.textColor = [UIColor whiteColor];
+            detailDataView.font = [UIFont boldSystemFontOfSize:14];
+            detailDataView.alpha = 0;
+            detailDataView.numberOfLines = 2;
+            detailDataView.lineBreakMode = NSLineBreakByWordWrapping;
+            [gruyOutview addSubview:detailDataView];
+            
+            UIImageView *downArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            downArrow.frame = CGRectMake(413, 850, 53, 120);
+            downArrow.alpha = 0;
+            downArrow.transform = CGAffineTransformMakeRotation(M_PI);
+            [gruyOutview addSubview:downArrow];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 600, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:18];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                dataViewDetail.alpha = 1;
+                detailDataView.alpha = 1;
+                downArrow.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(2.0);
+                [UIView animateWithDuration:0.3 animations:^{
+                    tapToContinue.alpha = 1;
+                } completion:^(BOOL finished) {
+                    tutorialStep = 6;
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 6){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *moreViewDetail = [[UILabel alloc] initWithFrame:CGRectMake(430, 790, 240, 30)];
+            moreViewDetail.text = @"The More View";
+            moreViewDetail.textColor = [UIColor whiteColor];
+            moreViewDetail.textAlignment = NSTextAlignmentCenter;
+            moreViewDetail.font = [UIFont boldSystemFontOfSize:20];
+            moreViewDetail.alpha = 0;
+            [gruyOutview addSubview:moreViewDetail];
+            
+            UILabel *detailMoreView = [[UILabel alloc] initWithFrame:CGRectMake(440, 810, 220, 60)];
+            detailMoreView.text = @"Where you can sync with others, get match schedules, and more (hence the name)";
+            detailMoreView.textAlignment = NSTextAlignmentCenter;
+            detailMoreView.textColor = [UIColor whiteColor];
+            detailMoreView.font = [UIFont boldSystemFontOfSize:14];
+            detailMoreView.alpha = 0;
+            detailMoreView.numberOfLines = 3;
+            detailMoreView.lineBreakMode = NSLineBreakByWordWrapping;
+            [gruyOutview addSubview:detailMoreView];
+            
+            UIImageView *downArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            downArrow.frame = CGRectMake(523, 850, 53, 120);
+            downArrow.alpha = 0;
+            downArrow.transform = CGAffineTransformMakeRotation(M_PI);
+            [gruyOutview addSubview:downArrow];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 600, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:18];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                moreViewDetail.alpha = 1;
+                detailMoreView.alpha = 1;
+                downArrow.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(2.0);
+                [UIView animateWithDuration:0.3 animations:^{
+                    tapToContinue.alpha = 1;
+                } completion:^(BOOL finished) {
+                    tutorialStep = 7;
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 7){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *oneMoreThingLbl = [[UILabel alloc] initWithFrame:CGRectMake(420, 400, 300, 30)];
+            oneMoreThingLbl.text = @"Oh, and one more thing...";
+            oneMoreThingLbl.textColor = [UIColor whiteColor];
+            oneMoreThingLbl.textAlignment = NSTextAlignmentCenter;
+            oneMoreThingLbl.font = [UIFont boldSystemFontOfSize:24];
+            oneMoreThingLbl.alpha = 0;
+            [gruyOutview addSubview:oneMoreThingLbl];
+            
+            UILabel *passLbl = [[UILabel alloc] initWithFrame:CGRectMake(200, 620, 80, 30)];
+            passLbl.text = @"Passes";
+            passLbl.textAlignment = NSTextAlignmentRight;
+            passLbl.textColor = [UIColor whiteColor];
+            passLbl.font = [UIFont boldSystemFontOfSize:18];
+            passLbl.alpha = 0;
+            [gruyOutview addSubview:passLbl];
+            
+            UIImageView *passArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            passArrow.frame = CGRectMake(300, 575, 53, 120);
+            passArrow.alpha = 0;
+            passArrow.transform = CGAffineTransformMakeRotation(M_PI/2);
+            [gruyOutview addSubview:passArrow];
+            
+            UILabel *receiveLbl = [[UILabel alloc] initWithFrame:CGRectMake(200, 680, 80, 30)];
+            receiveLbl.text = @"Receives";
+            receiveLbl.textAlignment = NSTextAlignmentRight;
+            receiveLbl.textColor = [UIColor whiteColor];
+            receiveLbl.font = [UIFont boldSystemFontOfSize:18];
+            receiveLbl.alpha = 0;
+            [gruyOutview addSubview:receiveLbl];
+            
+            UIImageView *receiveArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upArrow"]];
+            receiveArrow.frame = CGRectMake(300, 635, 53, 120);
+            receiveArrow.alpha = 0;
+            receiveArrow.transform = CGAffineTransformMakeRotation(M_PI/2);
+            [gruyOutview addSubview:receiveArrow];
+            
+            UILabel *dontWorryLbl = [[UILabel alloc] initWithFrame:CGRectMake(420, 770, 300, 80)];
+            dontWorryLbl.text = @"Don't worry about assist bonuses, just record when the robot passes and receives the ball";
+            dontWorryLbl.textColor = [UIColor whiteColor];
+            dontWorryLbl.textAlignment = NSTextAlignmentCenter;
+            dontWorryLbl.font = [UIFont boldSystemFontOfSize:18];
+            dontWorryLbl.numberOfLines = 3;
+            dontWorryLbl.lineBreakMode = NSLineBreakByWordWrapping;
+            dontWorryLbl.alpha = 0;
+            [gruyOutview addSubview:dontWorryLbl];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 450, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:18];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                oneMoreThingLbl.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(1.5);
+                [self autoOff];
+                [UIView animateWithDuration:0.4 animations:^{
+                    oneMoreThingLbl.center = CGPointMake(oneMoreThingLbl.center.x, oneMoreThingLbl.center.y + 150);
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:0.3 animations:^{
+                        passLbl.alpha = 1;
+                        passLbl.center = CGPointMake(passLbl.center.x + 50, passLbl.center.y);
+                        passArrow.alpha = 1;
+                        passArrow.center = CGPointMake(passArrow.center.x + 50, passArrow.center.y);
+                        receiveLbl.alpha = 1;
+                        receiveLbl.center = CGPointMake(receiveLbl.center.x + 50, receiveLbl.center.y);
+                        receiveArrow.alpha = 1;
+                        receiveArrow.center = CGPointMake(receiveArrow.center.x + 50, receiveArrow.center.y);
+                    } completion:^(BOOL finished) {
+                        [UIView animateWithDuration:0.3 animations:^{
+                            dontWorryLbl.alpha = 1;
+                            dontWorryLbl.center = CGPointMake(dontWorryLbl.center.x, dontWorryLbl.center.y - 50);
+                        } completion:^(BOOL finished) {
+                            sleep(2.5);
+                            [UIView animateWithDuration:0.3 animations:^{
+                                tapToContinue.alpha = 1;
+                            } completion:^(BOOL finished) {
+                                tutorialStep = 8;
+                            }];
+                        }];
+                    }];
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 8){
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            UILabel *finallyLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 300, 300, 30)];
+            finallyLbl.text = @"And Finally...";
+            finallyLbl.textAlignment = NSTextAlignmentCenter;
+            finallyLbl.textColor = [UIColor whiteColor];
+            finallyLbl.font = [UIFont boldSystemFontOfSize:24];
+            finallyLbl.alpha = 0;
+            [gruyOutview addSubview:finallyLbl];
+            
+            UILabel *fromAllOfTDLbl = [[UILabel alloc] initWithFrame:CGRectMake(134, 380, 500, 30)];
+            fromAllOfTDLbl.text = @"For all of us here on Team Driven 1730,";
+            fromAllOfTDLbl.textColor = [UIColor whiteColor];
+            fromAllOfTDLbl.textAlignment = NSTextAlignmentCenter;
+            fromAllOfTDLbl.font = [UIFont boldSystemFontOfSize:24];
+            fromAllOfTDLbl.alpha = 0;
+            [gruyOutview addSubview:fromAllOfTDLbl];
+            
+            UILabel *stayClassyLbl = [[UILabel alloc] initWithFrame:CGRectMake(234, 460, 300, 30)];
+            stayClassyLbl.text = @"Stay classy FRC Scouts.";
+            stayClassyLbl.textColor = [UIColor whiteColor];
+            stayClassyLbl.textAlignment = NSTextAlignmentCenter;
+            stayClassyLbl.font = [UIFont boldSystemFontOfSize:26];
+            stayClassyLbl.alpha = 0;
+            [gruyOutview addSubview:stayClassyLbl];
+            
+            UILabel *tapToContinue = [[UILabel alloc] initWithFrame:CGRectMake(284, 600, 200, 30)];
+            tapToContinue.text = @"Tap to Continue";
+            tapToContinue.textColor = [UIColor whiteColor];
+            tapToContinue.textAlignment = NSTextAlignmentCenter;
+            tapToContinue.font = [UIFont boldSystemFontOfSize:18];
+            tapToContinue.alpha = 0;
+            [gruyOutview addSubview:tapToContinue];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                finallyLbl.alpha = 1;
+            } completion:^(BOOL finished) {
+                sleep(2.0);
+                [UIView animateWithDuration:0.3 animations:^{
+                    fromAllOfTDLbl.alpha = 1;
+                } completion:^(BOOL finished) {
+                    sleep(2.0);
+                    [UIView animateWithDuration:0.3 animations:^{
+                        stayClassyLbl.alpha = 1;
+                    } completion:^(BOOL finished) {
+                        sleep(1.5);
+                        tutorialStep = 9;
+                        [UIView animateWithDuration:0.3 delay:3.0 options:UIViewAnimationOptionTransitionNone animations:^{
+                            tapToContinue.alpha = 1;
+                        } completion:^(BOOL finished) {
+                            
+                        }];
+                    }];
+                }];
+            }];
+        }];
+    }
+    else if (tutorialStep == 9){
+        tutorialStep = 0;
+        [UIView animateWithDuration:0.3 animations:^{
+            for (UIView *v in gruyOutview.subviews) {
+                v.alpha = 0;
+            }
+        } completion:^(BOOL finished) {
+            [self autoOn];
+            [UIView animateWithDuration:0.3 animations:^{
+                gruyOutview.alpha = 0;
+            } completion:^(BOOL finished) {
+                [gruyOutview removeFromSuperview];
+                [scheduleDictionary setValue:[NSNumber numberWithBool:NO] forKey:@"FirstOpening"];
+                [scheduleDictionary writeToFile:schedulePath atomically:YES];
+                for (UIBarButtonItem *item in self.tabBarController.tabBar.items) {
+                    item.enabled = true;
+                }
+                twoFingerDown.enabled = true;
+            }];
+        }];
+    }
+}
+
 // Opens up the SetUpScreen once more after it has been closed once already (if users rotate)
 -(IBAction)reSignIn:(id)sender {
     initials = nil;
@@ -891,7 +1769,7 @@ UILabel *blue3UpdaterLbl;
                          visibleSwitchLbl.hidden = false;
                          visibleSwitch.hidden = false;
                          visibleSwitch.enabled = true;
-                         [visibleSwitch setOn:true animated:YES];
+                         [visibleSwitch setOn:visible animated:YES];
                          inviteMoreBtn.enabled = host;
                          inviteMoreBtn.hidden = !host;
                          doneButton.hidden = false;
@@ -947,9 +1825,18 @@ UILabel *blue3UpdaterLbl;
 -(void)changeMatchType{
     if (matchTypeSelector.selectedSegmentIndex == 0) {
         currentMatchType = @"Q";
+        currentMatchNumField.keyboardType = UIKeyboardTypeDecimalPad;
     }
     else{
         currentMatchType = @"E";
+        UIAlertView *elimMatchTypeAlert = [[UIAlertView alloc] initWithTitle:@"Just a heads up..."
+                                                                     message:@"If you choose Elimination Match type, you must abide by the following format: \n Quarterfinal Match -> Q1.1, Q1.2, Q2.1, etc. \n Semifinal Match -> S1.1, S1.2, S2.1, etc. \n Finals Match -> F1.1, F1.2, F1.3, etc."
+                                                                    delegate:nil
+                                                           cancelButtonTitle:@"Affirmative."
+                                                           otherButtonTitles: nil];
+        [elimMatchTypeAlert show];
+        currentMatchNumField.keyboardType = UIKeyboardTypeAlphabet;
+        currentMatchNumField.text = @"Q1.1";
     }
 }
 // Called by the weekSelector UISegmentedControl
@@ -985,20 +1872,26 @@ UILabel *blue3UpdaterLbl;
                 scoutTeamNumField.text = [[NSString alloc] initWithString:txt1];
             }
         }
+        if ([txt1 length] > 4) {
+            [txt1 deleteCharactersInRange:NSMakeRange(4, 1)];
+            scoutTeamNumField.text = [[NSString alloc] initWithString:txt1];
+        }
     }
     if (currentMatchNumField.isEditing) {
-        NSMutableString *txt2 = [[NSMutableString alloc] initWithString:currentMatchNumField.text];
-        for (unsigned int i = 0; i < [txt2 length]; i++) {
-            NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt2 characterAtIndex:i]];
-            if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
-                                                               message: @"Please only enter numbers in the \"Current Match Number\" text field"
-                                                              delegate: nil
-                                                     cancelButtonTitle:@"Sorry..."
-                                                     otherButtonTitles:nil];
-                [alert show];
-                [txt2 deleteCharactersInRange:NSMakeRange(i, 1)];
-                currentMatchNumField.text = [[NSString alloc] initWithString:txt2];
+        if ([currentMatchType isEqualToString:@"Q"]) {
+            NSMutableString *txt2 = [[NSMutableString alloc] initWithString:currentMatchNumField.text];
+            for (unsigned int i = 0; i < [txt2 length]; i++) {
+                NSString *character = [[NSString alloc] initWithFormat:@"%C", [txt2 characterAtIndex:i]];
+                if ([character integerValue] == 0 && ![character isEqualToString:@"0"]) {
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Numbers only please!"
+                                                                   message: @"Please only enter numbers in the \"Current Match Number\" text field"
+                                                                  delegate: nil
+                                                         cancelButtonTitle:@"Sorry..."
+                                                         otherButtonTitles:nil];
+                    [alert show];
+                    [txt2 deleteCharactersInRange:NSMakeRange(i, 1)];
+                    currentMatchNumField.text = [[NSString alloc] initWithString:txt2];
+                }
             }
         }
     }
@@ -1105,7 +1998,7 @@ UILabel *blue3UpdaterLbl;
 
 // Tell the picker the width of each row for a given component (420)
 -(CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
-    int sectionWidth = 420;
+    int sectionWidth = 480;
     
     return sectionWidth;
 }
@@ -1152,11 +2045,15 @@ UILabel *blue3UpdaterLbl;
     if (visibleSwitch.on) {
         [self setUpMultiPeer];
         visible = true;
+        hostSwitch.enabled = true;
     }
     else{
         [self.mySession disconnect];
         [self.advertiser stop];
         visible = false;
+        [hostSwitch setOn:NO animated:YES];
+        hostSwitch.enabled = false;
+        host = false;
     }
 }
 
@@ -1197,6 +2094,13 @@ UILabel *blue3UpdaterLbl;
             else if ([updatedPeerString isEqualToString:@"Blue 1"]){[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor blueColor]];}
             else if ([updatedPeerString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor blueColor]];}
             else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor blueColor]];}
+            
+            UIAlertView *connectedSuccessfullyAlert = [[UIAlertView alloc] initWithTitle:@"Woot Woot!"
+                                                                                 message:[[NSString alloc] initWithFormat:@"You successfully connected to %@ on Insta-Share!", [peerID displayName]]
+                                                                                delegate:nil
+                                                                       cancelButtonTitle:@"Great Odin's Raven!"
+                                                                       otherButtonTitles: nil];
+            [connectedSuccessfullyAlert show];
         });
         
         if ([updatedPeerString isEqualToString:pos]) {
@@ -1214,15 +2118,18 @@ UILabel *blue3UpdaterLbl;
         NSLog(@"Disconnected");
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([updatedPeerString isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
-            else if ([updatedPeerString isEqualToString:@"Red 2"]){[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
+            else if ([updatedPeerString isEqualToString:@"Red 2"]){
+                NSLog(@"Red 2");
+                [[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+            }
             else if ([updatedPeerString isEqualToString:@"Red 3"]){[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Blue 1"]){[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             UIAlertView *disconnectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh no!"
-                                                                        message:[[NSString alloc] initWithFormat:@"You disconnected with %@!", updatedPeerString]
+                                                                        message:[[NSString alloc] initWithFormat:@"You disconnected with %@ in Insta-Share!", updatedPeerString]
                                                                        delegate:nil
-                                                              cancelButtonTitle:@"Aw man!"
+                                                              cancelButtonTitle:@"Son of a bee sting!"
                                                               otherButtonTitles:nil];
             [disconnectedAlert show];
         });
@@ -1309,8 +2216,10 @@ UILabel *blue3UpdaterLbl;
 // Activated by two finger swipe up (changes to auto UI)
 -(void)autoOn{
     autoYN = true;
-    twoFingerUp.enabled = false;
-    twoFingerDown.enabled = true;
+    if ([[self.tabBarController.tabBar.items firstObject] isEnabled]) {
+        twoFingerUp.enabled = false;
+        twoFingerDown.enabled = true;
+    }
     for (UIView *v in autoScreenObjects) {
         if ([v isKindOfClass:[UIButton class]] || [v isKindOfClass:[UIImage class]]) {
             v.userInteractionEnabled = YES;
@@ -1349,8 +2258,10 @@ UILabel *blue3UpdaterLbl;
 // Activated by two finger swipe down (changes to telop UI)
 -(void)autoOff{
     autoYN = false;
-    twoFingerUp.enabled = true;
-    twoFingerDown.enabled = false;
+    if ([[self.tabBarController.tabBar.items firstObject] isEnabled]) {
+        twoFingerUp.enabled = true;
+        twoFingerDown.enabled = false;
+    }
     
     for (UIView *v in teleopScreenObjects) {
         if ([v isKindOfClass:[UIResponder class]]) {
@@ -1432,8 +2343,10 @@ float startY;
 }
 
 - (IBAction)autoHotHighPlus:(id)sender {
-    autoHighHotScore++;
-    _autoHotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighHotScore];
+    if (autoHighHotScore < 3) {
+        autoHighHotScore++;
+        _autoHotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighHotScore];
+    }
 }
 - (IBAction)autoHotHighMinus:(id)sender {
     if (autoHighHotScore > 0) {
@@ -1442,8 +2355,10 @@ float startY;
     }
 }
 - (IBAction)autoNotHighPlus:(id)sender {
-    autoHighNotScore++;
-    _autoNotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighNotScore];
+    if (autoHighNotScore < 3) {
+        autoHighNotScore++;
+        _autoNotHighLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoHighNotScore];
+    }
 }
 - (IBAction)autoNotHighMinus:(id)sender {
     if (autoHighNotScore > 0) {
@@ -1463,8 +2378,10 @@ float startY;
 }
 
 - (IBAction)autoHotLowPlus:(id)sender {
-    autoLowHotScore++;
-    _autoHotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowHotScore];
+    if (autoLowHotScore < 3) {
+        autoLowHotScore++;
+        _autoHotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowHotScore];
+    }
 }
 - (IBAction)autoHotLowMinus:(id)sender {
     if (autoLowHotScore > 0) {
@@ -1473,8 +2390,10 @@ float startY;
     }
 }
 - (IBAction)autoNotLowPlus:(id)sender {
-    autoLowNotScore++;
-    _autoNotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowNotScore];
+    if (autoLowNotScore < 3) {
+        autoLowNotScore++;
+        _autoNotLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowNotScore];
+    }
 }
 - (IBAction)autoNotLowMinus:(id)sender {
     if (autoLowNotScore > 0) {
@@ -1492,7 +2411,6 @@ float startY;
         _autoMissLowLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)autoLowMissScore];
     }
 }
-
 
 
 - (IBAction)teleopMakeHighPlus:(id)sender {
@@ -1590,6 +2508,39 @@ float startY;
     _matchNumField.text = _matchNumEdit.titleLabel.text;
     [_matchNumField becomeFirstResponder];
 }
+- (IBAction)matchNumberEditFinished:(id)sender {
+    currentMatchNum = _matchNumField.text;
+    if ([scheduleDictionary objectForKey:currentRegional]) {
+        if ([[[scheduleDictionary objectForKey:currentRegional] objectForKey:pos] objectForKey:currentMatchNum]) {
+            currentTeamNum = [[[scheduleDictionary objectForKey:currentRegional] objectForKey:pos] objectForKey:currentMatchNum];
+            currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
+            [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
+            _teamNumEdit.enabled = true;
+            _teamNumEdit.hidden = false;
+            _teamNumField.enabled = false;
+            _teamNumField.hidden = true;
+        }
+        else{
+            UIAlertView *invalidMatchNumberAlert = [[UIAlertView alloc] initWithTitle:@"Invalid Match Number!"
+                                                                              message:@"You could have finished the last match for this regional, entered a bad match number, or there is some mistake with the schedule downloaded."
+                                                                             delegate:nil
+                                                                    cancelButtonTitle:@"I see."
+                                                                    otherButtonTitles:nil];
+            [invalidMatchNumberAlert show];
+            currentTeamNum = @"";
+        }
+    }
+    else{
+        currentTeamNum = @"";
+    }
+    if (currentTeamNum.length == 0) {
+        _teamNumEdit.enabled = false;
+        _teamNumEdit.hidden = true;
+        _teamNumField.enabled = true;
+        _teamNumField.hidden = false;
+        _teamNumField.text = currentTeamNum;
+    }
+}
 // Makes the team number editable
 -(IBAction)teamNumberEdit:(id)sender {
     _teamNumEdit.hidden = true;
@@ -1646,18 +2597,34 @@ float startY;
     }
     
     // If for some reason there was no match number (Shouldn't occur, but just in case)
-    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""] || [currentMatchNum integerValue] < 1) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO MATCH NUMBER"
-                                                       message: @"Please enter a match number for this match."
+    BOOL badMatchNumber = true;
+    if ([currentMatchType isEqualToString:@"Q"]) {
+        if ([currentMatchNum integerValue] > 0) {
+            badMatchNumber = false;
+        }
+    }
+    else{
+        if ([[currentMatchNum substringToIndex:2] isEqualToString:@"Q1"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q2"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q3"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"Q4"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"S1"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"S2"] || [[currentMatchNum substringToIndex:2] isEqualToString:@"F1"]) {
+            if ([[currentMatchNum substringWithRange:NSMakeRange(3, 1)] integerValue] > 0) {
+                if (currentMatchNum.length == 4) {
+                    badMatchNumber = false;
+                }
+            }
+        }
+    }
+    if (currentMatchNum == nil || [currentMatchNum isEqualToString:@""] ||[[currentMatchNum substringToIndex:1] isEqualToString:@"0"] || badMatchNumber) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"INVALID MATCH NUMBER"
+                                                       message: @"Please enter a valid match number for this match."
                                                       delegate: nil
                                              cancelButtonTitle:@"OK"
                                              otherButtonTitles:nil];
+        
         [alert show];
     }
     // Another unlikely case: No team number. Also shouldn't happen, but a good safety net
-    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""] || [currentTeamNum integerValue] < 1) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"NO TEAM NUMBER"
-                                                       message: @"Please enter a team number for this match."
+    else if (currentTeamNum == nil || [currentTeamNum isEqualToString:@""] || [currentTeamNum integerValue] < 1 || [[currentTeamNum substringToIndex:1] isEqualToString:@"0"] || currentTeamNum.length > 4) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"INVALID TEAM NUMBER"
+                                                       message: @"Please enter a valid team number for this match."
                                                       delegate: nil
                                              cancelButtonTitle:@"OK"
                                              otherButtonTitles:nil];
@@ -1671,6 +2638,25 @@ float startY;
 }
 
 -(void)createNotesScreen{
+    inRedZone = false;
+    inWhiteZone = false;
+    inBlueZone = false;
+    didGreatDefense = false;
+    didBadDefense = false;
+    didDidntMove = false;
+    didSlowMovement = false;
+    didFastMovement = false;
+    didBrokeDownInMatch = false;
+    didGreatBallPickup = false;
+    didBadBallPickup = false;
+    didGreatCooperation = false;
+    didBadCooperation = false;
+    didGreatHumanPlayer = false;
+    didBadHumanPlayer = false;
+    didGreatDriver = false;
+    didAverageDriver = false;
+    didBadDriver = false;
+    
     greyOut = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, 768, 1024)];
     [greyOut addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
     greyOut.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.6];
@@ -1693,9 +2679,9 @@ float startY;
     [cancelButton addTarget:self action:@selector(cancelNotesScreen) forControlEvents:UIControlEventTouchUpInside];
     [notesScreen addSubview:cancelButton];
     
-    UILabel *zoneSelectorLbl = [[UILabel alloc] initWithFrame:CGRectMake(100, 58, 250, 12)];
-    zoneSelectorLbl.text = @"Select the Zones they tended to hang out in";
-    zoneSelectorLbl.font = [UIFont systemFontOfSize:10];
+    UILabel *zoneSelectorLbl = [[UILabel alloc] initWithFrame:CGRectMake(100, 58, 250, 17)];
+    zoneSelectorLbl.text = @"Zones They Hung Out In";
+    zoneSelectorLbl.font = [UIFont systemFontOfSize:13];
     zoneSelectorLbl.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
     zoneSelectorLbl.textAlignment = NSTextAlignmentCenter;
     [notesScreen addSubview:zoneSelectorLbl];
@@ -1771,6 +2757,16 @@ float startY;
         redZone.layer.mask = rightMaskLayer;
     }
     
+    // **************************************************
+    
+    // **************************************************
+    
+    // ************** QUICK NOTES ***********************
+    
+    // **************************************************
+    
+    // **************************************************
+    
     UILabel *quickNotesLbl = [[UILabel alloc] initWithFrame:CGRectMake(175, 130, 100, 13)];
     quickNotesLbl.text = @"Quick Notes (tap)";
     quickNotesLbl.textAlignment = NSTextAlignmentCenter;
@@ -1778,30 +2774,186 @@ float startY;
     quickNotesLbl.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
     [notesScreen addSubview:quickNotesLbl];
     
-    goodDefense = [[UIControl alloc] initWithFrame:CGRectMake(40, 150, 130, 30)];
-    goodDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
-    [goodDefense addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
-    goodDefense.layer.cornerRadius = 5;
-    UILabel *goodDefenseLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 125, 30)];
-    goodDefenseLbl.text = @"Good Defense";
-    goodDefenseLbl.textAlignment = NSTextAlignmentCenter;
-    goodDefenseLbl.textColor = [UIColor whiteColor];
-    goodDefenseLbl.font = [UIFont systemFontOfSize:15];
-    [goodDefense addSubview:goodDefenseLbl];
-    [notesScreen addSubview:goodDefense];
+    greatDefense = [[UIControl alloc] initWithFrame:CGRectMake(55, 150, 110, 30)];
+    greatDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [greatDefense addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    greatDefense.layer.cornerRadius = 5;
+    UILabel *greatDefenseLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 110, 30)];
+    greatDefenseLbl.text = @"Great Defense";
+    greatDefenseLbl.textAlignment = NSTextAlignmentCenter;
+    greatDefenseLbl.textColor = [UIColor whiteColor];
+    greatDefenseLbl.font = [UIFont systemFontOfSize:14];
+    [greatDefense addSubview:greatDefenseLbl];
+    [notesScreen addSubview:greatDefense];
     
-    didntMove = [[UIControl alloc] initWithFrame:CGRectMake(180, 150, 110, 30)];
+    badDefense = [[UIControl alloc] initWithFrame:CGRectMake(180, 150, 100, 30)];
+    badDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [badDefense addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    badDefense.layer.cornerRadius = 5;
+    UILabel *badDefenseLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
+    badDefenseLbl.text = @"Bad Defense";
+    badDefenseLbl.textAlignment = NSTextAlignmentCenter;
+    badDefenseLbl.textColor = [UIColor whiteColor];
+    badDefenseLbl.font = [UIFont systemFontOfSize:14];
+    [badDefense addSubview:badDefenseLbl];
+    [notesScreen addSubview:badDefense];
+    
+    didntMove = [[UIControl alloc] initWithFrame:CGRectMake(295, 150, 100, 30)];
     didntMove.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
     [didntMove addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
     didntMove.layer.cornerRadius = 5;
-    UILabel *didntMoveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 110, 30)];
+    UILabel *didntMoveLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
     didntMoveLbl.text = @"Didn't Move";
     didntMoveLbl.textAlignment = NSTextAlignmentCenter;
     didntMoveLbl.textColor = [UIColor whiteColor];
-    didntMoveLbl.font = [UIFont systemFontOfSize:15];
+    didntMoveLbl.font = [UIFont systemFontOfSize:14];
     [didntMove addSubview:didntMoveLbl];
     [notesScreen addSubview:didntMove];
     
+    slowMovement = [[UIControl alloc] initWithFrame:CGRectMake(15, 190, 120, 30)];
+    slowMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [slowMovement addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    slowMovement.layer.cornerRadius = 5;
+    UILabel *slowMovementLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 30)];
+    slowMovementLbl.text = @"Slow Movement";
+    slowMovementLbl.textAlignment = NSTextAlignmentCenter;
+    slowMovementLbl.textColor = [UIColor whiteColor];
+    slowMovementLbl.font = [UIFont systemFontOfSize:14];
+    [slowMovement addSubview:slowMovementLbl];
+    [notesScreen addSubview:slowMovement];
+    
+    fastMovement = [[UIControl alloc] initWithFrame:CGRectMake(150, 190, 120, 30)];
+    fastMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [fastMovement addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    fastMovement.layer.cornerRadius = 5;
+    UILabel *fastMovementLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 30)];
+    fastMovementLbl.text = @"Fast Movement";
+    fastMovementLbl.textAlignment = NSTextAlignmentCenter;
+    fastMovementLbl.textColor = [UIColor whiteColor];
+    fastMovementLbl.font = [UIFont systemFontOfSize:14];
+    [fastMovement addSubview:fastMovementLbl];
+    [notesScreen addSubview:fastMovement];
+    
+    brokeDownInMatch = [[UIControl alloc] initWithFrame:CGRectMake(285, 190, 150, 30)];
+    brokeDownInMatch.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [brokeDownInMatch addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    brokeDownInMatch.layer.cornerRadius = 5;
+    UILabel *brokeDownInMatchLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 30)];
+    brokeDownInMatchLbl.text = @"Broke Down in Match";
+    brokeDownInMatchLbl.textAlignment = NSTextAlignmentCenter;
+    brokeDownInMatchLbl.textColor = [UIColor whiteColor];
+    brokeDownInMatchLbl.font = [UIFont systemFontOfSize:14];
+    [brokeDownInMatch addSubview:brokeDownInMatchLbl];
+    [notesScreen addSubview:brokeDownInMatch];
+    
+    greatBallPickup = [[UIControl alloc] initWithFrame:CGRectMake(15, 230, 128, 30)];
+    greatBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [greatBallPickup addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    greatBallPickup.layer.cornerRadius = 5;
+    UILabel *greatBallPickupLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 128, 30)];
+    greatBallPickupLbl.text = @"Great Ball Pickup";
+    greatBallPickupLbl.textAlignment = NSTextAlignmentCenter;
+    greatBallPickupLbl.textColor = [UIColor whiteColor];
+    greatBallPickupLbl.font = [UIFont systemFontOfSize:14];
+    [greatBallPickup addSubview:greatBallPickupLbl];
+    [notesScreen addSubview:greatBallPickup];
+    
+    badBallPickup = [[UIControl alloc] initWithFrame:CGRectMake(158, 230, 122, 30)];
+    badBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [badBallPickup addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    badBallPickup.layer.cornerRadius = 5;
+    UILabel *badBallPickupLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 122, 30)];
+    badBallPickupLbl.text = @"Bad Ball Pickup";
+    badBallPickupLbl.textAlignment = NSTextAlignmentCenter;
+    badBallPickupLbl.textColor = [UIColor whiteColor];
+    badBallPickupLbl.font = [UIFont systemFontOfSize:14];
+    [badBallPickup addSubview:badBallPickupLbl];
+    [notesScreen addSubview:badBallPickup];
+    
+    greatCooperation = [[UIControl alloc] initWithFrame:CGRectMake(295, 230, 140, 30)];
+    greatCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [greatCooperation addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    greatCooperation.layer.cornerRadius = 5;
+    UILabel *greatCooperationLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 140, 30)];
+    greatCooperationLbl.text = @"Great Cooperation";
+    greatCooperationLbl.textAlignment = NSTextAlignmentCenter;
+    greatCooperationLbl.textColor = [UIColor whiteColor];
+    greatCooperationLbl.font = [UIFont systemFontOfSize:14];
+    [greatCooperation addSubview:greatCooperationLbl];
+    [notesScreen addSubview:greatCooperation];
+    
+    badCooperation = [[UIControl alloc] initWithFrame:CGRectMake(10, 270, 125, 30)];
+    badCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [badCooperation addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    badCooperation.layer.cornerRadius = 5;
+    UILabel *badCooperationLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 125, 30)];
+    badCooperationLbl.text = @"Bad Cooperation";
+    badCooperationLbl.textAlignment = NSTextAlignmentCenter;
+    badCooperationLbl.textColor = [UIColor whiteColor];
+    badCooperationLbl.font = [UIFont systemFontOfSize:13];
+    [badCooperation addSubview:badCooperationLbl];
+    [notesScreen addSubview:badCooperation];
+    
+    greatHumanPlayer = [[UIControl alloc] initWithFrame:CGRectMake(150, 270, 140, 30)];
+    greatHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [greatHumanPlayer addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    greatHumanPlayer.layer.cornerRadius = 5;
+    UILabel *greatHumanPlayerLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 140, 30)];
+    greatHumanPlayerLbl.text = @"Great Human Player";
+    greatHumanPlayerLbl.textAlignment = NSTextAlignmentCenter;
+    greatHumanPlayerLbl.textColor = [UIColor whiteColor];
+    greatHumanPlayerLbl.font = [UIFont systemFontOfSize:13];
+    [greatHumanPlayer addSubview:greatHumanPlayerLbl];
+    [notesScreen addSubview:greatHumanPlayer];
+    
+    badHumanPlayer = [[UIControl alloc] initWithFrame:CGRectMake(305, 270, 135, 30)];
+    badHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [badHumanPlayer addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    badHumanPlayer.layer.cornerRadius = 5;
+    UILabel *badHumanPlayerLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 135, 30)];
+    badHumanPlayerLbl.text = @"Bad Human Player";
+    badHumanPlayerLbl.textAlignment = NSTextAlignmentCenter;
+    badHumanPlayerLbl.textColor = [UIColor whiteColor];
+    badHumanPlayerLbl.font = [UIFont systemFontOfSize:13];
+    [badHumanPlayer addSubview:badHumanPlayerLbl];
+    [notesScreen addSubview:badHumanPlayer];
+    
+    greatDriver = [[UIControl alloc] initWithFrame:CGRectMake(55, 310, 100, 30)];
+    greatDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [greatDriver addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    greatDriver.layer.cornerRadius = 5;
+    UILabel *greatDriverLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
+    greatDriverLbl.text = @"Great Driver";
+    greatDriverLbl.textAlignment = NSTextAlignmentCenter;
+    greatDriverLbl.textColor = [UIColor whiteColor];
+    greatDriverLbl.font = [UIFont systemFontOfSize:14];
+    [greatDriver addSubview:greatDriverLbl];
+    [notesScreen addSubview:greatDriver];
+    
+    averageDriver = [[UIControl alloc] initWithFrame:CGRectMake(170, 310, 110, 30)];
+    averageDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [averageDriver addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    averageDriver.layer.cornerRadius = 5;
+    UILabel *averageDriverLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 110, 30)];
+    averageDriverLbl.text = @"Average Driver";
+    averageDriverLbl.textAlignment = NSTextAlignmentCenter;
+    averageDriverLbl.textColor = [UIColor whiteColor];
+    averageDriverLbl.font = [UIFont systemFontOfSize:14];
+    [averageDriver addSubview:averageDriverLbl];
+    [notesScreen addSubview:averageDriver];
+    
+    badDriver = [[UIControl alloc] initWithFrame:CGRectMake(295, 310, 90, 30)];
+    badDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+    [badDriver addTarget:self action:@selector(notesControllerTapped:) forControlEvents:UIControlEventTouchUpInside];
+    badDriver.layer.cornerRadius = 5;
+    UILabel *badDriverLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 90, 30)];
+    badDriverLbl.text = @"Bad Driver";
+    badDriverLbl.textAlignment = NSTextAlignmentCenter;
+    badDriverLbl.textColor = [UIColor whiteColor];
+    badDriverLbl.font = [UIFont systemFontOfSize:14];
+    [badDriver addSubview:badDriverLbl];
+    [notesScreen addSubview:badDriver];
+
     
     notesTextField = [[UITextView alloc] initWithFrame:CGRectMake(75, 350, 300, 100)];
     notesTextField.textAlignment = NSTextAlignmentCenter;
@@ -1841,13 +2993,13 @@ float startY;
 -(void)notesControllerTapped:(UIControl *)controlView{
     if ([controlView isEqual:redZone]) {
         if (inRedZone) {
-            [UIView animateWithDuration:0.1 animations:^{
+            [UIView animateWithDuration:0.2 animations:^{
                 redZone.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
             }];
             inRedZone = false;
         }
         else{
-            [UIView animateWithDuration:0.1 animations:^{
+            [UIView animateWithDuration:0.2 animations:^{
                 redZone.backgroundColor = [UIColor redColor];
             }];
             inRedZone = true;
@@ -1881,18 +3033,36 @@ float startY;
             inBlueZone = true;
         }
     }
-    else if ([controlView isEqual:goodDefense]){
-        if (didGoodDefense) {
+    else if ([controlView isEqual:greatDefense]){
+        if (didGreatDefense) {
             [UIView animateWithDuration:0.2 animations:^{
-                goodDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                greatDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
-            didGoodDefense = false;
+            didGreatDefense = false;
         }
         else{
             [UIView animateWithDuration:0.2 animations:^{
-                goodDefense.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                greatDefense.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                badDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
             }];
-            didGoodDefense = true;
+            didGreatDefense = true;
+            didBadDefense = false;
+        }
+    }
+    else if ([controlView isEqual:badDefense]){
+        if (didBadDefense) {
+            [UIView animateWithDuration:0.2 animations:^{
+                badDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadDefense = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                badDefense.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                greatDefense.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadDefense = true;
+            didGreatDefense = false;
         }
     }
     else if ([controlView isEqual:didntMove]){
@@ -1907,6 +3077,202 @@ float startY;
                 didntMove.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
             }];
             didDidntMove = true;
+        }
+    }
+    else if ([controlView isEqual:slowMovement]){
+        if (didSlowMovement) {
+            [UIView animateWithDuration:0.2 animations:^{
+                slowMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didSlowMovement = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                slowMovement.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                fastMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didSlowMovement = true;
+            didFastMovement = false;
+        }
+    }
+    else if ([controlView isEqual:fastMovement]){
+        if (didFastMovement) {
+            [UIView animateWithDuration:0.2 animations:^{
+                fastMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didFastMovement = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                fastMovement.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                slowMovement.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didFastMovement = true;
+            didSlowMovement = false;
+        }
+    }
+    else if ([controlView isEqual:brokeDownInMatch]){
+        if (didBrokeDownInMatch) {
+            [UIView animateWithDuration:0.2 animations:^{
+                brokeDownInMatch.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBrokeDownInMatch = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                brokeDownInMatch.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+            }];
+            didBrokeDownInMatch = true;
+        }
+    }
+    else if ([controlView isEqual:greatBallPickup]){
+        if (didGreatBallPickup) {
+            [UIView animateWithDuration:0.2 animations:^{
+                greatBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatBallPickup = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatBallPickup.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                badBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatBallPickup = true;
+            didBadBallPickup = false;
+        }
+    }
+    else if ([controlView isEqual:badBallPickup]){
+        if (didBadBallPickup) {
+            [UIView animateWithDuration:0.2 animations:^{
+                badBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadBallPickup = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                badBallPickup.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                greatBallPickup.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadBallPickup = true;
+            didGreatBallPickup = false;
+        }
+    }
+    else if ([controlView isEqual:greatCooperation]){
+        if (didGreatCooperation) {
+            [UIView animateWithDuration:0.2 animations:^{
+                greatCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatCooperation = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatCooperation.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                badCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatCooperation = true;
+            didBadCooperation = false;
+        }
+    }
+    else if ([controlView isEqual:badCooperation]){
+        if (didBadCooperation) {
+            [UIView animateWithDuration:0.2 animations:^{
+                badCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadCooperation = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                badCooperation.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                greatCooperation.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadCooperation = true;
+            didGreatCooperation = false;
+        }
+    }
+    else if ([controlView isEqual:greatHumanPlayer]){
+        if (didGreatHumanPlayer) {
+            [UIView animateWithDuration:0.2 animations:^{
+                greatHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatHumanPlayer = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatHumanPlayer.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                badHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatHumanPlayer = true;
+            didBadHumanPlayer = false;
+        }
+    }
+    else if ([controlView isEqual:badHumanPlayer]){
+        if (didBadHumanPlayer) {
+            [UIView animateWithDuration:0.2 animations:^{
+                badHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadHumanPlayer = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                badHumanPlayer.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                greatHumanPlayer.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadHumanPlayer = true;
+            didGreatHumanPlayer = false;
+        }
+    }
+    else if ([controlView isEqual:greatDriver]){
+        if (didGreatDriver) {
+            [UIView animateWithDuration:0.2 animations:^{
+                greatDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatDriver = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatDriver.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                averageDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                badDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatDriver = true;
+            didAverageDriver = false;
+            didBadDriver = false;
+        }
+    }
+    else if ([controlView isEqual:averageDriver]){
+        if (didAverageDriver) {
+            [UIView animateWithDuration:0.2 animations:^{
+                averageDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didAverageDriver = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                averageDriver.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+                badDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didGreatDriver = false;
+            didAverageDriver = true;
+            didBadDriver = false;
+        }
+    }
+    else if ([controlView isEqual:badDriver]){
+        if (didBadDriver) {
+            [UIView animateWithDuration:0.2 animations:^{
+                badDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+            }];
+            didBadDriver = false;
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                greatDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                averageDriver.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
+                badDriver.backgroundColor = [UIColor colorWithRed:0.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+            }];
+            didGreatDriver = false;
+            didAverageDriver = false;
+            didBadDriver = true;
         }
     }
 }
@@ -1933,7 +3299,79 @@ float startY;
 
 -(void)coreDataSave{
     if ([notesTextField.text isEqualToString:@"Custom Notes"]) {notesTextField.text = @"";}
-    notes = notesTextField.text;
+    notes = [[NSMutableString alloc] initWithString:@""];
+    if (inRedZone) {
+        [notes appendString:@"Red "];
+    }
+    if (inWhiteZone) {
+        [notes appendString:@"White "];
+    }
+    if (inBlueZone) {
+        [notes appendString:@"Blue "];
+    }
+    [notes appendString:@"{} "];
+    
+    NSMutableString *quickNotes = [[NSMutableString alloc] initWithString:@""];
+    if (didGreatDefense) {
+        [quickNotes appendString:@"Did Great Defense, "];
+    }
+    if (didBadDefense) {
+        [quickNotes appendString:@"Did Bad Defense, "];
+    }
+    if (didDidntMove) {
+        [quickNotes appendString:@"Didn't Move, "];
+    }
+    if (didSlowMovement) {
+        [quickNotes appendString:@"Moved Slow, "];
+    }
+    if (didFastMovement) {
+        [quickNotes appendString:@"Moved Fast, "];
+    }
+    if (didBrokeDownInMatch) {
+        [quickNotes appendString:@"Broke Down in Match, "];
+    }
+    if (didGreatBallPickup) {
+        [quickNotes appendString:@"Had Great Ball Pick Up Skills, "];
+    }
+    if (didBadBallPickup) {
+        [quickNotes appendString:@"Had Bad Ball Pick Up Skills, "];
+    }
+    if (didGreatCooperation) {
+        [quickNotes appendString:@"Great Cooperation, "];
+    }
+    if (didBadCooperation) {
+        [quickNotes appendString:@"Bad Cooperation, "];
+    }
+    if (didGreatHumanPlayer) {
+        [quickNotes appendString:@"Great Human Player, "];
+    }
+    if (didBadHumanPlayer) {
+        [quickNotes appendString:@"Bad Human Player, "];
+    }
+    if (didGreatDriver) {
+        [quickNotes appendString:@"Great Driver, "];
+    }
+    if (didAverageDriver) {
+        [quickNotes appendString:@"Average Driver, "];
+    }
+    if (didBadDriver) {
+        [quickNotes appendString:@"Bad Driver, "];
+    }
+    if (quickNotes.length > 0) {
+        [quickNotes deleteCharactersInRange:NSMakeRange(quickNotes.length-2, 2)];
+    }
+    if (notesTextField.text.length > 0) {
+        if (quickNotes.length == 0) {
+            [notes appendString:notesTextField.text];
+        }
+        else{
+            [notes appendString: quickNotes];
+            [notes appendString: [[NSString alloc] initWithFormat:@"\n \n%@", notesTextField.text]];
+        }
+    }
+    else{
+        [notes appendString:quickNotes];
+    }
     [UIView animateWithDuration:0.3 animations:^{
         notesScreen.center = CGPointMake(notesScreen.center.x, 1524);
     } completion:^(BOOL finished) {
@@ -1974,6 +3412,8 @@ float startY;
                                    [NSString stringWithString:currentMatchType], @"matchType",
                                    [NSString stringWithString:currentMatchNum], @"matchNum",
                                    [NSNumber numberWithInteger:secs], @"uniqueID", nil];
+        
+//        NSLog(@"%@", matchDict);
         
         Match *match = [Match createMatchWithDictionary:matchDict inTeam:tm withManagedObjectContext:context];
         
@@ -2049,12 +3489,12 @@ float startY;
         NSError *error;
         [self.mySession sendData:dataToSend toPeers:[self.mySession connectedPeers] withMode:MCSessionSendDataReliable error:&error];
     }
-    if (red1Pos == 0) {red1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 1 : %@", currentMatchNum];}
-    else if (red1Pos == 1){red2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 2 : %@", currentMatchNum];}
-    else if (red1Pos == 2){red3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 3 : %@", currentMatchNum];}
-    else if (red1Pos == 3){blue1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 1 : %@", currentMatchNum];}
-    else if (red1Pos == 4){blue2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 2 : %@", currentMatchNum];}
-    else if (red1Pos == 5){blue3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 3 : %@", currentMatchNum];}
+    if (red1Pos == 0) {red1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 1 : %@", currentMatchNum]; red1UpdaterLbl.adjustsFontSizeToFitWidth = true;}
+    else if (red1Pos == 1){red2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 2 : %@", currentMatchNum]; red2UpdaterLbl.adjustsFontSizeToFitWidth = true;}
+    else if (red1Pos == 2){red3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 3 : %@", currentMatchNum]; red3UpdaterLbl.adjustsFontSizeToFitWidth = true;}
+    else if (red1Pos == 3){blue1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 1 : %@", currentMatchNum]; blue1UpdaterLbl.adjustsFontSizeToFitWidth = true;}
+    else if (red1Pos == 4){blue2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 2 : %@", currentMatchNum]; blue2UpdaterLbl.adjustsFontSizeToFitWidth = true;}
+    else if (red1Pos == 5){blue3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Blue 3 : %@", currentMatchNum]; blue3UpdaterLbl.adjustsFontSizeToFitWidth = true;}
     
     // Reset all the scores and labels
     autoHighHotScore = 0;
@@ -2101,18 +3541,139 @@ float startY;
     _largePenaltyLbl.text = [[NSString alloc] initWithFormat:@"%ld", (long)largePenaltyTally];
     _largePenaltyStepper.value = 0;
     
-    // Increment match number by 1
-    NSInteger matchNumTranslator = [currentMatchNum integerValue];
-    matchNumTranslator++;
-    currentMatchNum = [[NSString alloc] initWithFormat:@"%ld", (long)matchNumTranslator];
+    inRedZone = false;
+    inWhiteZone = false;
+    inBlueZone = false;
+    didGreatDefense = false;
+    didBadDefense = false;
+    didDidntMove = false;
+    didSlowMovement = false;
+    didFastMovement = false;
+    didBrokeDownInMatch = false;
+    didGreatBallPickup = false;
+    didBadBallPickup = false;
+    didGreatCooperation = false;
+    didBadCooperation = false;
+    didGreatHumanPlayer = false;
+    didBadHumanPlayer = false;
+    didGreatDriver = false;
+    didAverageDriver = false;
+    didBadDriver = false;
+    
+    // Increment match number by 1 & Generate a random team number to simulate a loaded schedule if it's a qual match
+    if ([currentMatchType isEqualToString:@"Q"]) {
+        NSInteger matchNumTranslator = [currentMatchNum integerValue];
+        matchNumTranslator++;
+        currentMatchNum = [[NSString alloc] initWithFormat:@"%ld", (long)matchNumTranslator];
+        currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
+        [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
+        
+//        NSInteger randomTeamNum = arc4random() % 4000;
+//        currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
+        if ([scheduleDictionary objectForKey:currentRegional]) {
+            if ([[[scheduleDictionary objectForKey:currentRegional] objectForKey:pos] objectForKey:currentMatchNum]) {
+                currentTeamNum = [[[scheduleDictionary objectForKey:currentRegional] objectForKey:pos] objectForKey:currentMatchNum];
+                currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
+                [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
+            }
+            else{
+                UIAlertView *invalidMatchNumberAlert = [[UIAlertView alloc] initWithTitle:@"Invalid Match Number!"
+                                                                                  message:@"You could have finished the last match for this regional, entered a bad match number, or there is some mistake with the schedule downloaded."
+                                                                                 delegate:nil
+                                                                        cancelButtonTitle:@"I see."
+                                                                        otherButtonTitles:nil];
+                [invalidMatchNumberAlert show];
+                currentTeamNum = @"";
+            }
+        }
+        else{
+            currentTeamNum = @"";
+        }
+        
+        
+        NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
+        NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %@", currentTeamNum];
+        roboPicRequest.predicate = roboPicPredicate;
+        NSError *roboPicError = nil;
+        NSArray *roboPics = [context executeFetchRequest:roboPicRequest error:&roboPicError];
+        PitTeam *pt = [roboPics firstObject];
+        _robotPic.alpha = 0;
+        UIImage *image = [UIImage imageWithData:[pt valueForKey:@"image"]];
+        _robotPic.image = image;
+    }
+    else{
+        if ([currentMatchNum isEqualToString:@"Q1.1"]) {
+            currentMatchNum = @"Q2.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q2.1"]){
+            currentMatchNum = @"Q3.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q3.1"]){
+            currentMatchNum = @"Q4.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q4.1"]){
+            currentMatchNum = @"Q1.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q1.2"]){
+            currentMatchNum = @"Q2.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q2.2"]){
+            currentMatchNum = @"Q3.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q3.2"]){
+            currentMatchNum = @"Q4.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q4.2"]){
+            currentMatchNum = @"Q1.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q1.3"]){
+            currentMatchNum = @"Q2.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q2.3"]){
+            currentMatchNum = @"Q3.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q3.3"]){
+            currentMatchNum = @"Q4.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"Q4.3"]){
+            currentMatchNum = @"S1.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"S1.1"]){
+            currentMatchNum = @"S2.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"S2.1"]){
+            currentMatchNum = @"S1.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"S1.2"]){
+            currentMatchNum = @"S2.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"S2.2"]){
+            currentMatchNum = @"S1.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"S1.3"]){
+            currentMatchNum = @"S2.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"S2.3"]){
+            currentMatchNum = @"F1.1";
+        }
+        else if ([currentMatchNum isEqualToString:@"F1.1"]){
+            currentMatchNum = @"F1.2";
+        }
+        else if ([currentMatchNum isEqualToString:@"F1.2"]){
+            currentMatchNum = @"F1.3";
+        }
+        else if ([currentMatchNum isEqualToString:@"F1.3"]){
+            currentMatchNum = @"F1.4";
+        }
+        else if ([currentMatchNum isEqualToString:@"F1.4"]){
+            currentMatchNum = @"";
+        }
+        
+        _teamNumField.text = @"";
+    }
+    
     currentMatchNumAtString = [[NSAttributedString alloc] initWithString:currentMatchNum];
     [_matchNumEdit setAttributedTitle:currentMatchNumAtString forState:UIControlStateNormal];
-    
-    // Generate a random team number to simulate a loaded schedule
-    NSInteger randomTeamNum = arc4random() % 4000;
-    currentTeamNum = [[NSString alloc] initWithFormat:@"%ld", (long)randomTeamNum];
-    currentTeamNumAtString = [[NSAttributedString alloc] initWithString:currentTeamNum];
-    [_teamNumEdit setAttributedTitle:currentTeamNumAtString forState:UIControlStateNormal];
     
     // Reset editability of match and team numbers
     if (_matchNumEdit.hidden) {
@@ -2122,21 +3683,31 @@ float startY;
         _matchNumEdit.hidden = false;
     }
     if (_teamNumEdit.hidden) {
-        _teamNumField.enabled = false;
-        _teamNumField.hidden = true;
-        _teamNumEdit.enabled = true;
-        _teamNumEdit.hidden = false;
+        if ([currentMatchType isEqualToString:@"Q"]) {
+            if (currentTeamNum.length > 0) {
+                _teamNumField.enabled = false;
+                _teamNumField.hidden = true;
+                _teamNumEdit.enabled = true;
+                _teamNumEdit.hidden = false;
+            }
+            else{
+                _teamNumField.enabled = true;
+                _teamNumField.hidden = false;
+                _teamNumEdit.enabled = false;
+                _teamNumEdit.hidden = true;
+                _teamNumField.text = currentTeamNum;
+            }
+        }
     }
     
-    NSFetchRequest *roboPicRequest = [NSFetchRequest fetchRequestWithEntityName:@"PitTeam"];
-    NSPredicate *roboPicPredicate = [NSPredicate predicateWithFormat:@"teamNumber = %ld", randomTeamNum];
-    roboPicRequest.predicate = roboPicPredicate;
-    NSError *roboPicError = nil;
-    NSArray *roboPics = [context executeFetchRequest:roboPicRequest error:&roboPicError];
-    PitTeam *pt = [roboPics firstObject];
-    _robotPic.alpha = 0;
-    UIImage *image = [UIImage imageWithData:[pt valueForKey:@"image"]];
-    _robotPic.image = image;
+    if (currentMatchNum.length == 0) {
+        _matchNumField.enabled = true;
+        _matchNumField.hidden = false;
+        _matchNumEdit.enabled = false;
+        _matchNumEdit.hidden = true;
+        
+        _matchNumField.text = @"";
+    }
     
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^(void){
         _movementRobot.center = CGPointMake(_movementRobot.center.x, _movementLine.center.y + 50);

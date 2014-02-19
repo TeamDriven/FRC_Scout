@@ -46,4 +46,20 @@
     return regional;
 }
 
+//-(void)insertObject:(Team *)team inFirstPickListAtIndex:(NSUInteger)idx{
+//    NSMutableArray *editableFirstPickList = [[NSMutableArray alloc] initWithArray:[self.firstPickList array]];
+//    
+//    [editableFirstPickList insertObject:team atIndex:idx];
+//    
+//    self.firstPickList = [NSOrderedSet orderedSetWithArray:editableFirstPickList];
+//}
+//
+//-(void)insertObject:(Team *)team inSecondPickListAtIndex:(NSUInteger)idx{
+//    NSMutableArray *editableSecondPickList = [[NSMutableArray alloc] initWithArray:[self.secondPickList array]];
+//    
+//    [editableSecondPickList insertObject:team atIndex:idx];
+//    
+//    self.secondPickList = [NSOrderedSet orderedSetWithArray:editableSecondPickList];
+//}
+
 @end
