@@ -1316,8 +1316,8 @@ NSInteger tutorialStep;
             pitViewDetail.alpha = 0;
             [gruyOutview addSubview:pitViewDetail];
             
-            UILabel *detailPit = [[UILabel alloc] initWithFrame:CGRectMake(230, 820, 200, 30)];
-            detailPit.text = @"For all you Pit Scouting needs";
+            UILabel *detailPit = [[UILabel alloc] initWithFrame:CGRectMake(220, 820, 220, 30)];
+            detailPit.text = @"For all your Pit Scouting needs";
             detailPit.textAlignment = NSTextAlignmentCenter;
             detailPit.textColor = [UIColor whiteColor];
             detailPit.font = [UIFont boldSystemFontOfSize:14];
@@ -1615,6 +1615,7 @@ NSInteger tutorialStep;
         }];
     }
     else if (tutorialStep == 9){
+        tutorialStep = 0;
         [UIView animateWithDuration:0.3 animations:^{
             for (UIView *v in gruyOutview.subviews) {
                 v.alpha = 0;
