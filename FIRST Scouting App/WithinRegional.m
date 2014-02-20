@@ -18,6 +18,17 @@ UISegmentedControl *weekSelector;
 NSInteger weekSelectedData;
 NSString *regionalSelected;
 
+// Regional Arrays
+NSArray *regionalNames;
+NSArray *week1Regionals;
+NSArray *week2Regionals;
+NSArray *week3Regionals;
+NSArray *week4Regionals;
+NSArray *week5Regionals;
+NSArray *week6Regionals;
+NSArray *week7Regionals;
+NSArray *allWeekRegionals;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -33,7 +44,7 @@ NSString *regionalSelected;
     _nextMatchBtn.layer.cornerRadius = 10;
     _allianceSelectionBtn.layer.cornerRadius = 10;
     
-    
+    NSLog(@"Week selected data: %ld", (long)weekSelectedData);
     
     weekSelector = [[UISegmentedControl alloc] initWithItems:@[@"All",@"1", @"2", @"3", @"4", @"5", @"6", @"7+"]];
     weekSelector.frame = CGRectMake(-35, 324, 215, 30);
@@ -60,8 +71,8 @@ NSString *regionalSelected;
     _regionalPicker.dataSource = self;
     _regionalPicker.layer.cornerRadius = 5;
     _regionalPicker.backgroundColor = [UIColor colorWithWhite:0.9 alpha:0.5];
-    if (regionalSelected) {
-        [_regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelectedData] indexOfObject:regionalSelected] inComponent:0 animated:NO];
+    if (regionalSelected.length > 0) {
+        [_regionalPicker selectRow:[[allWeekRegionals objectAtIndex:weekSelector.selectedSegmentIndex] indexOfObject:regionalSelected] inComponent:0 animated:NO];
     }
     
     if (!regionalSelected) {
@@ -88,6 +99,8 @@ NSString *regionalSelected;
     }
     
     weekSelectedData = weekSelector.selectedSegmentIndex;
+    UILabel *selectedRow = (UILabel *)[_regionalPicker viewForRow:[_regionalPicker selectedRowInComponent:0] forComponent:0];
+    regionalSelected = selectedRow.text;
 }
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
@@ -166,6 +179,7 @@ NSString *regionalSelected;
 
 // Tell the picker the width of each row for a given component (420)
 -(CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
+    
     int sectionWidth = 580;
     
     return sectionWidth;
