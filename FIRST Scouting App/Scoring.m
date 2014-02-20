@@ -1552,6 +1552,7 @@ NSInteger tutorialStep;
         }];
     }
     else if (tutorialStep == 8){
+        tutorialStep = 0;
         [UIView animateWithDuration:0.3 animations:^{
             for (UIView *v in gruyOutview.subviews) {
                 v.alpha = 0;
@@ -2023,6 +2024,8 @@ NSInteger tutorialStep;
     //  Setup Advertiser
     self.advertiser = [[MCAdvertiserAssistant alloc] initWithServiceType:@"frcScorer" discoveryInfo:nil session:self.mySession];
     [self.advertiser start];
+    
+    visible = true;
 }
 
 
@@ -2164,6 +2167,7 @@ NSInteger tutorialStep;
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *peerString = [[NSString alloc] initWithFormat:@"%@", [peer displayName]];
             NSString *identifiedPeerString = [[peerString componentsSeparatedByString:@" - "] firstObject];
+            NSLog(@"Identifier string: %@", identifiedPeerString);
             if ([identifiedPeerString isEqualToString:@"Red 1"]) {red1UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 1 : %@", matchNumberReceived];}
             else if ([identifiedPeerString isEqualToString:@"Red 2"]){red2UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 2 : %@", matchNumberReceived];}
             else if ([identifiedPeerString isEqualToString:@"Red 3"]){red3UpdaterLbl.text = [[NSString alloc] initWithFormat:@"Red 3 : %@", matchNumberReceived];}

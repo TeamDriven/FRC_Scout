@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8846FECC1826D7D100B37E44"
-               BuildableName = "FIRST Scouting App.app"
+               BuildableName = "FIRST Scout.app"
                BlueprintName = "FIRST Scout"
                ReferencedContainer = "container:FIRST Scout.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8846FEF01826D7D200B37E44"
-               BuildableName = "FIRST Scouting AppTests.xctest"
+               BuildableName = "FIRST ScoutTests.xctest"
                BlueprintName = "FIRST ScoutTests"
                ReferencedContainer = "container:FIRST Scout.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8846FECC1826D7D100B37E44"
-            BuildableName = "FIRST Scouting App.app"
+            BuildableName = "FIRST Scout.app"
             BlueprintName = "FIRST Scout"
             ReferencedContainer = "container:FIRST Scout.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8846FECC1826D7D100B37E44"
-            BuildableName = "FIRST Scouting App.app"
+            BuildableName = "FIRST Scout.app"
             BlueprintName = "FIRST Scout"
             ReferencedContainer = "container:FIRST Scout.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8846FECC1826D7D100B37E44"
-            BuildableName = "FIRST Scouting App.app"
+            BuildableName = "FIRST Scout.app"
             BlueprintName = "FIRST Scout"
             ReferencedContainer = "container:FIRST Scout.xcodeproj">
          </BuildableReference>
@@ -91,6 +91,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "FIRST Scout"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
