@@ -33,6 +33,8 @@ CGRect selectedCellRect;
 
 -(void)setTextField:(UITextField *)textField{
     _textField = textField;
+    
+    [textField addTarget:self action:@selector(searching) forControlEvents:UIControlEventEditingChanged];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -324,7 +326,7 @@ CGRect selectedCellRect;
     }];
 }
 
-- (IBAction)searching:(id)sender {
+- (void)searching{
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"PitTeam"];
     NSNumberFormatter *checker = [[NSNumberFormatter alloc] init];
     if ([checker numberFromString:_textField.text]) {

@@ -1031,7 +1031,7 @@ UIAlertView *doubleCheckDeleteAlert;
     }
     
     NSLog(@"Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
-    //NSLog(@"%@", dataDict);
+    _matchScheduleBtn.enabled = true;
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
