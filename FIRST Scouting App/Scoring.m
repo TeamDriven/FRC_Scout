@@ -319,37 +319,6 @@ NSInteger tutorialStep;
     }
     
     notes = [[NSMutableString alloc] initWithString:@""];
-}
-
--(void)viewDidAppear:(BOOL)animated{
-    // *** Map to Schedule plist ***
-    schedulePaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    scheduleDirectory = [schedulePaths objectAtIndex:0];
-    schedulePath = [scheduleDirectory stringByAppendingPathComponent:@"plistData.plist"];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:schedulePath]) {
-        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"plistData" ofType:@"plist"] toPath:schedulePath error:nil];
-    }
-    // *** Done Mapping to Schedule plist ***
-    scheduleDictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:schedulePath];
-    
-    NSLog(@"%@", scheduleDictionary);
-}
-
--(void)didReceiveMemoryWarning{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    if (setUpView) {
-        [setUpView removeFromSuperview];
-        [greyOut removeFromSuperview];
-    }
-    [self setUpScreen];
-    //    [self autoOn];
-    
-    _movementRobot.userInteractionEnabled = YES;
     
     NSInteger lastX = 55;
     
@@ -436,6 +405,51 @@ NSInteger tutorialStep;
     
     for (UIView *v in posUpdateArray) {
         v.hidden = true;
+    }
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    // *** Map to Schedule plist ***
+    schedulePaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    scheduleDirectory = [schedulePaths objectAtIndex:0];
+    schedulePath = [scheduleDirectory stringByAppendingPathComponent:@"plistData.plist"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:schedulePath]) {
+        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle]pathForResource:@"plistData" ofType:@"plist"] toPath:schedulePath error:nil];
+    }
+    // *** Done Mapping to Schedule plist ***
+    scheduleDictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:schedulePath];
+    
+    NSLog(@"%@", scheduleDictionary);
+}
+
+-(void)didReceiveMemoryWarning{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    if (setUpView) {
+        [setUpView removeFromSuperview];
+        [greyOut removeFromSuperview];
+    }
+    [self setUpScreen];
+    
+    _movementRobot.userInteractionEnabled = YES;
+    
+    if (self.mySession) {
+        for (UIView *v in posUpdateArray) {
+            if ([posUpdateArray indexOfObject:v] > 0) {
+                v.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+            }
+        }
+        
+        if (red1Pos >= 0 && red1Pos < 3) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor redColor]];}
+        else if (red1Pos >= 3 && red1Pos < 6) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor blueColor]];}
+        
+        for (MCPeerID *peerID in [self.mySession connectedPeers]) {
+            
+        }
     }
 }
 
@@ -853,6 +867,7 @@ NSInteger tutorialStep;
                              
                              twoFingerDown.enabled = true;
                              
+                             
                              // Shows the scouts position nice and large-like in the top center of the screen
                              CGRect red1Rect = CGRectMake(282, 145, 200, 60);
                              red1Lbl = [[UILabel alloc] initWithFrame:red1Rect];
@@ -892,6 +907,7 @@ NSInteger tutorialStep;
                              for (UIView *v in posUpdateArray) {
                                  v.hidden = false;
                              }
+                             
                              if (red1Pos >= 0 && red1Pos < 3) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor redColor]]; [_movementRobot setImage:[UIImage imageNamed:@"RedRobot"]];}
                              else if (red1Pos >= 3 && red1Pos < 6) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor blueColor]]; [_movementRobot setImage:[UIImage imageNamed:@"BlueRobot"]];}
                              [self.view bringSubviewToFront:_movementRobot];
@@ -2121,10 +2137,7 @@ NSInteger tutorialStep;
         NSLog(@"Disconnected");
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([updatedPeerString isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
-            else if ([updatedPeerString isEqualToString:@"Red 2"]){
-                NSLog(@"Red 2");
-                [[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
-            }
+            else if ([updatedPeerString isEqualToString:@"Red 2"]){[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Red 3"]){[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Blue 1"]){[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
@@ -2544,6 +2557,7 @@ float startY;
         _teamNumField.hidden = false;
         _teamNumField.text = currentTeamNum;
     }
+    [self teamNumberEditFinished:_teamNumField];
 }
 // Makes the team number editable
 -(IBAction)teamNumberEdit:(id)sender {
