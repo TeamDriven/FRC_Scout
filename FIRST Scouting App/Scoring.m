@@ -2121,7 +2121,7 @@ NSInteger tutorialStep;
             else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor blueColor]];}
             
             UIAlertView *connectedSuccessfullyAlert = [[UIAlertView alloc] initWithTitle:@"Woot Woot!"
-                                                                                 message:[[NSString alloc] initWithFormat:@"You successfully connected to %@ on Insta-Share!", [peerID displayName]]
+                                                                                 message:[[NSString alloc] initWithFormat:@"You successfully connected to \n %@ on Insta-Share!", [peerID displayName]]
                                                                                 delegate:nil
                                                                        cancelButtonTitle:@"Great Odin's Raven!"
                                                                        otherButtonTitles: nil];
@@ -2149,7 +2149,7 @@ NSInteger tutorialStep;
             else if ([updatedPeerString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             else if ([updatedPeerString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];}
             UIAlertView *disconnectedAlert = [[UIAlertView alloc] initWithTitle:@"Oh no!"
-                                                                        message:[[NSString alloc] initWithFormat:@"You disconnected with %@ in Insta-Share!", updatedPeerString]
+                                                                        message:[[NSString alloc] initWithFormat:@"You disconnected with \n %@ in Insta-Share!", updatedPeerString]
                                                                        delegate:nil
                                                               cancelButtonTitle:@"Son of a bee sting!"
                                                               otherButtonTitles:nil];
