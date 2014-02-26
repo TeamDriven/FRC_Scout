@@ -448,7 +448,13 @@ NSInteger tutorialStep;
         else if (red1Pos >= 3 && red1Pos < 6) {[[posUpdateArray objectAtIndex:red1Pos+1] setBackgroundColor:[UIColor blueColor]];}
         
         for (MCPeerID *peerID in [self.mySession connectedPeers]) {
-            
+            NSString *shortString = [[[peerID displayName] componentsSeparatedByString:@" - "] firstObject];
+            if ([shortString isEqualToString:@"Red 1"]) {[[posUpdateArray objectAtIndex:1] setBackgroundColor:[UIColor redColor]];}
+            else if ([shortString isEqualToString:@"Red 2"]){[[posUpdateArray objectAtIndex:2] setBackgroundColor:[UIColor redColor]];}
+            else if ([shortString isEqualToString:@"Red 3"]){[[posUpdateArray objectAtIndex:3] setBackgroundColor:[UIColor redColor]];}
+            else if ([shortString isEqualToString:@"Blue 1"]){[[posUpdateArray objectAtIndex:4] setBackgroundColor:[UIColor blueColor]];}
+            else if ([shortString isEqualToString:@"Blue 2"]){[[posUpdateArray objectAtIndex:5] setBackgroundColor:[UIColor blueColor]];}
+            else if ([shortString isEqualToString:@"Blue 3"]){[[posUpdateArray objectAtIndex:6] setBackgroundColor:[UIColor blueColor]];}
         }
     }
 }
